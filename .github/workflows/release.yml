@@ -1,12 +1,19 @@
 name: release
 
 # A release is a tag vX.Y.Z on master with an immutable release carrying the source archive and its hash (ADR 0003).
-# Pushing the tag runs this: the tag must equal ontology_version, CHANGELOG.md must have the section, the archive is
-# built from the tag, and the release is published with the archive and its sha256. A tag vX.Y.Z-rc.N is a pre-release.
+# Two ways in, one job: push the tag, or run this workflow on master with the version — it then creates the tag.
+# Either way the tag must equal ontology_version, CHANGELOG.md must have the section, the archive is built from the
+# tag, and the release is published with the archive and its sha256. A tag vX.Y.Z-rc.N is a pre-release.
 
 on:
   push:
     tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release, as in schema.yaml (X.Y.Z or X.Y.Z-rc.N); the tag v<version> is created on master"
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -15,10 +22,13 @@ jobs:
   release:
     runs-on: ubuntu-latest
     env:
-      TAG: ${{ github.ref_name }}
+      TAG: ${{ github.event_name == 'workflow_dispatch' && format('v{0}', inputs.version) || github.ref_name }}
       GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
       - name: The tag names the version in schema.yaml
         run: |
           version="${TAG#v}"
@@ -31,6 +41,22 @@ jobs:
           echo "BASE_VERSION=$base" >> "$GITHUB_ENV"
       - name: Release notes come from CHANGELOG.md
         run: python3 tools/release-notes.py "$BASE_VERSION" > notes.md
+      - name: Create the tag on master (manual run)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          if [ "$GITHUB_REF" != "refs/heads/master" ]; then
+            echo "::error::a release is tagged on master, not on $GITHUB_REF (ADR 0003)"; exit 1
+          fi
+          if git rev-parse -q --verify "refs/tags/$TAG^{commit}" >/dev/null; then
+            if [ "$(git rev-parse "$TAG^{commit}")" != "$(git rev-parse HEAD)" ]; then
+              echo "::error::tag $TAG already exists at another commit; tags are never moved"; exit 1
+            fi
+            echo "tag $TAG already exists at HEAD"; exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" -m "ITPRA ontology $VERSION"
+          git push origin "refs/tags/$TAG"
       - name: Build the source archive and its hash
         run: |
           name="itpra-ontology-$VERSION"
