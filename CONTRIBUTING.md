@@ -34,9 +34,12 @@ Thank you for helping keep this vocabulary precise. Everything below follows the
 ## Running the checks
 
 ```
+python tools/ontology-lint.py              # schema, terms, verbs; every source: cites a record in decisions/
 python tools/adr-lint.py --strict          # the decision records
-python -m unittest discover -s tests -v    # the lint's own tests
+python tools/check-version-bump.py --base origin/master   # a vocabulary change bumps ontology_version
+python tools/check-links.py                # relative links resolve
+python tools/publication-scan.py           # nothing refers to a private repository
+python -m unittest discover -s tests -v    # the tools' own tests
 ```
 
-The term linter, the version-bump check, the link check and the publication guard join these checks as the release
-tooling lands; until then a maintainer runs them on review.
+CI runs the same six steps on every push and pull request (`.github/workflows/checks.yml`).

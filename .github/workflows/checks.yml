@@ -1,0 +1,31 @@
+name: checks
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyyaml
+      - name: Vocabulary lint (schema, terms, verbs, sources resolve in decisions/)
+        run: python tools/ontology-lint.py
+      - name: Decision records
+        run: python tools/adr-lint.py --strict
+      - name: Version bump (a vocabulary change bumps ontology_version)
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: python tools/check-version-bump.py
+      - name: Links
+        run: python tools/check-links.py
+      - name: Publication guard
+        run: python tools/publication-scan.py
+      - name: Tool tests
+        run: python -m unittest discover -s tests -v
