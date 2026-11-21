@@ -1,0 +1,62 @@
+# ITPRA ontology — FUNCTION library, ADM-REL (Application Release Coordination)
+# type: Function. ids FUNC-adm-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
+# the function (ADR 0011). Functions `support` ≥1 capability (many-to-many). CONSUMER-side; consumes ITO DEL.
+# See ADR 0021.
+
+# Release planning (CAP-ADM-REL-1)
+- id: FUNC-adm-release-planning
+  term: Release Planning
+  type: Function
+  definition: Plans release scope, content, and sequencing across the application's roadmap.
+  aliases: [release scheduling, release scoping]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-REL-1}
+  source: ADR 0021
+
+# Dependency coordination (CAP-ADM-REL-2)
+- id: FUNC-adm-dependency-coordination
+  term: Dependency Coordination
+  type: Function
+  definition: Surfaces and sequences inter-team and cross-application dependencies for a release.
+  aliases: [release train coordination, dependency mapping, cross-team alignment]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-REL-2}
+  source: ADR 0021
+
+# Readiness & go/no-go (CAP-ADM-REL-3)
+- id: FUNC-adm-release-readiness-gate
+  term: Release Readiness Gate
+  type: Function
+  definition: Evaluates a release against quality bar, dependency status, and risk and records a go/no-go decision.
+  aliases: [go/no-go decision, release gate, readiness review]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-REL-3}
+  source: ADR 0021
+
+- id: FUNC-adm-change-communication
+  term: Release Change Communication
+  type: Function
+  definition: Communicates upcoming and shipped change to affected stakeholders so they are prepared.
+  aliases: [release notes, stakeholder communication, change notification]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-REL-3}
+  source: ADR 0021
+
+# Progressive rollout & verification (CAP-ADM-REL-4)
+- id: FUNC-adm-progressive-rollout
+  term: Progressive Rollout
+  type: Function
+  definition: Exposes a release to users in stages with the ability to halt or roll back on failure.
+  aliases: [canary release, phased rollout, staged exposure, blue-green]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-REL-4}
+  source: ADR 0021
+
+- id: FUNC-adm-release-verification
+  term: Release Verification
+  type: Function
+  definition: Verifies a release is healthy in the target environment before it reaches everyone.
+  aliases: [post-deploy verification, smoke verification, release validation]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-REL-4}
+  source: ADR 0021

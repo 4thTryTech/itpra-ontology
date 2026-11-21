@@ -1,0 +1,362 @@
+# ITPRA ontology — T1 journey catalog
+# The end-to-end stories a persona follows to achieve an outcome across capabilities. Ratified taxonomy: ADR
+# 0013 (six JourneyGroups). type: Journey; ids JRN-<slug> (group is NOT encoded in the id — membership is the
+# `grouped_by` relation). Neutral — steps reference capabilities + neutral construct points
+# (request/approval/change/incident/record), never tools or named processes. Relationships are expressed from
+# the journey side: grouped_by (one group), consumed_by (primary personas), depends_on (the capabilities the
+# journey exercises). Diagrams: WF-<slug> (terms/workflows.yaml).
+
+# ---- JG-ONBOARDING ----
+- id: JRN-onboard-consumer
+  term: Onboard a Consumer Team & Tenant
+  type: Journey
+  definition: >
+    Establish a new consumer team on the platform — identity, access, an isolated tenancy boundary, catalog
+    discovery, and onboarding documentation — and register it in the system-of-record.
+  relates_to:
+    - {rel: grouped_by, target: JG-ONBOARDING}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+    - {rel: depends_on, target: CAP-EXP-2}
+    - {rel: depends_on, target: CAP-EXP-1}
+    - {rel: depends_on, target: CAP-GOV-1}
+    - {rel: depends_on, target: CAP-SEC-1}
+    - {rel: depends_on, target: CAP-SEC-2}
+    - {rel: depends_on, target: CAP-GOV-5}
+    - {rel: depends_on, target: CAP-GOV-4}
+    - {rel: depends_on, target: CAP-GOV-8}
+    - {rel: depends_on, target: CAP-EXP-5}
+    - {rel: depends_on, target: CAP-EXP-6}
+  source: ADR 0013
+
+- id: JRN-provision-dev-environment
+  term: Provision a Developer Environment
+  type: Journey
+  definition: >
+    A consumer self-provisions a standardized, pre-configured development environment with governed coding
+    assistance, started from a golden-path template under its own identity.
+  relates_to:
+    - {rel: grouped_by, target: JG-ONBOARDING}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+    - {rel: depends_on, target: CAP-EXP-7}
+    - {rel: depends_on, target: CAP-EXP-8}
+    - {rel: depends_on, target: CAP-EXP-3}
+    - {rel: depends_on, target: CAP-EXP-1}
+    - {rel: depends_on, target: CAP-SEC-1}
+  source: ADR 0013
+
+# ---- JG-DELIVERY ----
+- id: JRN-build-deploy-service
+  term: Build, Test & Deploy a Service
+  type: Journey
+  definition: >
+    The recurring delivery loop: a consumer commits a change, the platform builds and tests it, gates on
+    code quality and application-security testing, verifies supply-chain integrity, evaluates policy at
+    admission, and deploys/promotes the version across environments from declarative definitions.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+    - {rel: depends_on, target: CAP-EXP-4}
+    - {rel: depends_on, target: CAP-DEL-1}
+    - {rel: depends_on, target: CAP-DEL-5}
+    - {rel: depends_on, target: CAP-SEC-9}
+    - {rel: depends_on, target: CAP-FND-3}
+    - {rel: depends_on, target: CAP-DEL-3}
+    - {rel: depends_on, target: CAP-FND-4}
+    - {rel: depends_on, target: CAP-SEC-5}
+    - {rel: depends_on, target: CAP-DEL-2}
+    - {rel: depends_on, target: CAP-AUT-1}
+    - {rel: depends_on, target: CAP-AUT-2}
+    - {rel: depends_on, target: CAP-SUB-1}
+    - {rel: depends_on, target: CAP-SUB-2}
+  source: ADR 0013
+
+- id: JRN-provision-data-services
+  term: Provision Data & Backing Services
+  type: Journey
+  definition: >
+    A consumer self-provisions managed data and backing services for a workload — data stores, caching,
+    messaging/event streams, an ingestion pipeline, an external-data integration point, and a managed service
+    for runs that must survive the loss of the process executing them — with credentials issued and storage
+    allocated.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+    - {rel: depends_on, target: CAP-EXP-1}
+    - {rel: depends_on, target: CAP-GOV-1}
+    - {rel: depends_on, target: CAP-DATA-1}
+    - {rel: depends_on, target: CAP-DATA-6}
+    - {rel: depends_on, target: CAP-DATA-7}
+    - {rel: depends_on, target: CAP-DATA-2}
+    - {rel: depends_on, target: CAP-DATA-5}
+    - {rel: depends_on, target: CAP-SUB-3}
+    - {rel: depends_on, target: CAP-FND-2}
+    - {rel: depends_on, target: CAP-AUT-5}
+    - {rel: depends_on, target: CAP-AUT-9}
+    - {rel: depends_on, target: CAP-SUB-8}
+    - {rel: depends_on, target: CAP-DATA-8}
+  source: ADR 0013
+
+- id: JRN-expose-service-api
+  term: Expose a Service API
+  type: Journey
+  definition: >
+    A consumer publishes a workload's API to other consumers or externally through the managed gateway and
+    service mesh, with ingress, transport identity and encryption, and a catalog listing.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+    - {rel: depends_on, target: CAP-SUB-6}
+    - {rel: depends_on, target: CAP-SUB-7}
+    - {rel: depends_on, target: CAP-SUB-4}
+    - {rel: depends_on, target: CAP-SEC-3}
+    - {rel: depends_on, target: CAP-EXP-2}
+  source: ADR 0013
+
+# ---- JG-OPERATIONS ----
+- id: JRN-observe-and-meet-slo
+  term: Observe a Service & Meet SLOs
+  type: Journey
+  definition: >
+    A running service is made observable and held to its objectives — telemetry collected and piped,
+    dashboards and alerts defined, SLOs tracked, experience monitored, and topology mapped, with breaches
+    routed to responders.
+  relates_to:
+    - {rel: grouped_by, target: JG-OPERATIONS}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+    - {rel: depends_on, target: CAP-OBS-1}
+    - {rel: depends_on, target: CAP-OBS-8}
+    - {rel: depends_on, target: CAP-OBS-3}
+    - {rel: depends_on, target: CAP-OBS-2}
+    - {rel: depends_on, target: CAP-OBS-4}
+    - {rel: depends_on, target: CAP-OBS-9}
+    - {rel: depends_on, target: CAP-OBS-10}
+    - {rel: depends_on, target: CAP-OBS-7}
+  source: ADR 0013
+
+- id: JRN-scale-and-routine-change
+  term: Scale & Make a Routine Change
+  type: Journey
+  definition: >
+    Steady-state operate: scale a workload to demand and run routine operational and scheduled tasks,
+    reconciling to desired state and correcting drift, with low-risk changes recorded at the change point.
+  relates_to:
+    - {rel: grouped_by, target: JG-OPERATIONS}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+    - {rel: depends_on, target: CAP-AUT-6}
+    - {rel: depends_on, target: CAP-AUT-7}
+    - {rel: depends_on, target: CAP-SUB-1}
+    - {rel: depends_on, target: CAP-AUT-2}
+    - {rel: depends_on, target: CAP-AUT-3}
+    - {rel: depends_on, target: CAP-AUT-4}
+    - {rel: depends_on, target: CAP-GOV-2}
+  source: ADR 0013
+
+- id: JRN-patch-platform
+  term: Patch & Update the Platform
+  type: Journey
+  definition: >
+    The platform team applies updates and vulnerability fixes to platform components on a managed cadence —
+    informed by component inventory and vulnerability findings, routed through change, and reversible by
+    rollback.
+  relates_to:
+    - {rel: grouped_by, target: JG-OPERATIONS}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+    - {rel: depends_on, target: CAP-OBS-5}
+    - {rel: depends_on, target: CAP-SEC-4}
+    - {rel: depends_on, target: CAP-FND-5}
+    - {rel: depends_on, target: CAP-FND-1}
+    - {rel: depends_on, target: CAP-GOV-2}
+    - {rel: depends_on, target: CAP-DEL-4}
+  source: ADR 0013
+
+# ---- JG-RESPONSE ----
+- id: JRN-incident-response
+  term: Respond to a Production Incident
+  type: Journey
+  definition: >
+    Detect, triage, coordinate, mitigate, and restore a production incident — alert to responder via
+    escalation, root-cause from telemetry analytics and topology, mitigation (e.g. rollback), and capture of
+    the learning as operational knowledge.
+  relates_to:
+    - {rel: grouped_by, target: JG-RESPONSE}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+    - {rel: depends_on, target: CAP-OBS-2}
+    - {rel: depends_on, target: CAP-OBS-7}
+    - {rel: depends_on, target: CAP-GOV-3}
+    - {rel: depends_on, target: CAP-OBS-6}
+    - {rel: depends_on, target: CAP-OBS-10}
+    - {rel: depends_on, target: CAP-DEL-4}
+    - {rel: depends_on, target: CAP-GOV-9}
+  source: ADR 0013
+
+- id: JRN-security-response
+  term: Respond to a Security Event
+  type: Journey
+  definition: >
+    Detect and respond to a security event — threat detection raises a security incident, response is
+    orchestrated through playbooks (triage, enrichment, containment), access is revoked and credentials
+    rotated, and the audit trail is preserved.
+  relates_to:
+    - {rel: grouped_by, target: JG-RESPONSE}
+    - {rel: consumed_by, target: PERSONA-security-compliance}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+    - {rel: depends_on, target: CAP-SEC-7}
+    - {rel: depends_on, target: CAP-SEC-6}
+    - {rel: depends_on, target: CAP-SEC-8}
+    - {rel: depends_on, target: CAP-SEC-2}
+    - {rel: depends_on, target: CAP-SEC-3}
+    - {rel: depends_on, target: CAP-GOV-3}
+  source: ADR 0013
+
+- id: JRN-disaster-recovery
+  term: Recover from a Disaster
+  type: Journey
+  definition: >
+    Recover service and data after a major disruption — declare the event, fail over or relocate workloads to
+    an alternate location, restore state from backup within recovery objectives, and re-establish high
+    availability.
+  relates_to:
+    - {rel: grouped_by, target: JG-RESPONSE}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+    - {rel: depends_on, target: CAP-RES-3}
+    - {rel: depends_on, target: CAP-RES-2}
+    - {rel: depends_on, target: CAP-RES-1}
+    - {rel: depends_on, target: CAP-RES-5}
+    - {rel: depends_on, target: CAP-RES-4}
+    - {rel: depends_on, target: CAP-GOV-3}
+  source: ADR 0013
+
+# ---- JG-GOVERNANCE ----
+- id: JRN-change-approval
+  term: Approve & Record a Change
+  type: Journey
+  definition: >
+    A significant change is routed from request through a defined approval/decision point — with policy
+    evaluation and admission control — to execution, and the outcome is recorded in the system-of-record.
+  relates_to:
+    - {rel: grouped_by, target: JG-GOVERNANCE}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+    - {rel: consumed_by, target: PERSONA-security-compliance}
+    - {rel: depends_on, target: CAP-GOV-1}
+    - {rel: depends_on, target: CAP-GOV-2}
+    - {rel: depends_on, target: CAP-FND-4}
+    - {rel: depends_on, target: CAP-SEC-5}
+    - {rel: depends_on, target: CAP-GOV-4}
+  source: ADR 0013
+
+- id: JRN-compliance-audit
+  term: Produce Compliance & Audit Evidence
+  type: Journey
+  definition: >
+    An audit or compliance review is satisfied from retained evidence — policy-as-code results, security
+    audit logs, component provenance, and data-governance records assembled against the system-of-record.
+  relates_to:
+    - {rel: grouped_by, target: JG-GOVERNANCE}
+    - {rel: consumed_by, target: PERSONA-security-compliance}
+    - {rel: depends_on, target: CAP-GOV-6}
+    - {rel: depends_on, target: CAP-SEC-6}
+    - {rel: depends_on, target: CAP-FND-4}
+    - {rel: depends_on, target: CAP-FND-5}
+    - {rel: depends_on, target: CAP-DATA-4}
+    - {rel: depends_on, target: CAP-GOV-4}
+  source: ADR 0013
+
+- id: JRN-cost-value-review
+  term: Review Cost, Capacity & Value
+  type: Journey
+  definition: >
+    A periodic review of cost, capacity, and platform value — consumption attributed and shown back,
+    capacity forecast against demand, optimization opportunities surfaced, and adoption/value analyzed and
+    reported.
+  relates_to:
+    - {rel: grouped_by, target: JG-GOVERNANCE}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+    - {rel: depends_on, target: CAP-COST-1}
+    - {rel: depends_on, target: CAP-COST-2}
+    - {rel: depends_on, target: CAP-COST-3}
+    - {rel: depends_on, target: CAP-GOV-7}
+    - {rel: depends_on, target: CAP-DATA-3}
+  source: ADR 0013
+
+# ---- JG-EVOLUTION ----
+- id: JRN-upgrade-migrate
+  term: Upgrade & Migrate a Workload
+  type: Journey
+  definition: >
+    A workload or component moves to a new version, location, or environment — re-realized from declarative
+    definitions, validated by controlled fault injection, promoted through change, and tracked as a lifecycle
+    transition.
+  relates_to:
+    - {rel: grouped_by, target: JG-EVOLUTION}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+    - {rel: depends_on, target: CAP-RES-5}
+    - {rel: depends_on, target: CAP-AUT-1}
+    - {rel: depends_on, target: CAP-DEL-2}
+    - {rel: depends_on, target: CAP-RES-6}
+    - {rel: depends_on, target: CAP-GOV-2}
+    - {rel: depends_on, target: CAP-GOV-8}
+  source: ADR 0013
+
+- id: JRN-decommission-offboard
+  term: Decommission a Service & Offboard a Tenant
+  type: Journey
+  definition: >
+    A service reaches end-of-life or a tenant leaves — substrate reclaimed, access revoked, a final backup
+    and required records retained, data retention applied, and the lifecycle and evidence closed out.
+  relates_to:
+    - {rel: grouped_by, target: JG-EVOLUTION}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+    - {rel: depends_on, target: CAP-GOV-8}
+    - {rel: depends_on, target: CAP-SUB-5}
+    - {rel: depends_on, target: CAP-SEC-2}
+    - {rel: depends_on, target: CAP-RES-1}
+    - {rel: depends_on, target: CAP-DATA-4}
+    - {rel: depends_on, target: CAP-GOV-4}
+    - {rel: depends_on, target: CAP-GOV-6}
+    - {rel: depends_on, target: CAP-DATA-8}
+  source: ADR 0013
+
+- id: JRN-platform-product-feedback
+  term: Run the Platform-as-a-Product Feedback Loop
+  type: Journey
+  definition: >
+    The platform improves as a product — consumers and operators raise defects and feature nominations, which
+    are triaged into a prioritized backlog and roadmap, delivered, and reported back, informed by adoption and
+    value measurement and captured operational knowledge.
+  relates_to:
+    - {rel: grouped_by, target: JG-EVOLUTION}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+    - {rel: depends_on, target: CAP-GOV-10}
+    - {rel: depends_on, target: CAP-GOV-11}
+    - {rel: depends_on, target: CAP-GOV-7}
+    - {rel: depends_on, target: CAP-GOV-9}
+    - {rel: depends_on, target: CAP-EXP-6}
+  source: ADR 0013
+
+- id: JRN-run-delegated-actor
+  term: Run a Delegated Actor
+  type: Journey
+  definition: >
+    A delegated actor is put to work on the platform and kept within bounds while it runs - hosted in a
+    governed harness, reaching models and tools only through mediated paths, choosing its own next action
+    within a partitioned action space, accumulating state scoped to the principal it acts for, and remaining
+    interruptible and attributable throughout. The operate-phase counterpart to running a pre-authored
+    automation, distinguished by the action set being selected during the run rather than before it.
+  relates_to:
+    - {rel: grouped_by, target: JG-OPERATIONS}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+    - {rel: depends_on, target: CAP-AUT-8}
+    - {rel: depends_on, target: CAP-DATA-8}
+    - {rel: depends_on, target: CAP-SUB-8}
+    - {rel: depends_on, target: CAP-SEC-2}
+    - {rel: depends_on, target: CAP-GOV-2}
+    - {rel: depends_on, target: CAP-OBS-1}
+    - {rel: depends_on, target: CAP-COST-1}
+    - {rel: depends_on, target: CAP-GOV-9}
+  source: ADR 0016 (extended by ADR 0038)

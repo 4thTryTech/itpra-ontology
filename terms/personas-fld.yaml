@@ -1,0 +1,64 @@
+# ITPRA ontology — Onsite / Field Support (FLD) personas
+# type: Persona. ids PERSONA-fld-<slug>. Coarse, tier-graduated neutral role archetypes (mirrors the persona
+# model, ADR 0012): each refines into granular roles at T2/T3. Capabilities reference these via `consumed_by`;
+# relationships are expressed from the capability/journey side. Ratified by ADR 0020.
+
+- id: PERSONA-fld-field-technician
+  term: Field Technician
+  type: Persona
+  definition: >
+    The hands on site: the person who travels to a desk, site, or facility and performs the physical work —
+    on-site diagnosis, directed- and skilled-hands execution, install/move/add/change, break-fix and part
+    swaps — that remote and automated action cannot do. The primary provider of the field service. At T2/T3
+    this refines into segments (deskside technician, smart-hands/data-center technician, field engineer,
+    depot repair technician, subcontracted field partner).
+  aliases: [field engineer, deskside technician, smart-hands technician, on-site technician]
+  source: ADR 0020
+
+- id: PERSONA-fld-field-coordinator
+  term: Field Operations Coordinator
+  type: Persona
+  definition: >
+    The coordinator: receives and qualifies field work, schedules and assigns technicians by skill and
+    credential, plans routes and territories, and tracks visits to completion against the service
+    commitment. Runs the dispatch spine. At T2/T3 this refines into granular roles (dispatcher, scheduler,
+    field-operations controller, territory planner).
+  aliases: [dispatcher, scheduler, field operations, field controller]
+  source: ADR 0020
+
+- id: PERSONA-fld-field-service-lead
+  term: Field Support Lead
+  type: Persona
+  definition: >
+    The provider-as-product owner: builds, operates, and evolves onsite/field support as a service — the
+    capability set, the spares and logistics network, the technician workforce and partners, and the
+    performance and SLA commitments. Owns the FLD roadmap and the field-performance insight loop. At T2/T3
+    this refines into granular roles (field-services manager, spares/logistics manager, field product owner,
+    field performance analyst).
+  aliases: [field services manager, field support manager, field product owner]
+  source: ADR 0020
+
+- id: PERSONA-fld-site-custodian
+  term: Site & Safety Custodian
+  type: Persona
+  definition: >
+    The assurance owner for the place: governs who may enter a controlled site and under what conditions —
+    induction, credential verification, permit-to-work, escort, chain-of-custody, and on-site safety. FLD
+    operates within these controls for its technicians; the custodian role represents the site/facility and
+    enterprise safety/physical-security authority FLD complies with and interfaces with. At T2/T3 this
+    refines into granular roles (site security officer, safety/EHS coordinator, facility access controller,
+    escort).
+  aliases: [site security, safety officer, facility custodian, access controller]
+  source: ADR 0020
+
+- id: PERSONA-fld-service-requestor
+  term: Field Service Requestor
+  type: Persona
+  definition: >
+    The consumer: the party that needs physical hands on site and raises the field work — typically the
+    Service Desk routing a triaged issue, an asset-owning or operations team needing rack-and-stack or a
+    relocation, or an end-user/site contact awaiting a deskside visit. Consumes field support; does not
+    perform it. At T2/T3 this refines into segments (service-desk agent, requesting platform/operations team,
+    end-user/site contact, business stakeholder).
+  aliases: [requester, requesting team, service desk, site contact]
+  source: ADR 0020

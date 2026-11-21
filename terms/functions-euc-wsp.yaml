@@ -1,0 +1,69 @@
+# ITPRA ontology — FUNCTION library, EUC-WSP (Workspace & Productivity Services)
+# type: Function. ids FUNC-euc-<slug>.
+
+# Productivity & collaboration application provisioning (CAP-EUC-WSP-1)
+- id: FUNC-euc-app-entitlement
+  term: Application Entitlement & Licensing
+  type: Function
+  definition: Entitles and licenses productivity/collaboration applications to a user by role or request.
+  aliases: [license assignment, app entitlement]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-WSP-1}
+  source: ADR 0018
+
+- id: FUNC-euc-collaboration-provisioning
+  term: Collaboration Space Provisioning
+  type: Function
+  definition: Provisions messaging, meeting, and collaboration spaces for a user or team.
+  aliases: [collaboration setup, team workspace provisioning]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-WSP-1}
+  source: ADR 0018
+
+# Workspace configuration & personalization (CAP-EUC-WSP-2)
+- id: FUNC-euc-user-profile-management
+  term: User Profile & Settings Management
+  type: Function
+  definition: Maintains and roams the user's workspace settings, preferences, and profile across devices and sessions.
+  aliases: [profile roaming, settings sync, user state management]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-WSP-2}
+  source: ADR 0018
+
+# File & content access (CAP-EUC-WSP-3)
+- id: FUNC-euc-file-sync-share
+  term: File Synchronization & Sharing
+  type: Function
+  definition: Synchronizes, shares, and makes available offline a user's files and shared content from the endpoint.
+  aliases: [file sync, content sync-and-share]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-WSP-3}
+  source: ADR 0018
+
+- id: FUNC-euc-data-handling-policy
+  term: Endpoint Data-Handling Policy
+  type: Function
+  definition: Applies data-handling and sharing controls to workplace content accessed from the endpoint.
+  aliases: [content protection, data-loss-prevention policy]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-WSP-3}
+  source: ADR 0018
+
+# Peripheral & output services (CAP-EUC-WSP-4)
+- id: FUNC-euc-print-services
+  term: Managed Print & Scan Services
+  type: Function
+  definition: Discovers and delivers managed print, scan, and follow-me output services to the endpoint under policy.
+  aliases: [print management, follow-me printing]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-WSP-4}
+  source: ADR 0018
+
+- id: FUNC-euc-peripheral-management
+  term: Peripheral Management
+  type: Function
+  definition: Connects and governs managed peripherals (displays, docks, input devices) usable from the endpoint.
+  aliases: [peripheral provisioning, device redirection]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-WSP-4}
+  source: ADR 0018

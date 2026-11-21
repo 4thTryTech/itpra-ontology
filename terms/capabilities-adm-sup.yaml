@@ -1,0 +1,83 @@
+# ITPRA ontology — ADM-SUP (Application Support & Maintenance Modes) capabilities
+# type: Capability. ids CAP-ADM-SUP-<n>. Grouped under domain ADM-SUP (ADR 0021). Maintenance modes follow
+# ISO/IEC 14764 (corrective/adaptive/perfective/preventive). Owns APPLICATION resolution; distinct from the
+# cross-domain contact channel (Service Desk) and platform runtime incidents (ITO) (ADR 0021).
+
+- id: CAP-ADM-SUP-1
+  term: Application Support Triage & Resolution
+  type: Capability
+  definition: >
+    Triages and resolves application-level issues across escalating tiers of expertise — from known-item
+    handling and configuration workarounds to deep code-level diagnosis — restoring correct application
+    behavior for users. Receives issues routed by the cross-domain contact channel; does not own that
+    channel.
+  relates_to:
+    - {rel: grouped_by, target: ADM-SUP}
+    - {rel: consumed_by, target: PERSONA-adm-app-support}
+    - {rel: consumed_by, target: PERSONA-adm-business-owner}
+  source: ADR 0021
+
+- id: CAP-ADM-SUP-2
+  term: Corrective Maintenance
+  type: Capability
+  definition: >
+    Modifies the application to fix a reported defect or failure to meet requirements — diagnosing root
+    cause and delivering the fix through the normal engineering and release path — so confirmed faults are
+    removed.
+  relates_to:
+    - {rel: grouped_by, target: ADM-SUP}
+    - {rel: depends_on, target: CAP-ADM-SUP-1}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+    - {rel: consumed_by, target: PERSONA-adm-app-support}
+  source: ADR 0021
+
+- id: CAP-ADM-SUP-3
+  term: Adaptive Maintenance
+  type: Capability
+  definition: >
+    Modifies the application to keep it usable in a changed or changing environment — a new runtime,
+    dependency, interface, or platform version it depends on — so external change does not break the
+    application.
+  relates_to:
+    - {rel: grouped_by, target: ADM-SUP}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+  source: ADR 0021
+
+- id: CAP-ADM-SUP-4
+  term: Perfective Maintenance
+  type: Capability
+  definition: >
+    Enhances the delivered application's qualities beyond its original requirements — usability, performance,
+    or maintainability — as planned, value-adding improvement informed by usage and feedback.
+  relates_to:
+    - {rel: grouped_by, target: ADM-SUP}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+    - {rel: consumed_by, target: PERSONA-adm-business-owner}
+  source: ADR 0021
+
+- id: CAP-ADM-SUP-5
+  term: Preventive Maintenance
+  type: Capability
+  definition: >
+    Modifies the application to forestall latent problems before they manifest — addressing faults not yet
+    surfaced, reducing accumulated technical debt, and lowering future maintenance cost — keeping the
+    application durable over its life.
+  relates_to:
+    - {rel: grouped_by, target: ADM-SUP}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+    - {rel: consumed_by, target: PERSONA-adm-app-assurance}
+  source: ADR 0021
+
+- id: CAP-ADM-SUP-6
+  term: Application Support Model & Lifecycle Modes
+  type: Capability
+  definition: >
+    Defines and operates each application's support model across lifecycle stages — heightened-attention
+    post-go-live (hypercare) transitioning to a leaner steady-state coverage — so support effort matches the
+    application's maturity and risk.
+  relates_to:
+    - {rel: grouped_by, target: ADM-SUP}
+    - {rel: depends_on, target: CAP-ADM-SUP-1}
+    - {rel: consumed_by, target: PERSONA-adm-app-support}
+    - {rel: consumed_by, target: PERSONA-adm-business-owner}
+  source: ADR 0021

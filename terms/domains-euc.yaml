@@ -1,0 +1,105 @@
+# ITPRA ontology — End-User Computing (EUC) capability domains
+# type: Domain. The `id` IS the domain code used in capability ids: CAP-<id>-<n> (child: CAP-<id>-<n>.<m>). Each
+# domain is `grouped_by` an EXISTING capability PLANE (terms/planes.yaml). EUC capabilities span planes; each
+# group is placed under the fitting existing plane. Taxonomy ratified by ADR 0018. Owning service domain:
+# SD-END-USER (interfaces_with PLANE-EXPERIENCE; see ADR 0009 + ADR 0018).
+
+- id: EUC-DEV
+  term: Device Lifecycle & Provisioning
+  type: Domain
+  definition: >
+    The end-to-end lifecycle of workforce endpoints — enrollment, zero-touch provisioning, configuration and
+    software distribution, patch/update, and retirement/wipe — keeping the device estate known, current, and
+    consistently configured from procurement to decommission.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-RESOURCE}
+    - {rel: belongs_to_service_domain, target: SD-END-USER}
+  source: ADR 0018
+
+- id: EUC-WSP
+  term: Workspace & Productivity Services
+  type: Domain
+  definition: >
+    The productivity and collaboration workspace people use to do work — provisioning of productivity and
+    collaboration applications, workspace configuration and personalization, and governed access to files and
+    content from the endpoint.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-EXPERIENCE}
+    - {rel: belongs_to_service_domain, target: SD-END-USER}
+  source: ADR 0018
+
+- id: EUC-SEC
+  term: Endpoint Security & Compliance Posture
+  type: Domain
+  definition: >
+    The end-user-facing security posture of the endpoint — threat protection and response on the device,
+    configuration hardening against baselines, endpoint patch/update assurance, and device compliance state
+    and attestation. Applies enterprise policy to endpoints and supplies endpoint compliance evidence; distinct
+    from platform/workload security (ITO SEC) and enterprise policy authorship (Enterprise Security/GRC).
+  relates_to:
+    - {rel: grouped_by, target: PLANE-SECURITY}
+    - {rel: belongs_to_service_domain, target: SD-END-USER}
+  source: ADR 0018
+
+- id: EUC-IAM
+  term: Workforce Identity & Access
+  type: Domain
+  definition: >
+    The end-user-facing identity and access experience — workforce access onboarding, sign-in experience
+    (multi-factor, single sign-on), device-posture-conditioned access to workplace resources, and self-service
+    credential and access recovery. Consumes and applies the enterprise identity of record; does not own the
+    directory of record or workload identity.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-SECURITY}
+    - {rel: belongs_to_service_domain, target: SD-END-USER}
+  source: ADR 0018
+
+- id: EUC-MOB
+  term: Mobility & BYOD
+  type: Domain
+  definition: >
+    Mobile and personally-owned device participation in the workplace — personal-device enrollment, separation
+    of work and personal data, selective/remote wipe of corporate data, and mobile application and content
+    management, so personal devices can safely reach workplace resources.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-RESOURCE}
+    - {rel: belongs_to_service_domain, target: SD-END-USER}
+  source: ADR 0018
+
+- id: EUC-VRW
+  term: Virtual & Remote Workspace
+  type: Domain
+  definition: >
+    Delivery of a workspace decoupled from the physical device — virtual/hosted desktop provisioning,
+    remote/published application delivery, and remote-session brokering and access. The hosting compute/
+    storage/network substrate is an infrastructure-platform concern (ITO SUB) this domain interfaces with.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-DELIVERY}
+    - {rel: belongs_to_service_domain, target: SD-END-USER}
+  source: ADR 0018
+
+- id: EUC-SUP
+  term: End-User Support Experience & Self-Service
+  type: Domain
+  definition: >
+    The end-user-facing support experience of the workplace — workplace self-service and knowledge, automated
+    fulfilment of workplace requests, remote endpoint assistance and remediation, and the workforce
+    onboarding/offboarding experience. Shifts resolution left to the user; distinct from the cross-domain
+    contact channel and triage owned by the Service Desk (SD-SERVICE-DESK), which it interfaces with.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-EXPERIENCE}
+    - {rel: belongs_to_service_domain, target: SD-END-USER}
+  source: ADR 0018
+
+- id: EUC-DEX
+  term: Endpoint Observability & Digital Employee Experience
+  type: Domain
+  definition: >
+    Understanding and improving the workforce's digital experience — endpoint telemetry and inventory,
+    digital-experience scoring and analytics across device/application/connection performance, proactive
+    experience remediation, and experience sentiment and feedback. Observes the end-user's device, apps, and
+    experience; distinct from platform/workload observability (ITO OBS).
+  relates_to:
+    - {rel: grouped_by, target: PLANE-OPERATIONS}
+    - {rel: belongs_to_service_domain, target: SD-END-USER}
+  source: ADR 0018

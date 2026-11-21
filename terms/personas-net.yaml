@@ -1,0 +1,59 @@
+# ITPRA ontology — Network & Connectivity (NET) personas
+# type: Persona. ids PERSONA-net-<slug>. Coarse, tier-graduated neutral role archetypes (mirrors the persona
+# model, ADR 0012): each refines into granular roles at T2/T3. Capabilities reference these via `consumed_by`;
+# relationships are expressed from the capability/journey side. Ratified by ADR 0023.
+
+- id: PERSONA-net-consumer
+  term: Network Consumer
+  type: Persona
+  definition: >
+    The consumer of enterprise connectivity: any site, team, workload, application, or workforce user that
+    depends on the network to reach the resources it needs — the primary customer of the NET service domain.
+    At T2/T3 this refines into segments (site/branch, remote/roaming worker, application/workload owner,
+    platform consumer, third party/partner).
+  aliases: [network user, connectivity consumer, site, tenant]
+  source: ADR 0023
+
+- id: PERSONA-net-engineering-team
+  term: Network Engineering Team
+  type: Persona
+  definition: >
+    The provider: designs, builds, and evolves the enterprise network as a product — WAN and edge connectivity,
+    segmentation and secure access, DDI, performance, and resilience. Owns the NET capabilities and the golden-
+    path connectivity experiences. At T2/T3 this refines into granular roles (WAN/edge engineer, network
+    security engineer, DDI engineer, network automation engineer, NET product owner).
+  aliases: [network engineering, network team, connectivity engineering]
+  source: ADR 0023
+
+- id: PERSONA-net-operations
+  term: Network Operations
+  type: Persona
+  definition: >
+    The operate/assistance owner: runs and assures the enterprise network day to day — monitoring health and
+    performance, detecting and restoring degradation, and assisting consumers with connectivity issues.
+    Distinct from the cross-domain Service Desk contact channel; this is the network-resolution role. At T2/T3
+    this refines into granular roles (network operations centre engineer, on-call responder, capacity/assurance
+    analyst).
+  aliases: [NOC, network operations centre, network run team]
+  source: ADR 0023
+
+- id: PERSONA-net-security-compliance
+  term: Network Security & Compliance
+  type: Persona
+  definition: >
+    The assurance owner for the network: defines and verifies the network-edge security and segmentation
+    posture and the access policy applied to the enterprise network, and supplies network-control evidence.
+    Applies the enterprise control catalog to the network rather than authoring it. At T2/T3 this refines into
+    granular roles (network security engineer, segmentation/policy owner, compliance/audit liaison).
+  aliases: [network security, connectivity compliance, edge security owner]
+  source: ADR 0023
+
+- id: PERSONA-net-architect
+  term: Network Architect & Planner
+  type: Persona
+  definition: >
+    The planning/evolution owner: sets the target network architecture, address plan, and capacity/resilience
+    strategy, and steers the network's evolution and technology refresh. At T2/T3 this refines into granular
+    roles (enterprise network architect, capacity planner, addressing/topology designer).
+  aliases: [network architect, network planner, connectivity architect]
+  source: ADR 0023

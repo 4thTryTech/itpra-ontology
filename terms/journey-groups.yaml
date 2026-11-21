@@ -1,0 +1,53 @@
+# ITPRA ontology — T1 journey groups
+# The groups journeys are organized under. Ratified by ADR 0013. type: JourneyGroup; ids JG-<slug>. Grouping is
+# by lifecycle phase (design -> deploy -> operate) plus cross-cutting concerns, NOT by persona (a journey
+# crosses personas; primary persona is a field on the journey spec). The id is NOT encoded in journey ids
+# (journeys are JRN-<slug>; group membership is via `grouped_by`). Neutral — no ITIL/DevOps terms.
+
+- id: JG-ONBOARDING
+  term: Onboarding
+  type: JourneyGroup
+  definition: >
+    Establishing a consumer, team, or workload on the platform — access, identity, tenancy, and the first
+    golden-path service. The entry point that precedes the design -> deploy -> operate loop.
+  source: ADR 0013
+
+- id: JG-DELIVERY
+  term: Build & Deliver
+  type: JourneyGroup
+  definition: >
+    Designing, building, testing, deploying, releasing, and promoting a workload onto the platform — the
+    recurring delivery loop spanning the design and deploy phases.
+  source: ADR 0013
+
+- id: JG-OPERATIONS
+  term: Operate
+  type: JourneyGroup
+  definition: >
+    Running, observing, scaling, patching, and making routine changes to keep workloads and the platform
+    healthy — the ongoing operate phase, which runs for the lifetime of the workload.
+  source: ADR 0013
+
+- id: JG-RESPONSE
+  term: Respond & Recover
+  type: JourneyGroup
+  definition: >
+    Detecting and responding to disruption — incidents, rollback, disaster recovery and restore, and
+    security response. The exception paths off the steady-state operate loop.
+  source: ADR 0013
+
+- id: JG-GOVERNANCE
+  term: Govern & Assure
+  type: JourneyGroup
+  definition: >
+    Request, approval, and change; compliance and audit evidence; cost and value review; and access and
+    tenancy review — the cross-cutting governance and assurance journeys.
+  source: ADR 0013
+
+- id: JG-EVOLUTION
+  term: Evolve & Retire
+  type: JourneyGroup
+  definition: >
+    Upgrading and migrating, decommissioning and offboarding, and the platform-as-a-product feedback loop
+    (defect/nomination -> backlog -> roadmap) — how the platform and its workloads change and end.
+  source: ADR 0013

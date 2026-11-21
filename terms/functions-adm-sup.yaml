@@ -1,0 +1,82 @@
+# ITPRA ontology — FUNCTION library, ADM-SUP (Application Support & Maintenance Modes)
+# type: Function. ids FUNC-adm-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
+# the function (ADR 0011). Maintenance-mode functions name the ISO/IEC 14764 categories (that IS the function).
+# See ADR 0021.
+
+# Support triage & resolution (CAP-ADM-SUP-1)
+- id: FUNC-adm-support-triage
+  term: Application Support Triage
+  type: Function
+  definition: Triages routed application issues by severity and type and routes them to the right resolution tier.
+  aliases: [issue triage, support routing, ticket triage]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-SUP-1}
+  source: ADR 0021
+
+- id: FUNC-adm-issue-diagnosis
+  term: Application Issue Diagnosis
+  type: Function
+  definition: Diagnoses an application issue from its behavior and telemetry, escalating to code-level analysis where needed.
+  aliases: [root-cause diagnosis, defect reproduction, fault isolation]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-SUP-1}
+  source: ADR 0021
+
+# Corrective maintenance (CAP-ADM-SUP-2)
+- id: FUNC-adm-corrective-maintenance
+  term: Corrective Maintenance
+  type: Function
+  definition: Modifies the application to fix a reported defect or failure to meet requirements (ISO/IEC 14764).
+  aliases: [defect fix, bug fix, fault correction]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-SUP-2}
+  source: ADR 0021
+
+# Adaptive maintenance (CAP-ADM-SUP-3)
+- id: FUNC-adm-adaptive-maintenance
+  term: Adaptive Maintenance
+  type: Function
+  definition: Modifies the application to keep it usable in a changed or changing environment (ISO/IEC 14764).
+  aliases: [dependency upgrade, runtime adaptation, platform-version adaptation]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-SUP-3}
+  source: ADR 0021
+
+# Perfective maintenance (CAP-ADM-SUP-4)
+- id: FUNC-adm-perfective-maintenance
+  term: Perfective Maintenance
+  type: Function
+  definition: Enhances the delivered application's qualities beyond original requirements (ISO/IEC 14764).
+  aliases: [enhancement, usability improvement, performance tuning]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-SUP-4}
+  source: ADR 0021
+
+# Preventive maintenance (CAP-ADM-SUP-5)
+- id: FUNC-adm-preventive-maintenance
+  term: Preventive Maintenance
+  type: Function
+  definition: Modifies the application to forestall latent problems and reduce technical debt before they manifest (ISO/IEC 14764).
+  aliases: [technical-debt reduction, refactoring, latent-fault remediation]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-SUP-5}
+  source: ADR 0021
+
+# Support model & lifecycle modes (CAP-ADM-SUP-6)
+- id: FUNC-adm-hypercare
+  term: Hypercare Support
+  type: Function
+  definition: Provides heightened-attention support immediately after go-live until the release stabilizes.
+  aliases: [post-go-live support, elevated support, warranty support]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-SUP-6}
+  source: ADR 0021
+
+- id: FUNC-adm-support-model-definition
+  term: Support Model Definition
+  type: Function
+  definition: Defines each application's support coverage and tiers and transitions it across lifecycle stages.
+  aliases: [support tiering, steady-state support model, coverage model]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-SUP-6}
+  source: ADR 0021

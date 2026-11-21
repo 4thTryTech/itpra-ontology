@@ -1,0 +1,70 @@
+# ITPRA ontology — FLD-DISP (Dispatch & Scheduling) capabilities
+# type: Capability. ids CAP-FLD-DISP-<n>. Grouped under domain FLD-DISP (ADR 0020); environment expression per
+# ADR 0014.
+
+- id: CAP-FLD-DISP-1
+  term: Dispatch Intake & Qualification
+  type: Capability
+  definition: >
+    Receives a request for physical, on-site work, qualifies it (what, where, when, criticality, required
+    skills and credentials), and converts it into a dispatchable field work order — the entry point that
+    turns demand from the contact channel or an operations signal into coordinated field work.
+  relates_to:
+    - {rel: grouped_by, target: FLD-DISP}
+    - {rel: consumed_by, target: PERSONA-fld-field-coordinator}
+    - {rel: consumed_by, target: PERSONA-fld-service-requestor}
+  source: ADR 0020
+
+- id: CAP-FLD-DISP-2
+  term: Technician Scheduling & Appointment Management
+  type: Capability
+  definition: >
+    Schedules qualified field work into time-bounded visits against technician availability and the service
+    commitment, books and confirms appointments, and dynamically reschedules as same-day changes arrive, so
+    every visit has a committed window.
+  relates_to:
+    - {rel: grouped_by, target: FLD-DISP}
+    - {rel: depends_on, target: CAP-FLD-DISP-1}
+    - {rel: consumed_by, target: PERSONA-fld-field-coordinator}
+    - {rel: consumed_by, target: PERSONA-fld-service-requestor}
+  source: ADR 0020
+
+- id: CAP-FLD-DISP-3
+  term: Skill & Credential-Based Assignment
+  type: Capability
+  definition: >
+    Assigns each visit to a technician whose skills, certifications, and site safety credentials satisfy the
+    work — treating required skill and credential as hard constraints — while weighing proximity, territory,
+    and the service commitment, so no technician is sent to work they are not qualified or cleared to do.
+  relates_to:
+    - {rel: grouped_by, target: FLD-DISP}
+    - {rel: depends_on, target: CAP-FLD-DISP-2}
+    - {rel: consumed_by, target: PERSONA-fld-field-coordinator}
+  source: ADR 0020
+
+- id: CAP-FLD-DISP-4
+  term: Route & Territory Planning
+  type: Capability
+  definition: >
+    Plans efficient routes and balances coverage across territories for the day's visits, minimizing travel
+    and idle time while honoring committed windows, so technician time converts to on-site productive work
+    rather than transit.
+  relates_to:
+    - {rel: grouped_by, target: FLD-DISP}
+    - {rel: depends_on, target: CAP-FLD-DISP-3}
+    - {rel: consumed_by, target: PERSONA-fld-field-coordinator}
+  source: ADR 0020
+
+- id: CAP-FLD-DISP-5
+  term: En-Route Tracking & On-Site Status
+  type: Capability
+  definition: >
+    Tracks each visit through its lifecycle — assigned, en route, on site, in progress, complete — with
+    live status and arrival/ETA visibility, so the coordinator, the requestor, and the SLA clock all share
+    one current picture of where the work stands.
+  relates_to:
+    - {rel: grouped_by, target: FLD-DISP}
+    - {rel: depends_on, target: CAP-FLD-DISP-4}
+    - {rel: consumed_by, target: PERSONA-fld-field-coordinator}
+    - {rel: consumed_by, target: PERSONA-fld-service-requestor}
+  source: ADR 0020

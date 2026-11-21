@@ -1,0 +1,73 @@
+# ITPRA ontology — ITSM-SLM (Service-Level & Supplier/Provider Management) capabilities
+# type: Capability. ids CAP-ITSM-SLM-<n>. Grouped under domain ITSM-SLM (ADR 0025). Neutral cross-provider
+# coordination over GC-SERVICE-LEVEL / GC-OWNERSHIP / GC-FEEDBACK.
+
+- id: CAP-ITSM-SLM-1
+  term: End-to-End Service-Level Commitment
+  type: Capability
+  definition: >
+    Composes the per-provider commitments into a single end-to-end commitment a consumer is given for a whole
+    service — defining what level is promised and confirming each contributing provider's commitment underpins
+    it — so the consumer-facing commitment is credible and traceable to the chain that supports it.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-SLM}
+    - {rel: consumed_by, target: PERSONA-itsm-service-owner}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+  source: ADR 0025
+
+- id: CAP-ITSM-SLM-2
+  term: Service-Level Monitoring & Headroom
+  type: Capability
+  definition: >
+    Measures the end-to-end service against its commitment and watches the headroom against it across the
+    provider chain — surfacing where a provider's contribution is at risk of breaching the whole — so attention
+    moves to the right provider before the end-to-end commitment is missed.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-SLM}
+    - {rel: depends_on, target: CAP-ITSM-SLM-1}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-service-owner}
+  source: ADR 0025
+
+- id: CAP-ITSM-SLM-3
+  term: Supplier & Provider Relationship Management
+  type: Capability
+  definition: >
+    Manages the relationship with each provider/supplier that contributes to enterprise services — its scope,
+    commitments, and engagement model, and the onboarding and offboarding of providers — so the provider chain
+    stays governed and accountable as providers join, change, or leave.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-SLM}
+    - {rel: consumed_by, target: PERSONA-itsm-service-owner}
+    - {rel: consumed_by, target: PERSONA-itsm-provider}
+  source: ADR 0025
+
+- id: CAP-ITSM-SLM-4
+  term: Provider Performance & Commitment Assurance
+  type: Capability
+  definition: >
+    Assesses each provider's performance against its commitments and feeds the result into service-level and
+    relationship decisions — confirming providers meet what they committed and flagging shortfalls — so the
+    chain underpinning each end-to-end commitment is held to account on evidence.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-SLM}
+    - {rel: depends_on, target: CAP-ITSM-SLM-3}
+    - {rel: depends_on, target: CAP-ITSM-SLM-2}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-service-owner}
+  source: ADR 0025
+
+- id: CAP-ITSM-SLM-5
+  term: Internal Alignment Coordination
+  type: Capability
+  definition: >
+    Coordinates the internal alignments between contributing teams that an end-to-end commitment depends on —
+    the responsibilities and hand-offs each must hold for the consumer-facing commitment to be met — so the
+    commitments below the surface are explicit and consistent across providers, without naming any provider's
+    own internal process.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-SLM}
+    - {rel: depends_on, target: CAP-ITSM-SLM-1}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-provider}
+  source: ADR 0025

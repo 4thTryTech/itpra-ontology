@@ -1,0 +1,90 @@
+# ITPRA ontology — FUNCTION library, EUC-DEV (Device Lifecycle & Provisioning)
+# type: Function. ids FUNC-euc-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
+# the function (ADR 0011). Functions `support` ≥1 capability (many-to-many). See ADR 0018.
+
+# Device enrollment & zero-touch provisioning (CAP-EUC-DEV-1)
+- id: FUNC-euc-device-enrollment
+  term: Device Enrollment
+  type: Function
+  definition: Registers an endpoint into management by its hardware/identity record so it can receive policy and applications.
+  aliases: [device registration, fleet enrollment]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-DEV-1}
+  source: ADR 0018
+
+- id: FUNC-euc-zero-touch-provisioning
+  term: Zero-Touch Provisioning
+  type: Function
+  definition: Provisions an endpoint to its productive baseline over the air on first sign-in with no manual imaging.
+  aliases: [over-the-air provisioning, autopilot-style provisioning, OTAP]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-DEV-1}
+  source: ADR 0018
+
+# Endpoint configuration & software distribution (CAP-EUC-DEV-2)
+- id: FUNC-euc-configuration-profile
+  term: Configuration Profile Management
+  type: Function
+  definition: Defines and pushes desired-state configuration profiles to endpoints and reconciles drift.
+  aliases: [policy profile, desired-state configuration]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-DEV-2}
+  source: ADR 0018
+
+- id: FUNC-euc-software-distribution
+  term: Software Distribution
+  type: Function
+  definition: Distributes, updates, and removes managed applications across the endpoint estate.
+  aliases: [application deployment, package deployment]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-DEV-2}
+  source: ADR 0018
+
+# Patch & update (CAP-EUC-DEV-3)
+- id: FUNC-euc-patch-orchestration
+  term: Patch Orchestration
+  type: Function
+  definition: Schedules, stages, and rolls out OS/firmware/application updates to endpoints with rollback.
+  aliases: [update ring, staged patch rollout]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-DEV-3}
+  source: ADR 0018
+
+# Inventory & asset state (CAP-EUC-DEV-4)
+- id: FUNC-euc-device-inventory
+  term: Device Inventory
+  type: Function
+  definition: Maintains the authoritative record of each device's identity, ownership, assignment, and lifecycle stage.
+  aliases: [asset register, hardware inventory]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-DEV-4}
+  source: ADR 0018
+
+- id: FUNC-euc-hardware-software-discovery
+  term: Hardware & Software Discovery
+  type: Function
+  definition: Discovers installed hardware and software on managed endpoints to keep the inventory accurate.
+  aliases: [software inventory, configuration discovery]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-DEV-4}
+  source: ADR 0018
+
+# Retirement & decommission (CAP-EUC-DEV-5)
+- id: FUNC-euc-remote-wipe
+  term: Remote Wipe
+  type: Function
+  definition: Remotely removes corporate data and access from a device, fully or selectively.
+  aliases: [device wipe, corporate data removal]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-DEV-5}
+    - {rel: supports, target: CAP-EUC-MOB-3}
+  source: ADR 0018
+
+- id: FUNC-euc-device-sanitization
+  term: Device Sanitization
+  type: Function
+  definition: Sanitizes or securely erases a retired device so no residual corporate data remains before reuse or disposal.
+  aliases: [secure erase, data sanitization, device reclamation]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-DEV-5}
+  source: ADR 0018

@@ -1,0 +1,41 @@
+# ITPRA ontology — FUNCTION library, GRC-INS (Security & Risk Posture Insight)
+# type: Function. ids FUNC-grc-<slug>. All T1-neutral. Functions `support` >=1 capability. See ADR 0024.
+
+# Consolidated posture reporting (CAP-GRC-INS-1)
+- id: FUNC-grc-posture-aggregation
+  term: Posture Signal Aggregation
+  type: Function
+  definition: Aggregates signals from the GRC groups and from estate-supplied evidence into a single consolidated posture model.
+  aliases: [posture consolidation, GRC data aggregation]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-INS-1}
+  source: ADR 0024
+
+- id: FUNC-grc-posture-trending
+  term: Posture Trending
+  type: Function
+  definition: Trends the consolidated security and risk posture over time to show direction, not just a snapshot.
+  aliases: [trend analysis, posture history]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-INS-1}
+  source: ADR 0024
+
+# Control-health & KRI/KPI dashboards (CAP-GRC-INS-2)
+- id: FUNC-grc-operational-dashboard
+  term: Operational Risk & Control Dashboard
+  type: Function
+  definition: Presents control-health and KRI/KPI dashboards segmented by estate, team, and population for operational owners.
+  aliases: [control dashboard, KRI dashboard, risk heatmap]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-INS-2}
+  source: ADR 0024
+
+# Board & executive reporting (CAP-GRC-INS-3)
+- id: FUNC-grc-executive-reporting
+  term: Board & Executive Reporting
+  type: Function
+  definition: Produces audience-shaped board/executive reporting on posture trends, top risks, control investment, and obligation status.
+  aliases: [board reporting, executive risk report, QBR pack]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-INS-3}
+  source: ADR 0024

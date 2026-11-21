@@ -1,0 +1,119 @@
+# ITPRA ontology — FUNCTION library, PLATFORM FOUNDATION (FND) domain file
+# type: Function. ids FUNC-<slug> (slug-based, NO domain prefix — shared cross-domain). All T1 neutral (no tool
+# names; SBOM kept as an alias only). See ADR 0011.
+
+# Platform configuration source of truth (supports CAP-FND-1)
+- id: FUNC-version-control
+  term: Version Control
+  type: Function
+  definition: Stores configuration and definitions with full, reviewable history and the ability to compare versions.
+  aliases: [versioning, source control, change history]
+  relates_to:
+    - {rel: supports, target: CAP-FND-1}
+  source: ADR 0011
+
+- id: FUNC-change-review
+  term: Change Review
+  type: Function
+  definition: Reviews and approves proposed changes to configuration/definitions before they are accepted into the source of truth.
+  aliases: [peer review, merge review]
+  relates_to:
+    - {rel: supports, target: CAP-FND-1}
+  source: ADR 0011
+
+- id: FUNC-configuration-rollback
+  term: Configuration Rollback
+  type: Function
+  definition: Reverts configuration/definitions to a known-good prior version.
+  aliases: [config revert, version rollback]
+  relates_to:
+    - {rel: supports, target: CAP-FND-1}
+  source: ADR 0011
+
+# Secrets management (supports CAP-FND-2)
+- id: FUNC-secret-storage
+  term: Secret Storage
+  type: Function
+  definition: Stores secrets and credentials encrypted at rest in a centralized, access-controlled store.
+  aliases: [secret vaulting, credential storage]
+  relates_to:
+    - {rel: supports, target: CAP-FND-2}
+  source: ADR 0011
+
+- id: FUNC-secret-distribution
+  term: Secret Distribution
+  type: Function
+  definition: Delivers secrets to authorized consumers at runtime without exposing them in plaintext at rest or in definitions.
+  aliases: [secret injection, credential delivery]
+  relates_to:
+    - {rel: supports, target: CAP-FND-2}
+  source: ADR 0011
+
+- id: FUNC-secret-rotation
+  term: Secret Rotation
+  type: Function
+  definition: Rotates and revokes secrets on a schedule or event, favoring short-lived/ephemeral credentials.
+  aliases: [credential rotation, secret revocation]
+  relates_to:
+    - {rel: supports, target: CAP-FND-2}
+  source: ADR 0011
+
+# Artifact & image registry (supports CAP-FND-3)
+- id: FUNC-artifact-storage
+  term: Artifact Storage
+  type: Function
+  definition: Stores deployable artifacts and images in a versioned, access-controlled registry.
+  aliases: [artifact repository, image storage]
+  relates_to:
+    - {rel: supports, target: CAP-FND-3}
+  source: ADR 0011
+
+- id: FUNC-artifact-versioning
+  term: Artifact Versioning
+  type: Function
+  definition: Versions and tags artifacts/images so each deployable unit is unambiguously identified and retrievable.
+  aliases: [artifact tagging, image versioning]
+  relates_to:
+    - {rel: supports, target: CAP-FND-3}
+  source: ADR 0011
+
+# Policy-as-code evaluation (supports CAP-FND-4; evaluation shared with SEC-5 admission)
+- id: FUNC-policy-authoring
+  term: Policy Authoring
+  type: Function
+  definition: Expresses platform policy as versioned code so it can be reviewed, tested, and evaluated.
+  aliases: [policy-as-code authoring, rule authoring]
+  relates_to:
+    - {rel: supports, target: CAP-FND-4}
+  source: ADR 0011
+
+- id: FUNC-policy-evaluation
+  term: Policy Evaluation
+  type: Function
+  definition: >
+    Evaluates codified policy against a proposed change and returns pass/fail with rationale. Shared across
+    change-time policy-as-code evaluation and security admission (which consumes the decision to enforce).
+  aliases: [policy decision, compliance evaluation]
+  relates_to:
+    - {rel: supports, target: CAP-FND-4}
+    - {rel: supports, target: CAP-SEC-5}
+  source: ADR 0011
+
+# Platform provenance & component inventory (supports CAP-FND-5)
+- id: FUNC-component-inventory
+  term: Component Inventory
+  type: Function
+  definition: Maintains an authoritative inventory of the platform's own components and their versions.
+  aliases: [SBOM, software bill of materials, component manifest]
+  relates_to:
+    - {rel: supports, target: CAP-FND-5}
+  source: ADR 0011
+
+- id: FUNC-provenance-tracking
+  term: Provenance Tracking
+  type: Function
+  definition: Records the origin of each component — where it came from and which definition/build produced it.
+  aliases: [provenance recording, build provenance]
+  relates_to:
+    - {rel: supports, target: CAP-FND-5}
+  source: ADR 0011

@@ -1,0 +1,76 @@
+# ITPRA ontology — FUNCTION library, NET-OBS (Network Observability & Assurance)
+# type: Function. ids FUNC-net-<slug>. T1-neutral; a function MAY name a standard/technique where that IS the
+# function (ADR 0011). See ADR 0023.
+
+- id: FUNC-net-flow-analysis
+  term: Network Flow Analysis
+  type: Function
+  definition: Collects and analyzes traffic flow records for traffic baselining and investigation.
+  aliases: [NetFlow, IPFIX, sFlow, cloud flow logs]
+  relates_to:
+    - {rel: supports, target: CAP-NET-OBS-1}
+  source: ADR 0023
+
+- id: FUNC-net-streaming-telemetry
+  term: Streaming Telemetry Collection
+  type: Function
+  definition: Collects model-driven device state continuously streamed from network devices for fresh operational data.
+  aliases: [gRPC telemetry, model-driven telemetry, push telemetry]
+  relates_to:
+    - {rel: supports, target: CAP-NET-OBS-1}
+  source: ADR 0023
+
+- id: FUNC-net-snmp-polling
+  term: Device Metric Polling
+  type: Function
+  definition: Polls device and interface metrics from network elements on a schedule.
+  aliases: [SNMP polling, interface counters, metric scraping]
+  relates_to:
+    - {rel: supports, target: CAP-NET-OBS-1}
+  source: ADR 0023
+
+- id: FUNC-net-control-plane-telemetry
+  term: Control-Plane Telemetry
+  type: Function
+  definition: Captures routing and control-plane context such as route-table and adjacency changes.
+  aliases: [BGP monitoring, routing telemetry, BMP]
+  relates_to:
+    - {rel: supports, target: CAP-NET-OBS-1}
+    - {rel: supports, target: CAP-NET-OBS-4}
+  source: ADR 0023
+
+- id: FUNC-net-health-monitoring
+  term: Network Health Monitoring
+  type: Function
+  definition: Turns telemetry into a current view of network health and alerts on degradation.
+  aliases: [network monitoring, alerting, fault detection]
+  relates_to:
+    - {rel: supports, target: CAP-NET-OBS-2}
+  source: ADR 0023
+
+- id: FUNC-net-intent-assurance
+  term: Intent Assurance
+  type: Function
+  definition: Verifies the running network against its intended service level and policy and flags drift proactively.
+  aliases: [intent-based assurance, SLO verification, drift detection]
+  relates_to:
+    - {rel: supports, target: CAP-NET-OBS-3}
+  source: ADR 0023
+
+- id: FUNC-net-topology-discovery
+  term: Topology & Configuration Discovery
+  type: Function
+  definition: Discovers and maintains a current view of network topology and device configuration.
+  aliases: [topology mapping, config inventory, network discovery]
+  relates_to:
+    - {rel: supports, target: CAP-NET-OBS-4}
+  source: ADR 0023
+
+- id: FUNC-net-change-tracking
+  term: Configuration Change Tracking
+  type: Function
+  definition: Detects and records changes to device configuration so what changed the network is auditable.
+  aliases: [config drift detection, change audit]
+  relates_to:
+    - {rel: supports, target: CAP-NET-OBS-4}
+  source: ADR 0023

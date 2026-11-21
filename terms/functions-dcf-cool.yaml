@@ -1,0 +1,89 @@
+# ITPRA ontology — FUNCTION library, DCF-COOL (Cooling & Environmental Control)
+# type: Function. ids FUNC-dcf-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
+# the function (ADR 0011).
+
+# Heat removal & cooling provision (CAP-DCF-COOL-1)
+- id: FUNC-dcf-heat-rejection
+  term: Heat Rejection
+  type: Function
+  definition: Removes heat from the white-space and rejects it outside the facility via the cooling plant.
+  aliases: [heat removal, chiller plant, heat rejection loop]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-COOL-1}
+  source: ADR 0022
+
+- id: FUNC-dcf-cool-medium-distribution
+  term: Cooling Medium Distribution
+  type: Function
+  definition: Supplies cool air or cooling medium to the equipment via room/row cooling units.
+  aliases: [CRAC/CRAH supply, cool-air delivery, chilled-water distribution]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-COOL-1}
+  source: ADR 0022
+
+- id: FUNC-dcf-free-cooling-economization
+  term: Free-Cooling Economization
+  type: Function
+  definition: Uses cool outside air or water when ambient conditions allow, reducing mechanical cooling energy.
+  aliases: [economizer, airside/waterside economization, free cooling]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-COOL-1}
+    - {rel: supports, target: CAP-DCF-MON-4}
+  source: ADR 0022
+
+# Environmental envelope control (CAP-DCF-COOL-2)
+- id: FUNC-dcf-thermal-envelope-control
+  term: Thermal Envelope Control
+  type: Function
+  definition: Holds inlet temperature within a recognized recommended/allowable operating envelope.
+  aliases: [recommended-envelope control, inlet temperature control, ASHRAE-envelope control]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-COOL-2}
+  source: ADR 0022
+
+- id: FUNC-dcf-humidity-control
+  term: Humidity Control
+  type: Function
+  definition: Controls humidity/dew-point within bounds to avoid static discharge and condensation/corrosion.
+  aliases: [humidification, dehumidification, dew-point control]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-COOL-2}
+  source: ADR 0022
+
+# Airflow management & containment (CAP-DCF-COOL-3)
+- id: FUNC-dcf-aisle-containment
+  term: Aisle Containment
+  type: Function
+  definition: Contains the hot or cold aisle to prevent air recirculation and cut cooling energy.
+  aliases: [hot-aisle containment, cold-aisle containment]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-COOL-3}
+  source: ADR 0022
+
+- id: FUNC-dcf-airflow-management
+  term: Airflow Management
+  type: Function
+  definition: Organizes hot/cold aisles, blanking, and floor/ceiling openings to eliminate hot spots.
+  aliases: [hot/cold aisle organization, blanking panels, airflow tuning]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-COOL-3}
+  source: ADR 0022
+
+# High-density & liquid cooling provision (CAP-DCF-COOL-4)
+- id: FUNC-dcf-liquid-cooling
+  term: Liquid / Direct-to-Equipment Cooling
+  type: Function
+  definition: Provides close-coupled or direct-to-equipment liquid cooling for high-density footprints.
+  aliases: [direct-to-chip cooling, rear-door heat exchanger, close-coupled cooling]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-COOL-4}
+  source: ADR 0022
+
+- id: FUNC-dcf-immersion-cooling
+  term: Immersion Cooling
+  type: Function
+  definition: Cools equipment by immersion in a thermally conductive dielectric medium for very high density.
+  aliases: [immersion tank cooling]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-COOL-4}
+  source: ADR 0022

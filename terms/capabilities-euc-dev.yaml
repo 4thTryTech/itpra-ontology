@@ -1,0 +1,69 @@
+# ITPRA ontology — EUC-DEV (Device Lifecycle & Provisioning) capabilities
+# type: Capability. ids CAP-EUC-DEV-<n>. Grouped under domain EUC-DEV (ADR 0018); environment expression per ADR
+# 0014.
+
+- id: CAP-EUC-DEV-1
+  term: Device Enrollment & Zero-Touch Provisioning
+  type: Capability
+  definition: >
+    Brings a new endpoint under management and provisions it to a productive, policy-compliant state with no
+    manual imaging — the device registers by its identity and pulls its configuration, applications, and
+    security policy on first use.
+  relates_to:
+    - {rel: grouped_by, target: EUC-DEV}
+    - {rel: consumed_by, target: PERSONA-euc-workplace-team}
+    - {rel: consumed_by, target: PERSONA-euc-workforce-user}
+  source: ADR 0018
+
+- id: CAP-EUC-DEV-2
+  term: Endpoint Configuration & Software Distribution
+  type: Capability
+  definition: >
+    Maintains the desired configuration of the endpoint estate and distributes, updates, and removes managed
+    applications consistently across devices, so every endpoint converges on its assigned baseline.
+  relates_to:
+    - {rel: grouped_by, target: EUC-DEV}
+    - {rel: depends_on, target: CAP-EUC-DEV-1}
+    - {rel: consumed_by, target: PERSONA-euc-workplace-team}
+  source: ADR 0018
+
+- id: CAP-EUC-DEV-3
+  term: Endpoint Patch & Update Management
+  type: Capability
+  definition: >
+    Keeps operating systems, firmware, and managed applications on workforce endpoints current with vendor
+    updates on a governed cadence, with staged rollout and rollback, so the estate stays supportable and free
+    of known-fixed defects.
+  relates_to:
+    - {rel: grouped_by, target: EUC-DEV}
+    - {rel: depends_on, target: CAP-EUC-DEV-2}
+    - {rel: consumed_by, target: PERSONA-euc-workplace-team}
+    - {rel: consumed_by, target: PERSONA-euc-security-compliance}
+  source: ADR 0018
+
+- id: CAP-EUC-DEV-4
+  term: Device Inventory & Asset State
+  type: Capability
+  definition: >
+    Maintains an authoritative inventory of workforce devices and their current state — identity, ownership,
+    assignment, configuration, and lifecycle stage — as the trustworthy record of what the estate is and who
+    holds each device.
+  relates_to:
+    - {rel: grouped_by, target: EUC-DEV}
+    - {rel: consumed_by, target: PERSONA-euc-workplace-team}
+    - {rel: consumed_by, target: PERSONA-euc-security-compliance}
+  source: ADR 0018
+
+- id: CAP-EUC-DEV-5
+  term: Device Retirement & Decommission
+  type: Capability
+  definition: >
+    Retires an endpoint at end of life or reassignment — removing corporate data and access, recovering or
+    sanitizing the device, and closing its record — so no corporate data or entitlement persists on a device
+    leaving the estate.
+  relates_to:
+    - {rel: grouped_by, target: EUC-DEV}
+    - {rel: depends_on, target: CAP-EUC-DEV-4}
+    - {rel: consumed_by, target: PERSONA-euc-workplace-team}
+    - {rel: consumed_by, target: PERSONA-euc-security-compliance}
+  source: ADR 0018

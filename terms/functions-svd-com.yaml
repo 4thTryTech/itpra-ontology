@@ -1,0 +1,80 @@
+# ITPRA ontology — FUNCTION library, SVD-COM (Customer Communication & Satisfaction)
+# type: Function. ids FUNC-svd-<slug>. Functions `support` >=1 capability; NEVER derived_from on a Function (ADR
+# 0011). See ADR 0019.
+
+# Proactive status & outage communication (CAP-SVD-COM-1)
+- id: FUNC-svd-status-broadcast
+  term: Service Status Broadcast
+  type: Function
+  definition: Publishes current service status and known issues to users proactively.
+  aliases: [status page, service announcements]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-COM-1}
+  source: ADR 0019
+
+- id: FUNC-svd-planned-change-notice
+  term: Planned-Change Notification
+  type: Function
+  definition: Notifies affected users of planned changes and maintenance before they are impacted.
+  aliases: [maintenance notice, change advisory to users]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-COM-1}
+  source: ADR 0019
+
+# Service-level expectation & commitment (CAP-SVD-COM-2)
+- id: FUNC-svd-expectation-setting
+  term: Response Expectation Setting
+  type: Function
+  definition: Communicates clear, neutral expectations of response and resolution to the user at contact.
+  aliases: [expectation management, commitment communication]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-COM-2}
+  source: ADR 0019
+
+- id: FUNC-svd-commitment-tracking
+  term: Service-Level Commitment Tracking
+  type: Function
+  definition: Tracks contacts against the neutral service-level commitment and flags those at risk.
+  aliases: [SLA tracking, commitment monitoring]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-COM-2}
+    - {rel: supports, target: CAP-SVD-HDL-4}
+  source: ADR 0019
+
+# Satisfaction & effort feedback capture (CAP-SVD-COM-3)
+- id: FUNC-svd-satisfaction-survey
+  term: Satisfaction Survey
+  type: Function
+  definition: Asks the user how satisfied they were with the interaction and records the response against the contact.
+  aliases: [CSAT survey, post-contact survey]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-COM-3}
+  source: ADR 0019
+
+- id: FUNC-svd-effort-measurement
+  term: Customer-Effort Measurement
+  type: Function
+  definition: Captures how much effort the interaction took the user, as an experience signal.
+  aliases: [effort score, CES capture]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-COM-3}
+  source: ADR 0019
+
+# Consumer segment & high-touch handling (CAP-SVD-COM-4)
+- id: FUNC-svd-segment-handling
+  term: Segment-Aware Handling
+  type: Function
+  definition: Applies the handling, priority, and channel appropriate to the requester's segment.
+  aliases: [tiered service, segment policy]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-COM-4}
+  source: ADR 0019
+
+- id: FUNC-svd-high-touch-support
+  term: High-Touch / Critical-Consumer Support
+  type: Function
+  definition: Provides elevated, white-glove handling for high-touch or critical consumers and external parties.
+  aliases: [VIP support, executive support, premium support]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-COM-4}
+  source: ADR 0019

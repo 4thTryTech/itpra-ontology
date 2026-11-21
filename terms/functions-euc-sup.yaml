@@ -1,0 +1,61 @@
+# ITPRA ontology — FUNCTION library, EUC-SUP (End-User Support Experience & Self-Service)
+# type: Function. ids FUNC-euc-<slug>.
+
+# Workplace self-service & knowledge (CAP-EUC-SUP-1)
+- id: FUNC-euc-self-service-portal
+  term: Self-Service Portal
+  type: Function
+  definition: Presents a workforce user a surface to find answers, request resources, and resolve common needs themselves.
+  aliases: [employee portal, self-help portal]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-SUP-1}
+  source: ADR 0018
+
+- id: FUNC-euc-knowledge-management
+  term: Knowledge Management
+  type: Function
+  definition: Curates searchable workplace knowledge and guided assistance for self-service resolution.
+  aliases: [knowledge base, guided assistance, conversational assistance]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-SUP-1}
+  source: ADR 0018
+
+# Automated workplace request fulfilment (CAP-EUC-SUP-2)
+- id: FUNC-euc-request-fulfilment
+  term: Automated Request Fulfilment
+  type: Function
+  definition: Fulfils an approved workplace request (app, access, device, setting) through an automated, policy-checked path.
+  aliases: [request automation, fulfilment workflow]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-SUP-2}
+  source: ADR 0018
+
+# Remote endpoint assistance & remediation (CAP-EUC-SUP-3)
+- id: FUNC-euc-remote-assistance
+  term: Remote Assistance
+  type: Function
+  definition: Lets support view and interact with a user's endpoint remotely to diagnose and guide resolution.
+  aliases: [remote control, remote support session, screen sharing]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-SUP-3}
+  source: ADR 0018
+
+- id: FUNC-euc-automated-remediation
+  term: Automated Endpoint Remediation
+  type: Function
+  definition: Runs unattended remediation or recovery actions on an endpoint to restore a known-good state.
+  aliases: [self-healing, remediation script, automated fix]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-SUP-3}
+    - {rel: supports, target: CAP-EUC-DEX-3}
+  source: ADR 0018
+
+# Workforce onboarding & offboarding experience (CAP-EUC-SUP-4)
+- id: FUNC-euc-joiner-leaver-orchestration
+  term: Joiner / Leaver Orchestration
+  type: Function
+  definition: Orchestrates the device, workspace, application, and access steps of onboarding and offboarding a user.
+  aliases: [onboarding orchestration, offboarding orchestration, JML orchestration]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-SUP-4}
+  source: ADR 0018

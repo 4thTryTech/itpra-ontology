@@ -1,0 +1,56 @@
+# ITPRA ontology — SVD-PRF (Support Performance & Insight) capabilities
+# type: Capability. ids CAP-SVD-PRF-<n>. Grouped under domain SVD-PRF (ADR 0019).
+
+- id: CAP-SVD-PRF-1
+  term: Contact Analytics & Reporting
+  type: Capability
+  definition: >
+    Turns the desk's contact records into a clear picture of volume, flow, and throughput across channels
+    and resolver groups, so the desk and its stakeholders can see how it is performing and where work is
+    accumulating.
+  relates_to:
+    - {rel: grouped_by, target: SVD-PRF}
+    - {rel: depends_on, target: CAP-SVD-CON-2}
+    - {rel: consumed_by, target: PERSONA-svd-coordinator}
+  source: ADR 0019
+
+- id: CAP-SVD-PRF-2
+  term: Experience & Outcome Measurement
+  type: Capability
+  definition: >
+    Measures the desk on the experience and outcome it delivers — satisfaction, effort, and first-contact
+    resolution as neutral outcome measures alongside operational throughput — so the desk is judged on how
+    users fared, not only on whether targets were hit. Measurable thresholds are set at T2.
+  relates_to:
+    - {rel: grouped_by, target: SVD-PRF}
+    - {rel: depends_on, target: CAP-SVD-COM-3}
+    - {rel: consumed_by, target: PERSONA-svd-coordinator}
+  source: ADR 0019
+
+- id: CAP-SVD-PRF-3
+  term: Demand & Trend Analysis
+  type: Capability
+  definition: >
+    Analyzes patterns across contacts to find recurring demand, emerging issues, and root causes worth
+    eliminating, so the desk can drive demand down at the source rather than only absorbing it.
+  relates_to:
+    - {rel: grouped_by, target: SVD-PRF}
+    - {rel: depends_on, target: CAP-SVD-PRF-1}
+    - {rel: depends_on, target: CAP-SVD-TRI-4}
+    - {rel: consumed_by, target: PERSONA-svd-coordinator}
+    - {rel: consumed_by, target: PERSONA-svd-resolver}
+  source: ADR 0019
+
+- id: CAP-SVD-PRF-4
+  term: Continual Service-Desk Improvement
+  type: Capability
+  definition: >
+    Feeds what the desk learns — from analytics, experience measures, and feedback — into a prioritized loop
+    that improves the desk's knowledge, routing, channels, and process over time, so the desk gets better as
+    a service rather than staying static.
+  relates_to:
+    - {rel: grouped_by, target: SVD-PRF}
+    - {rel: depends_on, target: CAP-SVD-PRF-2}
+    - {rel: depends_on, target: CAP-SVD-PRF-3}
+    - {rel: consumed_by, target: PERSONA-svd-coordinator}
+  source: ADR 0019

@@ -1,0 +1,192 @@
+# ITPRA ontology — Digital Experience & Channels (DXC) journey catalog
+# type: Journey. ids JRN-dxc-<slug>. Each `grouped_by` exactly one EXISTING JourneyGroup
+# (JG-ONBOARDING..JG-EVOLUTION; reused, not redefined). Neutral — steps reference capabilities + neutral
+# governance construct points (request/approval/change/incident/record/feedback), never tools or named
+# processes. Relationships from the journey side: grouped_by, consumed_by (primary personas), depends_on
+# (capabilities exercised). Ratified by ADR 0027. Diagrams: WF-dxc-<slug>.
+
+# ---- JG-ONBOARDING ----
+- id: JRN-dxc-onboard-digital-channel
+  term: Onboard a New Digital Channel
+  type: Journey
+  definition: >
+    Stand up a new customer-facing channel, site, or app on the experience platform — register its presence,
+    wire its delivery surface and APIs, and prepare it to receive composed, personalized experiences.
+  relates_to:
+    - {rel: grouped_by, target: JG-ONBOARDING}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-team}
+    - {rel: depends_on, target: CAP-DXC-CHN-4}
+    - {rel: depends_on, target: CAP-DXC-CHN-2}
+    - {rel: depends_on, target: CAP-DXC-CHN-1}
+  source: ADR 0027
+
+- id: JRN-dxc-establish-customer-profile
+  term: Establish a Unified Customer Profile
+  type: Journey
+  definition: >
+    Bring a customer's data together from across touchpoints into a single consented unified profile —
+    ingesting signals, resolving identity, and capturing consent — so the customer can be recognized and
+    served within what they permit.
+  relates_to:
+    - {rel: grouped_by, target: JG-ONBOARDING}
+    - {rel: consumed_by, target: PERSONA-dxc-customer}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-team}
+    - {rel: depends_on, target: CAP-DXC-CDP-1}
+    - {rel: depends_on, target: CAP-DXC-CDP-2}
+    - {rel: depends_on, target: CAP-DXC-CDP-4}
+  source: ADR 0027
+
+# ---- JG-DELIVERY ----
+- id: JRN-dxc-author-publish-content
+  term: Author & Publish Content
+  type: Journey
+  definition: >
+    A practitioner authors structured content and assets, takes them through review and approval, and
+    publishes them for delivery across channels — content reaches customers accurate, on-brand, and governed.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-practitioner}
+    - {rel: depends_on, target: CAP-DXC-CNT-1}
+    - {rel: depends_on, target: CAP-DXC-CNT-3}
+    - {rel: depends_on, target: CAP-DXC-CNT-4}
+    - {rel: depends_on, target: CAP-DXC-CNT-5}
+  source: ADR 0027
+
+- id: JRN-dxc-compose-personalized-experience
+  term: Compose a Personalized Experience
+  type: Journey
+  definition: >
+    A practitioner composes a deliverable experience from modular content and defines the personalization
+    rules and audience targeting, so different customers receive a tailored, on-brand experience.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-practitioner}
+    - {rel: depends_on, target: CAP-DXC-CNT-2}
+    - {rel: depends_on, target: CAP-DXC-PER-1}
+    - {rel: depends_on, target: CAP-DXC-PER-2}
+    - {rel: depends_on, target: CAP-DXC-PER-4}
+  source: ADR 0027
+
+- id: JRN-dxc-design-launch-journey
+  term: Design & Launch a Customer Journey
+  type: Journey
+  definition: >
+    A practitioner designs a cross-channel customer journey with its triggers and next-best-action logic and
+    launches it, so customers are guided through an adaptive, orchestrated experience.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-practitioner}
+    - {rel: depends_on, target: CAP-DXC-JRN-1}
+    - {rel: depends_on, target: CAP-DXC-JRN-2}
+    - {rel: depends_on, target: CAP-DXC-JRN-3}
+    - {rel: depends_on, target: CAP-DXC-CDP-5}
+  source: ADR 0027
+
+- id: JRN-dxc-launch-commerce-experience
+  term: Launch a Digital Commerce Experience
+  type: Journey
+  definition: >
+    A practitioner stands up the customer-facing commerce experience — catalog and merchandising, search,
+    cart/checkout, and pricing/promotions — so customers can discover and buy through the digital channel.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-practitioner}
+    - {rel: consumed_by, target: PERSONA-dxc-customer}
+    - {rel: depends_on, target: CAP-DXC-COM-1}
+    - {rel: depends_on, target: CAP-DXC-COM-2}
+    - {rel: depends_on, target: CAP-DXC-COM-3}
+    - {rel: depends_on, target: CAP-DXC-COM-4}
+  source: ADR 0027
+
+# ---- JG-OPERATIONS ----
+- id: JRN-dxc-deliver-omnichannel-experience
+  term: Deliver an Omnichannel Experience
+  type: Journey
+  definition: >
+    A customer engages across channels and receives the composed, personalized, orchestrated experience with
+    acceptable performance — content, personalization, and journeys delivered consistently wherever they are.
+  relates_to:
+    - {rel: grouped_by, target: JG-OPERATIONS}
+    - {rel: consumed_by, target: PERSONA-dxc-customer}
+    - {rel: depends_on, target: CAP-DXC-CHN-1}
+    - {rel: depends_on, target: CAP-DXC-CHN-3}
+    - {rel: depends_on, target: CAP-DXC-PER-2}
+    - {rel: depends_on, target: CAP-DXC-JRN-2}
+  source: ADR 0027
+
+- id: JRN-dxc-run-experiment-optimize
+  term: Run an Experiment & Optimize
+  type: Journey
+  definition: >
+    The experience team designs an experiment, exposes variants to the right audience, measures the result,
+    and promotes or rolls back — so experience changes ship on evidence of measured lift.
+  relates_to:
+    - {rel: grouped_by, target: JG-OPERATIONS}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-practitioner}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-team}
+    - {rel: depends_on, target: CAP-DXC-EXP-1}
+    - {rel: depends_on, target: CAP-DXC-EXP-2}
+    - {rel: depends_on, target: CAP-DXC-EXP-3}
+    - {rel: depends_on, target: CAP-DXC-EXP-4}
+  source: ADR 0027
+
+# ---- JG-RESPONSE ----
+- id: JRN-dxc-roll-back-experience-change
+  term: Roll Back a Faulty Experience Change
+  type: Journey
+  definition: >
+    A released experience or variant is found to harm customers or conversion, and the team rapidly withdraws
+    or reverts it via exposure control — restoring the prior good experience with the change recorded.
+  relates_to:
+    - {rel: grouped_by, target: JG-RESPONSE}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-team}
+    - {rel: depends_on, target: CAP-DXC-EXP-2}
+    - {rel: depends_on, target: CAP-DXC-EXP-4}
+    - {rel: depends_on, target: CAP-DXC-CHN-5}
+  source: ADR 0027
+
+- id: JRN-dxc-handle-consent-request
+  term: Handle a Customer Consent or Data Request
+  type: Journey
+  definition: >
+    A customer changes their consent or makes a data/preference request, and the experience honors it across
+    the profile and downstream use — so the customer's choices are respected and evidenced.
+  relates_to:
+    - {rel: grouped_by, target: JG-RESPONSE}
+    - {rel: consumed_by, target: PERSONA-dxc-customer}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-governance}
+    - {rel: depends_on, target: CAP-DXC-CDP-4}
+    - {rel: depends_on, target: CAP-DXC-CDP-5}
+    - {rel: depends_on, target: CAP-DXC-CDP-2}
+  source: ADR 0027
+
+# ---- JG-GOVERNANCE ----
+- id: JRN-dxc-review-experience-compliance
+  term: Review Experience Compliance & Brand
+  type: Journey
+  definition: >
+    The governance owner reviews the customer-facing experience against brand, accessibility, content, and
+    consent guardrails and evidences compliance — so the published experience stays accountable and compliant.
+  relates_to:
+    - {rel: grouped_by, target: JG-GOVERNANCE}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-governance}
+    - {rel: depends_on, target: CAP-DXC-CNT-4}
+    - {rel: depends_on, target: CAP-DXC-PER-4}
+    - {rel: depends_on, target: CAP-DXC-CHN-4}
+    - {rel: depends_on, target: CAP-DXC-CDP-4}
+  source: ADR 0027
+
+# ---- JG-EVOLUTION ----
+- id: JRN-dxc-evolve-experience-from-insight
+  term: Evolve the Experience from Insight
+  type: Journey
+  definition: >
+    The experience team turns channel, journey, and experiment insight into a prioritized improvement to the
+    experience as a product — closing the loop from observed customer outcomes to the next change.
+  relates_to:
+    - {rel: grouped_by, target: JG-EVOLUTION}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-team}
+    - {rel: depends_on, target: CAP-DXC-CHN-5}
+    - {rel: depends_on, target: CAP-DXC-JRN-4}
+    - {rel: depends_on, target: CAP-DXC-EXP-4}
+  source: ADR 0027

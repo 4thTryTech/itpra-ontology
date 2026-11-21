@@ -1,0 +1,225 @@
+# ITPRA ontology — End-User Computing (EUC) journey catalog
+# type: Journey. ids JRN-euc-<slug>. Each `grouped_by` exactly one EXISTING JourneyGroup
+# (JG-ONBOARDING..JG-EVOLUTION; reused, not redefined). Neutral — steps reference capabilities + neutral
+# governance construct points (request/approval/change/incident/record/feedback), never tools or named
+# processes. Relationships from the journey side: grouped_by, consumed_by (primary personas), depends_on
+# (capabilities exercised). Ratified by ADR 0018. Diagrams: WF-euc-<slug>.
+
+# ---- JG-ONBOARDING ----
+- id: JRN-euc-onboard-workforce-user
+  term: Onboard a Workforce User
+  type: Journey
+  definition: >
+    Ready a new workforce member to be productive on day one — establish their access, prepare a device and
+    workspace, entitle their applications, and confirm a healthy posture — coordinated as one joiner experience.
+  relates_to:
+    - {rel: grouped_by, target: JG-ONBOARDING}
+    - {rel: consumed_by, target: PERSONA-euc-workforce-user}
+    - {rel: consumed_by, target: PERSONA-euc-support-agent}
+    - {rel: depends_on, target: CAP-EUC-SUP-4}
+    - {rel: depends_on, target: CAP-EUC-IAM-1}
+    - {rel: depends_on, target: CAP-EUC-DEV-1}
+    - {rel: depends_on, target: CAP-EUC-WSP-1}
+    - {rel: depends_on, target: CAP-EUC-SEC-4}
+  source: ADR 0018
+
+- id: JRN-euc-provision-managed-device
+  term: Provision a Managed Device
+  type: Journey
+  definition: >
+    A workforce user receives a new corporate endpoint that provisions itself to a productive, hardened,
+    policy-compliant state with no manual imaging, and is recorded in the device inventory.
+  relates_to:
+    - {rel: grouped_by, target: JG-ONBOARDING}
+    - {rel: consumed_by, target: PERSONA-euc-workforce-user}
+    - {rel: consumed_by, target: PERSONA-euc-workplace-team}
+    - {rel: depends_on, target: CAP-EUC-DEV-1}
+    - {rel: depends_on, target: CAP-EUC-DEV-2}
+    - {rel: depends_on, target: CAP-EUC-SEC-2}
+    - {rel: depends_on, target: CAP-EUC-DEV-4}
+  source: ADR 0018
+
+- id: JRN-euc-enroll-byod-device
+  term: Enroll a Personal (BYOD) Device
+  type: Journey
+  definition: >
+    A workforce user enrolls a personally-owned device into the workplace, gaining a managed work boundary
+    for corporate apps and content while their personal use stays private and ungoverned.
+  relates_to:
+    - {rel: grouped_by, target: JG-ONBOARDING}
+    - {rel: consumed_by, target: PERSONA-euc-workforce-user}
+    - {rel: consumed_by, target: PERSONA-euc-security-compliance}
+    - {rel: depends_on, target: CAP-EUC-MOB-1}
+    - {rel: depends_on, target: CAP-EUC-MOB-2}
+    - {rel: depends_on, target: CAP-EUC-MOB-3}
+    - {rel: depends_on, target: CAP-EUC-SEC-4}
+  source: ADR 0018
+
+# ---- JG-DELIVERY ----
+- id: JRN-euc-entitle-workspace-app
+  term: Request & Receive a Workspace Application
+  type: Journey
+  definition: >
+    A workforce user requests a productivity or line-of-business application and receives it — entitled,
+    licensed, and delivered to their device — through an automated, policy-checked self-service path.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-euc-workforce-user}
+    - {rel: depends_on, target: CAP-EUC-SUP-1}
+    - {rel: depends_on, target: CAP-EUC-SUP-2}
+    - {rel: depends_on, target: CAP-EUC-WSP-1}
+    - {rel: depends_on, target: CAP-EUC-DEV-2}
+  source: ADR 0018
+
+- id: JRN-euc-provision-virtual-workspace
+  term: Provision a Virtual Workspace
+  type: Journey
+  definition: >
+    A workforce user is provisioned a virtual/hosted desktop or published application and connects to it from
+    their endpoint, with the session brokered and posture-conditioned.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-euc-workforce-user}
+    - {rel: consumed_by, target: PERSONA-euc-workplace-team}
+    - {rel: depends_on, target: CAP-EUC-VRW-1}
+    - {rel: depends_on, target: CAP-EUC-VRW-2}
+    - {rel: depends_on, target: CAP-EUC-VRW-3}
+    - {rel: depends_on, target: CAP-EUC-IAM-3}
+  source: ADR 0018
+
+# ---- JG-OPERATIONS ----
+- id: JRN-euc-patch-endpoint-estate
+  term: Patch & Update the Endpoint Estate
+  type: Journey
+  definition: >
+    The workplace team rolls out operating-system, firmware, and application updates across the endpoint
+    estate on a governed cadence with staged rollout and rollback, and confirms remediation of exposure.
+  relates_to:
+    - {rel: grouped_by, target: JG-OPERATIONS}
+    - {rel: consumed_by, target: PERSONA-euc-workplace-team}
+    - {rel: consumed_by, target: PERSONA-euc-security-compliance}
+    - {rel: depends_on, target: CAP-EUC-DEV-3}
+    - {rel: depends_on, target: CAP-EUC-SEC-3}
+    - {rel: depends_on, target: CAP-EUC-DEV-4}
+  source: ADR 0018
+
+- id: JRN-euc-observe-digital-experience
+  term: Observe & Improve Digital Experience
+  type: Journey
+  definition: >
+    The workplace team measures the workforce's digital experience from endpoint telemetry and sentiment,
+    locates root causes of poor experience, and feeds improvements into the digital-workplace product loop.
+  relates_to:
+    - {rel: grouped_by, target: JG-OPERATIONS}
+    - {rel: consumed_by, target: PERSONA-euc-workplace-team}
+    - {rel: depends_on, target: CAP-EUC-DEX-1}
+    - {rel: depends_on, target: CAP-EUC-DEX-2}
+    - {rel: depends_on, target: CAP-EUC-DEX-4}
+  source: ADR 0018
+
+# ---- JG-RESPONSE ----
+- id: JRN-euc-respond-endpoint-threat
+  term: Respond to an Endpoint Threat
+  type: Journey
+  definition: >
+    A threat detected on a workforce endpoint is triaged and contained — the affected device isolated or
+    remediated and its compliance re-verified — to limit harm and restore a healthy state.
+  relates_to:
+    - {rel: grouped_by, target: JG-RESPONSE}
+    - {rel: consumed_by, target: PERSONA-euc-security-compliance}
+    - {rel: consumed_by, target: PERSONA-euc-support-agent}
+    - {rel: depends_on, target: CAP-EUC-SEC-1}
+    - {rel: depends_on, target: CAP-EUC-SEC-4}
+    - {rel: depends_on, target: CAP-EUC-SUP-3}
+  source: ADR 0018
+
+- id: JRN-euc-recover-lost-device
+  term: Recover a Lost or Stolen Device
+  type: Journey
+  definition: >
+    A reported lost or stolen device is located in inventory, its access revoked, and its corporate data
+    remotely wiped, so no corporate data or entitlement remains reachable through it.
+  relates_to:
+    - {rel: grouped_by, target: JG-RESPONSE}
+    - {rel: consumed_by, target: PERSONA-euc-workforce-user}
+    - {rel: consumed_by, target: PERSONA-euc-security-compliance}
+    - {rel: depends_on, target: CAP-EUC-DEV-4}
+    - {rel: depends_on, target: CAP-EUC-DEV-5}
+    - {rel: depends_on, target: CAP-EUC-IAM-3}
+  source: ADR 0018
+
+- id: JRN-euc-resolve-endpoint-issue
+  term: Resolve an Endpoint Issue
+  type: Journey
+  definition: >
+    A workforce user's endpoint problem is resolved — first via self-service and knowledge, escalating to
+    remote assistance and remediation where needed — restoring their working state with minimal disruption.
+  relates_to:
+    - {rel: grouped_by, target: JG-RESPONSE}
+    - {rel: consumed_by, target: PERSONA-euc-workforce-user}
+    - {rel: consumed_by, target: PERSONA-euc-support-agent}
+    - {rel: depends_on, target: CAP-EUC-SUP-1}
+    - {rel: depends_on, target: CAP-EUC-SUP-3}
+    - {rel: depends_on, target: CAP-EUC-DEX-1}
+  source: ADR 0018
+
+# ---- JG-GOVERNANCE ----
+- id: JRN-euc-review-device-compliance
+  term: Review & Attest Device Compliance
+  type: Journey
+  definition: >
+    Workplace security reviews the compliance posture of the endpoint estate against required policy, drives
+    remediation of non-compliant devices, and produces endpoint-compliance evidence for assurance.
+  relates_to:
+    - {rel: grouped_by, target: JG-GOVERNANCE}
+    - {rel: consumed_by, target: PERSONA-euc-security-compliance}
+    - {rel: consumed_by, target: PERSONA-euc-workplace-team}
+    - {rel: depends_on, target: CAP-EUC-SEC-4}
+    - {rel: depends_on, target: CAP-EUC-SEC-2}
+    - {rel: depends_on, target: CAP-EUC-DEV-4}
+  source: ADR 0018
+
+- id: JRN-euc-recover-self-service-access
+  term: Recover Access via Self-Service
+  type: Journey
+  definition: >
+    A locked-out workforce user verifies their identity and recovers their own credentials and routine access
+    through self-service, restoring sign-in without an agent.
+  relates_to:
+    - {rel: grouped_by, target: JG-GOVERNANCE}
+    - {rel: consumed_by, target: PERSONA-euc-workforce-user}
+    - {rel: depends_on, target: CAP-EUC-IAM-4}
+    - {rel: depends_on, target: CAP-EUC-IAM-2}
+  source: ADR 0018
+
+# ---- JG-EVOLUTION ----
+- id: JRN-euc-offboard-workforce-user
+  term: Offboard a Workforce User
+  type: Journey
+  definition: >
+    A departing workforce member is cleanly offboarded — access revoked, corporate data removed from their
+    devices, devices recovered, and records closed — leaving no residual access or corporate data.
+  relates_to:
+    - {rel: grouped_by, target: JG-EVOLUTION}
+    - {rel: consumed_by, target: PERSONA-euc-support-agent}
+    - {rel: consumed_by, target: PERSONA-euc-security-compliance}
+    - {rel: depends_on, target: CAP-EUC-SUP-4}
+    - {rel: depends_on, target: CAP-EUC-DEV-5}
+    - {rel: depends_on, target: CAP-EUC-IAM-1}
+  source: ADR 0018
+
+- id: JRN-euc-refresh-device-fleet
+  term: Refresh & Migrate the Device Fleet
+  type: Journey
+  definition: >
+    The workplace team refreshes part of the endpoint estate — provisioning replacement devices, migrating
+    user state and workspace, and retiring the outgoing devices — with continuity of the user's experience.
+  relates_to:
+    - {rel: grouped_by, target: JG-EVOLUTION}
+    - {rel: consumed_by, target: PERSONA-euc-workplace-team}
+    - {rel: consumed_by, target: PERSONA-euc-workforce-user}
+    - {rel: depends_on, target: CAP-EUC-DEV-1}
+    - {rel: depends_on, target: CAP-EUC-WSP-2}
+    - {rel: depends_on, target: CAP-EUC-DEV-5}
+    - {rel: depends_on, target: CAP-EUC-DEX-4}
+  source: ADR 0018

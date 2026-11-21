@@ -1,0 +1,70 @@
+# ITPRA ontology — ADM-APM (Application Portfolio & Lifecycle Management) capabilities
+# type: Capability. ids CAP-ADM-APM-<n>. Grouped under domain ADM-APM (ADR 0021); environment expression per ADR
+# 0014.
+
+- id: CAP-ADM-APM-1
+  term: Application Inventory & Catalog
+  type: Capability
+  definition: >
+    Maintains an authoritative inventory of the organization's business applications and their relationships
+    to business capabilities, owners, and dependencies — the trustworthy record of what applications exist
+    and why. Distinct from the platform's catalog of platform offerings.
+  relates_to:
+    - {rel: grouped_by, target: ADM-APM}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+    - {rel: consumed_by, target: PERSONA-adm-business-owner}
+  source: ADR 0021
+
+- id: CAP-ADM-APM-2
+  term: Application Lifecycle State & Roadmap
+  type: Capability
+  definition: >
+    Tracks each application's lifecycle stage (ideation, active development, steady-state, sunset) and its
+    forward roadmap, so the portfolio's direction is known and investment can be sequenced against business
+    intent.
+  relates_to:
+    - {rel: grouped_by, target: ADM-APM}
+    - {rel: depends_on, target: CAP-ADM-APM-1}
+    - {rel: consumed_by, target: PERSONA-adm-business-owner}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+  source: ADR 0021
+
+- id: CAP-ADM-APM-3
+  term: Portfolio Rationalization & Investment Decisioning
+  type: Capability
+  definition: >
+    Assesses applications for business value, fitness, cost, and risk and decides their disposition —
+    invest, tolerate, migrate, or eliminate — so the portfolio is continuously optimized toward business
+    value rather than accreting indefinitely.
+  relates_to:
+    - {rel: grouped_by, target: ADM-APM}
+    - {rel: depends_on, target: CAP-ADM-APM-2}
+    - {rel: consumed_by, target: PERSONA-adm-business-owner}
+  source: ADR 0021
+
+- id: CAP-ADM-APM-4
+  term: Application Demand & Intake
+  type: Capability
+  definition: >
+    Captures and qualifies demand for new applications and major change — intake, business-case framing, and
+    prioritization against the portfolio — so new work enters through a governed front door rather than ad
+    hoc.
+  relates_to:
+    - {rel: grouped_by, target: ADM-APM}
+    - {rel: consumed_by, target: PERSONA-adm-business-owner}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+  source: ADR 0021
+
+- id: CAP-ADM-APM-5
+  term: Application Sunset & Decommission
+  type: Capability
+  definition: >
+    Retires an application at end of life or after replacement — migrating or archiving its data, removing
+    its access and integrations, releasing its platform resources, and closing its record — so no orphaned
+    application or data persists.
+  relates_to:
+    - {rel: grouped_by, target: ADM-APM}
+    - {rel: depends_on, target: CAP-ADM-APM-1}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+    - {rel: consumed_by, target: PERSONA-adm-app-assurance}
+  source: ADR 0021

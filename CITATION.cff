@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this vocabulary, please cite it as below."
+title: "ITPRA ontology"
+type: dataset
+authors:
+  - name: "4th Try Tech"
+version: 3.16.3
+date-released: 2026-11-21
+license: CC-BY-4.0
+repository-code: "https://github.com/4thtrytech/itpra-ontology"
+url: "https://itpra.4thtry.tech/"
+abstract: >-
+  The controlled vocabulary of the IT Platform Reference Architecture (ITPRA): service domains, planes, capability
+  domains, capabilities, functions, personas, journeys, workflows, dimensions, governance constructs, quality
+  attributes and cross-cutting concepts for describing an enterprise IT platform, tool-agnostic and neutral to any
+  operating model.
+keywords:
+  - reference architecture
+  - enterprise IT platform
+  - controlled vocabulary
+  - ontology
+  - platform engineering

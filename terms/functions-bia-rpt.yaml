@@ -1,0 +1,47 @@
+# ITPRA ontology — FUNCTION library, BIA-RPT (Reporting & Visualization)
+# type: Function. ids FUNC-bia-<slug>. T1-neutral (ADR 0011). Functions `support` ≥1 capability. See ADR 0026.
+
+- id: FUNC-bia-dashboard-rendering
+  term: Dashboard Rendering
+  type: Function
+  definition: Renders interactive, filterable, drillable dashboards over governed metrics.
+  aliases: [interactive dashboard, drill-down]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-RPT-1}
+  source: ADR 0026
+
+- id: FUNC-bia-report-production
+  term: Reproducible Report Production
+  type: Function
+  definition: Produces standardized, repeatable reports with controlled definitions and an evidencable production process.
+  aliases: [pixel-perfect report, statutory report, regulatory report]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-RPT-2}
+  source: ADR 0026
+
+- id: FUNC-bia-visual-exploration
+  term: Visual Exploration & Charting
+  type: Function
+  definition: Provides ad-hoc visual exploration and charting over permitted data to discover patterns.
+  aliases: [ad-hoc charting, visual analysis]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-RPT-3}
+  source: ADR 0026
+
+- id: FUNC-bia-metric-alerting
+  term: Metric Threshold Alerting
+  type: Function
+  definition: Detects when a metric crosses a defined condition and raises a notification.
+  aliases: [data-driven alert, threshold notification]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-RPT-4}
+  source: ADR 0026
+
+- id: FUNC-bia-scheduled-distribution
+  term: Scheduled Distribution
+  type: Function
+  definition: Distributes reports and insight to recipients on a schedule or on event.
+  aliases: [report subscription, burst delivery]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-RPT-4}
+  source: ADR 0026

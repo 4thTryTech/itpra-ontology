@@ -1,0 +1,42 @@
+# ITPRA ontology — FUNCTION library, GRC-AWR (Security Awareness & Human Risk Assurance)
+# type: Function. ids FUNC-grc-<slug>. All T1-neutral; functions MAY name a technique where that IS the function
+# (ADR 0011). Functions `support` >=1 capability. See ADR 0024.
+
+# Awareness & training programme (CAP-GRC-AWR-1)
+- id: FUNC-grc-awareness-curriculum
+  term: Awareness Curriculum & Delivery
+  type: Function
+  definition: Designs and delivers role-relevant security awareness content and tracks completion across the workforce.
+  aliases: [security training, awareness content, training delivery]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-AWR-1}
+  source: ADR 0024
+
+# Phishing & social-engineering simulation (CAP-GRC-AWR-2)
+- id: FUNC-grc-phishing-simulation
+  term: Phishing & Social-Engineering Simulation
+  type: Function
+  definition: Runs controlled simulated phishing and social-engineering campaigns and measures susceptibility and reporting behavior.
+  aliases: [phishing simulation, simulated attack, vishing/smishing exercise]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-AWR-2}
+  source: ADR 0024
+
+# Human-risk measurement & intervention (CAP-GRC-AWR-3)
+- id: FUNC-grc-human-risk-scoring
+  term: Human Risk Scoring
+  type: Function
+  definition: Scores human security risk by role/team/population from behavioral metrics to identify high-risk groups.
+  aliases: [human risk score, behavioral risk metric]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-AWR-3}
+  source: ADR 0024
+
+- id: FUNC-grc-targeted-intervention
+  term: Targeted Intervention
+  type: Function
+  definition: Targets additional training or controls at high-risk populations and measures the effect over time.
+  aliases: [adaptive training, remedial training]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-AWR-3}
+  source: ADR 0024

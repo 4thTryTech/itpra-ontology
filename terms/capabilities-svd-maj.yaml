@@ -1,0 +1,57 @@
+# ITPRA ontology — SVD-MAJ (Major-Incident Coordination & Escalation) capabilities
+# type: Capability. ids CAP-SVD-MAJ-<n>. Grouped under domain SVD-MAJ (ADR 0019).
+
+- id: CAP-SVD-MAJ-1
+  term: Major-Incident Declaration & Mobilization
+  type: Capability
+  definition: >
+    Declares a major disruption on objective criteria and stands up a coordinated response — bringing the
+    right people together quickly — so a high-impact event is recognized and mobilized without delay rather
+    than handled as an ordinary contact.
+  relates_to:
+    - {rel: grouped_by, target: SVD-MAJ}
+    - {rel: depends_on, target: CAP-SVD-TRI-5}
+    - {rel: consumed_by, target: PERSONA-svd-coordinator}
+  source: ADR 0019
+
+- id: CAP-SVD-MAJ-2
+  term: Response Coordination & Command
+  type: Capability
+  definition: >
+    Drives a major incident toward restoration from one coordination point — directing and tracking the
+    actions of the resolving teams and keeping the response organized — so restoration is fast and
+    coordinated rather than fragmented. The technical fix is performed by the resolving domains.
+  relates_to:
+    - {rel: grouped_by, target: SVD-MAJ}
+    - {rel: depends_on, target: CAP-SVD-MAJ-1}
+    - {rel: consumed_by, target: PERSONA-svd-coordinator}
+    - {rel: consumed_by, target: PERSONA-svd-resolver}
+  source: ADR 0019
+
+- id: CAP-SVD-MAJ-3
+  term: Disruption Communication
+  type: Capability
+  definition: >
+    Keeps users and stakeholders informed during a major disruption on a predictable cadence with
+    audience-appropriate, jargon-free updates, so people know what is happening and what to expect even
+    before service is restored.
+  relates_to:
+    - {rel: grouped_by, target: SVD-MAJ}
+    - {rel: depends_on, target: CAP-SVD-MAJ-1}
+    - {rel: consumed_by, target: PERSONA-svd-requester}
+    - {rel: consumed_by, target: PERSONA-svd-coordinator}
+  source: ADR 0019
+
+- id: CAP-SVD-MAJ-4
+  term: Post-Disruption Review & Learning
+  type: Capability
+  definition: >
+    Reviews a major incident after restoration to understand root cause without blame and to produce
+    lasting, owned improvement actions, so the same disruption is less likely to recur and the response
+    improves over time.
+  relates_to:
+    - {rel: grouped_by, target: SVD-MAJ}
+    - {rel: depends_on, target: CAP-SVD-MAJ-2}
+    - {rel: consumed_by, target: PERSONA-svd-coordinator}
+    - {rel: consumed_by, target: PERSONA-svd-resolver}
+  source: ADR 0019

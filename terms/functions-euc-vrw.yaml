@@ -1,0 +1,41 @@
+# ITPRA ontology — FUNCTION library, EUC-VRW (Virtual & Remote Workspace)
+# type: Function. ids FUNC-euc-<slug>.
+
+# Virtual & hosted desktop provisioning (CAP-EUC-VRW-1)
+- id: FUNC-euc-virtual-desktop-provisioning
+  term: Virtual Desktop Provisioning
+  type: Function
+  definition: Provisions and manages the lifecycle of virtual/hosted desktops delivered to users on demand.
+  aliases: [VDI provisioning, desktop image management, desktop pool management]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-VRW-1}
+  source: ADR 0018
+
+# Remote & published application delivery (CAP-EUC-VRW-2)
+- id: FUNC-euc-published-application-delivery
+  term: Published Application Delivery
+  type: Function
+  definition: Delivers an individual hosted application remotely to an entitled endpoint without a full desktop.
+  aliases: [app virtualization, published app, remote app]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-VRW-2}
+  source: ADR 0018
+
+# Remote session brokering & access (CAP-EUC-VRW-3)
+- id: FUNC-euc-session-brokering
+  term: Session Brokering
+  type: Function
+  definition: Authenticates a session and brokers it to an available virtual desktop or application host.
+  aliases: [connection broker, session placement]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-VRW-3}
+  source: ADR 0018
+
+- id: FUNC-euc-remote-display-protocol
+  term: Remote Display Delivery
+  type: Function
+  definition: Maintains the remote display/connection between the user's endpoint and their virtual workspace.
+  aliases: [remoting protocol, display protocol, session connection]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-VRW-3}
+  source: ADR 0018

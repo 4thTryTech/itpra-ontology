@@ -1,0 +1,117 @@
+# ITPRA ontology — FUNCTION library, RESILIENCE & CONTINUITY (RES) domain file
+# type: Function. ids FUNC-<slug> (slug-based, NO domain prefix — shared cross-domain). All T1 neutral. RES-1
+# backup schedule reuses FUNC-job-scheduling (AUT); RES-4 reuses FUNC-health-checking (SUB). See ADR 0011.
+
+# Backup (supports CAP-RES-1; schedule via shared FUNC-job-scheduling)
+- id: FUNC-backup-execution
+  term: Backup Execution
+  type: Function
+  definition: Backs up platform and tenant state, producing recoverable copies that meet retention policy.
+  aliases: [backup, snapshotting]
+  relates_to:
+    - {rel: supports, target: CAP-RES-1}
+  source: ADR 0011
+
+- id: FUNC-backup-retention
+  term: Backup Retention
+  type: Function
+  definition: Applies retention and expiry policy to backups, keeping required recovery points and pruning the rest.
+  aliases: [retention policy, backup lifecycle]
+  relates_to:
+    - {rel: supports, target: CAP-RES-1}
+  source: ADR 0011
+
+# Restore (supports CAP-RES-2)
+- id: FUNC-restore-execution
+  term: Restore Execution
+  type: Function
+  definition: Restores backed-up state to a known-good point within defined recovery objectives (RTO/RPO).
+  aliases: [restore, recovery]
+  relates_to:
+    - {rel: supports, target: CAP-RES-2}
+  source: ADR 0011
+
+- id: FUNC-restore-verification
+  term: Restore Verification
+  type: Function
+  definition: Verifies that backups are restorable and intact by testing restores against recovery objectives.
+  aliases: [restore testing, recovery verification]
+  relates_to:
+    - {rel: supports, target: CAP-RES-2}
+  source: ADR 0011
+
+# Disaster recovery (supports CAP-RES-3)
+- id: FUNC-failover-orchestration
+  term: Failover Orchestration
+  type: Function
+  definition: Orchestrates failover of services to an alternate location/region after a primary-site disruption.
+  aliases: [site failover, region failover]
+  relates_to:
+    - {rel: supports, target: CAP-RES-3}
+  source: ADR 0011
+
+- id: FUNC-recovery-plan-execution
+  term: Recovery Plan Execution
+  type: Function
+  definition: Executes disaster-recovery plans/runbooks to restore operation in the recovery location.
+  aliases: [DR runbook execution, recovery orchestration]
+  relates_to:
+    - {rel: supports, target: CAP-RES-3}
+  source: ADR 0011
+
+# High availability (supports CAP-RES-4; reuses shared FUNC-health-checking)
+- id: FUNC-redundancy-management
+  term: Redundancy Management
+  type: Function
+  definition: Maintains redundant instances/replicas across fault domains so there is no single point of failure.
+  aliases: [replication management, redundancy]
+  relates_to:
+    - {rel: supports, target: CAP-RES-4}
+  source: ADR 0011
+
+- id: FUNC-automatic-failover
+  term: Automatic Failover
+  type: Function
+  definition: Detects component failure and automatically shifts traffic/role to a healthy instance in place.
+  aliases: [auto-failover, failover]
+  relates_to:
+    - {rel: supports, target: CAP-RES-4}
+  source: ADR 0011
+
+# Workload mobility (supports CAP-RES-5)
+- id: FUNC-live-migration
+  term: Live Migration
+  type: Function
+  definition: Relocates a running workload to other infrastructure with little-to-no disruption to service.
+  aliases: [workload relocation, live move]
+  relates_to:
+    - {rel: supports, target: CAP-RES-5}
+  source: ADR 0011
+
+- id: FUNC-state-transfer
+  term: State Transfer
+  type: Function
+  definition: Transfers workload state, storage, and networking during relocation so the workload resumes intact.
+  aliases: [state migration, memory transfer]
+  relates_to:
+    - {rel: supports, target: CAP-RES-5}
+  source: ADR 0011
+
+# Chaos engineering (supports CAP-RES-6)
+- id: FUNC-fault-injection
+  term: Fault Injection
+  type: Function
+  definition: Deliberately injects controlled faults — failures, latency, partitions, resource exhaustion — under safety controls.
+  aliases: [chaos injection, failure injection]
+  relates_to:
+    - {rel: supports, target: CAP-RES-6}
+  source: ADR 0011
+
+- id: FUNC-resilience-experimentation
+  term: Resilience Experimentation
+  type: Function
+  definition: Designs and runs resilience experiments, forming hypotheses and observing whether the system degrades gracefully and recovers.
+  aliases: [chaos experiments, game day]
+  relates_to:
+    - {rel: supports, target: CAP-RES-6}
+  source: ADR 0011

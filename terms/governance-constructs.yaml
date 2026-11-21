@@ -1,0 +1,119 @@
+# ITPRA ontology — neutral governance constructs
+# The canonical set of operating-model-NEUTRAL governance "moments" T1 uses to describe how the platform is
+# requested, decided, operated, recorded, and improved. Ratified by ADR 0015. This set is the stable JOIN KEY
+# between T1 and every T2 operating model: a T2 maps each construct it uses into one model's vocabulary (a
+# cross-walk to one operating model exists downstream, never here — these definitions name no operating-model or
+# tool terms). Deliberately COARSE governance moments, not a clone of any framework's practice list. type:
+# Concept. Used by the capability `Governance touchpoints` field and journey construct points. Organized into
+# five moment-groups (noted per term).
+
+# ===== Engage — how a consumer reaches the platform =====
+
+- id: GC-REQUEST
+  term: Request point
+  type: Concept
+  definition: >
+    Moment-group Engage. Where a consumer asks the platform for something — a service, resource, access, or
+    action — and the platform receives, validates, and routes that ask. The neutral anchor for any
+    consumer-initiated demand on the platform.
+  aliases: [request, service request, demand point]
+  source: ADR 0015
+
+- id: GC-CATALOG
+  term: Catalog / offer
+  type: Concept
+  definition: >
+    Moment-group Engage. How an available service or resource is described and presented so a consumer can
+    discover, understand, and select it for consumption. The neutral anchor for the published surface of what
+    the platform offers.
+  aliases: [catalog, offer, service offering]
+  source: ADR 0015
+
+# ===== Decide & Control — governance gates on what proceeds and what changes =====
+
+- id: GC-APPROVAL
+  term: Approval / decision point
+  type: Concept
+  definition: >
+    Moment-group Decide & Control. Where a governance decision gates progress — a proposed action is assessed
+    against policy or authority and permitted, denied, or escalated before it proceeds. The neutral anchor for
+    any control gate, whether human-judged or automated.
+  aliases: [approval, decision point, gate]
+  source: ADR 0015
+
+- id: GC-CHANGE
+  term: Change point
+  type: Concept
+  definition: >
+    Moment-group Decide & Control. Where a modification to a managed thing is introduced in a controlled way,
+    with its intent recorded and its effect made reversible or recoverable. The neutral anchor for introducing
+    change to the platform or a tenant workload, including release and deployment of that change.
+  aliases: [change, release point]
+  source: ADR 0015
+
+# ===== Operate & Restore — running the service, recovering it, and committing to its level =====
+
+- id: GC-INCIDENT
+  term: Incident / restore point
+  type: Concept
+  definition: >
+    Moment-group Operate & Restore. Where an unplanned disruption or degradation is detected and handled to
+    restore the agreed service as quickly as possible. The neutral anchor for in-the-moment service recovery
+    (including continuity/restore actions); eliminating the underlying cause is the separate Problem point.
+  aliases: [incident, restore point, recovery point]
+  source: ADR 0015
+
+- id: GC-PROBLEM
+  term: Problem / root-cause point
+  type: Concept
+  definition: >
+    Moment-group Operate & Restore. Where the underlying cause of one or more disruptions is investigated and
+    eliminated or mitigated to prevent recurrence — distinct from restoring service in the moment (the
+    Incident point). The neutral anchor for root-cause analysis and lasting corrective action.
+  aliases: [problem, root-cause point, root-cause analysis]
+  source: ADR 0015
+
+- id: GC-SERVICE-LEVEL
+  term: Service-level / commitment point
+  type: Concept
+  definition: >
+    Moment-group Operate & Restore. Where the platform states a commitment about a service — a target level of
+    a quality such as availability or latency — and is measured against it, informing whether effort should go
+    to reliability or to change. The neutral anchor for service-level commitments and the headroom against
+    them; the measurable target is set at T2/T3.
+  aliases: [service level, commitment point, objective]
+  source: ADR 0015
+
+# ===== Record & Improve — authoritative state and the learning loop =====
+
+- id: GC-RECORD
+  term: Record / system-of-record update
+  type: Concept
+  definition: >
+    Moment-group Record & Improve. Where authoritative state about the platform or a managed thing is written,
+    so the record remains the trustworthy account of what exists and what happened. The neutral anchor for any
+    authoritative write — configuration, inventory, or audit trail.
+  aliases: [record, system-of-record update, audit record]
+  source: ADR 0015
+
+- id: GC-FEEDBACK
+  term: Feedback / improvement point
+  type: Concept
+  definition: >
+    Moment-group Record & Improve. Where feedback, defects, or improvement ideas are captured and fed into a
+    prioritized improvement loop that evolves the platform as a product. The neutral anchor for the ongoing
+    improvement and product-feedback loop.
+  aliases: [feedback, improvement point, improvement loop]
+  source: ADR 0015
+
+# ===== Cross-cutting =====
+
+- id: GC-OWNERSHIP
+  term: Ownership
+  type: Concept
+  definition: >
+    Cross-cutting moment. Who is accountable and responsible for a capability, service, or step — the role
+    that owns the outcome. Cross-cutting because every other construct has an owner; the neutral anchor for
+    the accountability model.
+  aliases: [accountability, responsibility]
+  source: ADR 0015

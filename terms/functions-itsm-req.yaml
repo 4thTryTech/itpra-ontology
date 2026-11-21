@@ -1,0 +1,70 @@
+# ITPRA ontology — FUNCTION library, ITSM-REQ (Cross-Domain Request & Fulfillment Orchestration)
+# type: Function. ids FUNC-itsm-<slug>. All T1-neutral. Functions `support` >=1 capability. See ADR 0025.
+
+# Cross-domain request intake & triage (CAP-ITSM-REQ-1)
+- id: FUNC-itsm-request-intake
+  term: Request Intake
+  type: Function
+  definition: Receives consumer demand at a single front door and records it into one accountable flow.
+  aliases: [single front door, demand capture]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-REQ-1}
+  source: ADR 0025
+
+- id: FUNC-itsm-request-triage
+  term: Request Validation & Triage
+  type: Function
+  definition: Validates entitlement and completeness and classifies a request for routing.
+  aliases: [request classification, triage]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-REQ-1}
+  source: ADR 0025
+
+# Request routing & decomposition (CAP-ITSM-REQ-2)
+- id: FUNC-itsm-request-decomposition
+  term: Request Decomposition
+  type: Function
+  definition: Breaks a cross-provider request into the provider-owned steps it requires.
+  aliases: [work breakdown, fulfillment decomposition]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-REQ-2}
+  source: ADR 0025
+
+- id: FUNC-itsm-request-routing
+  term: Request Routing
+  type: Function
+  definition: Routes each decomposed step to the responsible provider using the service ownership map.
+  aliases: [assignment routing, dispatch]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-REQ-2}
+  source: ADR 0025
+
+# Fulfillment orchestration & tracking (CAP-ITSM-REQ-3)
+- id: FUNC-itsm-fulfillment-orchestration
+  term: Fulfillment Orchestration
+  type: Function
+  definition: Sequences and coordinates provider-owned steps and their hand-offs to complete an end-to-end request.
+  aliases: [orchestration, workflow coordination]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-REQ-3}
+  source: ADR 0025
+
+- id: FUNC-itsm-request-status-tracking
+  term: Request Status Tracking
+  type: Function
+  definition: Tracks a request to a recorded outcome with status visible to the consumer across providers.
+  aliases: [status visibility, request tracking]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-REQ-3}
+  source: ADR 0025
+
+# Request authorization coordination (CAP-ITSM-REQ-4)
+- id: FUNC-itsm-approval-coordination
+  term: Approval Coordination
+  type: Function
+  definition: Coordinates the entitlement, policy, and authority decision points a request must pass, attributable and recorded.
+  aliases: [approval routing, authorization gate]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-REQ-4}
+    - {rel: supports, target: CAP-ITSM-CHG-1}
+  source: ADR 0025

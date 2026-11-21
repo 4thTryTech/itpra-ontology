@@ -1,0 +1,99 @@
+# ITPRA ontology — Business Intelligence & Analytics (BIA) capability domains
+# type: Domain. The `id` IS the domain code used in capability ids: CAP-<id>-<n> (child: CAP-<id>-<n>.<m>). Each
+# domain is `grouped_by` an EXISTING capability PLANE (terms/planes.yaml). SD-BUSINESS-ANALYTICS interfaces_with
+# PLANE-RESOURCE (it consumes the platform data substrate/streaming/storage) and PLANE-EXPERIENCE (it serves
+# insight to business consumers); every BIA group is placed under one of those two existing planes. Taxonomy
+# ratified by ADR 0026. Owning service domain: SD-BUSINESS-ANALYTICS (ADR 0009). Scope/boundary vs
+# ITO DATA/OBS/SEC: ADR 0026.
+
+- id: BIA-INT
+  term: Data Integration & Ingestion
+  type: Domain
+  definition: >
+    Acquiring business data from source systems and moving it into the analytical estate — batch and
+    streaming ingestion, change-data capture, extraction and transformation, replication, and data
+    virtualization/federation — so trustworthy source data lands reliably for downstream modeling and
+    analysis. Grounded in the DAMA data integration & interoperability knowledge area.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-RESOURCE}
+    - {rel: belongs_to_service_domain, target: SD-BUSINESS-ANALYTICS}
+  source: ADR 0026
+
+- id: BIA-WHS
+  term: Data Warehouse, Lakehouse & Modeling
+  type: Domain
+  definition: >
+    The governed analytical data store and its business models — a managed warehouse/lakehouse, the layered
+    refinement of data from landing through conformed to consumption-ready, dimensional/business data
+    modeling, time-variant history, and analytics-ready data products. Consumes the platform's data substrate
+    (ITO DATA/SUB) rather than owning it.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-RESOURCE}
+    - {rel: belongs_to_service_domain, target: SD-BUSINESS-ANALYTICS}
+  source: ADR 0026
+
+- id: BIA-SEM
+  term: Semantic Layer & Self-Service Analytics
+  type: Domain
+  definition: >
+    The governed business-meaning layer between the analytical store and consumers — a single definition of
+    business metrics, dimensions, and entities; certified data products; governed self-service exploration;
+    and a catalog/discovery surface — so business users obtain trusted, consistent insight without writing
+    queries. The consumer-facing front door of the analytics estate.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-EXPERIENCE}
+    - {rel: belongs_to_service_domain, target: SD-BUSINESS-ANALYTICS}
+  source: ADR 0026
+
+- id: BIA-RPT
+  term: Reporting & Visualization
+  type: Domain
+  definition: >
+    The rendered, distributed output of analytics — interactive dashboards, standard and regulatory reports,
+    visual exploration, alerting on metric conditions, and scheduled distribution — delivering insight to
+    business consumers in the form and cadence they need. Builds on the semantic layer's governed
+    definitions.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-EXPERIENCE}
+    - {rel: belongs_to_service_domain, target: SD-BUSINESS-ANALYTICS}
+  source: ADR 0026
+
+- id: BIA-SCI
+  term: Data Science & Advanced Analytics
+  type: Domain
+  definition: >
+    The advanced-analytics lifecycle — a collaborative experimentation workspace, feature engineering and a
+    feature store, model development/training/evaluation, model deployment and scoring as consumable insight,
+    and ongoing model monitoring and lifecycle management. Produces predictive and prescriptive business
+    insight; distinct from the platform's operational AIOps (ITO OBS).
+  relates_to:
+    - {rel: grouped_by, target: PLANE-EXPERIENCE}
+    - {rel: belongs_to_service_domain, target: SD-BUSINESS-ANALYTICS}
+  source: ADR 0026
+
+- id: BIA-PRD
+  term: Product & User-Behavior Analytics
+  type: Domain
+  definition: >
+    Measuring how people use products and digital services for business optimization — behavioral event
+    collection and a governed event taxonomy, journey/funnel/conversion analysis, cohort/retention/engagement
+    analysis, and experimentation and insight activation. Business product insight; distinct from security
+    UEBA (ITO SEC, CAP-SEC-7) and operational AIOps (ITO OBS, CAP-OBS-6).
+  relates_to:
+    - {rel: grouped_by, target: PLANE-EXPERIENCE}
+    - {rel: belongs_to_service_domain, target: SD-BUSINESS-ANALYTICS}
+  source: ADR 0026
+
+- id: BIA-GOV
+  term: Data Governance, Quality & Master Data
+  type: Domain
+  definition: >
+    The cross-cutting trust function for business data and insight — data governance and stewardship;
+    metadata, catalog, and lineage; data quality measurement and remediation; master data management (golden
+    records); reference data management; and data privacy/policy compliance for analytics. Governs business
+    data; applies the enterprise control catalog (Enterprise Security/GRC) and is distinct from the platform's
+    operational data governance (ITO DATA, CAP-DATA-4). The DAMA Wheel places this at the center.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-RESOURCE}
+    - {rel: belongs_to_service_domain, target: SD-BUSINESS-ANALYTICS}
+  source: ADR 0026

@@ -1,0 +1,225 @@
+# ITPRA ontology — Network & Connectivity (NET) journey catalog
+# type: Journey. ids JRN-net-<slug>. Each `grouped_by` exactly one EXISTING JourneyGroup
+# (JG-ONBOARDING..JG-EVOLUTION; reused, not redefined). Neutral — steps reference capabilities + neutral
+# governance construct points (request/approval/change/incident/record/feedback), never tools or named
+# processes. Relationships from the journey side: grouped_by, consumed_by (primary personas), depends_on
+# (capabilities exercised). Ratified by ADR 0023. Diagrams: WF-net-<slug>.
+
+# ---- JG-ONBOARDING ----
+- id: JRN-net-provision-site-connectivity
+  term: Provision Connectivity for a New Site
+  type: Journey
+  definition: >
+    Bring a new site or branch onto the enterprise network — provision its connectivity over available
+    transport, establish a redundant path, and confirm it can reach enterprise and internet resources.
+  relates_to:
+    - {rel: grouped_by, target: JG-ONBOARDING}
+    - {rel: consumed_by, target: PERSONA-net-consumer}
+    - {rel: consumed_by, target: PERSONA-net-engineering-team}
+    - {rel: depends_on, target: CAP-NET-CON-1}
+    - {rel: depends_on, target: CAP-NET-CON-3}
+    - {rel: depends_on, target: CAP-NET-CON-4}
+    - {rel: depends_on, target: CAP-NET-RES-1}
+  source: ADR 0023
+
+- id: JRN-net-connect-cloud-onramp
+  term: Establish a Cloud / SaaS On-Ramp
+  type: Journey
+  definition: >
+    Provide an optimized, governed network path from sites and the platform to a cloud provider or SaaS, so
+    cloud-bound traffic reaches its destination efficiently rather than backhauled through a central point.
+  relates_to:
+    - {rel: grouped_by, target: JG-ONBOARDING}
+    - {rel: consumed_by, target: PERSONA-net-engineering-team}
+    - {rel: consumed_by, target: PERSONA-net-consumer}
+    - {rel: depends_on, target: CAP-NET-CON-5}
+    - {rel: depends_on, target: CAP-NET-CON-2}
+    - {rel: depends_on, target: CAP-NET-QOS-3}
+  source: ADR 0023
+
+- id: JRN-net-onboard-remote-worker
+  term: Onboard a Remote Worker to Secure Access
+  type: Journey
+  definition: >
+    Give a remote or roaming worker secure access to the enterprise resources they need — a governed access
+    path, identity- and posture-conditioned, with addressing and naming working from anywhere.
+  relates_to:
+    - {rel: grouped_by, target: JG-ONBOARDING}
+    - {rel: consumed_by, target: PERSONA-net-consumer}
+    - {rel: consumed_by, target: PERSONA-net-security-compliance}
+    - {rel: depends_on, target: CAP-NET-RAX-2}
+    - {rel: depends_on, target: CAP-NET-RAX-3}
+    - {rel: depends_on, target: CAP-NET-RAX-4}
+    - {rel: depends_on, target: CAP-NET-DDI-2}
+  source: ADR 0023
+
+# ---- JG-DELIVERY ----
+- id: JRN-net-establish-site-to-site
+  term: Establish a Site-to-Site Interconnect
+  type: Journey
+  definition: >
+    Interconnect two locations (offices, data centers, or cloud networks) over an encrypted site-to-site path
+    into the routed enterprise network, segmented and admitted to the right zones.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-net-engineering-team}
+    - {rel: consumed_by, target: PERSONA-net-security-compliance}
+    - {rel: depends_on, target: CAP-NET-RAX-1}
+    - {rel: depends_on, target: CAP-NET-CON-1}
+    - {rel: depends_on, target: CAP-NET-SEG-2}
+  source: ADR 0023
+
+- id: JRN-net-provision-edge-security
+  term: Provision Network Edge Security
+  type: Journey
+  definition: >
+    Stand up the enterprise-edge security posture for a boundary — firewalling and policy enforcement, secure
+    web/internet egress, and cloud-application access governance — applying the enterprise control intent.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-net-security-compliance}
+    - {rel: consumed_by, target: PERSONA-net-engineering-team}
+    - {rel: depends_on, target: CAP-NET-SEG-1}
+    - {rel: depends_on, target: CAP-NET-SEG-3}
+    - {rel: depends_on, target: CAP-NET-SEG-4}
+  source: ADR 0023
+
+- id: JRN-net-publish-dns-zone
+  term: Publish & Manage a DNS Zone and Address Plan
+  type: Journey
+  definition: >
+    Stand up and maintain enterprise naming and addressing for a service or estate — publish the DNS zone,
+    allocate address space from the plan, and keep names and addresses consistent across on-premises and cloud.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-net-engineering-team}
+    - {rel: consumed_by, target: PERSONA-net-architect}
+    - {rel: depends_on, target: CAP-NET-DDI-1}
+    - {rel: depends_on, target: CAP-NET-DDI-3}
+    - {rel: depends_on, target: CAP-NET-DDI-4}
+  source: ADR 0023
+
+# ---- JG-OPERATIONS ----
+- id: JRN-net-observe-network-health
+  term: Observe & Assure Network Health
+  type: Journey
+  definition: >
+    Continuously watch the enterprise network — collect telemetry, monitor health and performance, verify the
+    network is meeting intent, and keep topology and change visible — so issues are seen before they bite.
+  relates_to:
+    - {rel: grouped_by, target: JG-OPERATIONS}
+    - {rel: consumed_by, target: PERSONA-net-operations}
+    - {rel: consumed_by, target: PERSONA-net-engineering-team}
+    - {rel: depends_on, target: CAP-NET-OBS-1}
+    - {rel: depends_on, target: CAP-NET-OBS-2}
+    - {rel: depends_on, target: CAP-NET-OBS-3}
+    - {rel: depends_on, target: CAP-NET-OBS-4}
+  source: ADR 0023
+
+- id: JRN-net-assure-application-performance
+  term: Assure Application Performance over the Network
+  type: Journey
+  definition: >
+    Keep a latency- or loss-sensitive application's experience predictable over the network — classify and
+    prioritize its traffic, shape bandwidth, and manage performance against its target.
+  relates_to:
+    - {rel: grouped_by, target: JG-OPERATIONS}
+    - {rel: consumed_by, target: PERSONA-net-engineering-team}
+    - {rel: consumed_by, target: PERSONA-net-operations}
+    - {rel: depends_on, target: CAP-NET-QOS-1}
+    - {rel: depends_on, target: CAP-NET-QOS-2}
+    - {rel: depends_on, target: CAP-NET-QOS-4}
+    - {rel: depends_on, target: CAP-NET-OBS-2}
+  source: ADR 0023
+
+- id: JRN-net-tune-qos-policy
+  term: Tune Traffic & Path Policy
+  type: Journey
+  definition: >
+    Adjust how the network treats and steers traffic — refine classification, prioritization, and application-
+    aware path optimization on observed performance, as a controlled change.
+  relates_to:
+    - {rel: grouped_by, target: JG-OPERATIONS}
+    - {rel: consumed_by, target: PERSONA-net-engineering-team}
+    - {rel: depends_on, target: CAP-NET-QOS-1}
+    - {rel: depends_on, target: CAP-NET-QOS-3}
+    - {rel: depends_on, target: CAP-NET-CON-2}
+  source: ADR 0023
+
+# ---- JG-RESPONSE ----
+- id: JRN-net-respond-network-incident
+  term: Respond to a Network Incident
+  type: Journey
+  definition: >
+    Detect, triage, and restore a network degradation or outage — isolate the affected path, fail over to a
+    healthy one, restore service, and record the event for follow-up.
+  relates_to:
+    - {rel: grouped_by, target: JG-RESPONSE}
+    - {rel: consumed_by, target: PERSONA-net-operations}
+    - {rel: consumed_by, target: PERSONA-net-engineering-team}
+    - {rel: depends_on, target: CAP-NET-OBS-2}
+    - {rel: depends_on, target: CAP-NET-RES-2}
+    - {rel: depends_on, target: CAP-NET-RES-3}
+  source: ADR 0023
+
+- id: JRN-net-recover-path-failure
+  term: Recover from a Path or Link Failure
+  type: Journey
+  definition: >
+    Survive the loss of a link, path, or device — traffic fails over automatically to a diverse redundant path
+    and converges quickly, and connectivity is verified recovered to a known-good state.
+  relates_to:
+    - {rel: grouped_by, target: JG-RESPONSE}
+    - {rel: consumed_by, target: PERSONA-net-operations}
+    - {rel: consumed_by, target: PERSONA-net-engineering-team}
+    - {rel: depends_on, target: CAP-NET-RES-1}
+    - {rel: depends_on, target: CAP-NET-RES-2}
+    - {rel: depends_on, target: CAP-NET-RES-4}
+  source: ADR 0023
+
+# ---- JG-GOVERNANCE ----
+- id: JRN-net-review-segmentation-access
+  term: Review Segmentation & Access Compliance
+  type: Journey
+  definition: >
+    Verify and attest that network segmentation and access policy match the enterprise control intent — review
+    the segments and access paths, confirm assurance against intent, and record the evidence.
+  relates_to:
+    - {rel: grouped_by, target: JG-GOVERNANCE}
+    - {rel: consumed_by, target: PERSONA-net-security-compliance}
+    - {rel: consumed_by, target: PERSONA-net-operations}
+    - {rel: depends_on, target: CAP-NET-SEG-2}
+    - {rel: depends_on, target: CAP-NET-RAX-4}
+    - {rel: depends_on, target: CAP-NET-OBS-3}
+  source: ADR 0023
+
+# ---- JG-EVOLUTION ----
+- id: JRN-net-refresh-network-edge
+  term: Refresh & Evolve the Network Edge
+  type: Journey
+  definition: >
+    Evolve or refresh part of the enterprise network — re-home transports, add diverse capacity, and migrate an
+    edge to a new design — without disrupting the connectivity it carries, as a planned change.
+  relates_to:
+    - {rel: grouped_by, target: JG-EVOLUTION}
+    - {rel: consumed_by, target: PERSONA-net-architect}
+    - {rel: consumed_by, target: PERSONA-net-engineering-team}
+    - {rel: depends_on, target: CAP-NET-CON-3}
+    - {rel: depends_on, target: CAP-NET-RES-1}
+    - {rel: depends_on, target: CAP-NET-OBS-4}
+  source: ADR 0023
+
+- id: JRN-net-decommission-site
+  term: Decommission a Site's Connectivity
+  type: Journey
+  definition: >
+    Retire a site or service from the enterprise network — remove its connectivity and access, reclaim its
+    address space and names, and close its records, so nothing stale or orphaned persists.
+  relates_to:
+    - {rel: grouped_by, target: JG-EVOLUTION}
+    - {rel: consumed_by, target: PERSONA-net-engineering-team}
+    - {rel: consumed_by, target: PERSONA-net-security-compliance}
+    - {rel: depends_on, target: CAP-NET-CON-1}
+    - {rel: depends_on, target: CAP-NET-DDI-3}
+    - {rel: depends_on, target: CAP-NET-SEG-2}
+  source: ADR 0023

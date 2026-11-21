@@ -1,0 +1,81 @@
+# ITPRA ontology — FUNCTION library, DXC-CHN (Channel Delivery & Experience Insight)
+# type: Function. ids FUNC-dxc-<slug>. All T1-neutral; a function MAY name a recognized technique where that IS
+# the function (ADR 0011). Boundary: technical end-user/page MONITORING is ITO OBS (CAP-OBS-9), not DXC (ADR
+# 0027).
+
+# Multi-channel experience delivery (CAP-DXC-CHN-1)
+- id: FUNC-dxc-channel-rendering
+  term: Channel Rendering & Delivery
+  type: Function
+  definition: Renders and delivers the composed, personalized experience to each customer channel/front end.
+  aliases: [rendering, presentation delivery, channel delivery]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-CHN-1}
+  source: ADR 0027
+
+- id: FUNC-dxc-omnichannel-delivery
+  term: Omnichannel Delivery
+  type: Function
+  definition: Delivers a consistent experience across web, app, and other touchpoints (create-once/publish-everywhere).
+  aliases: [omnichannel, multi-channel delivery]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-CHN-1}
+  source: ADR 0027
+
+# Delivery & front-end API services (CAP-DXC-CHN-2)
+- id: FUNC-dxc-delivery-api
+  term: Experience Delivery API
+  type: Function
+  definition: Exposes governed delivery/front-end APIs front ends consume for content and profile-aware experiences.
+  aliases: [delivery API, front-end API, experience API, BFF]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-CHN-2}
+  source: ADR 0027
+
+# Edge delivery & experience performance (CAP-DXC-CHN-3)
+- id: FUNC-dxc-edge-delivery
+  term: Edge & Cache Delivery
+  type: Function
+  definition: Delivers experiences with low, consistent latency using caching and edge delivery.
+  aliases: [edge delivery, CDN delivery, caching]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-CHN-3}
+  source: ADR 0027
+
+# Digital channel presence management (CAP-DXC-CHN-4)
+- id: FUNC-dxc-channel-presence
+  term: Channel Presence Management
+  type: Function
+  definition: Manages the set of channels/sites/apps the experience publishes to — configuration, domains, lifecycle.
+  aliases: [site management, channel configuration, presence management]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-CHN-4}
+  source: ADR 0027
+
+- id: FUNC-dxc-multisite-locale
+  term: Multi-Site & Locale Management
+  type: Function
+  definition: Manages multiple sites, brands, and locales/markets of the digital presence coherently.
+  aliases: [multisite, multi-market, localization delivery]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-CHN-4}
+  source: ADR 0027
+
+# Channel experience insight (CAP-DXC-CHN-5)
+- id: FUNC-dxc-engagement-insight
+  term: Engagement & Conversion Insight
+  type: Function
+  definition: Provides the customer-outcome view of engagement and conversion across channels and content.
+  aliases: [engagement analytics, conversion insight, experience analytics]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-CHN-5}
+  source: ADR 0027
+
+- id: FUNC-dxc-content-performance
+  term: Content & Experience Performance Insight
+  type: Function
+  definition: Shows which content and experiences perform, feeding optimization; not technical page monitoring (ITO OBS).
+  aliases: [content performance, experience performance, outcome insight]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-CHN-5}
+  source: ADR 0027

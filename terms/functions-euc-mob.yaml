@@ -1,0 +1,42 @@
+# ITPRA ontology — FUNCTION library, EUC-MOB (Mobility & BYOD)
+# type: Function. ids FUNC-euc-<slug>. Grounded in NIST SP 1800-22 (BYOD / EMM). FUNC-euc-remote-wipe (in
+# functions-euc-dev.yaml) also supports CAP-EUC-MOB-3 (selective wipe of the work container).
+
+# Personal-device enrollment (CAP-EUC-MOB-1)
+- id: FUNC-euc-byod-enrollment
+  term: BYOD Enrollment
+  type: Function
+  definition: Enrolls a personally-owned device into a managed work boundary while leaving personal use ungoverned.
+  aliases: [personal-device enrollment, work-profile enrollment]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-MOB-1}
+  source: ADR 0018
+
+# Work / personal data separation (CAP-EUC-MOB-2)
+- id: FUNC-euc-work-container
+  term: Work Container Isolation
+  type: Function
+  definition: Maintains a separated work container so corporate data and apps cannot leak into personal storage or apps.
+  aliases: [work profile, managed container, app sandboxing]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-MOB-2}
+  source: ADR 0018
+
+# Mobile application & content management (CAP-EUC-MOB-3)
+- id: FUNC-euc-mobile-app-management
+  term: Mobile Application Management
+  type: Function
+  definition: Governs distribution, configuration, and data-handling of corporate applications on mobile/personal devices.
+  aliases: [MAM, managed app configuration]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-MOB-3}
+  source: ADR 0018
+
+- id: FUNC-euc-mobile-content-management
+  term: Mobile Content Management
+  type: Function
+  definition: Controls how corporate content is accessed, stored, and shared by managed apps on mobile/personal devices.
+  aliases: [MCM, managed content access]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-MOB-3}
+  source: ADR 0018

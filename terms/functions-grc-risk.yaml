@@ -1,0 +1,91 @@
+# ITPRA ontology — FUNCTION library, GRC-RISK (Enterprise Vulnerability, Threat & Risk Management)
+# type: Function. ids FUNC-grc-<slug>. All T1-neutral; functions MAY name a standard/technique where that IS the
+# function (ADR 0011). Functions `support` >=1 capability. See ADR 0024.
+
+# Risk assessment & treatment (CAP-GRC-RISK-1)
+- id: FUNC-grc-risk-identification
+  term: Risk Identification & Analysis
+  type: Function
+  definition: Identifies, analyzes, and evaluates information-security risks against likelihood and impact (e.g. ISO/IEC 27005, NIST RMF).
+  aliases: [risk assessment, ISO 27005 assessment, risk analysis]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-RISK-1}
+  source: ADR 0024
+
+- id: FUNC-grc-risk-treatment-selection
+  term: Risk Treatment Selection
+  type: Function
+  definition: Selects a treatment for each evaluated risk — avoid, mitigate, transfer, or accept — with an owner and control or action.
+  aliases: [treatment plan, risk response]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-RISK-1}
+  source: ADR 0024
+
+# Risk register & KRI tracking (CAP-GRC-RISK-2)
+- id: FUNC-grc-risk-register
+  term: Risk Register Management
+  type: Function
+  definition: Maintains the system-of-record entry for each risk — treatment, owner, target date, residual risk, and indicator.
+  aliases: [risk register, risk inventory]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-RISK-2}
+  source: ADR 0024
+
+- id: FUNC-grc-kri-monitoring
+  term: Key Risk Indicator Monitoring
+  type: Function
+  definition: Tracks key risk indicators that monitor whether each treated risk stays within appetite over time.
+  aliases: [KRI tracking, risk metric monitoring]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-RISK-2}
+  source: ADR 0024
+
+# Risk acceptance & exception governance (CAP-GRC-RISK-3)
+- id: FUNC-grc-risk-acceptance
+  term: Risk Acceptance Decision
+  type: Function
+  definition: Records a formal, time-boxed acceptance of residual risk at the appropriate authority (the authorize decision).
+  aliases: [risk acceptance, authorization to operate, residual-risk sign-off]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-RISK-3}
+  source: ADR 0024
+
+# Enterprise vulnerability & exposure oversight (CAP-GRC-RISK-4)
+- id: FUNC-grc-vulnerability-aggregation
+  term: Vulnerability & Exposure Aggregation
+  type: Function
+  definition: Aggregates vulnerability and exposure findings reported by estates into an enterprise view.
+  aliases: [finding aggregation, exposure consolidation]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-RISK-4}
+  source: ADR 0024
+
+- id: FUNC-grc-risk-based-prioritization
+  term: Risk-Based Remediation Prioritization
+  type: Function
+  definition: Prioritizes findings by enterprise risk (not only technical severity) and tracks remediation against appetite.
+  aliases: [risk-based prioritization, remediation tracking]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-RISK-4}
+  source: ADR 0024
+
+# Threat & risk landscape analysis (CAP-GRC-RISK-5)
+- id: FUNC-grc-risk-landscape-analysis
+  term: Threat & Risk Landscape Analysis
+  type: Function
+  definition: Synthesizes threat intelligence and risk-register signals into forward-looking risk insight for strategy and appetite.
+  aliases: [horizon scanning, risk trend analysis]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-RISK-5}
+  source: ADR 0024
+
+# AI-system risk classification (ADR 0035)
+- id: FUNC-grc-ai-system-risk-classification
+  term: AI-System Risk Classification
+  type: Function
+  definition: Classifies an AI or agentic system by the risk it presents, so the obligations and controls that apply to it can be determined rather than assumed. Two independent regimes converge on this same activity as the entry point to everything else, which is why it is named once here rather than per regime; the tier labels and thresholds any given regime uses bind at T2/T3.
+  aliases: [AI risk tiering, AI system classification, AI risk categorisation]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-RISK-1}
+    - {rel: supports, target: CAP-GRC-CMP-1}
+  source: ADR 0035

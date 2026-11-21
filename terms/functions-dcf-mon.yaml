@@ -1,0 +1,100 @@
+# ITPRA ontology — FUNCTION library, DCF-MON (Facility Monitoring & Management)
+# type: Function. ids FUNC-dcf-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
+# the function (ADR 0011).
+
+# Physical asset & inventory management (CAP-DCF-MON-1)
+- id: FUNC-dcf-asset-inventory
+  term: Physical Asset Inventory
+  type: Function
+  definition: Maintains the authoritative record of racks, hosted equipment, and power/cooling units and their location.
+  aliases: [facility asset register, equipment inventory, DCIM inventory]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-MON-1}
+  source: ADR 0022
+
+- id: FUNC-dcf-connectivity-mapping
+  term: Physical Connectivity Mapping
+  type: Function
+  definition: Maps what is physically connected to what (power and cabling) for the facility record.
+  aliases: [connection mapping, port/circuit mapping]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-MON-1}
+    - {rel: supports, target: CAP-DCF-CAB-1}
+  source: ADR 0022
+
+# Environmental & power monitoring (CAP-DCF-MON-2)
+- id: FUNC-dcf-environmental-sensing
+  term: Environmental Sensing
+  type: Function
+  definition: Continuously senses temperature, humidity, and airflow across the white-space and racks.
+  aliases: [environmental monitoring, sensor telemetry]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-MON-2}
+  source: ADR 0022
+
+- id: FUNC-dcf-facility-alerting
+  term: Facility Alerting & Thresholds
+  type: Function
+  definition: Raises alerts when environmental or power readings cross defined thresholds.
+  aliases: [threshold alarms, facility alerts]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-MON-2}
+  source: ADR 0022
+
+# Facility capacity planning (CAP-DCF-MON-3)
+- id: FUNC-dcf-capacity-forecasting
+  term: Capacity Forecasting
+  type: Function
+  definition: Forecasts future space/power/cooling need from historical and trended facility data.
+  aliases: [capacity trending, headroom forecasting]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-MON-3}
+  source: ADR 0022
+
+- id: FUNC-dcf-what-if-capacity-modelling
+  term: What-If Capacity Modelling
+  type: Function
+  definition: Models the facility impact of a proposed footprint change before it is committed.
+  aliases: [scenario modelling, placement modelling]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-MON-3}
+  source: ADR 0022
+
+# Energy & efficiency measurement (CAP-DCF-MON-4)
+- id: FUNC-dcf-pue-measurement
+  term: PUE Measurement
+  type: Function
+  definition: Computes Power Usage Effectiveness from metered total-facility vs IT energy.
+  aliases: [PUE, power usage effectiveness]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-MON-4}
+  source: ADR 0022
+
+- id: FUNC-dcf-water-carbon-effectiveness
+  term: Water / Carbon Effectiveness
+  type: Function
+  definition: Computes water- and carbon-effectiveness metrics for the facility's resource and emissions intensity.
+  aliases: [WUE, CUE, water usage effectiveness, carbon usage effectiveness]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-MON-4}
+  source: ADR 0022
+
+# Facility maintenance management (CAP-DCF-MON-5)
+- id: FUNC-dcf-preventive-maintenance
+  term: Preventive Maintenance Scheduling
+  type: Function
+  definition: Plans and tracks preventive/corrective maintenance of physical power, cooling, and security plant.
+  aliases: [planned maintenance, maintenance scheduling]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-MON-5}
+  source: ADR 0022
+
+- id: FUNC-dcf-redundancy-testing
+  term: Redundancy & Failover Testing
+  type: Function
+  definition: Tests generators, transfer switches, batteries, and failover so redundancy works when called on.
+  aliases: [generator testing, failover drill, ATS testing]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-MON-5}
+    - {rel: supports, target: CAP-DCF-RES-2}
+  source: ADR 0022

@@ -1,0 +1,71 @@
+# ITPRA ontology — FLD-FIX (Hardware Break-Fix & Depot Repair) capabilities
+# type: Capability. ids CAP-FLD-FIX-<n>. Grouped under domain FLD-FIX (ADR 0020).
+
+- id: CAP-FLD-FIX-1
+  term: On-Site Fault Isolation & Component Swap
+  type: Capability
+  definition: >
+    Isolates a hardware fault on site and restores service by swapping the failed component or unit for a
+    serviceable part from stock — the act that returns equipment to working order in a single visit wherever
+    possible (the first-time-fix goal).
+  relates_to:
+    - {rel: grouped_by, target: FLD-FIX}
+    - {rel: consumed_by, target: PERSONA-fld-field-technician}
+    - {rel: consumed_by, target: PERSONA-fld-service-requestor}
+  source: ADR 0020
+
+- id: CAP-FLD-FIX-2
+  term: Warranty & Advance-Exchange Handling
+  type: Capability
+  definition: >
+    Handles the entitlement side of a repair — confirming warranty/contract coverage and, where offered,
+    shipping a known-good unit ahead (advance exchange) so service is restored before the defective unit is
+    returned — so coverage is honored and downtime is minimized.
+  relates_to:
+    - {rel: grouped_by, target: FLD-FIX}
+    - {rel: depends_on, target: CAP-FLD-FIX-1}
+    - {rel: consumed_by, target: PERSONA-fld-field-technician}
+    - {rel: consumed_by, target: PERSONA-fld-field-service-lead}
+  source: ADR 0020
+
+- id: CAP-FLD-FIX-3
+  term: Defective-Unit Return & Reverse Logistics
+  type: Capability
+  definition: >
+    Moves the failed unit back through the return cycle under a return authorization — labeling, packaging,
+    shipping, and tracking it from the field to the repair or replacement point — so defective stock flows
+    back reliably and is accounted for.
+  relates_to:
+    - {rel: grouped_by, target: FLD-FIX}
+    - {rel: depends_on, target: CAP-FLD-FIX-1}
+    - {rel: consumed_by, target: PERSONA-fld-field-technician}
+    - {rel: consumed_by, target: PERSONA-fld-field-service-lead}
+  source: ADR 0020
+
+- id: CAP-FLD-FIX-4
+  term: Depot Repair & Refurbishment
+  type: Capability
+  definition: >
+    Receives returned units at a repair point, diagnoses, repairs or refurbishes, tests, and returns them to
+    serviceable stock — coordinating the customer, repair point, parts, and any third-party agent — so failed
+    units re-enter the spares pool rather than being scrapped prematurely.
+  relates_to:
+    - {rel: grouped_by, target: FLD-FIX}
+    - {rel: depends_on, target: CAP-FLD-FIX-3}
+    - {rel: consumed_by, target: PERSONA-fld-field-technician}
+    - {rel: consumed_by, target: PERSONA-fld-field-service-lead}
+  source: ADR 0020
+
+- id: CAP-FLD-FIX-5
+  term: Final Disposition & Recycling
+  type: Capability
+  definition: >
+    Determines and executes the end state of a unit that cannot or should not be repaired — secure disposal,
+    recycling, or controlled scrap against the required sanitization and environmental standards — so units
+    leave the estate accountably and compliantly.
+  relates_to:
+    - {rel: grouped_by, target: FLD-FIX}
+    - {rel: depends_on, target: CAP-FLD-FIX-4}
+    - {rel: consumed_by, target: PERSONA-fld-field-service-lead}
+    - {rel: consumed_by, target: PERSONA-fld-site-custodian}
+  source: ADR 0020

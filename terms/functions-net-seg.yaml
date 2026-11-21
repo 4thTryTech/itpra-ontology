@@ -1,0 +1,68 @@
+# ITPRA ontology — FUNCTION library, NET-SEG (Network Security & Segmentation)
+# type: Function. ids FUNC-net-<slug>. T1-neutral; a function MAY name a standard/technique where that IS the
+# function (ADR 0011). See ADR 0023.
+
+- id: FUNC-net-edge-firewalling
+  term: Edge Firewalling
+  type: Function
+  definition: Admits, denies, and inspects traffic crossing the enterprise edge per security policy.
+  aliases: [perimeter firewall, edge packet filtering, stateful inspection]
+  relates_to:
+    - {rel: supports, target: CAP-NET-SEG-1}
+  source: ADR 0023
+
+- id: FUNC-net-policy-enforcement-point
+  term: Network Policy Enforcement Point
+  type: Function
+  definition: Enforces the enterprise security policy intent at a point on the network path.
+  aliases: [enforcement point, policy gateway]
+  relates_to:
+    - {rel: supports, target: CAP-NET-SEG-1}
+    - {rel: supports, target: CAP-NET-RAX-4}
+  source: ADR 0023
+
+- id: FUNC-net-segmentation-zoning
+  term: Segmentation & Zoning
+  type: Function
+  definition: Partitions the network into isolated zones between sites, tiers, and application groups.
+  aliases: [network zoning, VLAN/VRF segmentation, security zones]
+  relates_to:
+    - {rel: supports, target: CAP-NET-SEG-2}
+  source: ADR 0023
+
+- id: FUNC-net-microsegmentation
+  term: Micro-Segmentation
+  type: Function
+  definition: Enforces fine-grained least-privilege segmentation between workloads or endpoints to limit lateral movement.
+  aliases: [east-west segmentation, workload isolation]
+  relates_to:
+    - {rel: supports, target: CAP-NET-SEG-2}
+  source: ADR 0023
+
+- id: FUNC-net-secure-web-gateway
+  term: Secure Web / Internet Egress Inspection
+  type: Function
+  definition: Applies acceptable-use, threat, and data-protection policy to outbound web and internet traffic.
+  aliases: [secure web gateway, web filtering, egress inspection]
+  relates_to:
+    - {rel: supports, target: CAP-NET-SEG-3}
+  source: ADR 0023
+
+- id: FUNC-net-cloud-access-governance
+  term: Cloud Application Access Governance
+  type: Function
+  definition: Applies access and data-handling policy to sanctioned and unsanctioned cloud-application traffic.
+  aliases: [cloud access broker, SaaS access control]
+  relates_to:
+    - {rel: supports, target: CAP-NET-SEG-4}
+  source: ADR 0023
+
+- id: FUNC-net-dns-security-filtering
+  term: DNS-Layer Security Filtering
+  type: Function
+  definition: Blocks or redirects resolution of malicious or policy-violating destinations at the DNS layer.
+  aliases: [protective DNS, DNS filtering]
+  relates_to:
+    - {rel: supports, target: CAP-NET-SEG-3}
+    - {rel: supports, target: CAP-NET-DDI-1}
+  source: ADR 0023

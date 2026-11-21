@@ -1,0 +1,107 @@
+# ITPRA ontology — FUNCTION library, DCF-SEC (Physical Security & Access Control)
+# type: Function. ids FUNC-dcf-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
+# the function (ADR 0011).
+
+# Perimeter & site security (CAP-DCF-SEC-1)
+- id: FUNC-dcf-perimeter-barrier
+  term: Perimeter Barrier & Standoff
+  type: Function
+  definition: Provides physical barriers, fencing, and vehicle standoff at the site boundary.
+  aliases: [fencing, bollards, vehicle barrier, standoff]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-SEC-1}
+  source: ADR 0022
+
+- id: FUNC-dcf-perimeter-detection
+  term: Perimeter Detection
+  type: Function
+  definition: Detects unauthorized presence at the site boundary via perimeter sensors and vehicle identification.
+  aliases: [perimeter sensors, fence detection, vehicle identification]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-SEC-1}
+  source: ADR 0022
+
+# Layered physical access control (CAP-DCF-SEC-2)
+- id: FUNC-dcf-credentialed-access
+  term: Credentialed Access Control
+  type: Function
+  definition: Grants entry by credential (badge/PIN/biometric), commonly multi-factor, by role and zone.
+  aliases: [badge access, biometric access, multi-factor physical access]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-SEC-2}
+  source: ADR 0022
+
+- id: FUNC-dcf-anti-tailgating-vestibule
+  term: Anti-Tailgating Vestibule
+  type: Function
+  definition: Prevents tailgating via interlocking-door vestibules with single-occupancy sensing.
+  aliases: [mantrap, airlock, interlocking doors, anti-passback]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-SEC-2}
+  source: ADR 0022
+
+- id: FUNC-dcf-rack-level-locking
+  term: Rack-Level Locking
+  type: Function
+  definition: Secures access at the cabinet/rack with electronic locks for the innermost access layer.
+  aliases: [electronic rack lock, cabinet locking]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-SEC-2}
+  source: ADR 0022
+
+# Visitor & escort management (CAP-DCF-SEC-3)
+- id: FUNC-dcf-visitor-management
+  term: Visitor Registration & Authorization
+  type: Function
+  definition: Registers, authorizes, badges, and time-bounds non-staff visitors to the facility.
+  aliases: [visitor registration, visitor badging]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-SEC-3}
+  source: ADR 0022
+
+- id: FUNC-dcf-escort-enforcement
+  term: Escort Enforcement
+  type: Function
+  definition: Enforces that visitors are accompanied per policy while inside the facility.
+  aliases: [escort rules, accompaniment policy]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-SEC-3}
+  source: ADR 0022
+
+# Surveillance & physical intrusion detection (CAP-DCF-SEC-4)
+- id: FUNC-dcf-surveillance
+  term: Surveillance Coverage
+  type: Function
+  definition: Provides monitored camera coverage aligned to entries and access points with recorded retention.
+  aliases: [CCTV, video surveillance, camera coverage]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-SEC-4}
+  source: ADR 0022
+
+- id: FUNC-dcf-intrusion-detection
+  term: Physical Intrusion Detection
+  type: Function
+  definition: Detects physical intrusion and anomalies (door-forced, motion, tamper) in real time.
+  aliases: [intrusion alarm, door-position sensing, tamper detection]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-SEC-4}
+  source: ADR 0022
+
+# Physical access logging & audit evidence (CAP-DCF-SEC-5)
+- id: FUNC-dcf-access-logging
+  term: Physical Access Logging
+  type: Function
+  definition: Records every physical access and security event with who/where/when/authorization.
+  aliases: [access log, entry log, event log]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-SEC-5}
+  source: ADR 0022
+
+- id: FUNC-dcf-audit-evidence
+  term: Audit Evidence Production
+  type: Function
+  definition: Produces tamper-evident physical-access and security audit evidence for assurance.
+  aliases: [audit trail, evidence pack, chain of custody]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-SEC-5}
+  source: ADR 0022

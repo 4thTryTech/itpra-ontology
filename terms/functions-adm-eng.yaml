@@ -1,0 +1,131 @@
+# ITPRA ontology — FUNCTION library, ADM-ENG (Application Build & Engineering Practice)
+# type: Function. ids FUNC-adm-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
+# the function (ADR 0011). Functions `support` ≥1 capability (many-to-many). CONSUMER-side build; consumes ITO
+# DEL. See ADR 0021.
+
+# Design & architecture (CAP-ADM-ENG-1)
+- id: FUNC-adm-application-design
+  term: Application Design
+  type: Function
+  definition: Designs an application's components, behavior, and interfaces against its intent and quality bar.
+  aliases: [solution design, application architecture, design modeling]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-ENG-1}
+  source: ADR 0021
+
+- id: FUNC-adm-api-contract-design
+  term: API & Interface Contract Design
+  type: Function
+  definition: Defines the application's external contracts and interface specifications so consumers can integrate reliably.
+  aliases: [interface contract, API specification, contract-first design]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-ENG-1}
+    - {rel: supports, target: CAP-ADM-ENG-3}
+  source: ADR 0021
+
+# Implementation & source management (CAP-ADM-ENG-2)
+- id: FUNC-adm-source-version-control
+  term: Source Version Control
+  type: Function
+  definition: Versions the application source and curates its history so change is traceable and reversible.
+  aliases: [version control, source management, code repository]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-ENG-2}
+  source: ADR 0021
+
+- id: FUNC-adm-code-review
+  term: Code Review
+  type: Function
+  definition: Reviews proposed application change before it is accepted, improving correctness and shared understanding.
+  aliases: [peer review, change review, pull-request review]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-ENG-2}
+  source: ADR 0021
+
+# Integration & interface engineering (CAP-ADM-ENG-3)
+- id: FUNC-adm-integration-engineering
+  term: Integration Engineering
+  type: Function
+  definition: Builds and maintains the application's connections to other applications and external systems.
+  aliases: [interface engineering, integration build, connector development]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-ENG-3}
+  source: ADR 0021
+
+# Packaging & configuration (CAP-ADM-ENG-4)
+- id: FUNC-adm-application-packaging
+  term: Application Packaging
+  type: Function
+  definition: Packages the application into a deployable artifact promotable across environments without rebuild.
+  aliases: [artifact build, packaging, deployable build]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-ENG-4}
+  source: ADR 0021
+
+- id: FUNC-adm-config-externalization
+  term: Configuration Externalization
+  type: Function
+  definition: Externalizes environment-specific configuration so one artifact behaves correctly per environment.
+  aliases: [config management, externalized configuration, environment parameterization]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-ENG-4}
+  source: ADR 0021
+
+# Data & schema engineering (CAP-ADM-ENG-5)
+- id: FUNC-adm-schema-migration
+  term: Schema & Data Migration
+  type: Function
+  definition: Designs versioned schema change and migrates application data so the application evolves without data loss.
+  aliases: [database migration, schema versioning, data migration]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-ENG-5}
+    - {rel: supports, target: CAP-ADM-APM-5}
+  source: ADR 0021
+
+# Model-grounded behaviour (CAP-ADM-ENG-6) and guardrail design (CAP-ADM-ENG-7) - ADR 0034
+- id: FUNC-adm-context-assembly-design
+  term: Context Assembly Design
+  type: Function
+  definition: Specifies at design time what a model-grounded component may see at inference time - which sources, in what precedence, under what scoping and redaction rules, within what budget. The DESIGN-TIME counterpart of the platform's runtime assembly of that context; deliberately a separate function, not the same one.
+  aliases: [context engineering, context governance, context design, prompt context design]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-ENG-6}
+  source: ADR 0034
+
+- id: FUNC-adm-model-grounded-component-design
+  term: Model-Grounded Component Design
+  type: Function
+  definition: Decomposes a system into model-grounded and deterministic components and defines how they coordinate and hand off, including where one component may delegate work to another. T1 asserts that delegation between components is designed; the topology chosen is a T2 pattern decision.
+  aliases: [agent design, multi-agent decomposition, agentic architecture, orchestration design]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-ENG-6}
+    - {rel: supports, target: CAP-ADM-ENG-1}
+  source: ADR 0034
+
+- id: FUNC-adm-model-selection-policy
+  term: Model Selection Policy
+  type: Function
+  definition: Sets the application-side policy for which model or provider a given task is routed to, against cost, latency, capability, and data-handling criteria. The policy is the application's; the gateway that enacts it is platform-side.
+  aliases: [model routing policy, provider selection, model choice policy]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-ENG-6}
+  source: ADR 0034
+
+- id: FUNC-adm-inference-artifact-versioning
+  term: Inference-Time Artifact Versioning
+  type: Function
+  definition: Versions and curates the non-code artifacts that shape a model-grounded component's behaviour - instructions, context configurations, and model bindings - alongside source, so a behaviour change is as traceable and reversible as a code change.
+  aliases: [prompt versioning, prompt management, context config versioning, model binding versioning]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-ENG-2}
+    - {rel: supports, target: CAP-ADM-ENG-6}
+  source: ADR 0034
+
+- id: FUNC-adm-guardrail-design
+  term: Guardrail Design
+  type: Function
+  definition: Defines the behavioural, tool-use, and privilege boundaries an application's autonomous or generated actions must stay within, and specifies how the application enforces them. Covers what the component may do and reach, not only what text it may emit.
+  aliases: [guardrail specification, behavioural boundary design, tool-use policy, output policy]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-ENG-7}
+  source: ADR 0034

@@ -1,0 +1,48 @@
+# ITPRA ontology — FUNCTION library, BIA-SEM (Semantic Layer & Self-Service Analytics)
+# type: Function. ids FUNC-bia-<slug>. T1-neutral (ADR 0011). Functions `support` ≥1 capability. See ADR 0026.
+
+- id: FUNC-bia-metric-definition
+  term: Metric & Dimension Definition
+  type: Function
+  definition: Defines business metrics, dimensions, and entities once in a governed model for consistent reuse everywhere.
+  aliases: [metrics layer, headless metrics, business glossary binding]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-SEM-1}
+  source: ADR 0026
+
+- id: FUNC-bia-semantic-access-policy
+  term: Semantic Access Policy
+  type: Function
+  definition: Applies row/column-level access and scope policy at the semantic layer so it is enforced across every consuming surface.
+  aliases: [governed access, row-level security policy]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-SEM-1}
+    - {rel: supports, target: CAP-BIA-SEM-2}
+  source: ADR 0026
+
+- id: FUNC-bia-self-service-query
+  term: Self-Service Query Builder
+  type: Function
+  definition: Lets consumers compose analyses against governed definitions without writing query code.
+  aliases: [no-code query, governed exploration]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-SEM-2}
+  source: ADR 0026
+
+- id: FUNC-bia-catalog-search
+  term: Catalog Search & Discovery
+  type: Function
+  definition: Indexes data products, metrics, and reports with descriptions, ownership, and trust signals for search and assessment.
+  aliases: [data catalog, asset discovery]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-SEM-3}
+  source: ADR 0026
+
+- id: FUNC-bia-certification-workflow
+  term: Certification & Endorsement
+  type: Function
+  definition: Promotes a metric or data product to a certified, endorsed status through a governed review and records the decision.
+  aliases: [endorsement, trust badge, promotion to certified]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-SEM-4}
+  source: ADR 0026

@@ -1,0 +1,48 @@
+# ITPRA ontology — FUNCTION library, NET-RAX (Remote & Secure Access)
+# type: Function. ids FUNC-net-<slug>. T1-neutral; a function MAY name a standard/technique where that IS the
+# function (ADR 0011). See ADR 0023.
+
+- id: FUNC-net-site-to-site-tunnel
+  term: Site-to-Site Secure Tunnel
+  type: Function
+  definition: Establishes an encrypted, integrity-protected tunnel linking two locations into the routed enterprise network.
+  aliases: [IPsec site tunnel, branch interconnect tunnel]
+  relates_to:
+    - {rel: supports, target: CAP-NET-RAX-1}
+  source: ADR 0023
+
+- id: FUNC-net-remote-access-termination
+  term: Remote Access Termination
+  type: Function
+  definition: Terminates encrypted remote-user connections at a governed access point and admits them to the network.
+  aliases: [remote access concentrator, VPN termination]
+  relates_to:
+    - {rel: supports, target: CAP-NET-RAX-2}
+  source: ADR 0023
+
+- id: FUNC-net-identity-conditioned-access
+  term: Identity- & Posture-Conditioned Access
+  type: Function
+  definition: Grants access conditioned on verified identity, device posture, and context, per application, with no implicit trust.
+  aliases: [zero-trust access broker, conditional network access]
+  relates_to:
+    - {rel: supports, target: CAP-NET-RAX-3}
+  source: ADR 0023
+
+- id: FUNC-net-application-publishing
+  term: Per-Application Publishing
+  type: Function
+  definition: Publishes a specific application to an entitled user without exposing the broader network.
+  aliases: [app-level access, application connector]
+  relates_to:
+    - {rel: supports, target: CAP-NET-RAX-3}
+  source: ADR 0023
+
+- id: FUNC-net-access-policy-decision
+  term: Access Policy Decision
+  type: Function
+  definition: Decides whether a given subject may traverse a given access path under given conditions.
+  aliases: [policy decision point, access authorization]
+  relates_to:
+    - {rel: supports, target: CAP-NET-RAX-4}
+  source: ADR 0023

@@ -1,0 +1,59 @@
+# ITPRA ontology — capability maturity ladder
+# The neutral, ordered self-assessment ladder for T1 capabilities. Ratified by ADR 0014 (the maturity twin of
+# ADR 0014's environment dimensions and ADR 0014's tenancy dimensions). A capability's `Maturity signals` field
+# carries a few neutral, observable progression cues read against this ladder; the full per-stage rubric and any
+# measurable thresholds are a T2/T3 concern. type: Concept, applies_to CAPABILITY. Four stages, ordered 1->4,
+# neutrally named to map onto the CNCF Platform Engineering Maturity Model
+# (Provisional/Operational/Scalable/Optimizing) and CMMI. Tool- and operating-model-free.
+
+- id: MAT-STAGE-INITIAL
+  term: Initial
+  type: Concept
+  definition: >
+    Stage 1 of 4 on the neutral capability maturity ladder. The capability exists in an ad-hoc, reactive
+    form: delivered by individual effort, with informal or undocumented practice and inconsistent outcomes;
+    provisioning is manual and case-by-case. Maps onto CNCF "Provisional" and CMMI "Initial". At T1 this is
+    a qualitative self-assessment cue; thresholds are bound at T2/T3.
+  aliases: [provisional, ad-hoc, stage 1]
+  relates_to:
+    - {rel: applies_to, target: CAPABILITY}
+  source: ADR 0014
+
+- id: MAT-STAGE-MANAGED
+  term: Managed
+  type: Concept
+  definition: >
+    Stage 2 of 4 on the neutral capability maturity ladder. The capability is delivered by a defined,
+    accountable owner with standardized, documented, repeatable practice and centrally tracked records;
+    outcomes are consistent but largely operator-driven. Maps onto CNCF "Operational" and CMMI "Managed".
+    At T1 this is a qualitative self-assessment cue; thresholds are bound at T2/T3.
+  aliases: [operational, repeatable, stage 2]
+  relates_to:
+    - {rel: applies_to, target: CAPABILITY}
+  source: ADR 0014
+
+- id: MAT-STAGE-SCALED
+  term: Scaled
+  type: Concept
+  definition: >
+    Stage 3 of 4 on the neutral capability maturity ladder. The capability is offered self-service to
+    consumers, governed by data-driven indicators and a published roadmap, and scales across many
+    tenants/teams without proportional operator effort. Maps onto CNCF "Scalable". At T1 this is a
+    qualitative self-assessment cue; thresholds are bound at T2/T3.
+  aliases: [scalable, self-service, stage 3]
+  relates_to:
+    - {rel: applies_to, target: CAPABILITY}
+  source: ADR 0014
+
+- id: MAT-STAGE-OPTIMIZING
+  term: Optimizing
+  type: Concept
+  definition: >
+    Stage 4 of 4 on the neutral capability maturity ladder. The capability is continuously improved against
+    feedback and metrics, with delivery largely automated and a shared-responsibility model; investment is
+    steered by measured value. Maps onto CNCF "Optimizing" and CMMI "Optimizing". At T1 this is a
+    qualitative self-assessment cue; thresholds are bound at T2/T3.
+  aliases: [optimized, continuous-improvement, stage 4]
+  relates_to:
+    - {rel: applies_to, target: CAPABILITY}
+  source: ADR 0014

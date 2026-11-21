@@ -1,0 +1,56 @@
+# ITPRA ontology — FLD-DESK (Deskside / On-site Assistance) capabilities
+# type: Capability. ids CAP-FLD-DESK-<n>. Grouped under domain FLD-DESK (ADR 0020).
+
+- id: CAP-FLD-DESK-1
+  term: On-Site Triage & Diagnosis
+  type: Capability
+  definition: >
+    Confirms the fault or task in person at the location — reproducing the problem, inspecting the physical
+    equipment, and determining what the visit must actually do — so the right work is performed on the first
+    visit rather than diagnosed remotely and guessed.
+  relates_to:
+    - {rel: grouped_by, target: FLD-DESK}
+    - {rel: consumed_by, target: PERSONA-fld-field-technician}
+    - {rel: consumed_by, target: PERSONA-fld-service-requestor}
+  source: ADR 0020
+
+- id: CAP-FLD-DESK-2
+  term: Directed-Hands Execution
+  type: Capability
+  definition: >
+    Executes well-defined, low-judgement physical steps under explicit instruction from a remote party —
+    power-cycle, reseat, cable, label, receive and place equipment, guided swap — where the on-site party
+    acts and the remote party decides. The cost-efficient tier for routine, low-uncertainty work.
+  relates_to:
+    - {rel: grouped_by, target: FLD-DESK}
+    - {rel: depends_on, target: CAP-FLD-DESK-1}
+    - {rel: consumed_by, target: PERSONA-fld-field-technician}
+    - {rel: consumed_by, target: PERSONA-fld-service-requestor}
+  source: ADR 0020
+
+- id: CAP-FLD-DESK-3
+  term: Skilled-Hands Resolution
+  type: Capability
+  definition: >
+    Assesses the situation on site, applies technical judgement, and resolves independently — advanced
+    installs, complex cabling, equipment testing, and time-sensitive remediation needing physical presence
+    and specialized expertise. The tier reserved for work with greater technical uncertainty.
+  relates_to:
+    - {rel: grouped_by, target: FLD-DESK}
+    - {rel: depends_on, target: CAP-FLD-DESK-1}
+    - {rel: consumed_by, target: PERSONA-fld-field-technician}
+  source: ADR 0020
+
+- id: CAP-FLD-DESK-4
+  term: On-Site Handover & Sign-Off
+  type: Capability
+  definition: >
+    Closes the visit at the location — confirming the work with the on-site contact, capturing what was done
+    and any parts used, obtaining sign-off, and handing back a working state — so the visit is verifiably
+    complete and its record is trustworthy.
+  relates_to:
+    - {rel: grouped_by, target: FLD-DESK}
+    - {rel: depends_on, target: CAP-FLD-DESK-2}
+    - {rel: consumed_by, target: PERSONA-fld-field-technician}
+    - {rel: consumed_by, target: PERSONA-fld-service-requestor}
+  source: ADR 0020

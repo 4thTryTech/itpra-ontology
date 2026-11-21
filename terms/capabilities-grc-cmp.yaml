@@ -1,0 +1,75 @@
+# ITPRA ontology — GRC-CMP (Compliance, Audit & Evidence) capabilities
+# type: Capability. ids CAP-GRC-CMP-<n>. Grouped under domain GRC-CMP (ADR 0024). Enterprise compliance
+# AUTHORITY — owns obligations/attestation and consumes control results/evidence the platform (ITO GOV) and
+# other estates produce; does NOT duplicate per-estate evidence production (ADR 0024).
+
+- id: CAP-GRC-CMP-1
+  term: Enterprise Control Framework & Obligation Mapping
+  type: Capability
+  definition: >
+    Maintains the enterprise's unified control framework and maps each applicable obligation — regulation,
+    standard, contractual commitment — onto it, so a single shared control set satisfies many overlapping
+    obligations and every obligation has owned controls. The canonical "what we must comply with and how."
+    AI-specific obligations map onto THIS framework like any other: there is no separate AI control set, and
+    the overlap between AI regimes and existing security and privacy obligations is exactly what the unified
+    framework exists to absorb (ADR 0035).
+  relates_to:
+    - {rel: grouped_by, target: GRC-CMP}
+    - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
+  source: ADR 0024
+
+- id: CAP-GRC-CMP-2
+  term: Internal Audit & Assurance
+  type: Capability
+  definition: >
+    Plans and conducts independent internal audits and assurance reviews of controls and management systems
+    across the enterprise, identifying gaps and tracking findings to remediation — the recurring internal
+    assurance obligation that keeps the control environment honest between external audits.
+  relates_to:
+    - {rel: grouped_by, target: GRC-CMP}
+    - {rel: depends_on, target: CAP-GRC-CMP-1}
+    - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
+  source: ADR 0024
+
+- id: CAP-GRC-CMP-3
+  term: External Audit, Attestation & Certification Management
+  type: Capability
+  definition: >
+    Manages external audits, attestations, and certifications end to end — coordinating auditors, marshalling
+    evidence, and maintaining the enterprise's certifications and attestation reports. The enterprise-facing
+    counterpart that represents all estates (including the platform) to external assessors.
+  relates_to:
+    - {rel: grouped_by, target: GRC-CMP}
+    - {rel: depends_on, target: CAP-GRC-CMP-4}
+    - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
+  source: ADR 0024
+
+- id: CAP-GRC-CMP-4
+  term: Continuous Control Monitoring & Evidence Collection
+  type: Capability
+  definition: >
+    Continuously monitors control effectiveness and collects compliance evidence across the enterprise —
+    aggregating control results and evidence the platform and other estates supply — so compliance status is
+    current and audit evidence is gathered once and reused. Consumes per-estate evidence rather than
+    re-producing it.
+  relates_to:
+    - {rel: grouped_by, target: GRC-CMP}
+    - {rel: depends_on, target: CAP-GRC-CMP-1}
+    - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
+  source: ADR 0024
+
+- id: CAP-GRC-CMP-5
+  term: Regulatory Change & Obligation Management
+  type: Capability
+  definition: >
+    Tracks changes to applicable regulations, standards, and contractual obligations, assesses their impact,
+    and drives updates to the control framework and policies, so the enterprise stays current as its
+    obligations evolve. The intake that keeps the obligation register and control framework live. AI-specific
+    regimes are in scope and are the most volatile class of obligation currently tracked — applicability
+    dates have already moved after enactment, so a cited date is re-verified at time of use rather than
+    carried forward (ADR 0035).
+  relates_to:
+    - {rel: grouped_by, target: GRC-CMP}
+    - {rel: depends_on, target: CAP-GRC-CMP-1}
+    - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
+  source: ADR 0024

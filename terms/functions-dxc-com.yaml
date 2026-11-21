@@ -1,0 +1,70 @@
+# ITPRA ontology — FUNCTION library, DXC-COM (Digital Commerce)
+# type: Function. ids FUNC-dxc-<slug>. All T1-neutral; a function MAY name a recognized technique where that IS
+# the function (ADR 0011).
+
+# Product catalog & merchandising (CAP-DXC-COM-1)
+- id: FUNC-dxc-product-catalog
+  term: Product Catalog
+  type: Function
+  definition: Models products/offerings with categories and attributes as the authoritative commerce catalog.
+  aliases: [catalog, product information, PIM-fed catalog]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-COM-1}
+  source: ADR 0027
+
+- id: FUNC-dxc-merchandising
+  term: Merchandising Rules
+  type: Function
+  definition: Arranges and promotes catalog items through merchandising rules and curation.
+  aliases: [merchandising, product curation, category management]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-COM-1}
+  source: ADR 0027
+
+# Product search & discovery (CAP-DXC-COM-2)
+- id: FUNC-dxc-product-search
+  term: Product Search & Faceting
+  type: Function
+  definition: Lets a customer search, navigate, and facet the catalog to find offerings.
+  aliases: [search, faceted navigation, browse]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-COM-2}
+  source: ADR 0027
+
+# Cart & checkout experience (CAP-DXC-COM-3)
+- id: FUNC-dxc-cart
+  term: Cart Management
+  type: Function
+  definition: Lets a customer assemble and adjust a basket of intended purchases.
+  aliases: [shopping cart, basket]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-COM-3}
+  source: ADR 0027
+
+- id: FUNC-dxc-checkout
+  term: Checkout Flow
+  type: Function
+  definition: Completes the purchase, capturing the order; interfaces with downstream payment processing.
+  aliases: [checkout, order placement]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-COM-3}
+  source: ADR 0027
+
+# Pricing, promotions & order experience (CAP-DXC-COM-4)
+- id: FUNC-dxc-pricing-promotions
+  term: Pricing & Promotions
+  type: Function
+  definition: Applies pricing, promotions, and offers to the customer's purchase.
+  aliases: [pricing, promotions, discounts, offers engine]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-COM-4}
+  source: ADR 0027
+
+- id: FUNC-dxc-order-status
+  term: Order Status Experience
+  type: Function
+  definition: Gives the customer the post-purchase order and status experience; interfaces with fulfilment.
+  aliases: [order tracking, order history, order status]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-COM-4}
+  source: ADR 0027

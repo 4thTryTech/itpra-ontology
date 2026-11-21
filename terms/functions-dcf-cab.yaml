@@ -1,0 +1,60 @@
+# ITPRA ontology — FUNCTION library, DCF-CAB (Cabling & Physical Connectivity)
+# type: Function. ids FUNC-dcf-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
+# the function (ADR 0011).
+
+# Structured cabling provision (CAP-DCF-CAB-1)
+- id: FUNC-dcf-structured-cabling
+  term: Structured Cabling Installation
+  type: Function
+  definition: Installs structured copper/fiber media organized into the facility's distribution hierarchy.
+  aliases: [structured cabling, TIA-942 cabling, ISO 11801 cabling]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-CAB-1}
+  source: ADR 0022
+
+- id: FUNC-dcf-cabling-documentation
+  term: Cabling Documentation & As-Built
+  type: Function
+  definition: Documents the cabling plant (as-built records, port maps) so every physical link is traceable.
+  aliases: [as-built records, port mapping, cable schedule]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-CAB-1}
+  source: ADR 0022
+
+# Pathway & space management (CAP-DCF-CAB-2)
+- id: FUNC-dcf-pathway-management
+  term: Pathway & Containment Management
+  type: Function
+  definition: Routes and protects cabling through trays, risers, and conduits without obstructing airflow.
+  aliases: [cable tray, riser management, containment routing]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-CAB-2}
+  source: ADR 0022
+
+- id: FUNC-dcf-cable-labelling-segregation
+  term: Labelling & Power/Data Segregation
+  type: Function
+  definition: Labels cabling and segregates power from data pathways for safety and maintainability.
+  aliases: [cable labelling, segregation, identification scheme]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-CAB-2}
+  source: ADR 0022
+
+# Physical cross-connect & interconnect (CAP-DCF-CAB-3)
+- id: FUNC-dcf-cross-connect
+  term: Physical Cross-Connect
+  type: Function
+  definition: Provides governed physical cross-connections between tenant, carrier, and network demarcation points.
+  aliases: [cross-connect, patch interconnect, demarcation]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-CAB-3}
+  source: ADR 0022
+
+- id: FUNC-dcf-meet-me-room
+  term: Meet-Me / Demarcation Point
+  type: Function
+  definition: Provides the physical meet-me/demarcation point where tenants and carriers physically interconnect.
+  aliases: [meet-me room, carrier demarcation, interconnect point]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-CAB-3}
+  source: ADR 0022

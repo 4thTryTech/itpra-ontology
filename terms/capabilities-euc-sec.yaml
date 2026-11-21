@@ -1,0 +1,57 @@
+# ITPRA ontology — EUC-SEC (Endpoint Security & Compliance Posture) capabilities
+# type: Capability. ids CAP-EUC-SEC-<n>. End-user-facing endpoint posture — distinct from platform/workload
+# security (ITO SEC) and enterprise policy authorship (Enterprise Security/GRC); see ADR 0018.
+
+- id: CAP-EUC-SEC-1
+  term: Endpoint Threat Protection & Response
+  type: Capability
+  definition: >
+    Protects workforce endpoints against malicious activity and responds when it is detected — continuous
+    monitoring, behavioral detection, and containment or remediation of the affected device — limiting harm
+    from a compromised endpoint.
+  relates_to:
+    - {rel: grouped_by, target: EUC-SEC}
+    - {rel: consumed_by, target: PERSONA-euc-security-compliance}
+    - {rel: consumed_by, target: PERSONA-euc-workplace-team}
+  source: ADR 0018
+
+- id: CAP-EUC-SEC-2
+  term: Endpoint Configuration Hardening
+  type: Capability
+  definition: >
+    Applies and maintains a hardened security configuration baseline on workforce endpoints — disabling
+    unnecessary exposure, enforcing encryption and credential controls — and detects drift from the baseline.
+  relates_to:
+    - {rel: grouped_by, target: EUC-SEC}
+    - {rel: depends_on, target: CAP-EUC-DEV-2}
+    - {rel: consumed_by, target: PERSONA-euc-security-compliance}
+    - {rel: consumed_by, target: PERSONA-euc-workplace-team}
+  source: ADR 0018
+
+- id: CAP-EUC-SEC-3
+  term: Endpoint Vulnerability & Patch Assurance
+  type: Capability
+  definition: >
+    Assesses workforce endpoints for known vulnerabilities and verifies that required updates are applied
+    within policy, driving and confirming remediation through patch management — so exposure on the estate is
+    visible and closed.
+  relates_to:
+    - {rel: grouped_by, target: EUC-SEC}
+    - {rel: depends_on, target: CAP-EUC-DEV-3}
+    - {rel: consumed_by, target: PERSONA-euc-security-compliance}
+  source: ADR 0018
+
+- id: CAP-EUC-SEC-4
+  term: Device Compliance Posture & Attestation
+  type: Capability
+  definition: >
+    Determines whether an endpoint meets the required security and configuration policy and attests that
+    posture as the trustworthy signal other controls (notably access decisions) consume — so only healthy
+    devices are treated as compliant.
+  relates_to:
+    - {rel: grouped_by, target: EUC-SEC}
+    - {rel: depends_on, target: CAP-EUC-SEC-2}
+    - {rel: depends_on, target: CAP-EUC-DEV-4}
+    - {rel: consumed_by, target: PERSONA-euc-security-compliance}
+    - {rel: consumed_by, target: PERSONA-euc-workplace-team}
+  source: ADR 0018

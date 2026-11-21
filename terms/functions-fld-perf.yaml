@@ -1,0 +1,79 @@
+# ITPRA ontology — FUNCTION library, FLD-PERF (Field Performance & Insight)
+# type: Function. ids FUNC-fld-<slug>. Functions `support` ≥1 capability. See ADR 0020.
+
+# Field telemetry & visit record (CAP-FLD-PERF-1)
+- id: FUNC-fld-visit-record-capture
+  term: Visit Record Capture
+  type: Function
+  definition: Captures the authoritative record of each visit — work, time, parts, outcome, location/asset.
+  aliases: [visit logging, field record]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-PERF-1}
+  source: ADR 0020
+
+# SLA & response-commitment tracking (CAP-FLD-PERF-2)
+- id: FUNC-fld-sla-clock
+  term: Response/Resolution SLA Tracking
+  type: Function
+  definition: Measures each visit against its response and resolution window and flags breaches and at-risk work.
+  aliases: [SLA clock, response-time tracking]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-PERF-2}
+  source: ADR 0020
+
+# First-time-fix & repeat-visit analysis (CAP-FLD-PERF-3)
+- id: FUNC-fld-first-time-fix-analysis
+  term: First-Time-Fix Rate Analysis
+  type: Function
+  definition: Measures the share of work completed in one visit (FTFR) and the causes of repeat visits.
+  aliases: [FTFR analysis, repeat-visit analysis]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-PERF-3}
+  source: ADR 0020
+
+- id: FUNC-fld-mttr-analysis
+  term: Mean-Time-to-Repair Analysis
+  type: Function
+  definition: Measures elapsed time to restore service (MTTR) across the field operation.
+  aliases: [MTTR analysis, repair-time analysis]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-PERF-3}
+  source: ADR 0020
+
+# Field cost & utilization insight (CAP-FLD-PERF-4)
+- id: FUNC-fld-utilization-analysis
+  term: Technician Utilization Analysis
+  type: Function
+  definition: Measures productive on-site time versus travel and idle time across the workforce.
+  aliases: [utilization analysis, capacity insight]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-PERF-4}
+  source: ADR 0020
+
+- id: FUNC-fld-cost-per-visit
+  term: Cost-per-Visit Insight
+  type: Function
+  definition: Attributes cost per visit including labor, travel, and spares consumption.
+  aliases: [cost-per-call, field cost insight]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-PERF-4}
+  source: ADR 0020
+
+# Field experience & feedback (CAP-FLD-PERF-5)
+- id: FUNC-fld-visit-satisfaction
+  term: Visit Satisfaction Capture
+  type: Function
+  definition: Captures how the on-site contact experienced the visit (satisfaction signal).
+  aliases: [visit CSAT, satisfaction survey]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-PERF-5}
+  source: ADR 0020
+
+- id: FUNC-fld-improvement-nomination
+  term: Field Improvement Nomination
+  type: Function
+  definition: Feeds recurring pain points and improvement nominations back into the field service backlog.
+  aliases: [feedback loop, improvement intake]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-PERF-5}
+  source: ADR 0020

@@ -1,0 +1,71 @@
+# ITPRA ontology — FUNCTION library, ADM-APM (Application Portfolio & Lifecycle Management)
+# type: Function. ids FUNC-adm-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
+# the function (ADR 0011). Functions `support` ≥1 capability (many-to-many). See ADR 0021.
+
+# Application inventory & catalog (CAP-ADM-APM-1)
+- id: FUNC-adm-application-inventory
+  term: Application Inventory
+  type: Function
+  definition: Maintains the authoritative record of each business application, its owner, and its dependencies.
+  aliases: [application register, app catalog, application repository]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-APM-1}
+  source: ADR 0021
+
+- id: FUNC-adm-capability-mapping
+  term: Business Capability Mapping
+  type: Function
+  definition: Maps each application to the business capabilities it supports, exposing overlap and gaps.
+  aliases: [app-to-capability mapping, capability-application matrix]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-APM-1}
+  source: ADR 0021
+
+# Lifecycle state & roadmap (CAP-ADM-APM-2)
+- id: FUNC-adm-lifecycle-state-tracking
+  term: Lifecycle State Tracking
+  type: Function
+  definition: Records and updates each application's lifecycle stage from ideation through sunset.
+  aliases: [lifecycle status, application stage tracking]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-APM-2}
+  source: ADR 0021
+
+- id: FUNC-adm-roadmap-management
+  term: Application Roadmap Management
+  type: Function
+  definition: Maintains each application's forward roadmap and sequences planned change against business intent.
+  aliases: [roadmapping, investment sequencing]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-APM-2}
+  source: ADR 0021
+
+# Rationalization & investment (CAP-ADM-APM-3)
+- id: FUNC-adm-portfolio-rationalization
+  term: Portfolio Rationalization Assessment
+  type: Function
+  definition: Scores applications on value, fitness, cost, and risk to inform invest/tolerate/migrate/eliminate decisions.
+  aliases: [TIME assessment, application rationalization, disposition analysis]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-APM-3}
+  source: ADR 0021
+
+# Demand & intake (CAP-ADM-APM-4)
+- id: FUNC-adm-demand-intake
+  term: Application Demand Intake
+  type: Function
+  definition: Captures, business-cases, and prioritizes new application demand through a governed front door.
+  aliases: [intake, demand management, business-case qualification]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-APM-4}
+  source: ADR 0021
+
+# Sunset & decommission (CAP-ADM-APM-5)
+- id: FUNC-adm-application-decommission
+  term: Application Decommission
+  type: Function
+  definition: Retires an application — migrating/archiving data, removing access and integrations, releasing resources, and closing its record.
+  aliases: [application retirement, sunset execution, data archival]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-APM-5}
+  source: ADR 0021

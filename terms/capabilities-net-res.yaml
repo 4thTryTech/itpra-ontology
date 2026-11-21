@@ -1,0 +1,52 @@
+# ITPRA ontology — NET-RES (Network Resilience & Continuity) capabilities
+# type: Capability. ids CAP-NET-RES-<n>. Grouped under domain NET-RES (ADR 0023).
+
+- id: CAP-NET-RES-1
+  term: Redundant & Diverse-Path Connectivity
+  type: Capability
+  definition: >
+    Provides physically and logically diverse, redundant network paths for critical connectivity — across
+    carriers, routes, and devices — so no single link, path, or device failure isolates a site or service.
+  relates_to:
+    - {rel: grouped_by, target: NET-RES}
+    - {rel: consumed_by, target: PERSONA-net-engineering-team}
+    - {rel: consumed_by, target: PERSONA-net-architect}
+  source: ADR 0023
+
+- id: CAP-NET-RES-2
+  term: Automatic Failover & Convergence
+  type: Capability
+  definition: >
+    Detects path or device failure and fails traffic over to a healthy path quickly and without oscillation,
+    so connectivity recovers fast enough that users and services see minimal disruption.
+  relates_to:
+    - {rel: grouped_by, target: NET-RES}
+    - {rel: depends_on, target: CAP-NET-RES-1}
+    - {rel: consumed_by, target: PERSONA-net-engineering-team}
+    - {rel: consumed_by, target: PERSONA-net-operations}
+  source: ADR 0023
+
+- id: CAP-NET-RES-3
+  term: Network Capacity & Load Distribution
+  type: Capability
+  definition: >
+    Distributes load across available paths and devices and provides headroom, so the network carries demand
+    without congestion and a failure does not overload the surviving capacity.
+  relates_to:
+    - {rel: grouped_by, target: NET-RES}
+    - {rel: consumed_by, target: PERSONA-net-engineering-team}
+    - {rel: consumed_by, target: PERSONA-net-architect}
+  source: ADR 0023
+
+- id: CAP-NET-RES-4
+  term: Network Continuity & Recovery
+  type: Capability
+  definition: >
+    Plans, exercises, and verifies the recovery of enterprise connectivity through and after failure events —
+    so failover behaves as designed and connectivity is restorable to a known-good state, tested not assumed.
+  relates_to:
+    - {rel: grouped_by, target: NET-RES}
+    - {rel: depends_on, target: CAP-NET-RES-2}
+    - {rel: consumed_by, target: PERSONA-net-operations}
+    - {rel: consumed_by, target: PERSONA-net-architect}
+  source: ADR 0023

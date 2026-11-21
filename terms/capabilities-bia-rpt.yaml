@@ -1,0 +1,52 @@
+# ITPRA ontology — BIA-RPT (Reporting & Visualization) capabilities
+# type: Capability. ids CAP-BIA-RPT-<n>. Grouped under domain BIA-RPT (ADR 0026). Experience-plane group.
+
+- id: CAP-BIA-RPT-1
+  term: Interactive Dashboards
+  type: Capability
+  definition: >
+    Delivers interactive dashboards over governed metrics — filterable, drillable views of business
+    performance — so consumers monitor and explore the measures that matter to them on demand.
+  relates_to:
+    - {rel: grouped_by, target: BIA-RPT}
+    - {rel: depends_on, target: CAP-BIA-SEM-1}
+    - {rel: consumed_by, target: PERSONA-bia-insight-consumer}
+  source: ADR 0026
+
+- id: CAP-BIA-RPT-2
+  term: Standard & Regulatory Reporting
+  type: Capability
+  definition: >
+    Produces standardized, repeatable reports — including those required for regulatory or statutory
+    obligations — with controlled definitions and a reproducible, evidencable production process, so reported
+    figures are consistent and defensible.
+  relates_to:
+    - {rel: grouped_by, target: BIA-RPT}
+    - {rel: depends_on, target: CAP-BIA-SEM-1}
+    - {rel: consumed_by, target: PERSONA-bia-insight-consumer}
+    - {rel: consumed_by, target: PERSONA-bia-data-steward}
+  source: ADR 0026
+
+- id: CAP-BIA-RPT-3
+  term: Visual Data Exploration
+  type: Capability
+  definition: >
+    Provides visual exploration and ad-hoc charting over permitted data so consumers and analysts can
+    discover patterns and answer one-off questions visually, without authoring a formal report.
+  relates_to:
+    - {rel: grouped_by, target: BIA-RPT}
+    - {rel: depends_on, target: CAP-BIA-SEM-2}
+    - {rel: consumed_by, target: PERSONA-bia-insight-consumer}
+  source: ADR 0026
+
+- id: CAP-BIA-RPT-4
+  term: Metric Alerting & Distribution
+  type: Capability
+  definition: >
+    Detects when a metric crosses a defined condition and distributes reports and alerts on schedule or on
+    event to the right consumers, so insight reaches people proactively rather than waiting to be pulled.
+  relates_to:
+    - {rel: grouped_by, target: BIA-RPT}
+    - {rel: depends_on, target: CAP-BIA-RPT-1}
+    - {rel: consumed_by, target: PERSONA-bia-insight-consumer}
+  source: ADR 0026

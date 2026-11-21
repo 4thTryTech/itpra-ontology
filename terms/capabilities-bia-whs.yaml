@@ -1,0 +1,66 @@
+# ITPRA ontology — BIA-WHS (Data Warehouse, Lakehouse & Modeling) capabilities
+# type: Capability. ids CAP-BIA-WHS-<n>. Grouped under domain BIA-WHS (ADR 0026). Consumes the platform data
+# substrate (ITO DATA/SUB), does not own it (ADR 0026).
+
+- id: CAP-BIA-WHS-1
+  term: Governed Analytical Data Store
+  type: Capability
+  definition: >
+    Offers a managed, governed analytical store (warehouse or lakehouse) as a paved road for business
+    analytics, with query performance and isolation handled as a service, consuming the platform's data
+    substrate rather than operating its own infrastructure.
+  relates_to:
+    - {rel: grouped_by, target: BIA-WHS}
+    - {rel: consumed_by, target: PERSONA-bia-analytics-team}
+  source: ADR 0026
+
+- id: CAP-BIA-WHS-2
+  term: Layered Data Refinement
+  type: Capability
+  definition: >
+    Refines data through progressive quality layers — a source-faithful landing layer, a cleansed and
+    conformed enterprise-view layer, and a consumption-ready layer — so data improves in structure and trust
+    as it flows toward analysis, with each layer auditable and reproducible.
+  relates_to:
+    - {rel: grouped_by, target: BIA-WHS}
+    - {rel: depends_on, target: CAP-BIA-WHS-1}
+    - {rel: consumed_by, target: PERSONA-bia-analytics-team}
+  source: ADR 0026
+
+- id: CAP-BIA-WHS-3
+  term: Dimensional & Business Data Modeling
+  type: Capability
+  definition: >
+    Models conformed data into business-oriented structures — conformed dimensions, facts, and subject-area
+    models — so analytics reflects shared business concepts consistently rather than source-system idioms.
+  relates_to:
+    - {rel: grouped_by, target: BIA-WHS}
+    - {rel: depends_on, target: CAP-BIA-WHS-2}
+    - {rel: consumed_by, target: PERSONA-bia-analytics-team}
+  source: ADR 0026
+
+- id: CAP-BIA-WHS-4
+  term: Historization & Time-Variant History
+  type: Capability
+  definition: >
+    Preserves the time-variant history of business data — tracking how records and dimensions change over
+    time — so analytics can ask "as of" questions and reproduce point-in-time views faithfully.
+  relates_to:
+    - {rel: grouped_by, target: BIA-WHS}
+    - {rel: depends_on, target: CAP-BIA-WHS-2}
+    - {rel: consumed_by, target: PERSONA-bia-analytics-team}
+  source: ADR 0026
+
+- id: CAP-BIA-WHS-5
+  term: Analytics-Ready Data Products
+  type: Capability
+  definition: >
+    Curates consumption-ready, read-optimized datasets and data marts aligned to business domains, published
+    as discoverable, owned data products so consumers and downstream analytics reuse trustworthy assets rather
+    than rebuilding them.
+  relates_to:
+    - {rel: grouped_by, target: BIA-WHS}
+    - {rel: depends_on, target: CAP-BIA-WHS-3}
+    - {rel: consumed_by, target: PERSONA-bia-analytics-team}
+    - {rel: consumed_by, target: PERSONA-bia-data-scientist}
+  source: ADR 0026

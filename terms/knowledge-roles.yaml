@@ -1,0 +1,38 @@
+# ITPRA ontology — neutral knowledge-role partition
+# Cross-cutting Concept vocabulary for the ROLES knowledge plays in the estate, independent of how many physical
+# stores hold it. Operating-model-neutral and tool-neutral. Minted under ADR 0031 (evaluate-not-auto-add per ADR
+# 0011). ONE concept defining a partition, the same shape as AUTON-BOUNDARY and COVERAGE-AREA - not three
+# sibling concepts: no role needed relationships of its own. The roles are not service-domain owned (no
+# belongs_to_service_domain): in the IT estate alone the authoritative role is played by service-desk and
+# operational knowledge, the governing role by the configuration relationship model, and the system of record
+# (CAP-GOV-4) plays two roles at once. A role one store can play twice and several domains can each play is a
+# partition, not a capability. The obligations BETWEEN roles are NOT edges on this concept (no new relationship
+# verbs - ADR 0031 D3): they are carried by functions (FUNC-access-policy-propagation, FUNC-erasure-propagation,
+# FUNC-retrieval-provenance) and by the definition text below ("a derived representation is never
+# authoritative").
+
+- id: KNOWLEDGE-ROLE
+  term: Knowledge role
+  type: Concept
+  definition: >
+    The partition of an organisation's knowledge by the role a body of knowledge plays, whether the roles
+    are held in one store or in several physically separate ones. Three roles: the AUTHORITATIVE SOURCE -
+    the record that is the source of truth for what it states and is maintained by its owner; the GOVERNING
+    SEMANTIC MODEL - the governed vocabulary and ontology that content and instances conform to and take
+    their meaning from; and the DERIVED RETRIEVAL REPRESENTATION - an index, embedding set, graph, or cache
+    built from the other two so that humans and delegated actors can find and use them. A derived
+    representation is never authoritative: where it disagrees with the source it was built from, the source
+    prevails, and it inherits the obligations of its sources - their access restrictions, their erasure and
+    retention decisions, and traceability back to them. One store may play more than one role, and the same
+    storage technology may play different roles in different deployments; the role is a property of the
+    deployment, never of the store type. T1 asserts the roles and the obligations that follow from them;
+    how many stores hold them, how derived representations are built and refreshed, and which systems play
+    which role are scenario decisions.
+  aliases: [knowledge store roles, source-model-derivative partition, system of record vs derived index]
+  relates_to:
+    - {rel: applies_to, target: CAP-BIA-GOV-7}
+    - {rel: applies_to, target: CAP-DATA-1}
+    - {rel: applies_to, target: CAP-GOV-9}
+    - {rel: applies_to, target: CAP-GOV-4}
+    - {rel: applies_to, target: AUTON-ACTOR}
+  source: ADR 0031

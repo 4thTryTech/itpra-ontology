@@ -1,0 +1,70 @@
+# ITPRA ontology — DCF-PWR (Power & Energy Distribution) capabilities
+# type: Capability. ids CAP-DCF-PWR-<n>. Grouped under domain DCF-PWR (ADR 0022).
+
+- id: CAP-DCF-PWR-1
+  term: Utility Intake & Primary Supply
+  type: Capability
+  definition: >
+    Brings external electrical supply into the facility — utility intake, primary transformation/switchgear,
+    and the primary power path to the load — ideally from independent feeds, as the facility's primary source
+    of energy.
+  relates_to:
+    - {rel: grouped_by, target: DCF-PWR}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-tenant}
+  source: ADR 0022
+
+- id: CAP-DCF-PWR-2
+  term: Backup Generation
+  type: Capability
+  definition: >
+    Sustains the full facility load — hosted equipment plus mechanical/cooling — through a loss of primary
+    supply, using on-site backup generation with on-site fuel, and transfers the load to and from backup
+    automatically, so a utility outage does not interrupt the hosted load.
+  relates_to:
+    - {rel: grouped_by, target: DCF-PWR}
+    - {rel: depends_on, target: CAP-DCF-PWR-1}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+  source: ADR 0022
+
+- id: CAP-DCF-PWR-3
+  term: Uninterruptible & Conditioned Power
+  type: Capability
+  definition: >
+    Bridges the gap between a loss of primary supply and backup generation reaching load using stored energy,
+    and conditions/stabilizes the power delivered so the hosted equipment is isolated from upstream
+    disturbances — clean, continuous power with no interruption on source transfer.
+  relates_to:
+    - {rel: grouped_by, target: DCF-PWR}
+    - {rel: depends_on, target: CAP-DCF-PWR-1}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-tenant}
+  source: ADR 0022
+
+- id: CAP-DCF-PWR-4
+  term: Power Distribution to Equipment
+  type: Capability
+  definition: >
+    Distributes conditioned power from the facility plant to the racks and equipment — distribution boards,
+    rack power feeds, and protective devices — delivering power to each footprint, ideally via independent
+    feeds to support redundancy.
+  relates_to:
+    - {rel: grouped_by, target: DCF-PWR}
+    - {rel: depends_on, target: CAP-DCF-PWR-3}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-tenant}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+  source: ADR 0022
+
+- id: CAP-DCF-PWR-5
+  term: Power Metering & Electrical Capacity
+  type: Capability
+  definition: >
+    Meters electrical draw from the utility feed down to the rack/circuit and accounts for available
+    electrical capacity per area/rack, so power is allocated within limits and the metered data feeds capacity
+    planning and efficiency measurement.
+  relates_to:
+    - {rel: grouped_by, target: DCF-PWR}
+    - {rel: depends_on, target: CAP-DCF-PWR-4}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-compliance}
+  source: ADR 0022

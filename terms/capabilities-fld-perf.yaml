@@ -1,0 +1,69 @@
+# ITPRA ontology — FLD-PERF (Field Performance & Insight) capabilities
+# type: Capability. ids CAP-FLD-PERF-<n>. Grouped under domain FLD-PERF (ADR 0020).
+
+- id: CAP-FLD-PERF-1
+  term: Field Telemetry & Visit Record
+  type: Capability
+  definition: >
+    Captures a trustworthy record of every field visit — work done, time on site, parts used, outcome, and
+    location/asset touched — as the authoritative data the rest of field insight is built on, so the field
+    operation is measurable and auditable.
+  relates_to:
+    - {rel: grouped_by, target: FLD-PERF}
+    - {rel: consumed_by, target: PERSONA-fld-field-service-lead}
+    - {rel: consumed_by, target: PERSONA-fld-field-coordinator}
+  source: ADR 0020
+
+- id: CAP-FLD-PERF-2
+  term: SLA & Response-Commitment Tracking
+  type: Capability
+  definition: >
+    Tracks each visit against its response and resolution commitment — measuring whether the agreed window
+    was met and surfacing breaches and at-risk work — so the service is held to its commitment and the
+    requestor sees whether the promise was kept.
+  relates_to:
+    - {rel: grouped_by, target: FLD-PERF}
+    - {rel: depends_on, target: CAP-FLD-PERF-1}
+    - {rel: consumed_by, target: PERSONA-fld-field-service-lead}
+    - {rel: consumed_by, target: PERSONA-fld-service-requestor}
+  source: ADR 0020
+
+- id: CAP-FLD-PERF-3
+  term: First-Time-Fix & Repeat-Visit Analysis
+  type: Capability
+  definition: >
+    Measures how often work is completed in a single visit and analyzes the causes of repeat visits — missing
+    part, missing skill or credential, or missing access — so the readiness gaps that drive return visits are
+    found and closed across the field operation.
+  relates_to:
+    - {rel: grouped_by, target: FLD-PERF}
+    - {rel: depends_on, target: CAP-FLD-PERF-1}
+    - {rel: consumed_by, target: PERSONA-fld-field-service-lead}
+  source: ADR 0020
+
+- id: CAP-FLD-PERF-4
+  term: Field Cost & Utilization Insight
+  type: Capability
+  definition: >
+    Shows the cost and productive use of the field workforce — cost per visit, technician utilization, travel
+    versus on-site time, and spares consumption — so the operation can be tuned for value and capacity
+    planned against demand.
+  relates_to:
+    - {rel: grouped_by, target: FLD-PERF}
+    - {rel: depends_on, target: CAP-FLD-PERF-1}
+    - {rel: consumed_by, target: PERSONA-fld-field-service-lead}
+  source: ADR 0020
+
+- id: CAP-FLD-PERF-5
+  term: Field Experience & Feedback
+  type: Capability
+  definition: >
+    Captures how the visit was experienced by the on-site contact and feeds field learning back into the
+    service — visit satisfaction, recurring pain points, and improvement nominations — so the field service
+    evolves as a product on real consumer signal.
+  relates_to:
+    - {rel: grouped_by, target: FLD-PERF}
+    - {rel: depends_on, target: CAP-FLD-PERF-1}
+    - {rel: consumed_by, target: PERSONA-fld-field-service-lead}
+    - {rel: consumed_by, target: PERSONA-fld-service-requestor}
+  source: ADR 0020

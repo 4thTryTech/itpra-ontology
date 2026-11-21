@@ -1,0 +1,122 @@
+# ITPRA ontology — quality-attribute vocabulary (NFR categories)
+# Seeded controlled set for non-functional requirements. NFRs reference these by id via their `qa` field.
+# Starting set drawn from ISO/IEC 25010 and cloud well-architected frameworks; refine via ADR if changed.
+# Extended by ADR 0016 with SAFETY (ISO/IEC 25010:2023 2nd ed. added Safety as a full characteristic - the set
+# above predates that revision), and EXPLAINABILITY / VALIDITY / FAIRNESS (NIST AI RMF trustworthiness
+# characteristics; ISO/IEC 25059:2023 AI quality model). These four are VOCABULARY: whether a given architecture
+# carries an NFR against them is a T2/T3 scope decision, not a T1 obligation.
+
+- id: AVAILABILITY
+  term: Availability
+  type: QualityAttribute
+  definition: The platform and its services are reachable and operational when needed.
+  source: ISO/IEC 25010; well-architected
+
+- id: RESILIENCE
+  term: Resilience
+  type: QualityAttribute
+  definition: The platform tolerates and recovers from faults without disproportionate impact.
+  aliases: [reliability, fault-tolerance]
+  source: well-architected
+
+- id: SCALABILITY
+  term: Scalability
+  type: QualityAttribute
+  definition: Capacity can grow or shrink to meet demand.
+  aliases: [elasticity]
+  source: well-architected
+
+- id: PERFORMANCE
+  term: Performance
+  type: QualityAttribute
+  definition: Operations complete within acceptable latency and throughput.
+  aliases: [performance-efficiency]
+  source: ISO/IEC 25010
+
+- id: SECURITY
+  term: Security
+  type: QualityAttribute
+  definition: Confidentiality, integrity, and authorized access are preserved.
+  source: ISO/IEC 25010; well-architected
+
+- id: COMPLIANCE
+  term: Compliance & Auditability
+  type: QualityAttribute
+  definition: The platform meets regulatory/policy obligations and can evidence them.
+  aliases: [auditability]
+
+- id: OBSERVABILITY
+  term: Observability
+  type: QualityAttribute
+  definition: System state can be understood from its outputs (metrics, logs, traces, events).
+
+- id: OPERABILITY
+  term: Operability
+  type: QualityAttribute
+  definition: The platform is straightforward to run, monitor, and intervene in day-to-day.
+
+- id: MAINTAINABILITY
+  term: Maintainability
+  type: QualityAttribute
+  definition: Changes can be made effectively and safely over time.
+  source: ISO/IEC 25010
+
+- id: PORTABILITY
+  term: Portability
+  type: QualityAttribute
+  definition: Workloads and the platform can move across environments with bounded effort.
+  source: ISO/IEC 25010
+
+- id: INTEROPERABILITY
+  term: Interoperability
+  type: QualityAttribute
+  definition: Components and external systems exchange and use information through defined interfaces.
+  source: ISO/IEC 25010
+
+- id: COST_EFFICIENCY
+  term: Cost Efficiency
+  type: QualityAttribute
+  definition: Outcomes are delivered at justified, transparent cost.
+  aliases: [cost-optimization, finops]
+  source: well-architected
+
+- id: USABILITY
+  term: Usability & Developer Experience
+  type: QualityAttribute
+  definition: Consumers can accomplish tasks effectively with low friction (paved-road experience).
+  aliases: [devex, developer-experience]
+  source: ISO/IEC 25010
+
+- id: RECOVERABILITY
+  term: Recoverability
+  type: QualityAttribute
+  definition: After disruption, the platform restores service and data within defined objectives.
+  aliases: [disaster-recovery, dr]
+
+- id: SAFETY
+  term: Safety
+  type: QualityAttribute
+  definition: The system does not endanger human health, property, or the environment - operational constraints are enforced, hazards are identified and warned on, and failure modes fail safe.
+  aliases: [operational safety, fail-safe, harm prevention]
+  source: ISO/IEC 25010:2023 (2nd ed., added characteristic); ADR 0016
+
+- id: EXPLAINABILITY
+  term: Explainability & Transparency
+  type: QualityAttribute
+  definition: A decision or generated output can be traced to the inputs and reasoning that produced it, and rendered intelligibly to those accountable for it and affected by it. Distinct from OBSERVABILITY, which is about determining system state from emitted telemetry rather than accounting for a particular outcome.
+  aliases: [explainability, interpretability, transparency, auditability of reasoning]
+  source: NIST AI RMF; ISO/IEC 25059:2023; ADR 0016
+
+- id: VALIDITY
+  term: Validity & Output Fitness
+  type: QualityAttribute
+  definition: Output meets its intent to an agreed degree, including where there is no single correct answer and fitness is a threshold over a scored sample rather than an assertion, and that fitness holds as inputs, models, and usage change.
+  aliases: [accuracy, correctness, output quality, functional suitability]
+  source: ISO/IEC 25010 (functional suitability); NIST AI RMF (valid and reliable); ADR 0016
+
+- id: FAIRNESS
+  term: Fairness & Bias Management
+  type: QualityAttribute
+  definition: Outcomes do not systematically disadvantage groups of people; bias is surfaced, measured, and managed rather than assumed absent. Applicability is scenario-dependent - it binds where a system materially affects people - and is expressed through requirements at T2/T3.
+  aliases: [bias management, equity, non-discrimination]
+  source: NIST AI RMF (fair - with harmful bias managed); ADR 0016

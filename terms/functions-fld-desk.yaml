@@ -1,0 +1,79 @@
+# ITPRA ontology — FUNCTION library, FLD-DESK (Deskside / On-site Assistance)
+# type: Function. ids FUNC-fld-<slug>. Functions `support` ≥1 capability. See ADR 0020.
+
+# On-site triage & diagnosis (CAP-FLD-DESK-1)
+- id: FUNC-fld-onsite-fault-reproduction
+  term: On-Site Fault Reproduction
+  type: Function
+  definition: Reproduces and confirms the reported problem in person at the location before acting.
+  aliases: [on-site diagnosis, fault confirmation]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-DESK-1}
+  source: ADR 0020
+
+- id: FUNC-fld-physical-inspection
+  term: Physical Equipment Inspection
+  type: Function
+  definition: Inspects the physical equipment and environment to determine what the visit must do.
+  aliases: [equipment inspection, physical assessment]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-DESK-1}
+  source: ADR 0020
+
+# Directed-hands execution (CAP-FLD-DESK-2)
+- id: FUNC-fld-guided-remote-hands
+  term: Guided Remote-Hands Execution
+  type: Function
+  definition: Performs well-defined steps (power-cycle, reseat, cable, label, place) under explicit remote instruction.
+  aliases: [directed hands, remote-hands execution]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-DESK-2}
+  source: ADR 0020
+
+- id: FUNC-fld-equipment-receipt-placement
+  term: Equipment Receipt & Placement
+  type: Function
+  definition: Receives shipped equipment on site and places, mounts, or stages it as directed.
+  aliases: [receiving, equipment staging]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-DESK-2}
+  source: ADR 0020
+
+# Skilled-hands resolution (CAP-FLD-DESK-3)
+- id: FUNC-fld-skilled-onsite-resolution
+  term: Skilled On-Site Resolution
+  type: Function
+  definition: Applies technical judgement on site to resolve advanced installs, complex cabling, and time-sensitive faults independently.
+  aliases: [smart hands, independent resolution]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-DESK-3}
+  source: ADR 0020
+
+- id: FUNC-fld-onsite-equipment-test
+  term: On-Site Equipment Test
+  type: Function
+  definition: Tests and validates equipment on site after intervention to confirm correct operation.
+  aliases: [equipment testing, post-fix validation]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-DESK-3}
+  source: ADR 0020
+
+# On-site handover & sign-off (CAP-FLD-DESK-4)
+- id: FUNC-fld-visit-signoff
+  term: Visit Confirmation & Sign-Off
+  type: Function
+  definition: Confirms completed work with the on-site contact and captures their sign-off.
+  aliases: [customer sign-off, visit closure]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-DESK-4}
+  source: ADR 0020
+
+- id: FUNC-fld-work-and-parts-capture
+  term: Work & Parts-Used Capture
+  type: Function
+  definition: Records what was done and which parts were consumed during the visit.
+  aliases: [work note capture, parts-used logging]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-DESK-4}
+    - {rel: supports, target: CAP-FLD-PERF-1}
+  source: ADR 0020

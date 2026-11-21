@@ -1,0 +1,73 @@
+# ITPRA ontology — GRC-SOC (Security Operations & Threat Response) capabilities
+# type: Capability. ids CAP-GRC-SOC-<n>. Grouped under domain GRC-SOC (ADR 0024); environment expression per ADR
+# 0014. Enterprise SOC/CSIRT — consumes platform (ITO SEC) signals; does NOT duplicate platform detection (ADR
+# 0024).
+
+- id: CAP-GRC-SOC-1
+  term: Enterprise Security Monitoring & Event Correlation
+  type: Capability
+  definition: >
+    Aggregates and correlates security-relevant events from across the whole enterprise estate — including
+    signals supplied by the infrastructure platform and other service domains — into a single enterprise view
+    so cross-estate attacks are visible. The enterprise correlation layer above any single estate's own
+    detection.
+  relates_to:
+    - {rel: grouped_by, target: GRC-SOC}
+    - {rel: consumed_by, target: PERSONA-grc-security-operations}
+    - {rel: consumed_by, target: PERSONA-grc-security-leadership}
+  source: ADR 0024
+
+- id: CAP-GRC-SOC-2
+  term: Enterprise Threat Intelligence
+  type: Capability
+  definition: >
+    Acquires, curates, and disseminates threat intelligence about adversaries, indicators, and campaigns
+    relevant to the enterprise, enriching detection and prioritizing risk. Feeds monitoring, hunting, and the
+    risk-landscape analysis the risk function consumes.
+  relates_to:
+    - {rel: grouped_by, target: GRC-SOC}
+    - {rel: consumed_by, target: PERSONA-grc-security-operations}
+  source: ADR 0024
+
+- id: CAP-GRC-SOC-3
+  term: Threat Hunting & Adversary Analysis
+  type: Capability
+  definition: >
+    Proactively searches the enterprise estate for undetected adversary activity using hypotheses, behavioral
+    analysis, and threat intelligence, surfacing threats that automated detection missed and feeding new
+    detections back into monitoring.
+  relates_to:
+    - {rel: grouped_by, target: GRC-SOC}
+    - {rel: depends_on, target: CAP-GRC-SOC-1}
+    - {rel: depends_on, target: CAP-GRC-SOC-2}
+    - {rel: consumed_by, target: PERSONA-grc-security-operations}
+  source: ADR 0024
+
+- id: CAP-GRC-SOC-4
+  term: Major Security Incident Coordination
+  type: Capability
+  definition: >
+    Coordinates the enterprise response to major and cross-domain security incidents end to end — declaring,
+    triaging, communicating, and convening responders across service domains (the CSIRT coordination role) —
+    so a multi-estate incident is managed as one. Distinct from a single estate's local incident handling,
+    which it coordinates and escalates from.
+  relates_to:
+    - {rel: grouped_by, target: GRC-SOC}
+    - {rel: depends_on, target: CAP-GRC-SOC-1}
+    - {rel: consumed_by, target: PERSONA-grc-security-operations}
+    - {rel: consumed_by, target: PERSONA-grc-security-leadership}
+  source: ADR 0024
+
+- id: CAP-GRC-SOC-5
+  term: Security Incident Response & Recovery
+  type: Capability
+  definition: >
+    Executes the enterprise incident-response lifecycle — containment, eradication, recovery, and
+    post-incident learning — directing remediation across estates and capturing lessons that feed prevention,
+    detection, and the risk register. Drives enterprise recovery; the per-estate technical actions are carried
+    out by the owning estate (e.g. the platform's own response).
+  relates_to:
+    - {rel: grouped_by, target: GRC-SOC}
+    - {rel: depends_on, target: CAP-GRC-SOC-4}
+    - {rel: consumed_by, target: PERSONA-grc-security-operations}
+  source: ADR 0024

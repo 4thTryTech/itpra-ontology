@@ -1,0 +1,57 @@
+# ITPRA ontology — IT Service Management & Integration (ITSM) personas
+# type: Persona. ids PERSONA-itsm-<slug>. Coarse, tier-graduated neutral role archetypes (mirrors the persona
+# model, ADR 0012): each refines into granular roles at T2/T3. Capabilities reference these via `consumed_by`;
+# relationships are expressed from the capability/journey side. Ratified by ADR 0025.
+
+- id: PERSONA-itsm-integrator
+  term: Service Integrator
+  type: Persona
+  definition: >
+    The provider/coordinator of the cross-domain wrapper: builds, operates, and evolves the service-integration
+    function as a product — the end-to-end catalog/portfolio, the cross-provider request/change/incident/problem
+    coordination, end-to-end service-level commitments, the integrated system of record, and value insight. Owns
+    the ITSM capabilities and the coordination golden paths across providers. The role is the same whether the
+    integrator is kept internal (a retained organization), delegated externally, hybrid, or led by a provider —
+    that sourcing choice is a T2 operating-model decision. At T2/T3 this refines into granular roles
+    (integration lead, request/fulfilment coordinator, change coordinator, major-incident/problem coordinator,
+    catalog/portfolio manager, configuration-integration owner).
+  aliases: [retained organization, integration team, SIAM function]
+  source: ADR 0025
+
+- id: PERSONA-itsm-provider
+  term: Service / Domain Provider
+  type: Persona
+  definition: >
+    The coordinated party: any internal service domain (e.g. the infrastructure platform within IT Operations,
+    End-User Computing, the Service Desk, a security/GRC function) or external supplier that delivers part of an
+    end-to-end service and is coordinated by the integrator. Receives routed requests, executes its own changes
+    and responses within its domain, holds its own commitments, and supplies records, performance, and evidence
+    up to the integrator. Owns the work within its boundary; the integrator owns the seams between providers. At
+    T2/T3 this refines into specific internal domains and external suppliers.
+  aliases: [provider, service provider, supplier, coordinated domain, tower]
+  source: ADR 0025
+
+- id: PERSONA-itsm-service-owner
+  term: Service Owner & Portfolio
+  type: Persona
+  definition: >
+    The accountability owner for an end-to-end service across its providers and lifecycle: decides what belongs
+    in the portfolio, names and authorizes a service into the catalog, owns the end-to-end service-level
+    commitment and the provider/supplier relationships that underpin it, and is accountable for the value the
+    service delivers. The neutral anchor for end-to-end service ownership across the provider chain. At T2/T3
+    this refines into granular roles (service owner, portfolio/relationship manager, supplier manager,
+    service-level manager).
+  aliases: [service owner, portfolio manager, business relationship owner, supplier manager]
+  source: ADR 0025
+
+- id: PERSONA-itsm-consumer
+  term: Service Consumer
+  type: Persona
+  definition: >
+    The consumer of the end-to-end service: a business unit, function, or workforce member who discovers and
+    requests services from the enterprise catalog, experiences one service regardless of how many providers
+    stand behind it, and whose experienced value and feedback drive improvement. The primary customer the
+    integrator coordinates on behalf of. At T2/T3 this refines into segments (business consumer, requesting
+    manager, end recipient).
+  aliases: [consumer, customer, business consumer, requester]
+  source: ADR 0025

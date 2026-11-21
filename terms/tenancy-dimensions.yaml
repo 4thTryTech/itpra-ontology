@@ -1,0 +1,89 @@
+# ITPRA ontology — tenancy isolation dimensions + strength
+# The neutral model for multi-tenancy at T1. Ratified by ADR 0014 (the tenancy twin of ADR 0014's environment
+# dimensions). A capability's `Multi-tenancy` field states the per-tenant boundary it upholds, names which of
+# these isolation DIMENSIONS it is responsible for, and treats isolation STRENGTH/mechanism as a variation point
+# bound at T2/T3. type: Concept. The `tenant` (entity TENANT) is the T1 unit of isolation. Mechanism-free — no
+# products, no runtime primitives.
+
+# ---- isolation dimensions (the planes a tenant boundary must hold across) ----
+- id: TEN-DIM-DATA
+  term: Data isolation
+  type: Concept
+  definition: >
+    The isolation dimension covering tenant data and state at rest and in motion within the platform: one
+    tenant cannot read, alter, or infer another tenant's data beyond explicitly granted policy. T1 asserts
+    the boundary; the realization (separate stores, logical partitions, encryption scoping) is a T2/T3
+    variation point.
+  aliases: [data-plane isolation, storage isolation]
+  relates_to:
+    - {rel: applies_to, target: TENANT}
+  source: ADR 0014
+
+- id: TEN-DIM-NETWORK
+  term: Network isolation
+  type: Concept
+  definition: >
+    The isolation dimension covering tenant network traffic and reachability: tenant traffic is segmented so
+    one tenant cannot reach or observe another's network paths beyond explicitly granted policy. T1 asserts
+    the boundary; segmentation mechanism is a T2/T3 variation point. Network controls are necessary but not
+    solely sufficient — they combine with identity and data isolation.
+  aliases: [network-plane isolation, traffic isolation]
+  relates_to:
+    - {rel: applies_to, target: TENANT}
+  source: ADR 0014
+
+- id: TEN-DIM-RUNTIME
+  term: Compute/runtime isolation
+  type: Concept
+  definition: >
+    The isolation dimension covering tenant workload execution: one tenant's running workloads are separated
+    from another's at the execution layer so they cannot access or interfere with each other's processes or
+    memory beyond policy. T1 asserts the boundary; the isolation primitive (namespace, node, cluster, VM,
+    dedicated host) is a T2/T3 variation point and applies to both container and VM workload forms.
+  aliases: [compute isolation, execution isolation, workload isolation]
+  relates_to:
+    - {rel: applies_to, target: TENANT}
+  source: ADR 0014
+
+- id: TEN-DIM-IDENTITY
+  term: Identity & access isolation
+  type: Concept
+  definition: >
+    The isolation dimension covering tenant principals and authorization scope: a tenant's identities and
+    access grants are bounded so actions are attributable and a principal of one tenant cannot act on
+    another's resources beyond explicitly granted policy. T1 asserts the boundary; the access model
+    that enforces it is a variation point bound below the reference tier.
+  aliases: [access isolation, authorization boundary, principal isolation]
+  relates_to:
+    - {rel: applies_to, target: TENANT}
+  source: ADR 0014
+
+- id: TEN-DIM-OPERATIONAL
+  term: Operational isolation
+  type: Concept
+  definition: >
+    The isolation dimension covering shared-resource fairness and blast radius: per-tenant quotas and limits
+    bound consumption so one tenant cannot degrade another (the noisy-neighbor problem), and a fault or
+    control-plane action scoped to one tenant does not cascade to others. T1 asserts the boundary; quota and
+    blast-radius mechanisms are a T2/T3 variation point.
+  aliases: [performance isolation, quota isolation, blast-radius isolation, noisy-neighbor control]
+  relates_to:
+    - {rel: applies_to, target: TENANT}
+  source: ADR 0014
+
+# ---- isolation strength (the neutral spectrum; mechanism deferred to T2/T3) ----
+- id: TEN-ISOLATION-STRENGTH
+  term: Isolation strength
+  type: Concept
+  definition: >
+    The neutral spectrum describing how strongly a tenant boundary is realized for a given dimension —
+    independent of any specific mechanism. Allowed values: shared (tenants share the resource and the
+    boundary is upheld logically within it), logical (tenants get logically separate instances on shared
+    underlying infrastructure), dedicated (tenants get dedicated/physically separate resources). Strength may
+    differ per dimension and per tenant (a mixed posture). At T1 the chosen strength is a variation point;
+    it is selected at T2 (per scenario/tenant trust level) and realized at T3, and is where a measurable
+    target is set. Maps onto industry pool/bridge/silo and soft/hard multi-tenancy.
+  aliases: [tenant isolation level, isolation posture, shared-logical-dedicated]
+  relates_to:
+    - {rel: applies_to, target: TENANT}
+  source: ADR 0014

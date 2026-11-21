@@ -1,0 +1,39 @@
+# ITPRA ontology — personas (RATIFIED, ADR 0012)
+# The ratified T1 persona set: three COARSE, tier-graduated role archetypes — a provider, a consumer, and an
+# assurance owner. T1 stays abstract enough to fit any org size or operating model; each persona REFINES into
+# granular roles at T2/T3 (the refinement map is not held as aliases). Personas are neutral role archetypes, not
+# job titles. type: Persona. Capabilities reference these via `consumed_by`; personas are defined minimally here
+# (relationships are expressed from the capability side).
+
+- id: PERSONA-platform-team
+  term: Platform Team
+  type: Persona
+  definition: >
+    The provider: builds, operates, and evolves the platform as a product. Owns the platform's capabilities,
+    golden paths, automation, and day-2 running, and owns its roadmap, adoption, and value to consumers.
+    At T2/T3 this refines into granular roles (e.g. platform engineer, platform operator/SRE, enabling/
+    coaching, subsystem specialists, platform product owner/manager, business sponsor, cost/value owner,
+    platform service owner, and service-management/governance roles).
+  aliases: [platform group, platform provider, platform builders, platform product owner]
+  source: ADR 0012
+
+- id: PERSONA-platform-consumer
+  term: Platform Consumer
+  type: Persona
+  definition: >
+    The consumer: a stream-aligned team that uses the platform's self-service capabilities to build, deploy,
+    and run its own workloads — the platform's primary customer. At T2/T3 this refines into granular
+    consumer types (e.g. application development team, data/ML team, the service/business owner of its
+    workload, other tenant teams).
+  aliases: [consumer team, tenant team, workload team, application team]
+  source: ADR 0012
+
+- id: PERSONA-security-compliance
+  term: Security & Compliance
+  type: Persona
+  definition: >
+    The assurance owner: defines, enforces, and audits the platform's security, policy, and compliance
+    posture; consumes evidence and controls rather than building workloads. At T2/T3 this refines into
+    granular roles (e.g. security engineer, compliance/audit, GRC).
+  aliases: [security officer, infosec, compliance]
+  source: ADR 0012

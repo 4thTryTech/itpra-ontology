@@ -1,0 +1,49 @@
+# ITPRA ontology — FUNCTION library, NET-QOS (Network Performance & Quality of Service)
+# type: Function. ids FUNC-net-<slug>. T1-neutral; a function MAY name a standard/technique where that IS the
+# function (ADR 0011). See ADR 0023.
+
+- id: FUNC-net-traffic-classification
+  term: Traffic Classification & Marking
+  type: Function
+  definition: Recognizes traffic by application and importance and marks it for differentiated treatment.
+  aliases: [DSCP marking, deep packet inspection classification, traffic identification]
+  relates_to:
+    - {rel: supports, target: CAP-NET-QOS-1}
+  source: ADR 0023
+
+- id: FUNC-net-traffic-prioritization
+  term: Traffic Prioritization & Queueing
+  type: Function
+  definition: Queues and schedules marked traffic so sensitive flows receive service ahead of best-effort traffic.
+  aliases: [priority queueing, scheduling, differentiated services]
+  relates_to:
+    - {rel: supports, target: CAP-NET-QOS-1}
+  source: ADR 0023
+
+- id: FUNC-net-traffic-shaping
+  term: Traffic Shaping & Policing
+  type: Function
+  definition: Shapes and polices traffic rates to bound consumption and prevent congestion.
+  aliases: [rate limiting, bandwidth allocation, policing]
+  relates_to:
+    - {rel: supports, target: CAP-NET-QOS-2}
+  source: ADR 0023
+
+- id: FUNC-net-transport-optimization
+  term: Transport Optimization
+  type: Function
+  definition: Optimizes the transport for an application's traffic to improve its effective performance.
+  aliases: [WAN optimization, acceleration, forward error correction]
+  relates_to:
+    - {rel: supports, target: CAP-NET-QOS-3}
+  source: ADR 0023
+
+- id: FUNC-net-performance-measurement
+  term: Network Performance Measurement
+  type: Function
+  definition: Measures delay, jitter, loss, and throughput on the paths that matter against intended targets.
+  aliases: [active path measurement, synthetic probing, SLA measurement]
+  relates_to:
+    - {rel: supports, target: CAP-NET-QOS-4}
+    - {rel: supports, target: CAP-NET-OBS-2}
+  source: ADR 0023

@@ -1,0 +1,214 @@
+# ITPRA ontology — Business Intelligence & Analytics (BIA) journey catalog
+# type: Journey. ids JRN-bia-<slug>. Each `grouped_by` exactly one EXISTING JourneyGroup
+# (JG-ONBOARDING..JG-EVOLUTION; reused, not redefined). Neutral — steps reference capabilities + neutral
+# governance construct points (request/approval/change/incident/record/feedback), never tools or named
+# processes. Relationships from the journey side: grouped_by, consumed_by (primary personas), depends_on
+# (capabilities exercised). Ratified by ADR 0026. Diagrams: WF-bia-<slug>.
+
+# ---- JG-ONBOARDING ----
+- id: JRN-bia-onboard-insight-consumer
+  term: Onboard an Insight Consumer
+  type: Journey
+  definition: >
+    Ready a new business user to find and use trustworthy insight — establish their access to permitted data,
+    point them at the catalog and certified data products, and confirm they can self-serve safely.
+  relates_to:
+    - {rel: grouped_by, target: JG-ONBOARDING}
+    - {rel: consumed_by, target: PERSONA-bia-insight-consumer}
+    - {rel: consumed_by, target: PERSONA-bia-data-steward}
+    - {rel: depends_on, target: CAP-BIA-SEM-3}
+    - {rel: depends_on, target: CAP-BIA-SEM-2}
+    - {rel: depends_on, target: CAP-BIA-GOV-6}
+  source: ADR 0026
+
+- id: JRN-bia-onboard-data-source
+  term: Onboard a New Data Source
+  type: Journey
+  definition: >
+    Bring a new business data source into the analytics estate — connect and ingest it, profile its quality,
+    classify and catalog it with lineage, and land it in the refinement layers ready for modeling.
+  relates_to:
+    - {rel: grouped_by, target: JG-ONBOARDING}
+    - {rel: consumed_by, target: PERSONA-bia-analytics-team}
+    - {rel: consumed_by, target: PERSONA-bia-data-steward}
+    - {rel: depends_on, target: CAP-BIA-INT-1}
+    - {rel: depends_on, target: CAP-BIA-WHS-2}
+    - {rel: depends_on, target: CAP-BIA-GOV-2}
+    - {rel: depends_on, target: CAP-BIA-GOV-3}
+  source: ADR 0026
+
+# ---- JG-DELIVERY ----
+- id: JRN-bia-build-data-pipeline
+  term: Build a Data Pipeline
+  type: Journey
+  definition: >
+    A data engineer builds and orchestrates a pipeline that ingests, transforms, and conforms source data
+    through the refinement layers on a reliable cadence, with quality checks, ready for modeling.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-bia-analytics-team}
+    - {rel: depends_on, target: CAP-BIA-INT-3}
+    - {rel: depends_on, target: CAP-BIA-INT-4}
+    - {rel: depends_on, target: CAP-BIA-WHS-2}
+    - {rel: depends_on, target: CAP-BIA-GOV-3}
+  source: ADR 0026
+
+- id: JRN-bia-publish-data-product
+  term: Model & Publish a Data Product
+  type: Journey
+  definition: >
+    Conformed data is modeled into business structures, defined once in the semantic/metrics model, and
+    published as a discoverable, owned analytics-ready data product for consumers to reuse.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-bia-analytics-team}
+    - {rel: depends_on, target: CAP-BIA-WHS-3}
+    - {rel: depends_on, target: CAP-BIA-WHS-5}
+    - {rel: depends_on, target: CAP-BIA-SEM-1}
+    - {rel: depends_on, target: CAP-BIA-SEM-3}
+  source: ADR 0026
+
+- id: JRN-bia-deploy-analytics-model
+  term: Develop & Deploy an Analytics Model
+  type: Journey
+  definition: >
+    A data scientist explores data in a collaborative workspace, engineers features, trains and evaluates a
+    model against business objectives, and deploys it as governed, consumable scoring.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-bia-data-scientist}
+    - {rel: depends_on, target: CAP-BIA-SCI-1}
+    - {rel: depends_on, target: CAP-BIA-SCI-2}
+    - {rel: depends_on, target: CAP-BIA-SCI-3}
+    - {rel: depends_on, target: CAP-BIA-SCI-4}
+  source: ADR 0026
+
+# ---- JG-OPERATIONS ----
+- id: JRN-bia-run-self-service-analysis
+  term: Run a Self-Service Analysis
+  type: Journey
+  definition: >
+    A business consumer finds a certified data product in the catalog, explores it through governed
+    self-service against trusted metrics, and reaches a decision — without routing through a specialist.
+  relates_to:
+    - {rel: grouped_by, target: JG-OPERATIONS}
+    - {rel: consumed_by, target: PERSONA-bia-insight-consumer}
+    - {rel: depends_on, target: CAP-BIA-SEM-3}
+    - {rel: depends_on, target: CAP-BIA-SEM-2}
+    - {rel: depends_on, target: CAP-BIA-RPT-3}
+    - {rel: depends_on, target: CAP-BIA-RPT-1}
+  source: ADR 0026
+
+- id: JRN-bia-monitor-model-health
+  term: Monitor Model & Insight Health
+  type: Journey
+  definition: >
+    A deployed model and its insight are monitored for accuracy, stability, and drift against retrain
+    triggers, so degraded models are caught and the change recorded before decisions are affected.
+  relates_to:
+    - {rel: grouped_by, target: JG-OPERATIONS}
+    - {rel: consumed_by, target: PERSONA-bia-data-scientist}
+    - {rel: consumed_by, target: PERSONA-bia-data-steward}
+    - {rel: depends_on, target: CAP-BIA-SCI-5}
+    - {rel: depends_on, target: CAP-BIA-SCI-4}
+  source: ADR 0026
+
+# ---- JG-RESPONSE ----
+- id: JRN-bia-triage-data-quality-incident
+  term: Triage a Data Quality Incident
+  type: Journey
+  definition: >
+    A data-quality breach or anomaly is detected, its lineage traced to root cause, affected reports and data
+    products flagged, and remediation driven, so consumers are protected from acting on bad data.
+  relates_to:
+    - {rel: grouped_by, target: JG-RESPONSE}
+    - {rel: consumed_by, target: PERSONA-bia-data-steward}
+    - {rel: consumed_by, target: PERSONA-bia-analytics-team}
+    - {rel: depends_on, target: CAP-BIA-GOV-3}
+    - {rel: depends_on, target: CAP-BIA-GOV-2}
+    - {rel: depends_on, target: CAP-BIA-RPT-4}
+  source: ADR 0026
+
+# ---- JG-GOVERNANCE ----
+- id: JRN-bia-certify-metric
+  term: Certify a Metric or Data Product
+  type: Journey
+  definition: >
+    A candidate metric or data product is reviewed for definition, quality, and lineage, and promoted to a
+    certified, trustworthy status with a recorded endorsement, so consumers know it is safe for decisions.
+  relates_to:
+    - {rel: grouped_by, target: JG-GOVERNANCE}
+    - {rel: consumed_by, target: PERSONA-bia-data-steward}
+    - {rel: consumed_by, target: PERSONA-bia-analytics-team}
+    - {rel: depends_on, target: CAP-BIA-SEM-4}
+    - {rel: depends_on, target: CAP-BIA-SEM-1}
+    - {rel: depends_on, target: CAP-BIA-GOV-3}
+  source: ADR 0026
+
+- id: JRN-bia-review-analytics-compliance
+  term: Review Analytics Privacy & Compliance
+  type: Journey
+  definition: >
+    The analytics estate's handling of business data is reviewed against privacy, consent, retention, and
+    residency policy, and compliance evidence is produced on demand for an auditor or accountable owner.
+  relates_to:
+    - {rel: grouped_by, target: JG-GOVERNANCE}
+    - {rel: consumed_by, target: PERSONA-bia-data-steward}
+    - {rel: depends_on, target: CAP-BIA-GOV-6}
+    - {rel: depends_on, target: CAP-BIA-GOV-1}
+    - {rel: depends_on, target: CAP-BIA-GOV-2}
+  source: ADR 0026
+
+# ---- JG-EVOLUTION ----
+- id: JRN-bia-evolve-semantic-model
+  term: Evolve the Semantic Model
+  type: Journey
+  definition: >
+    A business metric or dimension definition changes; the semantic model is updated under change control,
+    impact is assessed via lineage, dependent reports and products are reconciled, and the change is recorded.
+  relates_to:
+    - {rel: grouped_by, target: JG-EVOLUTION}
+    - {rel: consumed_by, target: PERSONA-bia-analytics-team}
+    - {rel: consumed_by, target: PERSONA-bia-data-steward}
+    - {rel: depends_on, target: CAP-BIA-SEM-1}
+    - {rel: depends_on, target: CAP-BIA-GOV-2}
+    - {rel: depends_on, target: CAP-BIA-WHS-3}
+    - {rel: depends_on, target: CAP-BIA-GOV-7}
+    - {rel: depends_on, target: CAP-BIA-GOV-3}
+  source: ADR 0026 (extended by ADR 0037)
+
+- id: JRN-bia-retire-data-asset
+  term: Retire a Report or Dataset
+  type: Journey
+  definition: >
+    An unused or superseded report, dataset, or data product is identified, its consumers and lineage checked,
+    retention honored, and it is decommissioned and removed from the catalog, so the estate stays lean and
+    trustworthy.
+  relates_to:
+    - {rel: grouped_by, target: JG-EVOLUTION}
+    - {rel: consumed_by, target: PERSONA-bia-analytics-team}
+    - {rel: consumed_by, target: PERSONA-bia-data-steward}
+    - {rel: depends_on, target: CAP-BIA-SEM-3}
+    - {rel: depends_on, target: CAP-BIA-GOV-2}
+    - {rel: depends_on, target: CAP-BIA-GOV-6}
+  source: ADR 0026
+
+# ---- JG-GOVERNANCE (added by ADR 0037) ----
+- id: JRN-bia-formalise-business-term
+  term: Formalise a Business Term
+  type: Journey
+  definition: >
+    A business term is agreed as a glossary definition under business ownership, placed in the controlled
+    vocabulary, formalised in the governing semantic model as a versioned release, published for consumers
+    that did not author it, and used by the semantic layer, so its meaning is traceable from agreement to
+    every surface — human or delegated actor — that computes with it.
+  relates_to:
+    - {rel: grouped_by, target: JG-GOVERNANCE}
+    - {rel: consumed_by, target: PERSONA-bia-semantic-modeller}
+    - {rel: consumed_by, target: PERSONA-bia-data-steward}
+    - {rel: consumed_by, target: PERSONA-bia-analytics-team}
+    - {rel: depends_on, target: CAP-BIA-GOV-1}
+    - {rel: depends_on, target: CAP-BIA-GOV-5}
+    - {rel: depends_on, target: CAP-BIA-GOV-7}
+    - {rel: depends_on, target: CAP-BIA-SEM-1}
+  source: ADR 0037

@@ -1,0 +1,59 @@
+# ITPRA ontology — ITSM-CFG (System-of-Record & Configuration Integration) capabilities
+# type: Capability. ids CAP-ITSM-CFG-<n>. Grouped under domain ITSM-CFG (ADR 0025). Neutral cross-provider
+# coordination over GC-RECORD. Federation/normalization/reconciliation are neutral data-integration techniques
+# (function level; ADR 0011).
+
+- id: CAP-ITSM-CFG-1
+  term: Federated System-of-Record Integration
+  type: Capability
+  definition: >
+    Federates the authoritative records held by each provider/domain into one integrated, end-to-end view of
+    what is in service — linking to each source as the authority for its own detail rather than copying
+    everything centrally — so the enterprise can answer "what exists and who owns it" across providers while
+    each keeps its own record of record.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-CFG}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-provider}
+  source: ADR 0025
+
+- id: CAP-ITSM-CFG-2
+  term: Record Normalization & Reconciliation
+  type: Capability
+  definition: >
+    Normalizes and reconciles items drawn from diverse provider records into a consistent set — resolving
+    duplicates and conflicts and keeping the integrated view lean and trustworthy — so the federated record is
+    coherent across providers despite differing source models.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-CFG}
+    - {rel: depends_on, target: CAP-ITSM-CFG-1}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+  source: ADR 0025
+
+- id: CAP-ITSM-CFG-3
+  term: Service-to-Item Relationship Mapping
+  type: Capability
+  definition: >
+    Maintains the relationship model linking each end-to-end service to the items and providers that deliver it
+    and their dependencies — so cross-provider change risk, incident impact, and ownership can be traced across
+    the service-to-item graph.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-CFG}
+    - {rel: depends_on, target: CAP-ITSM-CFG-1}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-provider}
+  source: ADR 0025
+
+- id: CAP-ITSM-CFG-4
+  term: Record Integrity & Authority Governance
+  type: Capability
+  definition: >
+    Governs the integrity of the integrated record and the authority of its sources — which source is
+    authoritative for which detail, how freshness and accuracy are assured, and who may write — so the
+    end-to-end record stays trustworthy and the flow-coordination domains can rely on it.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-CFG}
+    - {rel: depends_on, target: CAP-ITSM-CFG-2}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-service-owner}
+  source: ADR 0025

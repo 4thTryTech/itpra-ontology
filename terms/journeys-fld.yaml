@@ -1,0 +1,222 @@
+# ITPRA ontology — Onsite / Field Support (FLD) journey catalog
+# type: Journey. ids JRN-fld-<slug>. Each `grouped_by` exactly one EXISTING JourneyGroup
+# (JG-ONBOARDING..JG-EVOLUTION; reused, not redefined). Neutral — steps reference capabilities + neutral
+# governance construct points (request/approval/change/incident/record/feedback), never tools or named
+# processes. Relationships from the journey side: grouped_by, consumed_by (primary personas), depends_on
+# (capabilities exercised). Ratified by ADR 0020. Diagrams: WF-fld-<slug>.
+
+# ---- JG-ONBOARDING ----
+- id: JRN-fld-onboard-site-engagement
+  term: Onboard a Site for Field Support
+  type: Journey
+  definition: >
+    Stand up field support for a new site or engagement — establish the access and safety requirements,
+    induct and credential the serving technicians, and position the initial spares — so the site can be
+    served from day one.
+  relates_to:
+    - {rel: grouped_by, target: JG-ONBOARDING}
+    - {rel: consumed_by, target: PERSONA-fld-field-service-lead}
+    - {rel: consumed_by, target: PERSONA-fld-site-custodian}
+    - {rel: depends_on, target: CAP-FLD-SAFE-1}
+    - {rel: depends_on, target: CAP-FLD-SAFE-2}
+    - {rel: depends_on, target: CAP-FLD-LOG-2}
+    - {rel: depends_on, target: CAP-FLD-DISP-1}
+  source: ADR 0020
+
+- id: JRN-fld-position-site-spares
+  term: Position Spares for a Site
+  type: Journey
+  definition: >
+    Plan and position the service spares a site or territory needs — forecasting demand, placing stock at
+    the right echelon (depot, field, or pooled), and seeding technician trunk stock — so the right part is
+    on hand when a visit is dispatched.
+  relates_to:
+    - {rel: grouped_by, target: JG-ONBOARDING}
+    - {rel: consumed_by, target: PERSONA-fld-field-service-lead}
+    - {rel: consumed_by, target: PERSONA-fld-field-coordinator}
+    - {rel: depends_on, target: CAP-FLD-LOG-1}
+    - {rel: depends_on, target: CAP-FLD-LOG-2}
+    - {rel: depends_on, target: CAP-FLD-LOG-3}
+  source: ADR 0020
+
+# ---- JG-DELIVERY (Build & Deliver) ----
+- id: JRN-fld-dispatch-deskside-visit
+  term: Dispatch & Complete a Deskside Visit
+  type: Journey
+  definition: >
+    Turn a request for on-site help into a completed visit — qualify the work, assign a credentialed
+    technician, schedule and route the visit, diagnose and resolve on site, and sign off — the core
+    field-support delivery loop.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-fld-field-coordinator}
+    - {rel: consumed_by, target: PERSONA-fld-field-technician}
+    - {rel: consumed_by, target: PERSONA-fld-service-requestor}
+    - {rel: depends_on, target: CAP-FLD-DISP-1}
+    - {rel: depends_on, target: CAP-FLD-DISP-3}
+    - {rel: depends_on, target: CAP-FLD-DESK-1}
+    - {rel: depends_on, target: CAP-FLD-DESK-3}
+    - {rel: depends_on, target: CAP-FLD-DESK-4}
+  source: ADR 0020
+
+- id: JRN-fld-install-new-equipment
+  term: Install & Commission New Equipment
+  type: Journey
+  definition: >
+    Receive, install, cable, and commission new authorized equipment on site as a controlled change, and
+    report it into the asset record — bringing new hardware to productive use.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-fld-field-technician}
+    - {rel: consumed_by, target: PERSONA-fld-service-requestor}
+    - {rel: depends_on, target: CAP-FLD-DISP-2}
+    - {rel: depends_on, target: CAP-FLD-DESK-2}
+    - {rel: depends_on, target: CAP-FLD-IMAC-1}
+    - {rel: depends_on, target: CAP-FLD-DESK-4}
+  source: ADR 0020
+
+- id: JRN-fld-relocate-asset
+  term: Relocate an Asset
+  type: Journey
+  definition: >
+    Move equipment from one position or site to another as a controlled change — de-cable, transport,
+    re-install, re-commission, and reconcile the location record — with custody preserved and downtime
+    minimized.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-fld-field-technician}
+    - {rel: consumed_by, target: PERSONA-fld-service-requestor}
+    - {rel: depends_on, target: CAP-FLD-DISP-2}
+    - {rel: depends_on, target: CAP-FLD-IMAC-2}
+    - {rel: depends_on, target: CAP-FLD-SAFE-4}
+    - {rel: depends_on, target: CAP-FLD-DESK-4}
+  source: ADR 0020
+
+# ---- JG-OPERATIONS (Operate) ----
+- id: JRN-fld-replenish-trunk-stock
+  term: Replenish Technician Trunk Stock
+  type: Journey
+  definition: >
+    Keep the technician's frontline stock serviceable — reconcile what was consumed, replenish against
+    demand, and requisition any part needed for upcoming work — so visits do not fail for want of a part.
+  relates_to:
+    - {rel: grouped_by, target: JG-OPERATIONS}
+    - {rel: consumed_by, target: PERSONA-fld-field-technician}
+    - {rel: consumed_by, target: PERSONA-fld-field-coordinator}
+    - {rel: depends_on, target: CAP-FLD-LOG-3}
+    - {rel: depends_on, target: CAP-FLD-LOG-4}
+  source: ADR 0020
+
+- id: JRN-fld-perform-smart-hands-task
+  term: Perform a Directed Smart-Hands Task
+  type: Journey
+  definition: >
+    Execute a remotely-directed physical task in a facility — receive instruction, perform the well-defined
+    steps (power-cycle, reseat, cable, swap), and confirm the result back to the directing party — the
+    routine, low-uncertainty operate-phase task.
+  relates_to:
+    - {rel: grouped_by, target: JG-OPERATIONS}
+    - {rel: consumed_by, target: PERSONA-fld-field-technician}
+    - {rel: consumed_by, target: PERSONA-fld-service-requestor}
+    - {rel: depends_on, target: CAP-FLD-DISP-5}
+    - {rel: depends_on, target: CAP-FLD-DESK-2}
+    - {rel: depends_on, target: CAP-FLD-DESK-4}
+  source: ADR 0020
+
+# ---- JG-RESPONSE (Respond & Recover) ----
+- id: JRN-fld-break-fix-hardware-failure
+  term: Break-Fix a Hardware Failure
+  type: Journey
+  definition: >
+    Restore failed hardware on site — dispatch with the right part and skill, isolate the fault, swap the
+    component, restore service, and return the defective unit through the reverse-logistics cycle — aiming
+    to fix in a single visit.
+  relates_to:
+    - {rel: grouped_by, target: JG-RESPONSE}
+    - {rel: consumed_by, target: PERSONA-fld-field-technician}
+    - {rel: consumed_by, target: PERSONA-fld-service-requestor}
+    - {rel: depends_on, target: CAP-FLD-DISP-3}
+    - {rel: depends_on, target: CAP-FLD-LOG-3}
+    - {rel: depends_on, target: CAP-FLD-FIX-1}
+    - {rel: depends_on, target: CAP-FLD-FIX-2}
+    - {rel: depends_on, target: CAP-FLD-FIX-3}
+  source: ADR 0020
+
+- id: JRN-fld-handle-safety-incident
+  term: Handle an On-Site Safety Incident
+  type: Journey
+  definition: >
+    Respond to a safety incident or near-miss during field work — make the situation safe, record and report
+    the incident, and act on the immediate cause — so people are protected and the exception is captured.
+  relates_to:
+    - {rel: grouped_by, target: JG-RESPONSE}
+    - {rel: consumed_by, target: PERSONA-fld-field-technician}
+    - {rel: consumed_by, target: PERSONA-fld-site-custodian}
+    - {rel: depends_on, target: CAP-FLD-SAFE-5}
+    - {rel: depends_on, target: CAP-FLD-PERF-1}
+  source: ADR 0020
+
+# ---- JG-GOVERNANCE (Govern & Assure) ----
+- id: JRN-fld-gain-site-access-permit
+  term: Gain Site Access & Work Permit
+  type: Journey
+  definition: >
+    Get a credentialed technician cleared to work on a controlled site — request access, verify induction
+    and credentials, obtain a permit-to-work for high-risk tasks, and arrange escort — so work proceeds only
+    under proper authorization.
+  relates_to:
+    - {rel: grouped_by, target: JG-GOVERNANCE}
+    - {rel: consumed_by, target: PERSONA-fld-field-technician}
+    - {rel: consumed_by, target: PERSONA-fld-site-custodian}
+    - {rel: depends_on, target: CAP-FLD-SAFE-1}
+    - {rel: depends_on, target: CAP-FLD-SAFE-2}
+    - {rel: depends_on, target: CAP-FLD-SAFE-3}
+    - {rel: depends_on, target: CAP-FLD-SAFE-4}
+  source: ADR 0020
+
+- id: JRN-fld-review-field-performance
+  term: Review Field SLA & Performance
+  type: Journey
+  definition: >
+    Assess how the field service is performing — SLA attainment, first-time-fix rate, utilization, and cost
+    — against the commitment, and decide where to improve, closing the governance loop on the service.
+  relates_to:
+    - {rel: grouped_by, target: JG-GOVERNANCE}
+    - {rel: consumed_by, target: PERSONA-fld-field-service-lead}
+    - {rel: consumed_by, target: PERSONA-fld-service-requestor}
+    - {rel: depends_on, target: CAP-FLD-PERF-2}
+    - {rel: depends_on, target: CAP-FLD-PERF-3}
+    - {rel: depends_on, target: CAP-FLD-PERF-4}
+  source: ADR 0020
+
+# ---- JG-EVOLUTION (Evolve & Retire) ----
+- id: JRN-fld-decommission-dispose-equipment
+  term: Decommission & Dispose of Equipment
+  type: Journey
+  definition: >
+    Retire equipment at end of life — de-install it on site, return or dispose of it against the required
+    sanitization and environmental standards, and record it as removed — so retired hardware leaves the
+    estate safely and accountably.
+  relates_to:
+    - {rel: grouped_by, target: JG-EVOLUTION}
+    - {rel: consumed_by, target: PERSONA-fld-field-technician}
+    - {rel: consumed_by, target: PERSONA-fld-site-custodian}
+    - {rel: depends_on, target: CAP-FLD-IMAC-5}
+    - {rel: depends_on, target: CAP-FLD-FIX-5}
+    - {rel: depends_on, target: CAP-FLD-SAFE-4}
+  source: ADR 0020
+
+- id: JRN-fld-improve-field-service
+  term: Improve the Field Service from Feedback
+  type: Journey
+  definition: >
+    Evolve the field service as a product — gather visit experience and improvement nominations, analyze
+    repeat-visit causes, and feed the prioritized changes into the field roadmap — closing the
+    platform-as-a-product feedback loop for field support.
+  relates_to:
+    - {rel: grouped_by, target: JG-EVOLUTION}
+    - {rel: consumed_by, target: PERSONA-fld-field-service-lead}
+    - {rel: consumed_by, target: PERSONA-fld-service-requestor}
+    - {rel: depends_on, target: CAP-FLD-PERF-5}
+    - {rel: depends_on, target: CAP-FLD-PERF-3}
+  source: ADR 0020

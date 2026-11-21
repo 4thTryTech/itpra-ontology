@@ -1,0 +1,50 @@
+# ITPRA ontology — DXC-EXP (Experimentation & Optimization) capabilities
+# type: Capability. ids CAP-DXC-EXP-<n>. Grouped under domain DXC-EXP (ADR 0027).
+
+- id: CAP-DXC-EXP-1
+  term: Experiment Design & Hypothesis Management
+  type: Capability
+  definition: >
+    Defines experiments — hypothesis, variants, audience, success metric, and guardrails — so experience
+    changes are tested deliberately against a measurable expectation rather than shipped on opinion.
+  relates_to:
+    - {rel: grouped_by, target: DXC-EXP}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-practitioner}
+  source: ADR 0027
+
+- id: CAP-DXC-EXP-2
+  term: Variant Assignment & Exposure Control
+  type: Capability
+  definition: >
+    Assigns customers consistently to experience variants and controls their exposure — including gated and
+    gradual rollout — so an experiment or release reaches exactly the intended population in a repeatable way.
+  relates_to:
+    - {rel: grouped_by, target: DXC-EXP}
+    - {rel: depends_on, target: CAP-DXC-EXP-1}
+    - {rel: consumed_by, target: PERSONA-dxc-customer}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-team}
+  source: ADR 0027
+
+- id: CAP-DXC-EXP-3
+  term: Result Measurement & Statistical Analysis
+  type: Capability
+  definition: >
+    Measures experiment outcomes against the chosen metric with sound statistical analysis, so the experience
+    team can tell which variant genuinely performs better and with what confidence.
+  relates_to:
+    - {rel: grouped_by, target: DXC-EXP}
+    - {rel: depends_on, target: CAP-DXC-EXP-2}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-practitioner}
+  source: ADR 0027
+
+- id: CAP-DXC-EXP-4
+  term: Optimization & Rollout Decision
+  type: Capability
+  definition: >
+    Acts on experiment results — promoting the winning variant, holding, or rolling back — and feeds the
+    learning into the experience backlog, so proven improvements ship and regressions are reversed.
+  relates_to:
+    - {rel: grouped_by, target: DXC-EXP}
+    - {rel: depends_on, target: CAP-DXC-EXP-3}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-team}
+  source: ADR 0027

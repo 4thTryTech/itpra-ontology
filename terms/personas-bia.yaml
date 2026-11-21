@@ -1,0 +1,74 @@
+# ITPRA ontology — Business Intelligence & Analytics (BIA) personas
+# type: Persona. ids PERSONA-bia-<slug>. Coarse, tier-graduated neutral role archetypes (mirrors the persona
+# model, ADR 0012): each refines into granular roles at T2/T3. Capabilities/journeys reference these via
+# consumed_by. Ratified by ADR 0026.
+
+- id: PERSONA-bia-insight-consumer
+  term: Insight Consumer
+  type: Persona
+  definition: >
+    The consumer of analytics: any business user, manager, or executive who uses dashboards, reports, and
+    self-service exploration to make decisions — the primary customer of the BIA service domain. At T2/T3
+    this refines into segments (executive/leadership, line-of-business manager, operational analyst,
+    self-service business user, external/partner report recipient).
+  aliases: [business user, report consumer, decision-maker, dashboard user]
+  source: ADR 0026
+
+- id: PERSONA-bia-analytics-team
+  term: Data & Analytics Engineering Team
+  type: Persona
+  definition: >
+    The provider: builds, operates, and evolves the analytics estate as a product — ingestion, the
+    warehouse/lakehouse and its models, the semantic layer, reporting surfaces, and the data products
+    consumers depend on. Owns most BIA capabilities. At T2/T3 this refines into granular roles (data
+    engineer, analytics engineer, BI developer, semantic-model owner, BIA platform/product owner).
+  aliases: [data engineering, analytics engineering, BI team, data platform team]
+  source: ADR 0026
+
+- id: PERSONA-bia-data-scientist
+  term: Data Scientist & Advanced Analyst
+  type: Persona
+  definition: >
+    The advanced-analytics specialist: develops, evaluates, deploys, and monitors analytical and predictive
+    models and conducts exploratory and statistical analysis to produce forward-looking business insight. At
+    T2/T3 this refines into granular roles (data scientist, ML engineer, statistician, quantitative/decision
+    analyst).
+  aliases: [data scientist, ML engineer, advanced analyst, quantitative analyst]
+  source: ADR 0026
+
+- id: PERSONA-bia-product-analyst
+  term: Product Analytics Team
+  type: Persona
+  definition: >
+    The product/user-behavior specialist: instruments products, measures how people use them, and turns
+    behavioral data (journeys, funnels, cohorts, retention, experiments) into product and business decisions.
+    Distinct from security UEBA and operational AIOps. At T2/T3 this refines into granular roles (product
+    analyst, growth analyst, experimentation analyst, digital analyst).
+  aliases: [product analyst, growth analyst, behavioral analyst, digital analytics]
+  source: ADR 0026
+
+- id: PERSONA-bia-data-steward
+  term: Data Steward & Governance Owner
+  type: Persona
+  definition: >
+    The assurance owner: defines and verifies the governance, quality, master/reference data, and
+    privacy/policy posture of business data and insight, supplies compliance evidence, and sets the
+    trust guardrails consumers and producers operate within. Applies the enterprise control catalog rather
+    than authoring it. At T2/T3 this refines into granular roles (data steward, data governance lead, data
+    quality analyst, MDM owner, privacy/compliance liaison).
+  aliases: [data steward, data governance, data quality owner, MDM owner, data custodian]
+  source: ADR 0026
+
+- id: PERSONA-bia-semantic-modeller
+  term: Semantic Modeller & Ontology Owner
+  type: Persona
+  definition: >
+    The meaning-structure owner: models and curates the organisation's controlled vocabularies and ontology
+    structure, and approves structural change to them — judging modelling soundness and backward
+    compatibility for everything that depends on a release. Distinct from the Data Steward & Governance
+    Owner, whose scope is assurance (quality, mastering, privacy), and from the semantic-model owner within
+    the Data & Analytics Engineering Team, who consumes the governed model to define metrics. Business term
+    meaning stays with business owners; this role formalises it. At T2/T3 this refines into granular roles
+    (ontologist, taxonomist, knowledge engineer, semantic architect). Added by ADR 0037.
+  aliases: [ontologist, taxonomist, knowledge engineer, semantic architect]
+  source: ADR 0037

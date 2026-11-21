@@ -1,0 +1,604 @@
+# ITPRA ontology — FUNCTION library, OBSERVABILITY domain file (granular behaviors below capabilities)
+# type: Function. ids FUNC-<slug> (slug-based, NO domain prefix — functions are shared cross-domain). A function
+# `supports` one or more capabilities (many-to-many). Functions are flat — no tier annotation, no `derived_from`
+# — per ADR 0011 (which supersedes ADR 0011 §3 on function tiering and ADR 0011 entirely). A function may freely
+# name a specific standard/protocol/technique where that *is* the function; whether the function is "neutral" or
+# "named" makes no structural difference. T2 selects required functions; T3 binds tools to them. The library is
+# SPLIT PER DOMAIN into functions-<domain>.yaml files; this is the OBSERVABILITY file. Functions stay shared
+# cross-domain: a function is HOMED in its primary domain's file but may `supports` capabilities in any domain.
+# See ADR 0011.
+
+# ---- Functions -----------------------------------------------------------------------------
+
+# Collection (supports CAP-OBS-1 Telemetry Collection)
+- id: FUNC-metric-collection
+  term: Metric Collection
+  type: Function
+  definition: Collects numeric time-series measurements (metrics) from platform and workloads.
+  relates_to:
+    - {rel: supports, target: CAP-OBS-1}
+  source: ADR 0011
+
+- id: FUNC-log-collection
+  term: Log Collection
+  type: Function
+  definition: Collects timestamped event records (logs) from platform and workloads.
+  relates_to:
+    - {rel: supports, target: CAP-OBS-1}
+  source: ADR 0011
+
+- id: FUNC-trace-collection
+  term: Trace Collection
+  type: Function
+  definition: Collects distributed request traces/spans across services.
+  relates_to:
+    - {rel: supports, target: CAP-OBS-1}
+  source: ADR 0011
+
+- id: FUNC-event-collection
+  term: Event Collection
+  type: Function
+  definition: Collects discrete state-change and lifecycle events from platform and workloads.
+  relates_to:
+    - {rel: supports, target: CAP-OBS-1}
+  source: ADR 0011
+
+- id: FUNC-continuous-profiling
+  term: Continuous Profiling
+  type: Function
+  definition: Low-overhead, always-on sampling of code execution (CPU, memory, I/O) to produce profiles.
+  aliases: [code profiling]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-1}
+  source: ADR 0011
+
+# Network & topology (supports CAP-OBS-10)
+- id: FUNC-network-flow-collection
+  term: Network Flow Collection
+  type: Function
+  definition: Collects network traffic flow records for traffic accounting and analysis.
+  relates_to:
+    - {rel: supports, target: CAP-OBS-10}
+  source: ADR 0011
+
+- id: FUNC-network-flow-analysis
+  term: Network Flow Analysis
+  type: Function
+  definition: >
+    Analyzes network flow records for traffic patterns, bandwidth, anomalies, and capacity. The specific
+    flow-export protocol — NetFlow / IPFIX / sFlow / cloud flow logs — is bound at tool selection (T3);
+    the architect/implementer chooses which protocols the chosen tooling must support.
+  aliases: [NetFlow, IPFIX, sFlow, flow analysis, flow telemetry]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-10}
+  source: ADR 0011
+
+- id: FUNC-service-topology-discovery
+  term: Service Topology Discovery
+  type: Function
+  definition: Discovers and maps service/dependency topology — who communicates with whom, over what.
+  aliases: [dependency mapping, topology mapping]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-10}
+  source: ADR 0011
+
+# Analytics & noise reduction (supports CAP-OBS-6; some cross-domain to SEC)
+- id: FUNC-event-correlation
+  term: Event Correlation
+  type: Function
+  definition: >
+    Links related events/alerts to reduce noise and reveal a common underlying issue. Shared across
+    observability and security operations.
+  aliases: [alert correlation]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-6}
+    - {rel: supports, target: CAP-SEC-6}
+  source: ADR 0011
+
+- id: FUNC-anomaly-detection
+  term: Anomaly Detection
+  type: Function
+  definition: >
+    Identifies abnormal patterns in a metric/signal series using statistical or ML methods. Used by
+    observability analytics, security threat detection, and cost-anomaly detection.
+  relates_to:
+    - {rel: supports, target: CAP-OBS-6}
+    - {rel: supports, target: CAP-SEC-7}
+    - {rel: supports, target: CAP-COST-3}
+  source: ADR 0011
+
+- id: FUNC-root-cause-analysis
+  term: Root Cause Analysis
+  type: Function
+  definition: Causal inference over correlated signal/topology to identify the underlying source of an issue.
+  aliases: [RCA]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-6}
+  source: ADR 0011
+
+- id: FUNC-trace-analysis
+  term: Trace Analysis
+  type: Function
+  definition: Analyzes distributed traces to locate latency and errors across service hops.
+  relates_to:
+    - {rel: supports, target: CAP-OBS-6}
+  source: ADR 0011
+
+- id: FUNC-alert-deduplication
+  term: Alert Deduplication
+  type: Function
+  definition: Consolidates duplicate alerts arriving from multiple sources into one.
+  relates_to:
+    - {rel: supports, target: CAP-OBS-6}
+  source: ADR 0011
+
+- id: FUNC-alert-suppression
+  term: Alert Suppression
+  type: Function
+  definition: Filters flapping, low-priority, or maintenance-window alerts so responders see signal, not noise.
+  relates_to:
+    - {rel: supports, target: CAP-OBS-6}
+  source: ADR 0011
+
+- id: FUNC-alert-enrichment
+  term: Alert Enrichment
+  type: Function
+  definition: Adds context (runbook links, configuration, ownership) to alerts/events before routing.
+  relates_to:
+    - {rel: supports, target: CAP-OBS-6}
+  source: ADR 0011
+
+# Digital experience (supports CAP-OBS-9)
+- id: FUNC-synthetic-monitoring
+  term: Synthetic Monitoring
+  type: Function
+  definition: Runs active scripted probes/transactions at intervals to measure availability and performance.
+  aliases: [active monitoring, probing]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-9}
+  source: ADR 0011
+
+- id: FUNC-real-user-monitoring
+  term: Real User Monitoring
+  type: Function
+  definition: Passively collects performance and experience telemetry from actual user sessions.
+  aliases: [RUM]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-9}
+  source: ADR 0011
+
+- id: FUNC-session-replay
+  term: Session Replay
+  type: Function
+  definition: Reconstructs a user session (DOM/interaction capture) for experience and error diagnosis.
+  relates_to:
+    - {rel: supports, target: CAP-OBS-9}
+  source: ADR 0011
+
+- id: FUNC-error-tracking
+  term: Error Tracking
+  type: Function
+  definition: Captures, groups, and alerts on client-side errors and crashes, correlated to the session.
+  aliases: [crash reporting, exception tracking]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-9}
+  source: ADR 0011
+
+- id: FUNC-uptime-monitoring
+  term: Uptime Monitoring
+  type: Function
+  definition: >
+    Periodically checks whether a service or endpoint is reachable and responding, producing up/down
+    availability status (and the data behind status pages). The lightweight availability/heartbeat probe —
+    distinct from synthetic monitoring (FUNC-synthetic-monitoring), which runs full scripted transactions.
+  aliases: [availability monitoring, heartbeat monitoring, health-check probing, status monitoring, ping monitoring]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-9}
+  source: ADR 0011
+
+# Presentation (supports CAP-OBS-3)
+- id: FUNC-dashboarding
+  term: Dashboarding
+  type: Function
+  definition: Renders telemetry into dashboards and charts for monitoring and review.
+  relates_to:
+    - {rel: supports, target: CAP-OBS-3}
+  source: ADR 0011
+
+- id: FUNC-log-search
+  term: Log Search
+  type: Function
+  definition: Full-text and structured search/query over collected logs and events.
+  relates_to:
+    - {rel: supports, target: CAP-OBS-3}
+  source: ADR 0011
+
+# ---- Cross-domain monitoring & telemetry-pipeline functions (added 2026-05-25). All neutral T1. -------
+
+# Coarse, product-category monitoring functions (compose finer functions above; useful T3 binding targets)
+- id: FUNC-infrastructure-monitoring
+  term: Infrastructure Monitoring
+  type: Function
+  definition: >
+    Monitors the health and performance of infrastructure resources — hosts/servers, network devices,
+    storage, and container nodes — gathering their utilization and availability signals (CPU, memory, disk,
+    I/O, interface counters). The infrastructure-scoped form of telemetry collection; underpins capacity
+    planning and high availability.
+  aliases: [infra monitoring, host monitoring, server monitoring]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-1}
+  source: ADR 0011
+
+- id: FUNC-application-performance-monitoring
+  term: Application Performance Monitoring
+  type: Function
+  definition: >
+    Instruments application code and services to monitor latency, throughput, errors, and dependencies via
+    metrics, traces, and logs — detecting issues and locating root cause in the application tier. A coarse,
+    recognized function composed of finer behaviors (trace collection/analysis, error tracking, service-level
+    metrics); a subset of observability bound to the application. Spans server-side and client tiers; the
+    mobile-client instantiation (mobile APM — app launch, crashes, network calls, per-session experience) is
+    the same function applied to mobile, contributing to digital-experience monitoring (CAP-OBS-9).
+  aliases: [APM, application monitoring, mobile APM, mobile application performance monitoring, mobile observability]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-1}
+    - {rel: supports, target: CAP-OBS-6}
+    - {rel: supports, target: CAP-OBS-9}
+  source: ADR 0011
+
+# Telemetry pipeline stages (supports CAP-OBS-8 — the receive -> process -> route observability data plane)
+- id: FUNC-telemetry-ingestion
+  term: Telemetry Ingestion
+  type: Function
+  definition: >
+    Receives and accepts telemetry from instrumented sources, agents, and upstream collectors at the head of
+    the pipeline — the reception stage before any processing.
+  aliases: [telemetry reception, telemetry receiving]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-8}
+  source: ADR 0011
+
+- id: FUNC-telemetry-transformation
+  term: Telemetry Transformation
+  type: Function
+  definition: >
+    Reshapes, normalizes, parses, and converts telemetry between formats and schemas as it passes through the
+    pipeline.
+  aliases: [telemetry processing, telemetry normalization]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-8}
+  source: ADR 0011
+
+- id: FUNC-telemetry-enrichment
+  term: Telemetry Enrichment
+  type: Function
+  definition: >
+    Adds context (resource, ownership, environment, geo, business labels) to in-flight telemetry so it is
+    queryable and attributable downstream. Distinct from alert enrichment (FUNC-alert-enrichment), which
+    enriches alerts/events for responders.
+  aliases: [metadata enrichment, label enrichment]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-8}
+  source: ADR 0011
+
+- id: FUNC-telemetry-filtering
+  term: Telemetry Filtering
+  type: Function
+  definition: >
+    Drops or keeps telemetry by rule (by attribute, severity, source, or pattern) to remove noise and reduce
+    volume before storage.
+  relates_to:
+    - {rel: supports, target: CAP-OBS-8}
+  source: ADR 0011
+
+- id: FUNC-telemetry-sampling
+  term: Telemetry Sampling
+  type: Function
+  definition: >
+    Retains a representative subset of high-volume telemetry (e.g. head- or tail-based trace sampling) to cut
+    volume and cost while preserving signal.
+  aliases: [trace sampling, head-based sampling, tail-based sampling]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-8}
+  source: ADR 0011
+
+- id: FUNC-telemetry-aggregation
+  term: Telemetry Aggregation
+  type: Function
+  definition: >
+    Pre-aggregates or rolls up telemetry (e.g. metric summarization, downsampling) in the pipeline to reduce
+    cardinality and downstream load.
+  aliases: [metric rollup, downsampling, pre-aggregation]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-8}
+  source: ADR 0011
+
+- id: FUNC-telemetry-routing
+  term: Telemetry Routing
+  type: Function
+  definition: >
+    Routes and fans out processed telemetry to one or more destinations/backends, decoupling sources from
+    storage and analysis backends.
+  aliases: [telemetry forwarding, telemetry export, fan-out routing]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-8}
+  source: ADR 0011
+
+- id: FUNC-telemetry-buffering
+  term: Telemetry Buffering
+  type: Function
+  definition: >
+    Buffers, batches, and queues telemetry to absorb bursts, apply backpressure, and provide delivery
+    durability between pipeline stages and backends.
+  aliases: [telemetry queuing, batching, backpressure handling]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-8}
+  source: ADR 0011
+
+# Cross-domain: redaction is both an observability-pipeline and a data-governance behavior
+- id: FUNC-sensitive-data-redaction
+  term: Sensitive Data Redaction
+  type: Function
+  definition: >
+    Detects and masks/scrubs sensitive data (PII, secrets, credentials) from in-flight telemetry before it
+    reaches storage. Shared across the observability pipeline and data governance (handling and retention of
+    classified data).
+  aliases: [PII redaction, data masking, telemetry scrubbing, sensitive data masking]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-8}
+    - {rel: supports, target: CAP-DATA-4}
+  source: ADR 0011
+
+# Endpoint & dependency monitoring (observe specific layers; observe other domains' services)
+- id: FUNC-api-monitoring
+  term: API Monitoring
+  type: Function
+  definition: >
+    Continuously validates API endpoints for availability, latency, error rate, and response correctness —
+    typically via scheduled synthetic checks from multiple locations with response assertions. Observes the
+    managed API edge (CAP-SUB-6); the API-scoped form of digital-experience probing.
+  aliases: [API endpoint monitoring, web API monitoring, API uptime monitoring]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-9}
+  source: ADR 0011
+
+- id: FUNC-database-monitoring
+  term: Database Monitoring
+  type: Function
+  definition: >
+    Monitors data-store health and query performance — slow/long-running queries, execution time, throughput,
+    connections, locks/waits, resource use, and replication lag. Observes managed data stores (CAP-DATA-1);
+    feeds collection and analysis/RCA.
+  aliases: [DB monitoring, database performance monitoring, query performance monitoring, database observability]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-1}
+    - {rel: supports, target: CAP-OBS-6}
+  source: ADR 0011
+
+- id: FUNC-service-mesh-observability
+  term: Service Mesh Observability
+  type: Function
+  definition: >
+    Consumes the telemetry a service mesh emits at the connectivity layer — golden-signal metrics (latency,
+    traffic, errors, saturation), distributed traces, access logs, and the service-to-service dependency map —
+    with no application instrumentation. Observes the service mesh (CAP-SUB-7); a source for service-topology
+    discovery.
+  aliases: [mesh observability, mesh telemetry, sidecar telemetry]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-1}
+    - {rel: supports, target: CAP-OBS-10}
+  source: ADR 0011
+
+# Network active measurement & packet analysis (packet analysis is cross-domain to SEC threat detection)
+- id: FUNC-network-path-testing
+  term: Network Path Testing
+  type: Function
+  definition: >
+    Actively measures network path performance by injecting probe traffic — latency, jitter, packet loss,
+    throughput, and route/hop path — directly measuring the network rather than inferring from passive
+    counters. The active-measurement counterpart to flow analysis; complements passive flow/metric collection.
+  aliases: [network testing, active path testing, network performance testing, active network measurement, synthetic network monitoring]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-10}
+  source: ADR 0011
+
+- id: FUNC-packet-analysis
+  term: Packet & Protocol Analysis
+  type: Function
+  definition: >
+    Captures network packets and decodes/inspects protocols and payloads (deep packet inspection) for network
+    troubleshooting and for security forensics and threat hunting. Shared across network observability and
+    security threat detection (network detection & response, incident forensics).
+  aliases: [packet capture, protocol analysis, deep packet inspection, network forensics]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-10}
+    - {rel: supports, target: CAP-SEC-7}
+  source: ADR 0011
+
+# Cross-domain: KPI tracking is strategic (governance) over operational (SLO management)
+- id: FUNC-kpi-tracking
+  term: KPI Tracking
+  type: Function
+  definition: >
+    Defines and tracks key performance indicators against targets, rolling operational measurements up into
+    the strategic indicators decision-makers steer by. Shared across platform measurement & insight
+    (governance) and service-level objective management (the operational SLI/SLO layer it builds on).
+  aliases: [KPI monitoring, scorecards, indicator tracking, metric targets]
+  relates_to:
+    - {rel: supports, target: CAP-GOV-7}
+    - {rel: supports, target: CAP-OBS-4}
+  source: ADR 0011
+
+# ---- OBS gap coverage (added 2026-05-25; entry 2026-05-25-functions-observability-gaps.md). T1 neutral ----
+
+# Alerting (supports CAP-OBS-2)
+- id: FUNC-threshold-evaluation
+  term: Threshold Evaluation
+  type: Function
+  definition: >
+    Evaluates signals against defined conditions/thresholds and emits a firing/resolved state when a rule's
+    condition is met or clears.
+  aliases: [condition evaluation, alert rule evaluation]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-2}
+  source: ADR 0011
+
+- id: FUNC-alert-rule-management
+  term: Alert Rule Management
+  type: Function
+  definition: Defines and manages alert rules — conditions, severity, grouping labels, and routing keys.
+  relates_to:
+    - {rel: supports, target: CAP-OBS-2}
+  source: ADR 0011
+
+- id: FUNC-alert-state-tracking
+  term: Alert State Tracking
+  type: Function
+  definition: Tracks each alert instance through its lifecycle states (pending, firing, recovering, resolved).
+  relates_to:
+    - {rel: supports, target: CAP-OBS-2}
+  source: ADR 0011
+
+# Platform patching & updates (supports CAP-OBS-5; scheduling reused from AUT later)
+- id: FUNC-patch-assessment
+  term: Patch Assessment
+  type: Function
+  definition: >
+    Identifies available patches/updates, determines which components require them, and prioritizes by risk
+    and applicability.
+  aliases: [patch prioritization, update assessment]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-5}
+  source: ADR 0011
+
+- id: FUNC-patch-deployment
+  term: Patch Deployment
+  type: Function
+  definition: Applies patches and updates to components in a controlled, phased manner within change windows.
+  aliases: [patch rollout, update deployment]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-5}
+  source: ADR 0011
+
+# Operational notification & escalation (supports CAP-OBS-7; delivery shared with EXP-6)
+- id: FUNC-notification-delivery
+  term: Notification Delivery
+  type: Function
+  definition: >
+    Delivers notifications to recipients across multiple channels (email, chat, SMS, voice, push). Shared
+    across operational responder notification and consumer-facing notification.
+  aliases: [multi-channel notification, message delivery]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-7}
+    - {rel: supports, target: CAP-EXP-6}
+  source: ADR 0011
+
+- id: FUNC-on-call-scheduling
+  term: On-Call Scheduling
+  type: Function
+  definition: Manages on-call schedules and rotations so the responsible responder is known at any time.
+  aliases: [on-call rotation, on-call roster]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-7}
+  source: ADR 0011
+
+- id: FUNC-alert-escalation
+  term: Alert Escalation
+  type: Function
+  definition: >
+    Applies escalation policy — re-notifying at intervals and handing off to the next responder/tier when an
+    alert is not acknowledged within a timeout.
+  aliases: [escalation policy, re-notification]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-7}
+  source: ADR 0011
+
+- id: FUNC-acknowledgement-tracking
+  term: Acknowledgement Tracking
+  type: Function
+  definition: Tracks acknowledgement of notifications/alerts and stops escalation once a responder accepts.
+  aliases: [ack tracking]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-7}
+  source: ADR 0011
+
+# ---- Standard / protocol / technique functions ---------------------------------------------------------
+# These name a specific technique (not interchangeable protocols of a generic function); they earn their
+# place in the library as distinct functions. They are flat — no tier annotation, no derived_from — per
+# ADR 0011 (which supersedes ADR 0011 §3 on function tiering). The earlier `FUNC-netflow-analysis` was
+# deleted; specific flow-export protocols (NetFlow/IPFIX/sFlow) are bound at tool selection (T3),
+# captured as aliases on FUNC-network-flow-analysis above.
+
+- id: FUNC-snmp-polling
+  term: SNMP Polling
+  type: Function
+  definition: >
+    Collects device metrics and receives traps via SNMP (polling MIB/OID values) — the standard form of
+    metric collection for network and infrastructure devices.
+  aliases: [SNMP, MIB polling, OID polling]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-1}
+    - {rel: supports, target: CAP-OBS-10}
+  source: ADR 0011
+
+- id: FUNC-opentelemetry-instrumentation
+  term: OpenTelemetry Instrumentation
+  type: Function
+  definition: >
+    Instruments workloads for metrics, logs, traces, and profiles via OpenTelemetry SDKs/auto-instrumentation
+    and the OTLP wire protocol — the standard form of cross-vendor telemetry collection.
+  aliases: [OpenTelemetry, OTel, OTLP]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-1}
+  source: ADR 0011
+
+- id: FUNC-ebpf-instrumentation
+  term: eBPF Instrumentation
+  type: Function
+  definition: >
+    Kernel-level, zero-code instrumentation using eBPF to emit metrics, traces, and network telemetry — the
+    technique-specific form of telemetry collection at the container/host kernel layer.
+  aliases: [eBPF]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-1}
+    - {rel: supports, target: CAP-OBS-10}
+  source: ADR 0011
+
+# Telemetry control plane (supports CAP-OBS-11, ADR 0032). Reused generics: health = FUNC-infrastructure-
+# monitoring; versions = FUNC-patch-*; rollout = FUNC-progressive-rollout; rollback = FUNC-configuration-
+# rollback; drift = FUNC-drift-*; audit = FUNC-audit-logging; secrets = FUNC-secret-*.
+- id: FUNC-collector-fleet-inventory
+  term: Collector Fleet Inventory
+  type: Function
+  definition: >
+    Maintains a live register of deployed telemetry collection agents and pipeline components — identity,
+    grouping, version, and reported state — as the management view of the telemetry estate.
+  aliases: [agent fleet inventory, telemetry fleet register]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-11}
+  source: ADR 0032
+
+- id: FUNC-collector-enrollment
+  term: Collector Enrollment
+  type: Function
+  definition: >
+    Bootstraps trust between a telemetry collection or pipeline component and its management plane at
+    first contact — registration, identity binding, and credential establishment — so the component can be
+    managed remotely. Credential issuance itself is CAP-SEC-3.
+  aliases: [agent registration, agent onboarding]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-11}
+  source: ADR 0032
+
+- id: FUNC-opamp-remote-management
+  term: OpAMP Remote Management
+  type: Function
+  definition: >
+    Manages telemetry agents remotely via the Open Agent Management Protocol — standardized remote
+    configuration exchange with applied/failed status reporting, package and version management, health
+    reporting, and connection-settings management. Named-standard function (the standard is the function);
+    the OpAMP specification is Beta as of 2026-08 — re-verify status when binding.
+  aliases: [OpAMP, Open Agent Management Protocol]
+  relates_to:
+    - {rel: supports, target: CAP-OBS-11}
+  source: ADR 0032

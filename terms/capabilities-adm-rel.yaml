@@ -1,0 +1,55 @@
+# ITPRA ontology — ADM-REL (Application Release Coordination) capabilities
+# type: Capability. ids CAP-ADM-REL-<n>. Grouped under domain ADM-REL (ADR 0021). CONSUMER-side: plans &
+# coordinates what ships and when; the pipeline that EXECUTES build/deploy + supply-chain is the platform's (ITO
+# DEL), consumed not owned (ADR 0021).
+
+- id: CAP-ADM-REL-1
+  term: Release Planning & Scheduling
+  type: Capability
+  definition: >
+    Plans what application change ships and when — release scope, content, and sequencing across the
+    application's roadmap — so delivery is intentional and predictable rather than opportunistic.
+  relates_to:
+    - {rel: grouped_by, target: ADM-REL}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+    - {rel: consumed_by, target: PERSONA-adm-business-owner}
+  source: ADR 0021
+
+- id: CAP-ADM-REL-2
+  term: Cross-Team & Dependency Coordination
+  type: Capability
+  definition: >
+    Coordinates a release across the teams and applications it depends on — surfacing and sequencing
+    inter-team and cross-application dependencies — so a release is not blocked or broken by an unmanaged
+    dependency.
+  relates_to:
+    - {rel: grouped_by, target: ADM-REL}
+    - {rel: depends_on, target: CAP-ADM-REL-1}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+  source: ADR 0021
+
+- id: CAP-ADM-REL-3
+  term: Release Readiness & Go/No-Go Decisioning
+  type: Capability
+  definition: >
+    Decides whether a release is ready to ship — evaluating it against the quality bar, dependency status,
+    and risk — and records an accountable go/no-go decision, so only releases that meet the bar proceed.
+  relates_to:
+    - {rel: grouped_by, target: ADM-REL}
+    - {rel: depends_on, target: CAP-ADM-REL-2}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+    - {rel: consumed_by, target: PERSONA-adm-app-assurance}
+  source: ADR 0021
+
+- id: CAP-ADM-REL-4
+  term: Progressive Rollout & Release Verification
+  type: Capability
+  definition: >
+    Rolls the application change out progressively and verifies it in the target environment — staged
+    exposure, in-flight verification, and rollback on failure — so a release is proven healthy before it
+    reaches everyone. Executes via the consumed platform delivery path.
+  relates_to:
+    - {rel: grouped_by, target: ADM-REL}
+    - {rel: depends_on, target: CAP-ADM-REL-3}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+  source: ADR 0021

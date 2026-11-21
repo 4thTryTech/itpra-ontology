@@ -1,0 +1,76 @@
+# ITPRA ontology — DEL (Software Delivery) capabilities
+# type: Capability. ids CAP-DEL-<n>. Grouped under domain DEL (ADR 0017).
+
+- id: CAP-DEL-1
+  term: Continuous Integration Pipeline
+  type: Capability
+  definition: >
+    Builds, tests, and packages services through automated pipelines, producing versioned deployable
+    units from source changes.
+  relates_to:
+    - {rel: grouped_by, target: DEL}
+    - {rel: depends_on, target: CAP-FND-3}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+  source: ADR 0017
+
+- id: CAP-DEL-2
+  term: Deployment & Promotion
+  type: Capability
+  definition: >
+    Deploys and promotes service versions across environments in a controlled manner, advancing changes
+    through defined stages with gates. Supports progressive exposure of a change to a growing audience and
+    runtime toggling of behavior, so risk is contained and a bad change is limited or reversed quickly.
+  aliases: [progressive delivery, feature flagging, canary release, blue-green deployment, staged rollout]
+  relates_to:
+    - {rel: grouped_by, target: DEL}
+    - {rel: depends_on, target: CAP-DEL-1}
+    - {rel: depends_on, target: CAP-FND-1}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+  source: ADR 0017
+
+- id: CAP-DEL-3
+  term: Supply-Chain Integrity Verification
+  type: Capability
+  definition: >
+    Verifies the supply-chain integrity of artifacts before deployment — provenance, signatures, and
+    attestations — so only trusted units are released.
+  relates_to:
+    - {rel: grouped_by, target: DEL}
+    - {rel: depends_on, target: CAP-FND-3}
+    - {rel: consumed_by, target: PERSONA-security-compliance}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+  source: ADR 0017
+
+- id: CAP-DEL-4
+  term: Release Rollback & Roll-Forward
+  type: Capability
+  definition: >
+    Enables rollback or roll-forward to a known-good service version, restoring a healthy release quickly
+    after a bad change. Constrained by executions still open against the superseded version: returning to a
+    known-good version is not safe on its own while runs are in flight, so each open execution continues on a
+    version able to complete it, or is explicitly drained, migrated, or terminated
+    (FUNC-execution-version-compatibility; ADR 0039).
+  relates_to:
+    - {rel: grouped_by, target: DEL}
+    - {rel: depends_on, target: CAP-DEL-2}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+  source: ADR 0017
+
+- id: CAP-DEL-5
+  term: Code Quality Analysis
+  type: Capability
+  definition: >
+    Statically analyzes source code for quality and maintainability — bugs, code smells, complexity,
+    duplication, coverage, and standards conformance — and gates the pipeline on defined quality thresholds.
+    A quality gate distinct from application security testing (CAP-SEC-9) and from the CI pipeline's
+    functional tests (CAP-DEL-1).
+  aliases: [static code analysis, code quality gates, linting]
+  relates_to:
+    - {rel: grouped_by, target: DEL}
+    - {rel: depends_on, target: CAP-DEL-1}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+  source: ADR 0017

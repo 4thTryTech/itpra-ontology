@@ -1,0 +1,75 @@
+# ITPRA ontology — FUNCTION library, NET-RES (Network Resilience & Continuity)
+# type: Function. ids FUNC-net-<slug>. T1-neutral; a function MAY name a standard/technique where that IS the
+# function (ADR 0011). See ADR 0023.
+
+- id: FUNC-net-multi-homing
+  term: Multi-Homing
+  type: Function
+  definition: Connects a site or edge to more than one transport or provider for diverse, redundant reachability.
+  aliases: [dual-homing, multi-provider connectivity, BGP multihoming]
+  relates_to:
+    - {rel: supports, target: CAP-NET-RES-1}
+  source: ADR 0023
+
+- id: FUNC-net-path-diversity
+  term: Physical & Logical Path Diversity
+  type: Function
+  definition: Ensures critical paths use physically and logically separate routes so one failure cannot take all.
+  aliases: [diverse routing, carrier diversity, separate conduits]
+  relates_to:
+    - {rel: supports, target: CAP-NET-RES-1}
+  source: ADR 0023
+
+- id: FUNC-net-failover-orchestration
+  term: Failover Orchestration
+  type: Function
+  definition: Detects failure and shifts traffic to a healthy path with fast, stable convergence.
+  aliases: [gateway redundancy, fast reroute, convergence control]
+  relates_to:
+    - {rel: supports, target: CAP-NET-RES-2}
+  source: ADR 0023
+
+- id: FUNC-net-liveness-detection
+  term: Path Liveness Detection
+  type: Function
+  definition: Rapidly detects loss of a path or neighbor to trigger failover before sessions time out.
+  aliases: [bidirectional forwarding detection, BFD, fast keepalive]
+  relates_to:
+    - {rel: supports, target: CAP-NET-RES-2}
+  source: ADR 0023
+
+- id: FUNC-net-load-distribution
+  term: Load Distribution
+  type: Function
+  definition: Distributes traffic across available paths and devices to use capacity and avoid hot spots.
+  aliases: [equal-cost multipath, link aggregation, load balancing]
+  relates_to:
+    - {rel: supports, target: CAP-NET-RES-3}
+  source: ADR 0023
+
+- id: FUNC-net-capacity-headroom
+  term: Capacity Headroom Management
+  type: Function
+  definition: Maintains spare capacity so a failure does not overload the surviving paths.
+  aliases: [N+1 capacity, headroom planning]
+  relates_to:
+    - {rel: supports, target: CAP-NET-RES-3}
+  source: ADR 0023
+
+- id: FUNC-net-failover-testing
+  term: Failover Testing & Verification
+  type: Function
+  definition: Exercises and verifies failover and recovery so resilience is proven, not assumed.
+  aliases: [resilience testing, failover drill, chaos test]
+  relates_to:
+    - {rel: supports, target: CAP-NET-RES-4}
+  source: ADR 0023
+
+- id: FUNC-net-connectivity-recovery
+  term: Connectivity Recovery
+  type: Function
+  definition: Restores enterprise connectivity to a known-good state after a failure event.
+  aliases: [network recovery, restore-to-known-good]
+  relates_to:
+    - {rel: supports, target: CAP-NET-RES-4}
+  source: ADR 0023

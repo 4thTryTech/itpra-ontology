@@ -1,0 +1,154 @@
+# ITPRA ontology — service domains
+# The domains of IT services in the enterprise landscape (TBM-tower / SIAM-tower style). Eleven peer service
+# domains, each authored as its own architecture in this framework. Each service domain has its own capability
+# domains (distinct from a capability DOMAIN, which is the finer-grained grouping inside a service domain — e.g.
+# SD-IT-OPERATIONS groups FND/SUB/AUT/DEL/SEC/OBS/RES/COST/DATA/EXP/GOV). Service domains `interfaces_with` each
+# other across capability planes (a C4 system-context boundary). Web-grounded in the TBM Council Resource
+# Towers, the SIAM tower model, and the ITIL core IT functions. Ratified by ADR 0009. type: ServiceDomain.
+
+- id: SD-IT-OPERATIONS
+  term: IT Operations
+  type: ServiceDomain
+  definition: >
+    The IT service domain that owns and operates the infrastructure platform — its capability domains,
+    capabilities, functions, journeys, personas, and requirements. One of eleven peer IT service domains in
+    the framework. Per Gartner, the people and processes that run IT services and infrastructure; per ITIL,
+    one of the core IT functions alongside application management and the service desk.
+  aliases: [ITOps, infrastructure and operations, I&O, IT operations and infrastructure]
+  source: ADR 0009
+
+# --- Service domains -------------------------------------------------------------------------------------
+- id: SD-END-USER
+  term: End-User Computing
+  type: ServiceDomain
+  definition: >
+    The workforce computing experience outside the platform — endpoints, mobile and workspace devices, and
+    the productivity/collaboration tooling people use. Platform consumers reach the platform's self-service
+    surface from here; the platform does not manage end-user devices. TBM "End User" / "Smart Devices" towers.
+  aliases: [end user computing, workplace services, EUC, digital workplace]
+  relates_to:
+    - {rel: interfaces_with, target: PLANE-EXPERIENCE}
+  source: ADR 0009
+
+- id: SD-SERVICE-DESK
+  term: Service Desk
+  type: ServiceDomain
+  definition: >
+    The single point of contact for users to report issues and raise requests, triaging and routing across
+    all service domains. It sits across the domains (front-line support) rather than inside the platform; the
+    platform exposes neutral request and incident points it integrates with. SIAM front-line service desk.
+  aliases: [help desk, support desk, single point of contact]
+  relates_to:
+    - {rel: interfaces_with, target: PLANE-GOVERNANCE}
+    - {rel: interfaces_with, target: PLANE-EXPERIENCE}
+  source: ADR 0009
+
+- id: SD-FIELD-SUPPORT
+  term: Onsite / Field Support
+  type: ServiceDomain
+  definition: >
+    Hands-on, physically-present support — deskside assistance, smart hands at a site or facility, and field
+    work the platform's remote automation cannot perform. Adjacent labor the platform may depend on but does
+    not provide. SIAM/TBM distributed/on-site support.
+  aliases: [field support, onsite support, deskside support, smart hands]
+  relates_to:
+    - {rel: interfaces_with, target: PLANE-RESOURCE}
+    - {rel: interfaces_with, target: PLANE-OPERATIONS}
+  source: ADR 0009
+
+- id: SD-APP-DEV
+  term: Application Development & Maintenance
+  type: ServiceDomain
+  definition: >
+    The teams and practices that build and maintain the business applications/workloads that RUN ON the
+    platform. They are platform consumers (their apps are the demand the platform serves); the platform
+    delivers and hosts those apps but does not own their application logic. TBM "Application" / ADM; ITIL
+    application management.
+  aliases: [ADM, application management, app dev and maintenance, business applications]
+  relates_to:
+    - {rel: interfaces_with, target: PLANE-DELIVERY}
+    - {rel: interfaces_with, target: PLANE-EXPERIENCE}
+  source: ADR 0009
+
+- id: SD-DATACENTER
+  term: Data Center & Facilities
+  type: ServiceDomain
+  definition: >
+    The physical hosting environment the platform runs on — buildings, power, cooling, racks, cabling, and
+    physical security. The platform provisions compute/network/storage on top of it but does not manage the
+    facility itself (a T3/facilities or provider concern). TBM "Data Center" tower.
+  aliases: [datacenter, facilities, colocation, physical hosting]
+  relates_to:
+    - {rel: interfaces_with, target: PLANE-RESOURCE}
+  source: ADR 0009
+
+- id: SD-NETWORK
+  term: Network & Connectivity
+  type: ServiceDomain
+  definition: >
+    The enterprise network beyond the platform's own substrate networking — corporate WAN, internet edge,
+    site-to-site and remote connectivity that links users, offices, and the platform. The platform consumes
+    this connectivity; the platform's in-cluster/in-fabric networking is its own SUB capability. TBM "Network".
+  aliases: [enterprise network, WAN, connectivity, telecom]
+  relates_to:
+    - {rel: interfaces_with, target: PLANE-RESOURCE}
+  source: ADR 0009
+
+- id: SD-SECURITY-GRC
+  term: Enterprise Security, Risk & Compliance
+  type: ServiceDomain
+  definition: >
+    The enterprise-wide security operations and governance/risk/compliance functions the platform operates
+    under — security operations center, corporate identity authority, audit, and risk/compliance oversight.
+    The platform has its own SEC capabilities and produces evidence to these functions; they set the
+    guardrails it runs within. TBM "Security" + "Risk & Compliance".
+  aliases: [enterprise security, GRC, SOC, risk and compliance, corporate identity]
+  relates_to:
+    - {rel: interfaces_with, target: PLANE-SECURITY}
+    - {rel: interfaces_with, target: PLANE-GOVERNANCE}
+  source: ADR 0009
+
+- id: SD-SERVICE-MGMT
+  term: IT Service Management & Integration
+  type: ServiceDomain
+  definition: >
+    The cross-domain management and service-integration wrapper that coordinates, governs, and assures
+    multiple service providers/domains end-to-end (a service integrator / retained organization). The
+    platform's governance constructs map into whichever model this wrapper uses — but that mapping is a T2
+    concern; at T1 it is an adjacent function, not platform vocabulary. TBM "Tech Management" + SIAM.
+  aliases: [ITSM, service management, service integration, SIAM, retained organization]
+  relates_to:
+    - {rel: interfaces_with, target: PLANE-GOVERNANCE}
+  source: ADR 0009
+
+# --- Service domains added by ADR 0009 (the analytics/experience disciplines) ---------------------------
+- id: SD-BUSINESS-ANALYTICS
+  term: Business Intelligence & Analytics
+  type: ServiceDomain
+  definition: >
+    The business data and insight discipline — data integration/warehousing, semantic layer, reporting,
+    self-service analytics, data science, data quality, master/reference data, data governance, and
+    product/user behavior analytics. It consumes the platform's data substrate and operational telemetry but
+    owns business data governance and insight, distinct from the platform's operational Data & Analytics
+    (DATA) and Observability (OBS). Where product/user behavior analytics lives — distinct from security UEBA
+    (CAP-SEC-7) and AIOps (CAP-OBS-6). DAMA-DMBOK discipline; TBM business-analytics solution + Data tower.
+  aliases: [BI, business intelligence, analytics, data analytics, product analytics]
+  relates_to:
+    - {rel: interfaces_with, target: PLANE-RESOURCE}
+    - {rel: interfaces_with, target: PLANE-EXPERIENCE}
+  source: ADR 0009
+
+- id: SD-DIGITAL-EXPERIENCE
+  term: Digital Experience & Channels
+  type: ServiceDomain
+  definition: >
+    The customer-facing digital experience discipline — composition, management, delivery, and optimization
+    of contextualized digital experiences across channels (content management, personalization, customer
+    journey orchestration, customer data, experimentation, digital commerce). Its consumers are external
+    customers; it runs ON the platform but the platform does not own its experience logic. Explicitly NOT
+    Digital Experience Monitoring (CAP-OBS-9), which observes end-user experience. Gartner DXP market.
+  aliases: [digital experience, DXP, digital experience platform, digital channels, customer experience, omnichannel]
+  relates_to:
+    - {rel: interfaces_with, target: PLANE-EXPERIENCE}
+    - {rel: interfaces_with, target: PLANE-DELIVERY}
+  source: ADR 0009

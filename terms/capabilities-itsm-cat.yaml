@@ -1,0 +1,57 @@
+# ITPRA ontology — ITSM-CAT (Service Catalog & Portfolio Coordination) capabilities
+# type: Capability. ids CAP-ITSM-CAT-<n>. Grouped under domain ITSM-CAT (ADR 0025); environment expression per
+# ADR 0014. Neutral cross-provider coordination over GC-CATALOG / GC-OWNERSHIP / GC-RECORD.
+
+- id: CAP-ITSM-CAT-1
+  term: End-to-End Service Catalog
+  type: Capability
+  definition: >
+    Presents the enterprise's requestable services as one consumer-facing catalog — each offer described with
+    what it is, who owns it, and the conditions of its fulfillment — regardless of how many providers stand
+    behind it, so a consumer can discover and select a service without knowing the provider topology.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-CAT}
+    - {rel: consumed_by, target: PERSONA-itsm-consumer}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+  source: ADR 0025
+
+- id: CAP-ITSM-CAT-2
+  term: Service Portfolio Coordination
+  type: Capability
+  definition: >
+    Maintains the full lifecycle view of all services across providers — pipeline (in development), live (in
+    the catalog), and retired — and coordinates the decisions to introduce, keep, change, or retire a service,
+    so the offered set stays aligned to enterprise need and no service exists without a reason.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-CAT}
+    - {rel: consumed_by, target: PERSONA-itsm-service-owner}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+  source: ADR 0025
+
+- id: CAP-ITSM-CAT-3
+  term: Service Definition & Offer Coordination
+  type: Capability
+  definition: >
+    Coordinates, with each service's owner and contributing providers, the definition of an offer — its
+    fulfillment conditions, the contributing providers and their steps, and its published presentation — so an
+    offer is consistent, accurate, and ready to be requested and committed to before it appears live.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-CAT}
+    - {rel: depends_on, target: CAP-ITSM-CAT-2}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-service-owner}
+  source: ADR 0025
+
+- id: CAP-ITSM-CAT-4
+  term: End-to-End Service Ownership Mapping
+  type: Capability
+  definition: >
+    Maintains the authoritative map of who owns and who contributes to each end-to-end service across its
+    providers — the accountable owner and the responsible providers per service — so every service, request,
+    commitment, and change has a clear owner and the right providers can be engaged across boundaries.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-CAT}
+    - {rel: depends_on, target: CAP-ITSM-CAT-1}
+    - {rel: consumed_by, target: PERSONA-itsm-service-owner}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+  source: ADR 0025

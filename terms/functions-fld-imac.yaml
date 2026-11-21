@@ -1,0 +1,81 @@
+# ITPRA ontology — FUNCTION library, FLD-IMAC (Install · Move · Add · Change)
+# type: Function. ids FUNC-fld-<slug>. Functions `support` ≥1 capability. See ADR 0020.
+
+# Physical install & commissioning (CAP-FLD-IMAC-1)
+- id: FUNC-fld-rack-and-stack
+  term: Rack & Stack Installation
+  type: Function
+  definition: Physically racks, mounts, cables, and powers new equipment into position.
+  aliases: [rack-and-stack, physical installation]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-IMAC-1}
+  source: ADR 0020
+
+- id: FUNC-fld-commissioning-check
+  term: Commissioning & Bring-Up Check
+  type: Function
+  definition: Brings installed equipment to a working state and verifies it before handover.
+  aliases: [bring-up, commissioning]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-IMAC-1}
+  source: ADR 0020
+
+# Asset move & relocation (CAP-FLD-IMAC-2)
+- id: FUNC-fld-asset-relocation
+  term: Asset Relocation
+  type: Function
+  definition: De-cables, transports, and re-installs equipment at a new position or site with minimal downtime.
+  aliases: [equipment move, relocation]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-IMAC-2}
+  source: ADR 0020
+
+- id: FUNC-fld-location-record-update
+  term: Location Record Update
+  type: Function
+  definition: Reports the asset's new location back to the asset record of truth after a move.
+  aliases: [move record update, location reconciliation]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-IMAC-2}
+    - {rel: supports, target: CAP-FLD-IMAC-4}
+  source: ADR 0020
+
+# On-site add & expansion (CAP-FLD-IMAC-3)
+- id: FUNC-fld-onsite-expansion
+  term: On-Site Add & Expansion
+  type: Function
+  definition: Installs additional units, components, peripherals, or cabling and checks physical compatibility.
+  aliases: [capacity add, expansion install]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-IMAC-3}
+  source: ADR 0020
+
+# On-site change & reconfiguration (CAP-FLD-IMAC-4)
+- id: FUNC-fld-onsite-reconfiguration
+  term: On-Site Reconfiguration
+  type: Function
+  definition: Performs the authorized physical change in place — re-cable, upgrade, reposition, or reconfigure.
+  aliases: [physical change execution, in-place reconfiguration]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-IMAC-4}
+  source: ADR 0020
+
+# De-install & disposal handover (CAP-FLD-IMAC-5)
+- id: FUNC-fld-deinstall
+  term: De-Install & Removal
+  type: Function
+  definition: Disconnects and removes equipment from its position at end of life or relocation.
+  aliases: [decommission removal, de-install]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-IMAC-5}
+  source: ADR 0020
+
+- id: FUNC-fld-disposal-handover
+  term: Disposal / Return Handover
+  type: Function
+  definition: Hands removed equipment into the disposal, recycling, or return path against any data-sanitization requirement.
+  aliases: [disposal handover, return handover]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-IMAC-5}
+    - {rel: supports, target: CAP-FLD-FIX-5}
+  source: ADR 0020

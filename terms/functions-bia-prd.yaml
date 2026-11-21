@@ -1,0 +1,48 @@
+# ITPRA ontology — FUNCTION library, BIA-PRD (Product & User-Behavior Analytics)
+# type: Function. ids FUNC-bia-<slug>. T1-neutral (ADR 0011). Business product insight; distinct from security
+# UEBA & operational AIOps (ADR 0026). Functions `support` ≥1 capability. See ADR 0026.
+
+- id: FUNC-bia-event-instrumentation
+  term: Event Instrumentation & Taxonomy
+  type: Function
+  definition: Captures product/usage events against a governed event taxonomy with consistent definitions.
+  aliases: [event tracking, behavioral instrumentation, tracking plan]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-PRD-1}
+  source: ADR 0026
+
+- id: FUNC-bia-funnel-analysis
+  term: Funnel & Conversion Analysis
+  type: Function
+  definition: Analyzes progression and drop-off across a defined product journey or conversion funnel.
+  aliases: [funnel analytics, conversion analysis, path analysis]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-PRD-2}
+  source: ADR 0026
+
+- id: FUNC-bia-cohort-analysis
+  term: Cohort & Retention Analysis
+  type: Function
+  definition: Groups users into cohorts and measures retention, engagement, and behavior over time.
+  aliases: [retention analysis, cohort analytics, engagement analysis]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-PRD-3}
+  source: ADR 0026
+
+- id: FUNC-bia-ab-test-measurement
+  term: Experiment Measurement
+  type: Function
+  definition: Measures controlled experiments (e.g. A/B tests) for statistically sound effect estimates.
+  aliases: [A/B test analysis, experiment analytics]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-PRD-4}
+  source: ADR 0026
+
+- id: FUNC-bia-insight-activation
+  term: Insight Activation
+  type: Function
+  definition: Feeds product/behavioral insight back into product and business decisions and downstream surfaces.
+  aliases: [reverse insight, decision feedback]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-PRD-4}
+  source: ADR 0026

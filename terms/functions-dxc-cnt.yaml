@@ -1,0 +1,110 @@
+# ITPRA ontology — FUNCTION library, DXC-CNT (Content Management & Composition)
+# type: Function. ids FUNC-dxc-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
+# the function (ADR 0011). Functions `support` >=1 capability (many-to-many). See ADR 0027.
+
+# Structured content modeling & authoring (CAP-DXC-CNT-1)
+- id: FUNC-dxc-content-modeling
+  term: Structured Content Modeling
+  type: Function
+  definition: Defines reusable content types and structured components decoupled from presentation.
+  aliases: [content type modeling, structured content, content schema]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-CNT-1}
+  source: ADR 0027
+
+- id: FUNC-dxc-content-authoring
+  term: Content Authoring & Editing
+  type: Function
+  definition: Lets practitioners create, edit, and translate structured content independent of channel.
+  aliases: [authoring, editorial, localization, translation]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-CNT-1}
+  source: ADR 0027
+
+# Experience composition & assembly (CAP-DXC-CNT-2)
+- id: FUNC-dxc-experience-composition
+  term: Experience Composition
+  type: Function
+  definition: Assembles a deliverable experience (page/screen/view) from modular content and components.
+  aliases: [page composition, layout assembly, visual composition]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-CNT-2}
+  source: ADR 0027
+
+- id: FUNC-dxc-content-preview
+  term: Content Preview & Staging
+  type: Function
+  definition: Previews composed experiences in context and stages them before publish.
+  aliases: [preview, staging, draft preview]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-CNT-2}
+    - {rel: supports, target: CAP-DXC-CNT-4}
+  source: ADR 0027
+
+# Digital asset management (CAP-DXC-CNT-3)
+- id: FUNC-dxc-asset-library
+  term: Digital Asset Library
+  type: Function
+  definition: Ingests, stores, versions, and retrieves digital assets with metadata and controlled vocabulary.
+  aliases: [asset repository, media library, DAM repository]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-CNT-3}
+  source: ADR 0027
+
+- id: FUNC-dxc-asset-rights
+  term: Asset Rights & Usage Tracking
+  type: Function
+  definition: Tracks rights, licensing, and usage of digital assets across the experience.
+  aliases: [rights management, usage rights, license tracking]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-CNT-3}
+  source: ADR 0027
+
+# Content workflow & governance (CAP-DXC-CNT-4)
+- id: FUNC-dxc-editorial-workflow
+  term: Editorial Workflow
+  type: Function
+  definition: Routes content through review, approval, scheduling, and publish stages with accountability.
+  aliases: [content workflow, approval workflow, publishing workflow]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-CNT-4}
+  source: ADR 0027
+
+- id: FUNC-dxc-content-provenance
+  term: Content Provenance
+  type: Function
+  definition: Records how a content item came to exist - including whether it was machine-generated and from what - and presents that record at the publish decision point and on later review. Distinct from rights tracking (what may be used), from platform-component and deployable-artifact provenance (different objects), and from runtime retrieval citation (a different object at a different time). The record is evidence informing an accountable person's gate, not proof replacing it; what the record must contain, and whether cryptographic content credentials carry it, bind at T2/T3 (ADR 0036).
+  aliases: [content origin record, authoring provenance, generated-content disclosure, content credentials]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-CNT-4}
+    - {rel: applies_to, target: AUTON-ACTOR}
+  source: ADR 0036
+
+- id: FUNC-dxc-brand-compliance-check
+  term: Brand & Editorial Compliance Check
+  type: Function
+  definition: Validates content against brand, editorial, and accessibility standards before publish.
+  aliases: [brand compliance, editorial governance, content compliance]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-CNT-4}
+  source: ADR 0027
+
+# Multi-channel content delivery & syndication (CAP-DXC-CNT-5)
+- id: FUNC-dxc-content-api
+  term: Content Delivery API
+  type: Function
+  definition: Serves managed content to consuming channels on demand via content services (e.g. REST/GraphQL).
+  aliases: [content API, headless delivery, content services]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-CNT-5}
+    - {rel: supports, target: CAP-DXC-CHN-2}
+  source: ADR 0027
+
+- id: FUNC-dxc-content-syndication
+  term: Content Syndication
+  type: Function
+  definition: Publishes the same managed content across multiple channels and destinations consistently.
+  aliases: [create-once publish-everywhere, multi-channel publishing]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-CNT-5}
+  source: ADR 0027

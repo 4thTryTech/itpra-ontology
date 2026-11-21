@@ -1,0 +1,60 @@
+# ITPRA ontology — BIA-SEM (Semantic Layer & Self-Service Analytics) capabilities
+# type: Capability. ids CAP-BIA-SEM-<n>. Grouped under domain BIA-SEM (ADR 0026). Experience-plane
+# (consumer-facing) group.
+
+- id: CAP-BIA-SEM-1
+  term: Semantic & Metrics Model
+  type: Capability
+  definition: >
+    Maintains a single, governed definition of business metrics, dimensions, and entities between the
+    analytical store and consuming surfaces, so every report, query, and analysis computes the same metric the
+    same way — define once, use everywhere. Its entities and terms take their meaning from the governing
+    semantic model (CAP-BIA-GOV-7); it serves those definitions as a queryable interface to every consuming
+    surface, including delegated actors (AUTON-ACTOR) and, where chosen, consumers across an organisational
+    boundary (ADR 0037).
+  relates_to:
+    - {rel: grouped_by, target: BIA-SEM}
+    - {rel: depends_on, target: CAP-BIA-WHS-3}
+    - {rel: depends_on, target: CAP-BIA-GOV-7}
+    - {rel: consumed_by, target: PERSONA-bia-analytics-team}
+    - {rel: consumed_by, target: PERSONA-bia-insight-consumer}
+  source: ADR 0026
+
+- id: CAP-BIA-SEM-2
+  term: Governed Self-Service Exploration
+  type: Capability
+  definition: >
+    Lets business consumers build their own analyses and answer their own questions within guardrails —
+    against governed semantic definitions and permitted data — so insight scales without every request
+    routing through a specialist.
+  relates_to:
+    - {rel: grouped_by, target: BIA-SEM}
+    - {rel: depends_on, target: CAP-BIA-SEM-1}
+    - {rel: consumed_by, target: PERSONA-bia-insight-consumer}
+  source: ADR 0026
+
+- id: CAP-BIA-SEM-3
+  term: Data Catalog & Discovery
+  type: Capability
+  definition: >
+    Provides a searchable catalog of data products, metrics, and reports with their descriptions, ownership,
+    and trust signals, so consumers can find and assess trustworthy data without tribal knowledge.
+  relates_to:
+    - {rel: grouped_by, target: BIA-SEM}
+    - {rel: consumed_by, target: PERSONA-bia-insight-consumer}
+    - {rel: consumed_by, target: PERSONA-bia-data-scientist}
+  source: ADR 0026
+
+- id: CAP-BIA-SEM-4
+  term: Data Product Certification
+  type: Capability
+  definition: >
+    Distinguishes certified, trustworthy data products and metrics from exploratory ones through a governed
+    promotion and endorsement signal, so consumers know which assets are safe for decisions and which are
+    work-in-progress.
+  relates_to:
+    - {rel: grouped_by, target: BIA-SEM}
+    - {rel: depends_on, target: CAP-BIA-SEM-3}
+    - {rel: consumed_by, target: PERSONA-bia-data-steward}
+    - {rel: consumed_by, target: PERSONA-bia-insight-consumer}
+  source: ADR 0026

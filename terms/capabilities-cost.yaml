@@ -1,0 +1,42 @@
+# ITPRA ontology — COST (Cost & Capacity) capabilities
+# type: Capability. ids CAP-COST-<n>. Grouped under domain COST (ADR 0017).
+
+- id: CAP-COST-1
+  term: Cost Attribution & Showback
+  type: Capability
+  definition: >
+    Attributes resource consumption and cost to tenants and services, making spend transparent and
+    chargeable/showable to those who incur it. Token and inference spend follows this same
+    consumption-to-attribution pattern and is in scope here: the unit differs, the capability does not
+    (metered by FUNC-token-usage-metering at the model gateway, CAP-SUB-8; ADR 0033).
+  relates_to:
+    - {rel: grouped_by, target: COST}
+    - {rel: depends_on, target: CAP-OBS-1}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+  source: ADR 0017
+
+- id: CAP-COST-2
+  term: Capacity Planning
+  type: Capability
+  definition: >
+    Reports current and forecast capacity against demand, so the platform can stay ahead of growth without
+    over-provisioning.
+  relates_to:
+    - {rel: grouped_by, target: COST}
+    - {rel: depends_on, target: CAP-OBS-1}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+  source: ADR 0017
+
+- id: CAP-COST-3
+  term: Optimization Recommendations
+  type: Capability
+  definition: >
+    Surfaces optimization opportunities for cost and utilization, identifying waste and right-sizing
+    actions for decision-makers to act on.
+  relates_to:
+    - {rel: grouped_by, target: COST}
+    - {rel: depends_on, target: CAP-COST-1}
+    - {rel: depends_on, target: CAP-COST-2}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+  source: ADR 0017

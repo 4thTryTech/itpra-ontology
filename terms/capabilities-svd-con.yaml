@@ -1,0 +1,69 @@
+# ITPRA ontology — SVD-CON (Contact & Intake Channels) capabilities
+# type: Capability. ids CAP-SVD-CON-<n>. Grouped under domain SVD-CON (ADR 0019); environment expression per ADR
+# 0014.
+
+- id: CAP-SVD-CON-1
+  term: Multi-Channel Contact Intake
+  type: Capability
+  definition: >
+    Receives contacts from users across the channels they choose to use, presenting one coherent front door
+    so a user can reach the single point of contact however they reach out, without the channel changing
+    what the desk can do.
+  relates_to:
+    - {rel: grouped_by, target: SVD-CON}
+    - {rel: consumed_by, target: PERSONA-svd-requester}
+    - {rel: consumed_by, target: PERSONA-svd-agent}
+  source: ADR 0019
+
+- id: CAP-SVD-CON-2
+  term: Unified Contact Queue & Record
+  type: Capability
+  definition: >
+    Consolidates contacts from every channel into one managed queue with a single authoritative record per
+    contact, so nothing is missed, work is visible in one place, and the contact's state stays trustworthy
+    from intake to closure.
+  relates_to:
+    - {rel: grouped_by, target: SVD-CON}
+    - {rel: depends_on, target: CAP-SVD-CON-1}
+    - {rel: consumed_by, target: PERSONA-svd-agent}
+  source: ADR 0019
+
+- id: CAP-SVD-CON-3
+  term: Requester Identity & Entitlement Verification
+  type: Capability
+  definition: >
+    Establishes who is contacting the desk and what they are entitled to at the point of intake, so the
+    contact is attributed to the right requester and handled within the entitlements and segment that apply
+    to them.
+  relates_to:
+    - {rel: grouped_by, target: SVD-CON}
+    - {rel: depends_on, target: CAP-SVD-CON-1}
+    - {rel: consumed_by, target: PERSONA-svd-requester}
+    - {rel: consumed_by, target: PERSONA-svd-agent}
+  source: ADR 0019
+
+- id: CAP-SVD-CON-4
+  term: Contact Context Capture
+  type: Capability
+  definition: >
+    Captures the context of the contact at intake — what the user is experiencing, the affected service,
+    and the relevant history — so the contact can be triaged and resolved without the user having to repeat
+    themselves.
+  relates_to:
+    - {rel: grouped_by, target: SVD-CON}
+    - {rel: depends_on, target: CAP-SVD-CON-2}
+    - {rel: consumed_by, target: PERSONA-svd-agent}
+  source: ADR 0019
+
+- id: CAP-SVD-CON-5
+  term: Channel & Session Continuity
+  type: Capability
+  definition: >
+    Carries a contact's identity, context, and history across channels and sessions, so a user who moves
+    from one channel to another — or returns later — continues the same conversation rather than starting
+    over. The neutral capability behind a seamless multi-channel experience.
+  relates_to:
+    - {rel: grouped_by, target: SVD-CON}
+    - {rel: depends_on, target: CAP-SVD-CON-2}
+    - {rel: consumed_by, target: PERSONA-svd-requester}
+  source: ADR 0019

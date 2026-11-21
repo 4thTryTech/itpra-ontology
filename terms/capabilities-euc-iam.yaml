@@ -1,0 +1,58 @@
+# ITPRA ontology — EUC-IAM (Workforce Identity & Access) capabilities
+# type: Capability. ids CAP-EUC-IAM-<n>. End-user-facing identity/access; consumes the enterprise identity of
+# record — does not own the directory of record or workload identity (ITO SEC); see ADR 0018.
+
+- id: CAP-EUC-IAM-1
+  term: Workforce Access Onboarding
+  type: Capability
+  definition: >
+    Establishes a workforce member's access to their workplace resources — provisioning entitlements by role
+    on joining and adjusting them on change — so a user has exactly the access their role requires, no more.
+  relates_to:
+    - {rel: grouped_by, target: EUC-IAM}
+    - {rel: consumed_by, target: PERSONA-euc-workforce-user}
+    - {rel: consumed_by, target: PERSONA-euc-support-agent}
+    - {rel: consumed_by, target: PERSONA-euc-security-compliance}
+  source: ADR 0018
+
+- id: CAP-EUC-IAM-2
+  term: Sign-In Experience (Multi-Factor & Single Sign-On)
+  type: Capability
+  definition: >
+    Provides the workforce user a secure, low-friction sign-in to their workplace resources — strong
+    multi-factor authentication and single sign-on across the applications they are entitled to — so identity
+    is verified strongly while credentials are entered rarely.
+  relates_to:
+    - {rel: grouped_by, target: EUC-IAM}
+    - {rel: consumed_by, target: PERSONA-euc-workforce-user}
+    - {rel: consumed_by, target: PERSONA-euc-security-compliance}
+  source: ADR 0018
+
+- id: CAP-EUC-IAM-3
+  term: Device-Posture-Conditioned Access
+  type: Capability
+  definition: >
+    Gates access to workplace resources on the verified posture of the requesting device and the context of
+    the request — admitting, restricting, or denying based on device compliance and risk signals — so access
+    follows the health of the endpoint, not just the identity.
+  relates_to:
+    - {rel: grouped_by, target: EUC-IAM}
+    - {rel: depends_on, target: CAP-EUC-SEC-4}
+    - {rel: depends_on, target: CAP-EUC-IAM-2}
+    - {rel: consumed_by, target: PERSONA-euc-security-compliance}
+    - {rel: consumed_by, target: PERSONA-euc-workforce-user}
+  source: ADR 0018
+
+- id: CAP-EUC-IAM-4
+  term: Self-Service Credential & Access Recovery
+  type: Capability
+  definition: >
+    Lets a workforce user securely recover or reset their own credentials and recover routine access without
+    an agent — verified self-service password/credential reset and access unlock — reducing lockout downtime
+    and support load.
+  relates_to:
+    - {rel: grouped_by, target: EUC-IAM}
+    - {rel: depends_on, target: CAP-EUC-IAM-2}
+    - {rel: consumed_by, target: PERSONA-euc-workforce-user}
+    - {rel: consumed_by, target: PERSONA-euc-support-agent}
+  source: ADR 0018

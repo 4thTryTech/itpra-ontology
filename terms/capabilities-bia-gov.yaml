@@ -1,0 +1,110 @@
+# ITPRA ontology — BIA-GOV (Data Governance, Quality & Master Data) capabilities
+# type: Capability. ids CAP-BIA-GOV-<n>. Grouped under domain BIA-GOV (ADR 0026). Governs BUSINESS data &
+# insight; distinct from platform operational data governance (ITO CAP-DATA-4); applies the enterprise control
+# catalog (Enterprise Security/GRC) — ADR 0026. ADR 0037 adds CAP-BIA-GOV-7 (the ONTOLOGY stage of the glossary
+# -> taxonomy -> ontology -> semantic layer progression; the load-bearing gap no term named) and amends
+# CAP-BIA-GOV-5 (cross-party mapping authority).
+
+- id: CAP-BIA-GOV-1
+  term: Data Governance & Stewardship
+  type: Capability
+  definition: >
+    Establishes ownership, policy, and stewardship over business data and insight — who owns what, how it is
+    classified, and the rules it is governed by — so the analytics estate is accountable and consistently
+    managed. Applies the enterprise control catalog rather than authoring it.
+  relates_to:
+    - {rel: grouped_by, target: BIA-GOV}
+    - {rel: consumed_by, target: PERSONA-bia-data-steward}
+  source: ADR 0026
+
+- id: CAP-BIA-GOV-2
+  term: Metadata, Catalog & Lineage
+  type: Capability
+  definition: >
+    Maintains the metadata, classifications, and end-to-end lineage of business data — what exists, what it
+    means, and how it flows from source to insight — so data can be understood, trusted, and impact-assessed
+    before it is used.
+  relates_to:
+    - {rel: grouped_by, target: BIA-GOV}
+    - {rel: depends_on, target: CAP-BIA-GOV-1}
+    - {rel: consumed_by, target: PERSONA-bia-data-steward}
+    - {rel: consumed_by, target: PERSONA-bia-analytics-team}
+  source: ADR 0026
+
+- id: CAP-BIA-GOV-3
+  term: Data Quality Measurement & Remediation
+  type: Capability
+  definition: >
+    Measures business data against quality dimensions — accuracy, completeness, consistency, timeliness,
+    validity, uniqueness — monitors it over time, and drives remediation, so insight rests on data of known
+    and improving quality.
+  relates_to:
+    - {rel: grouped_by, target: BIA-GOV}
+    - {rel: depends_on, target: CAP-BIA-GOV-2}
+    - {rel: consumed_by, target: PERSONA-bia-data-steward}
+  source: ADR 0026
+
+- id: CAP-BIA-GOV-4
+  term: Master Data Management
+  type: Capability
+  definition: >
+    Manages authoritative golden records for shared business entities — such as customer, product, supplier,
+    and location — reconciling and deduplicating records to one trusted version, so analytics across the
+    enterprise references the same definitive entities.
+  relates_to:
+    - {rel: grouped_by, target: BIA-GOV}
+    - {rel: depends_on, target: CAP-BIA-GOV-3}
+    - {rel: consumed_by, target: PERSONA-bia-data-steward}
+  source: ADR 0026
+
+- id: CAP-BIA-GOV-5
+  term: Reference Data Management
+  type: Capability
+  definition: >
+    Governs controlled value sets and code lists — the standardized reference data analytics conforms to — so
+    business data is coded consistently and mappings between schemes are managed and versioned. Reaches
+    hierarchical controlled vocabularies and taxonomies as well as flat code lists. A mapping asserted into a
+    scheme owned by another party (another business unit or an external organisation) requires that owner's
+    governance involvement; a mapping between schemes the organisation owns does not (ADR 0037).
+  aliases: [taxonomy management, controlled vocabulary management, crosswalk]
+  relates_to:
+    - {rel: grouped_by, target: BIA-GOV}
+    - {rel: depends_on, target: CAP-BIA-GOV-1}
+    - {rel: consumed_by, target: PERSONA-bia-data-steward}
+  source: ADR 0026
+
+- id: CAP-BIA-GOV-6
+  term: Analytics Privacy & Policy Compliance
+  type: Capability
+  definition: >
+    Enforces privacy, consent, retention, residency, and access policy over business data and insight,
+    supplying evidence of compliance, so the analytics estate honors the obligations on the data it holds.
+    Applies enterprise policy and supplies analytics-side compliance evidence.
+  relates_to:
+    - {rel: grouped_by, target: BIA-GOV}
+    - {rel: depends_on, target: CAP-BIA-GOV-1}
+    - {rel: consumed_by, target: PERSONA-bia-data-steward}
+  source: ADR 0026
+
+- id: CAP-BIA-GOV-7
+  term: Ontology & Conceptual Model Management
+  type: Capability
+  definition: >
+    Maintains a formal, machine-readable model of the organisation's business concepts — their properties,
+    relationships, and constraints — built from the agreed glossary and controlled vocabularies and released
+    in versions consumers can depend on, so that data, semantic definitions, automation, and delegated
+    actors share one governed meaning rather than each encoding its own. The governing semantic model
+    (KNOWLEDGE-ROLE) that content and instances conform to; a knowledge graph is its instance layer, held in
+    a store type (CAP-DATA-1), not a separate capability. Structural change is a modelling and
+    backward-compatibility judgement with its own owner and approval, distinct from a glossary change, which
+    is a business meaning judgement. How far an organisation climbs the progression, and the modelling
+    language used, are scenario decisions (ADR 0037).
+  aliases: [ontology management, conceptual data model, enterprise ontology, semantic model governance]
+  relates_to:
+    - {rel: grouped_by, target: BIA-GOV}
+    - {rel: depends_on, target: CAP-BIA-GOV-1}
+    - {rel: depends_on, target: CAP-BIA-GOV-5}
+    - {rel: consumed_by, target: PERSONA-bia-semantic-modeller}
+    - {rel: consumed_by, target: PERSONA-bia-data-steward}
+    - {rel: consumed_by, target: PERSONA-bia-analytics-team}
+  source: ADR 0037

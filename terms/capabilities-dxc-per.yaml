@@ -1,0 +1,51 @@
+# ITPRA ontology — DXC-PER (Personalization & Targeting) capabilities
+# type: Capability. ids CAP-DXC-PER-<n>. Grouped under domain DXC-PER (ADR 0027).
+
+- id: CAP-DXC-PER-1
+  term: Audience Segmentation & Targeting
+  type: Capability
+  definition: >
+    Defines audiences from customer attributes and behavior — rule-based and predictive — and targets
+    experiences to them, so the right experience can be aimed at the right group of customers.
+  relates_to:
+    - {rel: grouped_by, target: DXC-PER}
+    - {rel: depends_on, target: CAP-DXC-CDP-3}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-practitioner}
+  source: ADR 0027
+
+- id: CAP-DXC-PER-2
+  term: Content & Offer Personalization
+  type: Capability
+  definition: >
+    Selects and tailors the content, layout, and offers a given audience or individual sees, so each customer
+    receives an experience adapted to their context rather than a single generic one.
+  relates_to:
+    - {rel: grouped_by, target: DXC-PER}
+    - {rel: depends_on, target: CAP-DXC-PER-1}
+    - {rel: consumed_by, target: PERSONA-dxc-customer}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-practitioner}
+  source: ADR 0027
+
+- id: CAP-DXC-PER-3
+  term: Recommendation
+  type: Capability
+  definition: >
+    Recommends relevant content, products, or next items to a customer from their context and behavior, so
+    customers discover what is most relevant to them without searching for it.
+  relates_to:
+    - {rel: grouped_by, target: DXC-PER}
+    - {rel: depends_on, target: CAP-DXC-CDP-2}
+    - {rel: consumed_by, target: PERSONA-dxc-customer}
+  source: ADR 0027
+
+- id: CAP-DXC-PER-4
+  term: Personalization Decisioning & Rules
+  type: Capability
+  definition: >
+    Maintains the governed ruleset and decisioning logic that selects the next best experience for a context,
+    so personalization is consistent, explainable, and within brand and privacy guardrails rather than ad hoc.
+  relates_to:
+    - {rel: grouped_by, target: DXC-PER}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-practitioner}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-governance}
+  source: ADR 0027

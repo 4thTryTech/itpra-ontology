@@ -1,0 +1,112 @@
+# ITPRA ontology — EXP (Consumer Experience) capabilities
+# type: Capability. ids CAP-EXP-<n>. Grouped under domain EXP (ADR 0017).
+
+- id: CAP-EXP-1
+  term: Self-Service Interface
+  type: Capability
+  definition: >
+    Offers a self-service interface for consumers to discover and request capabilities, reducing
+    dependence on the platform team for common tasks.
+  relates_to:
+    - {rel: grouped_by, target: EXP}
+    - {rel: depends_on, target: CAP-EXP-2}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+  source: ADR 0017
+
+- id: CAP-EXP-2
+  term: Service Catalog
+  type: Capability
+  definition: >
+    Publishes a catalog of available services with their terms of use, so consumers know what they can
+    request and on what terms.
+  relates_to:
+    - {rel: grouped_by, target: EXP}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+  source: ADR 0017
+
+- id: CAP-EXP-3
+  term: Golden-Path Templates
+  type: Capability
+  definition: >
+    Provides golden-path templates that encode recommended practice, giving consumers a paved road to a
+    good outcome by default.
+  relates_to:
+    - {rel: grouped_by, target: EXP}
+    - {rel: depends_on, target: CAP-EXP-2}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+  source: ADR 0017
+
+- id: CAP-EXP-4
+  term: Programmatic Interfaces
+  type: Capability
+  definition: >
+    Exposes programmatic interfaces (APIs/CLIs) equivalent to the self-service UI, so the platform is
+    automatable and integrable, not click-only.
+  relates_to:
+    - {rel: grouped_by, target: EXP}
+    - {rel: depends_on, target: CAP-EXP-1}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+  source: ADR 0017
+
+- id: CAP-EXP-5
+  term: Documentation & Onboarding
+  type: Capability
+  definition: >
+    Provides documentation and onboarding guidance for the platform's capabilities, helping consumers
+    become productive quickly.
+  relates_to:
+    - {rel: grouped_by, target: EXP}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+  source: ADR 0017
+
+- id: CAP-EXP-6
+  term: Consumer Notifications
+  type: Capability
+  definition: >
+    Delivers notifications to consumers across multiple channels (email, chat, push, SMS) about the things
+    they care about — the status of their requests and fulfillment, and the availability and changes of the
+    services they use. Consumer-facing; responder paging/on-call escalation is CAP-OBS-7.
+  aliases: [status notifications, service announcements]
+  relates_to:
+    - {rel: grouped_by, target: EXP}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+  source: ADR 0017
+
+- id: CAP-EXP-7
+  term: Developer Environments
+  type: Capability
+  definition: >
+    Provides standardized, on-demand, pre-configured development environments (cloud development
+    environments / workspaces defined as code) so developers become productive without bespoke local setup.
+    Platform-provided; a developer's own local IDE is a consumer client that instead consumes the platform
+    via CAP-EXP-4 (APIs/CLIs) and CAP-EXP-3 (golden paths). Governed coding assistance is CAP-EXP-8.
+  aliases: [cloud development environment, CDE, developer workspace, dev workspace]
+  relates_to:
+    - {rel: grouped_by, target: EXP}
+    - {rel: depends_on, target: CAP-SUB-1}
+    - {rel: depends_on, target: CAP-EXP-3}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+  source: ADR 0017
+
+- id: CAP-EXP-8
+  term: Governed Coding Assistance
+  type: Capability
+  definition: >
+    Provides platform-curated coding assistance (including AI/agentic assistants) through approved models
+    and tooling integrated with golden paths, with guardrails for data handling and policy, so developers
+    consume assistance safely and consistently rather than adopting ungoverned tools. Platform-provided; a
+    developer's personal assistant is a consumer client.
+  aliases: [coding assistant, AI coding assistant, AI pair programming, governed AI assistance]
+  relates_to:
+    - {rel: grouped_by, target: EXP}
+    - {rel: depends_on, target: CAP-EXP-3}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+  source: ADR 0017

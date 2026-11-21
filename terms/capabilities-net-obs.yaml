@@ -1,0 +1,53 @@
+# ITPRA ontology — NET-OBS (Network Observability & Assurance) capabilities
+# type: Capability. ids CAP-NET-OBS-<n>. Grouped under domain NET-OBS (ADR 0023).
+
+- id: CAP-NET-OBS-1
+  term: Network Telemetry & Flow Collection
+  type: Capability
+  definition: >
+    Collects network telemetry from across the enterprise network — traffic/flow records, device and interface
+    metrics, routing/control-plane context, and operational events — as the data foundation for understanding
+    the network.
+  relates_to:
+    - {rel: grouped_by, target: NET-OBS}
+    - {rel: consumed_by, target: PERSONA-net-operations}
+    - {rel: consumed_by, target: PERSONA-net-engineering-team}
+  source: ADR 0023
+
+- id: CAP-NET-OBS-2
+  term: Network Performance & Health Monitoring
+  type: Capability
+  definition: >
+    Monitors the health and performance of the enterprise network — links, paths, edges, and services — turning
+    telemetry into a current picture of how the network is behaving and alerting on degradation.
+  relates_to:
+    - {rel: grouped_by, target: NET-OBS}
+    - {rel: depends_on, target: CAP-NET-OBS-1}
+    - {rel: consumed_by, target: PERSONA-net-operations}
+  source: ADR 0023
+
+- id: CAP-NET-OBS-3
+  term: Network Assurance & Intent Verification
+  type: Capability
+  definition: >
+    Continuously verifies that the enterprise network is meeting its intended service level and policy —
+    proactively detecting drift and degradation against intent rather than reporting failures after the fact.
+  relates_to:
+    - {rel: grouped_by, target: NET-OBS}
+    - {rel: depends_on, target: CAP-NET-OBS-2}
+    - {rel: consumed_by, target: PERSONA-net-operations}
+    - {rel: consumed_by, target: PERSONA-net-security-compliance}
+  source: ADR 0023
+
+- id: CAP-NET-OBS-4
+  term: Topology, Configuration & Change Visibility
+  type: Capability
+  definition: >
+    Maintains an accurate view of network topology and device configuration and surfaces changes to them, so
+    the current network state — and what changed it — is known and auditable.
+  relates_to:
+    - {rel: grouped_by, target: NET-OBS}
+    - {rel: depends_on, target: CAP-NET-OBS-1}
+    - {rel: consumed_by, target: PERSONA-net-engineering-team}
+    - {rel: consumed_by, target: PERSONA-net-architect}
+  source: ADR 0023

@@ -1,0 +1,74 @@
+# ITPRA ontology — ITSM-INC (Cross-Domain Incident & Problem Coordination) capabilities
+# type: Capability. ids CAP-ITSM-INC-<n>. Grouped under domain ITSM-INC (ADR 0025). Neutral cross-provider
+# coordination over GC-INCIDENT / GC-PROBLEM / GC-RECORD.
+
+- id: CAP-ITSM-INC-1
+  term: Cross-Provider Incident Detection & Triage
+  type: Capability
+  definition: >
+    Detects and triages a disruption to an end-to-end service across provider boundaries — correlating signals
+    and reports that individually sit with different providers, classifying impact, and identifying the
+    affected service — so a cross-provider disruption is recognized as one incident and owned, not lost in the
+    seams.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-INC}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-provider}
+  source: ADR 0025
+
+- id: CAP-ITSM-INC-2
+  term: End-to-End Restoration Coordination
+  type: Capability
+  definition: >
+    Coordinates the restoration of an end-to-end service across the providers that must act — driving each
+    provider's response toward one restore objective, sequencing dependent actions, and confirming service is
+    restored — so the consumer's service is recovered even when no single provider can restore it alone.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-INC}
+    - {rel: depends_on, target: CAP-ITSM-INC-1}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-provider}
+  source: ADR 0025
+
+- id: CAP-ITSM-INC-3
+  term: Major Incident Coordination & Communication
+  type: Capability
+  definition: >
+    Runs the coordination of a high-impact, cross-provider disruption — establishing a single coordinating
+    authority, mobilizing the right providers, and keeping consumers and owners informed with timely,
+    consistent communication — so a major event is handled as one orchestrated response with one source of
+    status.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-INC}
+    - {rel: depends_on, target: CAP-ITSM-INC-2}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-consumer}
+  source: ADR 0025
+
+- id: CAP-ITSM-INC-4
+  term: Cross-Provider Problem & Root-Cause Coordination
+  type: Capability
+  definition: >
+    Coordinates investigation of the underlying cause of one or more disruptions when the cause may span
+    providers — convening the right providers, driving root-cause analysis across boundaries, and tracking
+    lasting corrective action to closure — so recurrence is prevented even where the cause crosses domains.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-INC}
+    - {rel: depends_on, target: CAP-ITSM-INC-1}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-provider}
+  source: ADR 0025
+
+- id: CAP-ITSM-INC-5
+  term: Incident & Problem Record Integration
+  type: Capability
+  definition: >
+    Maintains the integrated, end-to-end record of cross-provider incidents and problems — consolidating each
+    provider's contribution to one trustworthy account of what happened, what was done, and what remains — so
+    the history is complete across boundaries and feeds service-level and improvement decisions.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-INC}
+    - {rel: depends_on, target: CAP-ITSM-INC-2}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-service-owner}
+  source: ADR 0025

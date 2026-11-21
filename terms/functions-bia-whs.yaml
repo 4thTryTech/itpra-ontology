@@ -1,0 +1,56 @@
+# ITPRA ontology — FUNCTION library, BIA-WHS (Data Warehouse, Lakehouse & Modeling)
+# type: Function. ids FUNC-bia-<slug>. T1-neutral (ADR 0011). Functions `support` ≥1 capability. See ADR 0026.
+
+- id: FUNC-bia-analytical-store-provisioning
+  term: Analytical Store Provisioning
+  type: Function
+  definition: Provisions and manages a governed analytical store (warehouse/lakehouse) as a self-service offering over the platform substrate.
+  aliases: [warehouse provisioning, lakehouse provisioning]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-WHS-1}
+  source: ADR 0026
+
+- id: FUNC-bia-query-engine
+  term: Analytical Query Serving
+  type: Function
+  definition: Serves analytical queries over the store with managed performance and concurrency.
+  aliases: [query engine, analytical SQL serving]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-WHS-1}
+  source: ADR 0026
+
+- id: FUNC-bia-layered-refinement
+  term: Layered Refinement
+  type: Function
+  definition: Promotes data through landing, conformed, and consumption layers, improving structure and trust at each stage.
+  aliases: [multi-hop refinement, landing-conformed-consumption layering]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-WHS-2}
+  source: ADR 0026
+
+- id: FUNC-bia-dimensional-modeling
+  term: Dimensional Modeling
+  type: Function
+  definition: Models conformed data into facts and conformed dimensions for consistent business analysis.
+  aliases: [star schema modeling, conformed dimensions]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-WHS-3}
+  source: ADR 0026
+
+- id: FUNC-bia-slowly-changing-dimensions
+  term: Slowly Changing Dimension Tracking
+  type: Function
+  definition: Tracks how dimension and record attributes change over time to support point-in-time and "as-of" analysis.
+  aliases: [SCD, temporal history, bitemporal tracking]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-WHS-4}
+  source: ADR 0026
+
+- id: FUNC-bia-data-mart-curation
+  term: Data Mart & Data Product Curation
+  type: Function
+  definition: Curates read-optimized, business-domain datasets published as owned, discoverable data products.
+  aliases: [data mart, curated dataset, data product]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-WHS-5}
+  source: ADR 0026

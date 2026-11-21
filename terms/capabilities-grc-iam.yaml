@@ -1,0 +1,79 @@
+# ITPRA ontology — GRC-IAM (Corporate Identity & Access Authority) capabilities
+# type: Capability. ids CAP-GRC-IAM-<n>. Grouped under domain GRC-IAM (ADR 0024). Enterprise identity AUTHORITY
+# — owns identity of record/entitlement governance the platform (ITO SEC) and workplace (EUC-IAM) consume; does
+# NOT own workload identity or the end-user sign-in experience (ADR 0024).
+
+- id: CAP-GRC-IAM-1
+  term: Identity of Record & Authoritative Source Management
+  type: Capability
+  definition: >
+    Maintains the enterprise identity of record — the authoritative register of people and their
+    organizational attributes from authoritative sources — that every downstream system trusts. The single
+    source of truth for who exists; the platform and workplace consume it rather than owning it. The register
+    is of PEOPLE: a non-human principal is not an entry here, but every delegated authority granted to one
+    binds back to a person in this register as the accountable party (ADR 0035).
+  relates_to:
+    - {rel: grouped_by, target: GRC-IAM}
+    - {rel: consumed_by, target: PERSONA-grc-identity-governance}
+  source: ADR 0024
+
+- id: CAP-GRC-IAM-2
+  term: Access Governance & Entitlement Management
+  type: Capability
+  definition: >
+    Governs what access exists and may be granted across the enterprise — the entitlement catalogue, the role
+    model, and least-privilege access policy — so grants are defined, owned, and policy-conformant. The
+    breadth-control discipline (identity governance) above any one system's authorization. Reaches authority
+    a person DELEGATES to a non-human principal acting on their behalf: what may be delegated, to what, and
+    for how long is governed here on the same least-privilege basis as a direct grant
+    (FUNC-grc-delegated-authority-governance; ADR 0035).
+  relates_to:
+    - {rel: grouped_by, target: GRC-IAM}
+    - {rel: depends_on, target: CAP-GRC-IAM-1}
+    - {rel: consumed_by, target: PERSONA-grc-identity-governance}
+  source: ADR 0024
+
+- id: CAP-GRC-IAM-3
+  term: Joiner-Mover-Leaver Access Lifecycle
+  type: Capability
+  definition: >
+    Drives access through the workforce lifecycle — provisioning birthright access on join, recalculating
+    entitlements to least privilege on role change, and revoking access on leave — from the authoritative
+    identity source, so access always reflects current standing.
+  relates_to:
+    - {rel: grouped_by, target: GRC-IAM}
+    - {rel: depends_on, target: CAP-GRC-IAM-2}
+    - {rel: consumed_by, target: PERSONA-grc-identity-governance}
+  source: ADR 0024
+
+- id: CAP-GRC-IAM-4
+  term: Access Certification & Recertification
+  type: Capability
+  definition: >
+    Runs periodic and event-driven access reviews in which owners and managers attest whether each grant is
+    still warranted, revoking what is not, and producing the attestation evidence the compliance function
+    relies on. Closes the loop on entitlement creep, including for principals that never leave the
+    organisation and so are never caught by a leaver event (ADR 0035).
+  relates_to:
+    - {rel: grouped_by, target: GRC-IAM}
+    - {rel: depends_on, target: CAP-GRC-IAM-2}
+    - {rel: consumed_by, target: PERSONA-grc-identity-governance}
+    - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
+  source: ADR 0024
+
+- id: CAP-GRC-IAM-5
+  term: Privileged Access Governance
+  type: Capability
+  definition: >
+    Governs the enterprise's most sensitive access — privileged and administrative accounts — with
+    credential safeguarding, brokered/monitored sessions, and just-in-time, time-bound elevation, so
+    high-impact access is minimized, attributable, and recorded. The depth-control complement to access
+    governance. Reaches non-human principals whose specific action is chosen at runtime, where the ceiling
+    is governed over the reachable action space rather than a named action, and attribution runs to both the
+    principal and the person accountable for it (ADR 0035).
+  relates_to:
+    - {rel: grouped_by, target: GRC-IAM}
+    - {rel: depends_on, target: CAP-GRC-IAM-2}
+    - {rel: consumed_by, target: PERSONA-grc-identity-governance}
+    - {rel: consumed_by, target: PERSONA-grc-security-operations}
+  source: ADR 0024

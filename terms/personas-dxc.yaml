@@ -1,0 +1,51 @@
+# ITPRA ontology — Digital Experience & Channels (DXC) personas
+# type: Persona. ids PERSONA-dxc-<slug>. Coarse, tier-graduated neutral role archetypes (mirrors the persona
+# model, ADR 0012): each refines into granular roles at T2/T3. Capabilities reference these via `consumed_by`;
+# relationships are expressed from the capability/journey side. Ratified by ADR 0027.
+
+- id: PERSONA-dxc-customer
+  term: Digital Customer
+  type: Persona
+  definition: >
+    The consumer of the digital experience: an external customer, prospect, or visitor who interacts with the
+    organization's content, personalized experiences, journeys, and commerce across digital channels — the
+    primary, external customer of the DXC service domain. At T2/T3 this refines into segments (anonymous
+    visitor, known/authenticated customer, loyalty member, B2B buyer, partner).
+  aliases: [customer, visitor, prospect, end customer, site visitor, shopper]
+  source: ADR 0027
+
+- id: PERSONA-dxc-experience-team
+  term: Digital Experience Engineering Team
+  type: Persona
+  definition: >
+    The provider: builds, operates, and evolves the digital experience service as a product — the content,
+    composition, personalization, journey, customer-data, experimentation, commerce, and channel-delivery
+    capabilities. Owns the DXC capabilities, the delivery surface, and the experience platform roadmap. At
+    T2/T3 this refines into granular roles (front-end/experience engineer, integration engineer, CDP/data
+    engineer, commerce engineer, platform/DXP product owner, site reliability for the experience tier).
+  aliases: [DX engineering, experience platform team, digital engineering, DXP team]
+  source: ADR 0027
+
+- id: PERSONA-dxc-experience-practitioner
+  term: Experience Practitioner
+  type: Persona
+  definition: >
+    The author/operator of the experience: creates and curates content, designs audiences and personalization
+    rules, designs and runs customer journeys and experiments, and merchandises commerce — the day-to-day
+    business operator of the experience the engineering team enables. At T2/T3 this refines into granular
+    roles (content author/editor, merchandiser, personalization/optimization specialist, journey/campaign
+    manager, audience/segment analyst, brand manager).
+  aliases: [content author, marketer, merchandiser, journey manager, optimization specialist, editor]
+  source: ADR 0027
+
+- id: PERSONA-dxc-experience-governance
+  term: Experience Governance & Privacy
+  type: Persona
+  definition: >
+    The assurance owner for the customer-facing experience: defines and verifies brand, accessibility,
+    content, and customer-data/consent guardrails the experience operates within, consumes consent and
+    compliance evidence, and applies enterprise privacy and accessibility obligations to the experience.
+    Applies the enterprise control catalog rather than authoring it. At T2/T3 this refines into granular
+    roles (privacy/consent owner, accessibility lead, brand/content governance, experience compliance liaison).
+  aliases: [experience governance, privacy owner, brand governance, accessibility lead, consent owner]
+  source: ADR 0027

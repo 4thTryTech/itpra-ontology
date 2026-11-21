@@ -1,0 +1,100 @@
+# ITPRA ontology — FUNCTION library, SVD-TRI (Triage, Classification & Routing)
+# type: Function. ids FUNC-svd-<slug>. Functions `support` >=1 capability; NEVER derived_from on a Function (ADR
+# 0011). See ADR 0019.
+
+# Contact classification (CAP-SVD-TRI-1)
+- id: FUNC-svd-type-classification
+  term: Incident-vs-Request Classification
+  type: Function
+  definition: Classifies a contact as a disruption to a service or a standard request.
+  aliases: [contact typing, demand classification]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-TRI-1}
+  source: ADR 0019
+
+- id: FUNC-svd-service-categorization
+  term: Affected-Service Categorization
+  type: Function
+  definition: Identifies and records the service and category a contact affects, driving routing.
+  aliases: [categorization, affected-service tagging]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-TRI-1}
+  source: ADR 0019
+
+# Priority determination (CAP-SVD-TRI-2)
+- id: FUNC-svd-impact-urgency-assessment
+  term: Impact & Urgency Assessment
+  type: Function
+  definition: Assesses business impact and urgency of a contact as the inputs to its priority.
+  aliases: [impact assessment, urgency assessment]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-TRI-2}
+  source: ADR 0019
+
+- id: FUNC-svd-priority-derivation
+  term: Priority Derivation
+  type: Function
+  definition: Derives a contact's priority objectively from impact and urgency rather than by manual choice.
+  aliases: [priority matrix, derived priority]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-TRI-2}
+  source: ADR 0019
+
+# Routing & assignment (CAP-SVD-TRI-3)
+- id: FUNC-svd-skill-based-routing
+  term: Skill-Based Routing
+  type: Function
+  definition: Routes a contact to a resolver group or agent matched on the skills the contact requires.
+  aliases: [skills routing, competency routing]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-TRI-3}
+  source: ADR 0019
+
+- id: FUNC-svd-assignment-orchestration
+  term: Assignment Orchestration
+  type: Function
+  definition: Assigns a contact to a specific owner considering availability, load, and context.
+  aliases: [auto-assignment, queue assignment]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-TRI-3}
+  source: ADR 0019
+
+# Duplicate & recurrence linking (CAP-SVD-TRI-4)
+- id: FUNC-svd-duplicate-detection
+  term: Duplicate Contact Detection
+  type: Function
+  definition: Detects multiple contacts reporting the same underlying event and links them as one.
+  aliases: [mass-event correlation, dedupe]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-TRI-4}
+  source: ADR 0019
+
+- id: FUNC-svd-known-cause-linking
+  term: Known-Cause Linking
+  type: Function
+  definition: Associates a contact with an existing known cause or recurring issue and its workaround/fix.
+  aliases: [known-error linking, recurrence association]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-TRI-4}
+    - {rel: supports, target: CAP-SVD-PRF-3}
+  source: ADR 0019
+
+# Severity escalation governance (CAP-SVD-TRI-5)
+- id: FUNC-svd-escalation-trigger
+  term: Severity Escalation Trigger
+  type: Function
+  definition: Raises a contact's severity against defined criteria as a controlled, recorded decision.
+  aliases: [escalation gate, priority escalation]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-TRI-5}
+  source: ADR 0019
+
+- id: FUNC-svd-major-declaration-criteria
+  term: Major-Incident Declaration Criteria
+  type: Function
+  definition: Evaluates objective criteria for declaring a contact a major incident.
+  aliases: [major-incident criteria, P1 criteria]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-TRI-5}
+    - {rel: supports, target: CAP-SVD-MAJ-1}
+  source: ADR 0019

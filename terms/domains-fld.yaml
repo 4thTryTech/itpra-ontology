@@ -1,0 +1,92 @@
+# ITPRA ontology — Onsite / Field Support (FLD) capability domains
+# type: Domain. The `id` IS the domain code used in capability ids: CAP-<id>-<n> (child: CAP-<id>-<n>.<m>). Each
+# domain is `grouped_by` an EXISTING capability PLANE (terms/planes.yaml). SD-FIELD-SUPPORT interfaces_with
+# PLANE-RESOURCE and PLANE-OPERATIONS (ADR 0009); each group is placed under the fitting existing plane.
+# Taxonomy ratified by ADR 0020. Owning service domain: SD-FIELD-SUPPORT (see ADR 0009 + ADR 0020).
+
+- id: FLD-DISP
+  term: Dispatch & Scheduling
+  type: Domain
+  definition: >
+    The coordination spine of the field operation — receiving and qualifying field work, scheduling and
+    appointing technicians, assigning by skill and safety credential, planning routes and territories, and
+    tracking technicians en route and on site. Turns a stream of requests into time-bounded, credential-
+    matched, location-aware visits.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-OPERATIONS}
+    - {rel: belongs_to_service_domain, target: SD-FIELD-SUPPORT}
+  source: ADR 0020
+
+- id: FLD-DESK
+  term: Deskside / On-site Assistance
+  type: Domain
+  definition: >
+    Physically-present help at a desk, site, or facility — on-site triage and diagnosis, directed-hands
+    execution of well-defined steps under remote instruction, skilled-hands independent resolution, and
+    on-site handover and sign-off. The hands that do what remote and automated action cannot.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-OPERATIONS}
+    - {rel: belongs_to_service_domain, target: SD-FIELD-SUPPORT}
+  source: ADR 0020
+
+- id: FLD-IMAC
+  term: Install · Move · Add · Change
+  type: Domain
+  definition: >
+    Physical execution of changes to the IT estate — installing and commissioning new equipment, relocating
+    assets, adding and expanding on site, reconfiguring in place, and de-installing for disposal handover
+    (IMAC/D). Performs the hands-on part of a controlled change and reports the result to the asset record.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-RESOURCE}
+    - {rel: belongs_to_service_domain, target: SD-FIELD-SUPPORT}
+  source: ADR 0020
+
+- id: FLD-FIX
+  term: Hardware Break-Fix & Depot Repair
+  type: Domain
+  definition: >
+    Restoring failed hardware — on-site fault isolation and component swap, warranty and advance-exchange
+    handling, defective-unit return and reverse logistics, depot repair and refurbishment, and final
+    disposition or recycling. Drives the failed unit back through the repair/replace cycle.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-RESOURCE}
+    - {rel: belongs_to_service_domain, target: SD-FIELD-SUPPORT}
+  source: ADR 0020
+
+- id: FLD-LOG
+  term: Spares, Stock & Logistics
+  type: Domain
+  definition: >
+    Positioning and moving service spare parts so the right part is in the right place at the right time —
+    spares demand planning, multi-echelon stock positioning (depot / field / pooled), trunk-stock management
+    and visibility, and replenishment and requisition. The forward flow that enables a first-time fix.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-RESOURCE}
+    - {rel: belongs_to_service_domain, target: SD-FIELD-SUPPORT}
+  source: ADR 0020
+
+- id: FLD-SAFE
+  term: On-site Safety, Access & Escort
+  type: Domain
+  definition: >
+    Getting field workers safely and compliantly onto a controlled site — site-access request and
+    scheduling, safety induction and credential verification, permit-to-work for high-risk tasks, escort and
+    chain-of-custody, and on-site safety compliance and incident handling. Governs the conduct of field work,
+    operating within the site's own physical-security controls rather than owning them.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-OPERATIONS}
+    - {rel: belongs_to_service_domain, target: SD-FIELD-SUPPORT}
+  source: ADR 0020
+
+- id: FLD-PERF
+  term: Field Performance & Insight
+  type: Domain
+  definition: >
+    Observing the field service itself — field telemetry and visit-record capture, SLA and response-
+    commitment tracking, first-time-fix and repeat-visit analysis, field cost and utilization insight, and
+    field experience and feedback. Distinct from platform observability and end-user-experience observability;
+    its subject is the field visit and the service commitment.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-OPERATIONS}
+    - {rel: belongs_to_service_domain, target: SD-FIELD-SUPPORT}
+  source: ADR 0020

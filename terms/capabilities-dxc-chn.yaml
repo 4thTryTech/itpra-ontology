@@ -1,0 +1,70 @@
+# ITPRA ontology — DXC-CHN (Channel Delivery & Experience Insight) capabilities
+# type: Capability. ids CAP-DXC-CHN-<n>. Grouped under domain DXC-CHN (ADR 0027). NOTE the boundary: technical
+# end-user/page MONITORING is ITO OBS (CAP-OBS-9), not DXC; DXC owns the customer-EXPERIENCE-OUTCOME insight.
+# See ADR 0027.
+
+- id: CAP-DXC-CHN-1
+  term: Multi-Channel Experience Delivery
+  type: Capability
+  definition: >
+    Delivers the composed, personalized experience to each customer channel and front end — web, app, and
+    other touchpoints — so the same intended experience reaches customers consistently wherever they engage.
+  relates_to:
+    - {rel: grouped_by, target: DXC-CHN}
+    - {rel: depends_on, target: CAP-DXC-CNT-5}
+    - {rel: consumed_by, target: PERSONA-dxc-customer}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-team}
+  source: ADR 0027
+
+- id: CAP-DXC-CHN-2
+  term: Delivery & Front-End API Services
+  type: Capability
+  definition: >
+    Exposes the governed delivery and front-end APIs that customer front ends consume to fetch content,
+    profile-aware experiences, and commerce data, so front ends can be built and changed independently of the
+    back-end experience tier.
+  relates_to:
+    - {rel: grouped_by, target: DXC-CHN}
+    - {rel: depends_on, target: CAP-DXC-CHN-1}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-team}
+  source: ADR 0027
+
+- id: CAP-DXC-CHN-3
+  term: Edge Delivery & Experience Performance
+  type: Capability
+  definition: >
+    Delivers experiences with acceptable, consistent latency to customers — using caching and edge delivery
+    as mechanisms — so the experience is fast and responsive across geographies and devices.
+  relates_to:
+    - {rel: grouped_by, target: DXC-CHN}
+    - {rel: depends_on, target: CAP-DXC-CHN-1}
+    - {rel: consumed_by, target: PERSONA-dxc-customer}
+  source: ADR 0027
+
+- id: CAP-DXC-CHN-4
+  term: Digital Channel Presence Management
+  type: Capability
+  definition: >
+    Manages the set of customer-facing channels, sites, and apps the experience is published to — their
+    configuration, domains, and lifecycle — so the organization's digital presence is governed and coherent
+    across channels and markets.
+  relates_to:
+    - {rel: grouped_by, target: DXC-CHN}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-team}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-governance}
+  source: ADR 0027
+
+- id: CAP-DXC-CHN-5
+  term: Channel Experience Insight
+  type: Capability
+  definition: >
+    Provides the customer-outcome view of how delivered experiences perform — engagement, conversion, and
+    friction across channels and content — so the experience team can see the business performance of the
+    experience. The technical monitoring of page/app performance and availability is ITO OBS (CAP-OBS-9),
+    which this interfaces with.
+  relates_to:
+    - {rel: grouped_by, target: DXC-CHN}
+    - {rel: depends_on, target: CAP-DXC-CDP-1}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-practitioner}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-team}
+  source: ADR 0027

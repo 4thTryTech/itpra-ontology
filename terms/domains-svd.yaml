@@ -1,0 +1,98 @@
+# ITPRA ontology — Service Desk (SVD) capability domains
+# type: Domain. The `id` IS the domain code used in capability ids: CAP-<id>-<n> (child: CAP-<id>-<n>.<m>). Each
+# domain is `grouped_by` an EXISTING capability PLANE (terms/planes.yaml). SD-SERVICE-DESK interfaces_with
+# PLANE-GOVERNANCE and PLANE-EXPERIENCE (service-domains.yaml), so SVD domains are placed under one of those two
+# existing planes. Taxonomy ratified by ADR 0019. Owning service domain: SD-SERVICE-DESK (interfaces_with
+# PLANE-GOVERNANCE + PLANE-EXPERIENCE; ADR 0009 + ADR 0019).
+
+- id: SVD-CON
+  term: Contact & Intake Channels
+  type: Domain
+  definition: >
+    The single, coherent contact surface across channels through which a user reaches the service desk —
+    multi-channel intake, a unified contact queue with one authoritative record per contact, identity and
+    entitlement verification at intake, contact-context capture, and continuity of context as a contact
+    moves across channels. The front door of the single point of contact.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-EXPERIENCE}
+    - {rel: belongs_to_service_domain, target: SD-SERVICE-DESK}
+  source: ADR 0019
+
+- id: SVD-TRI
+  term: Triage, Classification & Routing
+  type: Domain
+  definition: >
+    Turning a received contact into work that reaches the right resolver — classifying what it is and which
+    service it affects, determining its priority consistently and objectively from impact and urgency,
+    linking duplicates and recurrences, routing and assigning it, and governing escalation of its severity.
+    The step between contact received and someone working it.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-GOVERNANCE}
+    - {rel: belongs_to_service_domain, target: SD-SERVICE-DESK}
+  source: ADR 0019
+
+- id: SVD-KNW
+  term: Knowledge & Self-Service Enablement
+  type: Domain
+  definition: >
+    Resolving demand before and during contact through knowledge — a self-service surface, contextual
+    knowledge search and surfacing, capture and reuse of resolutions as knowledge, and keeping that
+    knowledge healthy over its lifecycle. The source of deflection and faster first-contact resolution;
+    knowledge is created as a by-product of resolving work, not as a separate effort.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-EXPERIENCE}
+    - {rel: belongs_to_service_domain, target: SD-SERVICE-DESK}
+  source: ADR 0019
+
+- id: SVD-HDL
+  term: Front-line Incident & Request Handling
+  type: Domain
+  definition: >
+    The core front-line work on a contact — first-line resolution at the point of contact where possible,
+    coordination of standard-request fulfilment, handoff and routing to a resolver when deeper work is
+    needed, ownership and follow-up that keeps the contact moving, and closure with the user's confirmation.
+    Neutral across tiered-escalation and swarming operating models (bound at T2).
+  relates_to:
+    - {rel: grouped_by, target: PLANE-GOVERNANCE}
+    - {rel: belongs_to_service_domain, target: SD-SERVICE-DESK}
+  source: ADR 0019
+
+- id: SVD-MAJ
+  term: Major-Incident Coordination & Escalation
+  type: Domain
+  definition: >
+    The higher-intensity coordination a major disruption demands — declaring and mobilizing a coordinated
+    response on objective criteria, driving restoration from one coordination point across resolving teams,
+    communicating to users and stakeholders on a predictable cadence during the disruption, and reviewing
+    afterward to drive lasting improvement. The front-line command and communication wrapper, not the
+    engineering fix (which the resolving domains perform).
+  relates_to:
+    - {rel: grouped_by, target: PLANE-GOVERNANCE}
+    - {rel: belongs_to_service_domain, target: SD-SERVICE-DESK}
+  source: ADR 0019
+
+- id: SVD-COM
+  term: Customer Communication & Satisfaction
+  type: Domain
+  definition: >
+    The relationship the desk holds with the people it serves — proactive status and outage communication,
+    setting and committing to neutral service-level expectations, capturing satisfaction and effort
+    feedback, and handling segments and high-touch consumers appropriately. The experience-facing side of
+    the desk toward the user.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-EXPERIENCE}
+    - {rel: belongs_to_service_domain, target: SD-SERVICE-DESK}
+  source: ADR 0019
+
+- id: SVD-PRF
+  term: Support Performance & Insight
+  type: Domain
+  definition: >
+    Understanding and improving the desk itself — contact analytics and reporting, measurement of the
+    desk's experience and outcomes (satisfaction, effort, first-contact resolution as neutral outcome
+    measures), demand and trend analysis that surfaces recurring contacts as candidates for elimination,
+    and the continual-improvement loop. The inward analytical side of the desk.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-GOVERNANCE}
+    - {rel: belongs_to_service_domain, target: SD-SERVICE-DESK}
+  source: ADR 0019

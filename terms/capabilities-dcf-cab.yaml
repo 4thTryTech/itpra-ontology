@@ -1,0 +1,42 @@
+# ITPRA ontology — DCF-CAB (Cabling & Physical Connectivity) capabilities
+# type: Capability. ids CAP-DCF-CAB-<n>. Grouped under domain DCF-CAB (ADR 0022).
+
+- id: CAP-DCF-CAB-1
+  term: Structured Cabling Provision
+  type: Capability
+  definition: >
+    Provides the passive physical cabling plant — structured copper and fiber media organized into the
+    facility's distribution hierarchy and documented — as the physical medium over which the logical network
+    runs. The passive plant only; logical switching/routing is the adjacent Network domain's concern.
+  relates_to:
+    - {rel: grouped_by, target: DCF-CAB}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-tenant}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+  source: ADR 0022
+
+- id: CAP-DCF-CAB-2
+  term: Pathway & Space Management
+  type: Capability
+  definition: >
+    Manages the pathways and spaces that carry and protect cabling — cable trays, risers, conduits, and
+    under-floor/overhead routes — including labelling, segregation of power from data, and capacity, so
+    cabling is routed safely, traceably, and without obstructing airflow.
+  relates_to:
+    - {rel: grouped_by, target: DCF-CAB}
+    - {rel: depends_on, target: CAP-DCF-CAB-1}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+  source: ADR 0022
+
+- id: CAP-DCF-CAB-3
+  term: Physical Cross-Connect & Interconnect
+  type: Capability
+  definition: >
+    Provides the physical demarcation and cross-connect points where a tenant's equipment is physically
+    interconnected to another tenant, a carrier, or the wider network — the meet-me/demarcation function — as
+    governed physical interconnections. The physical link only; logical peering is an adjacent-domain concern.
+  relates_to:
+    - {rel: grouped_by, target: DCF-CAB}
+    - {rel: depends_on, target: CAP-DCF-CAB-1}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-tenant}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+  source: ADR 0022

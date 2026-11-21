@@ -1,0 +1,68 @@
+# ITPRA ontology — BIA-SCI (Data Science & Advanced Analytics) capabilities
+# type: Capability. ids CAP-BIA-SCI-<n>. Grouped under domain BIA-SCI (ADR 0026). Business/analytical modeling;
+# distinct from operational AIOps (ITO OBS) — ADR 0026.
+
+- id: CAP-BIA-SCI-1
+  term: Collaborative Analytics Workspace
+  type: Capability
+  definition: >
+    Provides a governed, collaborative environment for exploratory analysis and experimentation over
+    permitted data, so analysts and data scientists can investigate, prototype, and share work reproducibly
+    within guardrails.
+  relates_to:
+    - {rel: grouped_by, target: BIA-SCI}
+    - {rel: depends_on, target: CAP-BIA-WHS-5}
+    - {rel: consumed_by, target: PERSONA-bia-data-scientist}
+  source: ADR 0026
+
+- id: CAP-BIA-SCI-2
+  term: Feature Engineering & Feature Store
+  type: Capability
+  definition: >
+    Derives, manages, and shares reusable analytical features with consistent definitions for training and
+    scoring, so models are built on trustworthy, reproducible inputs and features are reused across efforts.
+  relates_to:
+    - {rel: grouped_by, target: BIA-SCI}
+    - {rel: depends_on, target: CAP-BIA-SCI-1}
+    - {rel: consumed_by, target: PERSONA-bia-data-scientist}
+  source: ADR 0026
+
+- id: CAP-BIA-SCI-3
+  term: Model Development, Training & Evaluation
+  type: Capability
+  definition: >
+    Supports developing, training, and rigorously evaluating analytical and predictive models — comparing
+    candidates against business objectives and validation criteria — so only models that demonstrably meet
+    their goals advance toward use.
+  relates_to:
+    - {rel: grouped_by, target: BIA-SCI}
+    - {rel: depends_on, target: CAP-BIA-SCI-2}
+    - {rel: consumed_by, target: PERSONA-bia-data-scientist}
+  source: ADR 0026
+
+- id: CAP-BIA-SCI-4
+  term: Model Deployment & Scoring
+  type: Capability
+  definition: >
+    Deploys evaluated models as consumable insight — producing predictions and scores via batch or on-demand
+    serving — so model output flows into reports, applications, and decisions through a governed path.
+  relates_to:
+    - {rel: grouped_by, target: BIA-SCI}
+    - {rel: depends_on, target: CAP-BIA-SCI-3}
+    - {rel: consumed_by, target: PERSONA-bia-data-scientist}
+    - {rel: consumed_by, target: PERSONA-bia-analytics-team}
+  source: ADR 0026
+
+- id: CAP-BIA-SCI-5
+  term: Model Monitoring & Lifecycle Management
+  type: Capability
+  definition: >
+    Monitors deployed models for accuracy, stability, and drift against documented retrain triggers, and
+    governs model versions across their lifecycle, so insight stays trustworthy as the world the model
+    describes changes.
+  relates_to:
+    - {rel: grouped_by, target: BIA-SCI}
+    - {rel: depends_on, target: CAP-BIA-SCI-4}
+    - {rel: consumed_by, target: PERSONA-bia-data-scientist}
+    - {rel: consumed_by, target: PERSONA-bia-data-steward}
+  source: ADR 0026

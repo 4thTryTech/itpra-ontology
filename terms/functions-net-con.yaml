@@ -1,0 +1,78 @@
+# ITPRA ontology — FUNCTION library, NET-CON (Connectivity Provisioning & WAN)
+# type: Function. ids FUNC-net-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
+# the function (ADR 0011). Functions `support` >=1 capability (many-to-many). See ADR 0023.
+
+- id: FUNC-net-circuit-provisioning
+  term: Circuit & Link Provisioning
+  type: Function
+  definition: Provisions a network circuit or link to a site over a chosen transport and brings it into service.
+  aliases: [link turn-up, circuit turn-up, access provisioning]
+  relates_to:
+    - {rel: supports, target: CAP-NET-CON-1}
+  source: ADR 0023
+
+- id: FUNC-net-edge-device-onboarding
+  term: Edge Device Onboarding
+  type: Function
+  definition: Brings a site/branch edge device into the managed network by its identity and pushes its connectivity policy.
+  aliases: [branch edge bootstrap, zero-touch edge onboarding]
+  relates_to:
+    - {rel: supports, target: CAP-NET-CON-1}
+  source: ADR 0023
+
+- id: FUNC-net-overlay-tunneling
+  term: Overlay Tunnel Establishment
+  type: Function
+  definition: Builds the encrypted overlay tunnels that form the WAN fabric across underlying transports.
+  aliases: [overlay fabric, IPsec overlay, tunnel mesh]
+  relates_to:
+    - {rel: supports, target: CAP-NET-CON-2}
+    - {rel: supports, target: CAP-NET-RAX-1}
+  source: ADR 0023
+
+- id: FUNC-net-dynamic-path-selection
+  term: Dynamic Path Selection
+  type: Function
+  definition: Selects the forwarding path per policy and measured link health, steering traffic to the best available route.
+  aliases: [application-aware routing, policy-based path selection]
+  relates_to:
+    - {rel: supports, target: CAP-NET-CON-2}
+    - {rel: supports, target: CAP-NET-QOS-3}
+  source: ADR 0023
+
+- id: FUNC-net-link-health-measurement
+  term: Link Health Measurement
+  type: Function
+  definition: Continuously measures loss, latency, and jitter of each transport link to inform path selection and failover.
+  aliases: [path quality probing, link liveness measurement]
+  relates_to:
+    - {rel: supports, target: CAP-NET-CON-2}
+    - {rel: supports, target: CAP-NET-RES-2}
+  source: ADR 0023
+
+- id: FUNC-net-transport-abstraction
+  term: Transport Abstraction
+  type: Function
+  definition: Presents diverse underlying transports as interchangeable underlays the network can use and substitute.
+  aliases: [transport-independent underlay, multi-transport binding]
+  relates_to:
+    - {rel: supports, target: CAP-NET-CON-3}
+  source: ADR 0023
+
+- id: FUNC-net-internet-edge-gateway
+  term: Internet Edge Gateway
+  type: Function
+  definition: Operates the managed boundary through which the enterprise reaches and is reached by the public internet.
+  aliases: [internet breakout, internet egress gateway]
+  relates_to:
+    - {rel: supports, target: CAP-NET-CON-4}
+  source: ADR 0023
+
+- id: FUNC-net-cloud-onramp
+  term: Cloud / SaaS On-Ramp
+  type: Function
+  definition: Provides an optimized network path from sites or the platform to cloud and SaaS endpoints.
+  aliases: [cloud interconnect, direct cloud connect, local breakout]
+  relates_to:
+    - {rel: supports, target: CAP-NET-CON-5}
+  source: ADR 0023

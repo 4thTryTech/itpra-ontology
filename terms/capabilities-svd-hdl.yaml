@@ -1,0 +1,74 @@
+# ITPRA ontology — SVD-HDL (Front-line Incident & Request Handling) capabilities
+# type: Capability. ids CAP-SVD-HDL-<n>. Grouped under domain SVD-HDL (ADR 0019). Neutral across tiered and
+# swarming operating models (ADR 0019).
+
+- id: CAP-SVD-HDL-1
+  term: First-Line Resolution
+  type: Capability
+  definition: >
+    Resolves a contact at the point of first contact wherever the knowledge and access allow, so the user's
+    issue or request is handled in one interaction without a handoff — the largest lever on user experience
+    and cost.
+  relates_to:
+    - {rel: grouped_by, target: SVD-HDL}
+    - {rel: depends_on, target: CAP-SVD-KNW-2}
+    - {rel: depends_on, target: CAP-SVD-TRI-1}
+    - {rel: consumed_by, target: PERSONA-svd-agent}
+    - {rel: consumed_by, target: PERSONA-svd-requester}
+  source: ADR 0019
+
+- id: CAP-SVD-HDL-2
+  term: Standard-Request Fulfilment Coordination
+  type: Capability
+  definition: >
+    Drives a standard, pre-defined request from intake to delivery — confirming entitlement, obtaining any
+    needed approval, and coordinating the fulfilling action — so routine asks are satisfied predictably,
+    whether the desk fulfils them or coordinates a resolver who does.
+  relates_to:
+    - {rel: grouped_by, target: SVD-HDL}
+    - {rel: depends_on, target: CAP-SVD-CON-3}
+    - {rel: consumed_by, target: PERSONA-svd-agent}
+    - {rel: consumed_by, target: PERSONA-svd-resolver}
+  source: ADR 0019
+
+- id: CAP-SVD-HDL-3
+  term: Handoff & Resolver Routing
+  type: Capability
+  definition: >
+    Hands a contact the desk cannot resolve at first line to the right resolver with its full context, and
+    exchanges status back, so deeper work proceeds without losing context — neutral as to whether the
+    handoff is a tiered escalation or a swarm pull-in (bound at T2).
+  relates_to:
+    - {rel: grouped_by, target: SVD-HDL}
+    - {rel: depends_on, target: CAP-SVD-TRI-3}
+    - {rel: consumed_by, target: PERSONA-svd-agent}
+    - {rel: consumed_by, target: PERSONA-svd-resolver}
+  source: ADR 0019
+
+- id: CAP-SVD-HDL-4
+  term: Contact Ownership & Follow-up
+  type: Capability
+  definition: >
+    Keeps a single accountable owner on each contact from intake to closure — tracking it across resolvers,
+    chasing progress, and keeping the user informed — so no contact stalls or falls between teams regardless
+    of how many hands touch it.
+  relates_to:
+    - {rel: grouped_by, target: SVD-HDL}
+    - {rel: depends_on, target: CAP-SVD-CON-2}
+    - {rel: consumed_by, target: PERSONA-svd-agent}
+    - {rel: consumed_by, target: PERSONA-svd-coordinator}
+  source: ADR 0019
+
+- id: CAP-SVD-HDL-5
+  term: Resolution Confirmation & Closure
+  type: Capability
+  definition: >
+    Closes a contact only once the user confirms the issue is resolved or the request is delivered,
+    recording the outcome so the record is complete and the user's experience of closure is positive rather
+    than premature.
+  relates_to:
+    - {rel: grouped_by, target: SVD-HDL}
+    - {rel: depends_on, target: CAP-SVD-HDL-1}
+    - {rel: consumed_by, target: PERSONA-svd-requester}
+    - {rel: consumed_by, target: PERSONA-svd-agent}
+  source: ADR 0019

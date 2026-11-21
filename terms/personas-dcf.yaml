@@ -1,0 +1,55 @@
+# ITPRA ontology — Data Center & Facilities (DCF) personas
+# type: Persona. ids PERSONA-dcf-<slug>. Coarse, tier-graduated neutral role archetypes (mirrors the persona
+# model, ADR 0012): each refines into granular roles at T2/T3. Capabilities reference these via `consumed_by`;
+# relationships are expressed from the capability/journey side. Ratified by ADR 0022.
+
+- id: PERSONA-dcf-facility-tenant
+  term: Facility Tenant
+  type: Persona
+  definition: >
+    The consumer of the physical hosting environment: the platform and IT teams (and any co-located business
+    or third party) whose equipment is hosted in the facility — they consume space, power, cooling, cabling,
+    and physical access, and depend on the facility's physical availability. The primary customer of the DCF
+    service domain; the infrastructure platform (ITO) is its principal tenant. At T2/T3 this refines into
+    segments (platform/infrastructure team, co-located business unit, carrier/third-party tenant).
+  aliases: [tenant, hosted-equipment owner, platform team as tenant, colocation customer]
+  source: ADR 0022
+
+- id: PERSONA-dcf-facilities-team
+  term: Facilities Engineering Team
+  type: Persona
+  definition: >
+    The provider: designs, builds, operates, and evolves the physical hosting facility as a service — the
+    space, electrical plant, cooling and environmental control, cabling plant, physical security, facility
+    monitoring/management, and facility resilience. Owns substantially all DCF capabilities and the facility's
+    capacity and efficiency roadmap. At T2/T3 this refines into granular roles (critical-facilities/MEP
+    engineer, power engineer, cooling/mechanical engineer, cabling/structured-cabling technician, DCIM/
+    capacity analyst, facility operations manager).
+  aliases: [facilities team, critical facilities engineering, data-center operations, MEP team]
+  source: ADR 0022
+
+- id: PERSONA-dcf-physical-security-officer
+  term: Physical Security Officer
+  type: Persona
+  definition: >
+    The physical-protection owner: operates and assures the facility's physical security — perimeter and site
+    security, layered physical access control to the rack, visitor and escort management, surveillance and
+    physical intrusion detection, and physical access logging. Controls who physically reaches the equipment.
+    Distinct from logical/identity security (ITO SEC and the enterprise security domain), with which it
+    interfaces. At T2/T3 this refines into granular roles (security operations center officer, access-control
+    administrator, guard-force lead).
+  aliases: [physical security, site security officer, access-control administrator]
+  source: ADR 0022
+
+- id: PERSONA-dcf-facility-compliance
+  term: Facility Compliance & Assurance
+  type: Persona
+  definition: >
+    The assurance owner for the facility: defines and verifies the facility's resilience, safety, and
+    physical-security posture against required policy and rating, consumes facility evidence (access logs,
+    efficiency, capacity, maintenance, availability), and sets the guardrails the facility operates within.
+    Applies enterprise and regulatory policy to the facility and supplies facility-compliance evidence. At
+    T2/T3 this refines into granular roles (facility compliance/audit liaison, resilience/availability owner,
+    health-safety-environment lead).
+  aliases: [facility compliance, facility assurance, resilience owner, audit liaison]
+  source: ADR 0022

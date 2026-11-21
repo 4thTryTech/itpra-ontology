@@ -1,0 +1,57 @@
+# ITPRA ontology — EUC-SUP (End-User Support Experience & Self-Service) capabilities
+# type: Capability. ids CAP-EUC-SUP-<n>. Workplace-resolution experience — distinct from the cross-domain
+# contact channel/triage owned by the Service Desk (SD-SERVICE-DESK), interfaced with; see ADR 0018.
+
+- id: CAP-EUC-SUP-1
+  term: Workplace Self-Service & Knowledge
+  type: Capability
+  definition: >
+    Lets a workforce user resolve common workplace needs themselves — a self-service surface with curated,
+    searchable knowledge and guided assistance — so routine issues and requests are handled without an agent.
+  relates_to:
+    - {rel: grouped_by, target: EUC-SUP}
+    - {rel: consumed_by, target: PERSONA-euc-workforce-user}
+    - {rel: consumed_by, target: PERSONA-euc-support-agent}
+  source: ADR 0018
+
+- id: CAP-EUC-SUP-2
+  term: Automated Workplace Request Fulfilment
+  type: Capability
+  definition: >
+    Fulfils a workforce user's request for a workplace resource — an application, access, a device, or a
+    setting — through an automated, policy-checked path, so approved requests are satisfied promptly without
+    manual handling.
+  relates_to:
+    - {rel: grouped_by, target: EUC-SUP}
+    - {rel: depends_on, target: CAP-EUC-SUP-1}
+    - {rel: consumed_by, target: PERSONA-euc-workforce-user}
+    - {rel: consumed_by, target: PERSONA-euc-support-agent}
+  source: ADR 0018
+
+- id: CAP-EUC-SUP-3
+  term: Remote Endpoint Assistance & Remediation
+  type: Capability
+  definition: >
+    Lets support resolve a workforce user's endpoint issue without physical access — remote diagnosis, guided
+    or unattended remediation, and recovery actions on the device — restoring the user's working state quickly.
+  relates_to:
+    - {rel: grouped_by, target: EUC-SUP}
+    - {rel: depends_on, target: CAP-EUC-DEV-4}
+    - {rel: consumed_by, target: PERSONA-euc-support-agent}
+    - {rel: consumed_by, target: PERSONA-euc-workforce-user}
+  source: ADR 0018
+
+- id: CAP-EUC-SUP-4
+  term: Workforce Onboarding & Offboarding Experience
+  type: Capability
+  definition: >
+    Orchestrates the end-user-facing joiner/leaver experience — readying a new user's device, workspace,
+    applications, and access on joining, and cleanly removing them on leaving — so people are productive on
+    day one and leave no residual access or data.
+  relates_to:
+    - {rel: grouped_by, target: EUC-SUP}
+    - {rel: depends_on, target: CAP-EUC-DEV-1}
+    - {rel: depends_on, target: CAP-EUC-IAM-1}
+    - {rel: consumed_by, target: PERSONA-euc-workforce-user}
+    - {rel: consumed_by, target: PERSONA-euc-support-agent}
+  source: ADR 0018

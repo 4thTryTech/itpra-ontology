@@ -1,0 +1,53 @@
+# ITPRA ontology — FUNCTION library, ADM-DEX (Developer Enablement & Experience)
+# type: Function. ids FUNC-adm-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
+# the function (ADR 0011). CONSUMER view: adopts/consumes the platform's developer surface (ITO EXP/DEL). See
+# ADR 0021.
+
+# Onboarding & enablement (CAP-ADM-DEX-1)
+- id: FUNC-adm-developer-onboarding
+  term: Developer Onboarding
+  type: Function
+  definition: Onboards a developer or team onto the platform's paved roads with the access and skills their role needs.
+  aliases: [team onboarding, enablement onboarding, paved-road onboarding]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-DEX-1}
+  source: ADR 0021
+
+- id: FUNC-adm-developer-access-provisioning
+  term: Developer Access Provisioning
+  type: Function
+  definition: Grants a developer the tooling and entitlements their role requires, consuming platform self-service.
+  aliases: [access request, entitlement provisioning, tooling access]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-DEX-1}
+  source: ADR 0021
+
+# Self-service environment & resource (CAP-ADM-DEX-2)
+- id: FUNC-adm-self-service-environment
+  term: Self-Service Environment Request
+  type: Function
+  definition: Lets a developer obtain build/test environments and resources on demand via platform self-service.
+  aliases: [environment self-service, on-demand environment, resource request]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-DEX-2}
+  source: ADR 0021
+
+# Golden-path & template reuse (CAP-ADM-DEX-3)
+- id: FUNC-adm-golden-path-adoption
+  term: Golden-Path & Template Adoption
+  type: Function
+  definition: Adopts the platform's golden paths, starter templates, and reusable building blocks for common needs.
+  aliases: [paved-road adoption, scaffolding, starter template reuse]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-DEX-3}
+  source: ADR 0021
+
+# DevEx feedback & improvement (CAP-ADM-DEX-4)
+- id: FUNC-adm-devex-feedback
+  term: Developer Experience Feedback
+  type: Function
+  definition: Captures developer friction, gaps, and satisfaction and feeds it into the practice and the platform.
+  aliases: [DevEx survey, friction logging, experience feedback]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-DEX-4}
+  source: ADR 0021

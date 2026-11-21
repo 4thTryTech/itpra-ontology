@@ -1,0 +1,173 @@
+# ITPRA ontology — OBS (Observability & Operations) capabilities
+# type: Capability. ids CAP-OBS-<n>. Grouped under domain OBS (ADR 0017).
+
+- id: CAP-OBS-1
+  term: Telemetry Collection
+  type: Capability
+  definition: >
+    Collects metrics, logs, traces, events, and profiles from platform and tenant workloads — the raw signal
+    on which all observability and operations depend. Profiles (continuous, low-overhead code-execution
+    sampling) is an emerging signal alongside the three classic pillars. Collection sources span
+    infrastructure, workloads, data stores, and service-to-service traffic; instrumentation technique
+    (agent-, library-, or kernel-level) binds at T2/T3. Model-grounded and agentic workloads contribute new
+    SOURCES and new signal VOCABULARY (inference calls, tool invocations, actor run traces) within this same
+    signal shape - they are not a new signal kind requiring a distinct capture technique, so they are in
+    scope here rather than minted separately (ADR 0033).
+  aliases: [telemetry ingestion, AI observability, agent telemetry]   # granular behaviors (incl. infrastructure monitoring) are FUNC-* (ADR 0011)
+  relates_to:
+    - {rel: grouped_by, target: OBS}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+  source: ADR 0017
+
+- id: CAP-OBS-2
+  term: Alerting
+  type: Capability
+  definition: >
+    Raises alerts when defined conditions or thresholds are breached, notifying responders so issues are
+    acted on promptly.
+  relates_to:
+    - {rel: grouped_by, target: OBS}
+    - {rel: depends_on, target: CAP-OBS-1}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+  source: ADR 0017
+
+- id: CAP-OBS-3
+  term: Dashboards & Query
+  type: Capability
+  definition: >
+    Presents dashboards and ad hoc queries over operational telemetry, letting users see and interrogate
+    the state of the platform and their services.
+  aliases: [visualization, telemetry query, search and analytics]   # dashboarding/log-search are FUNC-* (ADR 0011)
+  relates_to:
+    - {rel: grouped_by, target: OBS}
+    - {rel: depends_on, target: CAP-OBS-1}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+  source: ADR 0017
+
+- id: CAP-OBS-4
+  term: Service-Level Objective Management
+  type: Capability
+  definition: >
+    Supports defining and tracking service-level objectives, measuring delivered service against targets
+    and surfacing error budgets.
+  relates_to:
+    - {rel: grouped_by, target: OBS}
+    - {rel: depends_on, target: CAP-OBS-1}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+  source: ADR 0017
+
+- id: CAP-OBS-5
+  term: Platform Patching & Updates
+  type: Capability
+  definition: >
+    Applies patches and updates to platform components on a managed cadence, keeping the platform current
+    and secure with controlled change.
+  relates_to:
+    - {rel: grouped_by, target: OBS}
+    - {rel: depends_on, target: CAP-FND-5}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+  source: ADR 0017
+
+- id: CAP-OBS-6
+  term: Telemetry Analytics & Insight
+  type: Capability
+  definition: >
+    Aggregates, correlates, and analyzes collected observability data — via queries, statistical methods,
+    or ML/AI — to surface insights, anomalies, and likely root causes. Includes event noise reduction
+    (deduplication, suppression, enrichment, correlation) so responders see actionable incidents, not raw
+    alert volume.
+  aliases: [AIOps, event noise reduction]   # correlation/anomaly/RCA/dedup are FUNC-* (ADR 0011)
+  relates_to:
+    - {rel: grouped_by, target: OBS}
+    - {rel: depends_on, target: CAP-OBS-1}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+  source: ADR 0017
+
+- id: CAP-OBS-7
+  term: Operational Notification & Escalation
+  type: Capability
+  definition: >
+    Delivers operational notifications to responders across multiple channels (email, chat, SMS, voice,
+    push) and applies escalation policy — on-call schedules, escalation chains, acknowledgement, and
+    re-notification on timeout — so the right responder is reached and a matter escalates until handled.
+    Responder-facing; consumer-facing notification is CAP-EXP-6.
+  aliases: [paging, on-call escalation, alert delivery, incident notification]
+  relates_to:
+    - {rel: grouped_by, target: OBS}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+    - {rel: consumed_by, target: PERSONA-security-compliance}
+  source: ADR 0017
+
+- id: CAP-OBS-8
+  term: Telemetry Pipeline
+  type: Capability
+  definition: >
+    Ingests telemetry and transforms, enriches, filters, samples, and routes it to one or more destinations
+    before it reaches storage/analysis backends — the observability data plane between collection
+    (CAP-OBS-1) and analysis. Reduces volume and cost and decouples sources from backends.
+  aliases: [observability pipeline]
+  relates_to:
+    - {rel: grouped_by, target: OBS}
+    - {rel: depends_on, target: CAP-OBS-1}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+  source: ADR 0017
+
+- id: CAP-OBS-9
+  term: Digital Experience Monitoring
+  type: Capability
+  definition: >
+    Measures availability, performance, and experience from the consumer's perspective using synthetic
+    monitoring (active scripted probes/transactions at intervals) and real user monitoring (passive
+    telemetry from actual user sessions). Synthetic catches issues before/without user traffic; RUM reflects
+    real-world experience. Spans web and mobile clients and includes capture of client-side errors and
+    crashes correlated to the affected session. This is Digital Experience **Monitoring** (observe/measure
+    experience) — distinct from Digital Experience **Management** (DXM/DXP: compose/deliver/optimize
+    experience), which is an adjacent SD-DIGITAL-EXPERIENCE concern (SDP-dxm), not an OBS capability.
+  aliases: [DEM, mobile monitoring, uptime monitoring, availability monitoring]   # synthetic/RUM/session-replay/error-tracking/uptime are FUNC-* (ADR 0011)
+  relates_to:
+    - {rel: grouped_by, target: OBS}
+    - {rel: depends_on, target: CAP-OBS-1}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+  source: ADR 0017
+
+- id: CAP-OBS-10
+  term: Network & Topology Observability
+  type: Capability
+  definition: >
+    Analyzes network traffic flows for traffic patterns, bandwidth, and performance, and discovers and maps
+    the service/dependency topology — who communicates with whom, over what, how often. The relational
+    network view; discovered topology relates to the authoritative system-of-record (CAP-GOV-4) as a PEER
+    source reconciled under precedence rules, not as a derived representation of it (KNOWLEDGE-ROLE;
+    ADR 0038).
+  aliases: [network observability]   # flow analysis/NetFlow/topology mapping are FUNC-* (ADR 0011)
+  relates_to:
+    - {rel: grouped_by, target: OBS}
+    - {rel: depends_on, target: CAP-OBS-1}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+  source: ADR 0017
+
+- id: CAP-OBS-11
+  term: Telemetry Agent & Pipeline Configuration Management
+  type: Capability
+  definition: >
+    Manages the telemetry estate's control plane: the configurations and versions of telemetry collection
+    agents and pipeline components are authored, validated, versioned, distributed, progressively rolled
+    out, and kept current across the estate, with the fleet's enrollment, inventory, and health visible as
+    a management concern. The control plane over the components that realize CAP-OBS-1 and CAP-OBS-8 (the
+    data plane); the telemetry-estate instantiation of generic configuration management, plus the
+    collector-specific behaviors no generic term covers. Realization approach (dedicated management plane
+    vs configuration-as-code over generic delivery machinery, or a coverage-area split of both) binds at
+    T2/T3.
+  aliases: [collector fleet management, telemetry control plane, agent configuration management]
+  relates_to:
+    - {rel: grouped_by, target: OBS}
+    - {rel: depends_on, target: CAP-FND-1}
+    - {rel: depends_on, target: CAP-FND-2}
+    - {rel: depends_on, target: CAP-AUT-4}
+    - {rel: depends_on, target: CAP-OBS-5}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+  source: ADR 0032

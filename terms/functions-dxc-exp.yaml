@@ -1,0 +1,79 @@
+# ITPRA ontology — FUNCTION library, DXC-EXP (Experimentation & Optimization)
+# type: Function. ids FUNC-dxc-<slug>. All T1-neutral; a function MAY name a recognized technique where that IS
+# the function (ADR 0011).
+
+# Experiment design & hypothesis management (CAP-DXC-EXP-1)
+- id: FUNC-dxc-experiment-design
+  term: Experiment Design
+  type: Function
+  definition: Defines an experiment's hypothesis, variants, audience, success metric, and guardrails.
+  aliases: [hypothesis, test design, experiment setup]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-EXP-1}
+  source: ADR 0027
+
+- id: FUNC-dxc-ab-multivariate-test
+  term: A/B & Multivariate Testing
+  type: Function
+  definition: Structures A/B and multivariate tests comparing experience variants.
+  aliases: [A/B test, multivariate test, split test]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-EXP-1}
+  source: ADR 0027
+
+# Variant assignment & exposure control (CAP-DXC-EXP-2)
+- id: FUNC-dxc-variant-bucketing
+  term: Variant Bucketing
+  type: Function
+  definition: Assigns customers consistently and deterministically to experience variants.
+  aliases: [bucketing, variant assignment, deterministic assignment]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-EXP-2}
+  source: ADR 0027
+
+- id: FUNC-dxc-feature-flag
+  term: Feature Flagging
+  type: Function
+  definition: Toggles and gradually rolls out an experience to a population without redeploying the front end.
+  aliases: [feature flags, gated rollout, progressive delivery]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-EXP-2}
+  source: ADR 0027
+
+# Result measurement & statistical analysis (CAP-DXC-EXP-3)
+- id: FUNC-dxc-result-analysis
+  term: Result Statistical Analysis
+  type: Function
+  definition: Measures experiment outcomes against the chosen metric with sound statistical analysis.
+  aliases: [statistical analysis, significance testing, Bayesian/Frequentist analysis]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-EXP-3}
+  source: ADR 0027
+
+- id: FUNC-dxc-metric-instrumentation
+  term: Experiment Metric Instrumentation
+  type: Function
+  definition: Instruments and collects the outcome metrics an experiment is judged on.
+  aliases: [metric tracking, goal instrumentation, conversion metric]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-EXP-3}
+  source: ADR 0027
+
+# Optimization & rollout decision (CAP-DXC-EXP-4)
+- id: FUNC-dxc-rollout-decision
+  term: Promotion & Rollback Decision
+  type: Function
+  definition: Promotes a winning variant, holds, or rolls back based on experiment results.
+  aliases: [promote winner, rollback, ship decision]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-EXP-4}
+  source: ADR 0027
+
+- id: FUNC-dxc-optimization-feedback
+  term: Optimization Feedback
+  type: Function
+  definition: Feeds experiment learning into the experience backlog and improvement loop.
+  aliases: [learning loop, optimization backlog, CRO feedback]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-EXP-4}
+  source: ADR 0027

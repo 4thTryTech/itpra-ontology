@@ -1,0 +1,58 @@
+# ITPRA ontology — EUC-DEX (Endpoint Observability & Digital Employee Experience) capabilities
+# type: Capability. ids CAP-EUC-DEX-<n>. Observes the end-user's device/apps/experience — distinct from
+# platform/workload observability (ITO OBS); see ADR 0018.
+
+- id: CAP-EUC-DEX-1
+  term: Endpoint Telemetry & Inventory
+  type: Capability
+  definition: >
+    Collects unified, near-real-time telemetry from workforce endpoints — device, application, and connection
+    state and performance — as the data foundation for understanding and improving the workforce's digital
+    experience.
+  relates_to:
+    - {rel: grouped_by, target: EUC-DEX}
+    - {rel: consumed_by, target: PERSONA-euc-workplace-team}
+    - {rel: consumed_by, target: PERSONA-euc-support-agent}
+  source: ADR 0018
+
+- id: CAP-EUC-DEX-2
+  term: Digital-Experience Scoring & Analytics
+  type: Capability
+  definition: >
+    Turns endpoint telemetry into a measurable view of the workforce's digital experience — composite
+    experience scores across device, application, and connection performance, with analytics that locate the
+    root causes of poor experience.
+  relates_to:
+    - {rel: grouped_by, target: EUC-DEX}
+    - {rel: depends_on, target: CAP-EUC-DEX-1}
+    - {rel: consumed_by, target: PERSONA-euc-workplace-team}
+  source: ADR 0018
+
+- id: CAP-EUC-DEX-3
+  term: Proactive Experience Remediation
+  type: Capability
+  definition: >
+    Acts on experience signals before users report problems — detecting degradation and triggering automated
+    or guided remediation across the estate — so experience issues are resolved proactively rather than
+    reactively through tickets.
+  relates_to:
+    - {rel: grouped_by, target: EUC-DEX}
+    - {rel: depends_on, target: CAP-EUC-DEX-2}
+    - {rel: depends_on, target: CAP-EUC-SUP-3}
+    - {rel: consumed_by, target: PERSONA-euc-workplace-team}
+    - {rel: consumed_by, target: PERSONA-euc-support-agent}
+  source: ADR 0018
+
+- id: CAP-EUC-DEX-4
+  term: Experience Sentiment & Feedback
+  type: Capability
+  definition: >
+    Captures the workforce's reported experience and satisfaction — sentiment and feedback alongside the
+    measured technology signals — and feeds it into the digital-workplace improvement loop, so the experience
+    view reflects how work actually feels, not only how systems perform.
+  relates_to:
+    - {rel: grouped_by, target: EUC-DEX}
+    - {rel: depends_on, target: CAP-EUC-DEX-2}
+    - {rel: consumed_by, target: PERSONA-euc-workplace-team}
+    - {rel: consumed_by, target: PERSONA-euc-workforce-user}
+  source: ADR 0018

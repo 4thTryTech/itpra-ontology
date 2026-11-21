@@ -1,0 +1,43 @@
+# ITPRA ontology — EUC-MOB (Mobility & BYOD) capabilities
+# type: Capability. ids CAP-EUC-MOB-<n>. Grounded in NIST SP 1800-22 (BYOD).
+
+- id: CAP-EUC-MOB-1
+  term: Personal-Device Enrollment
+  type: Capability
+  definition: >
+    Enrolls a personally-owned device into the workplace under a bring-your-own-device program — establishing
+    a managed work boundary on the device while leaving the owner's personal use ungoverned — so personal
+    devices can reach workplace resources within policy.
+  relates_to:
+    - {rel: grouped_by, target: EUC-MOB}
+    - {rel: consumed_by, target: PERSONA-euc-workforce-user}
+    - {rel: consumed_by, target: PERSONA-euc-workplace-team}
+  source: ADR 0018
+
+- id: CAP-EUC-MOB-2
+  term: Work / Personal Data Separation
+  type: Capability
+  definition: >
+    Separates corporate data and applications from the owner's personal data on a shared device — containing
+    work content so it cannot leak into personal apps or storage — and enables selective removal of only the
+    corporate portion.
+  relates_to:
+    - {rel: grouped_by, target: EUC-MOB}
+    - {rel: depends_on, target: CAP-EUC-MOB-1}
+    - {rel: consumed_by, target: PERSONA-euc-security-compliance}
+    - {rel: consumed_by, target: PERSONA-euc-workforce-user}
+  source: ADR 0018
+
+- id: CAP-EUC-MOB-3
+  term: Mobile Application & Content Management
+  type: Capability
+  definition: >
+    Manages the corporate applications and content delivered to mobile and personal devices — governed
+    distribution, configuration, data-handling controls, and selective wipe of the work container — so
+    corporate data on mobile devices stays controlled regardless of who owns the device.
+  relates_to:
+    - {rel: grouped_by, target: EUC-MOB}
+    - {rel: depends_on, target: CAP-EUC-MOB-2}
+    - {rel: consumed_by, target: PERSONA-euc-workplace-team}
+    - {rel: consumed_by, target: PERSONA-euc-security-compliance}
+  source: ADR 0018

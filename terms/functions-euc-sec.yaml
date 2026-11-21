@@ -1,0 +1,70 @@
+# ITPRA ontology — FUNCTION library, EUC-SEC (Endpoint Security & Compliance Posture)
+# type: Function. ids FUNC-euc-<slug>.
+
+# Endpoint threat protection & response (CAP-EUC-SEC-1)
+- id: FUNC-euc-endpoint-threat-detection
+  term: Endpoint Threat Detection
+  type: Function
+  definition: Continuously monitors endpoint behavior to detect malicious or anomalous activity.
+  aliases: [behavioral detection, endpoint detection, EDR detection]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-SEC-1}
+  source: ADR 0018
+
+- id: FUNC-euc-endpoint-threat-response
+  term: Endpoint Threat Response
+  type: Function
+  definition: Contains, isolates, or remediates a compromised endpoint when a threat is detected.
+  aliases: [endpoint containment, host isolation, automated response]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-SEC-1}
+  source: ADR 0018
+
+# Configuration hardening (CAP-EUC-SEC-2)
+- id: FUNC-euc-security-baseline-enforcement
+  term: Security Baseline Enforcement
+  type: Function
+  definition: Applies and maintains a hardened configuration baseline (e.g. CIS-style benchmarks) on endpoints and detects drift.
+  aliases: [hardening baseline, benchmark enforcement, configuration baseline]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-SEC-2}
+  source: ADR 0018
+
+- id: FUNC-euc-disk-encryption-enforcement
+  term: Full-Disk Encryption Enforcement
+  type: Function
+  definition: Enforces and verifies endpoint storage encryption and key escrow on managed devices.
+  aliases: [encryption enforcement, storage encryption]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-SEC-2}
+  source: ADR 0018
+
+# Vulnerability & patch assurance (CAP-EUC-SEC-3)
+- id: FUNC-euc-endpoint-vulnerability-assessment
+  term: Endpoint Vulnerability Assessment
+  type: Function
+  definition: Assesses endpoints for known vulnerabilities and missing required updates and prioritizes remediation.
+  aliases: [vulnerability scanning, exposure assessment]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-SEC-3}
+  source: ADR 0018
+
+# Compliance posture & attestation (CAP-EUC-SEC-4)
+- id: FUNC-euc-compliance-evaluation
+  term: Device Compliance Evaluation
+  type: Function
+  definition: Evaluates an endpoint against required security/configuration policy to determine its compliance state.
+  aliases: [compliance check, posture evaluation]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-SEC-4}
+  source: ADR 0018
+
+- id: FUNC-euc-device-attestation
+  term: Device Posture Attestation
+  type: Function
+  definition: Attests an endpoint's verified posture as a trustworthy signal consumed by access and other controls.
+  aliases: [posture attestation, health attestation]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-SEC-4}
+    - {rel: supports, target: CAP-EUC-IAM-3}
+  source: ADR 0018

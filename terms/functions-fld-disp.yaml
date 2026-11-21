@@ -1,0 +1,98 @@
+# ITPRA ontology — FUNCTION library, FLD-DISP (Dispatch & Scheduling)
+# type: Function. ids FUNC-fld-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
+# the function (ADR 0011). Functions `support` ≥1 capability (many-to-many). See ADR 0020.
+
+# Dispatch intake & qualification (CAP-FLD-DISP-1)
+- id: FUNC-fld-work-order-intake
+  term: Field Work-Order Intake
+  type: Function
+  definition: Receives a request for on-site work and opens a field work order with its location, asset, and required-by time.
+  aliases: [dispatch intake, work request intake]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-DISP-1}
+  source: ADR 0020
+
+- id: FUNC-fld-work-qualification
+  term: Work Qualification & Skill Tagging
+  type: Function
+  definition: Qualifies the work and tags the skills, certifications, parts, and safety credentials it requires.
+  aliases: [job qualification, requirement tagging]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-DISP-1}
+  source: ADR 0020
+
+# Scheduling & appointment (CAP-FLD-DISP-2)
+- id: FUNC-fld-appointment-booking
+  term: Appointment Booking & Confirmation
+  type: Function
+  definition: Books a committed visit window and confirms it with the technician and the on-site contact.
+  aliases: [visit booking, appointment scheduling]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-DISP-2}
+  source: ADR 0020
+
+- id: FUNC-fld-dynamic-rescheduling
+  term: Dynamic Rescheduling
+  type: Function
+  definition: Re-optimizes the schedule as same-day changes (cancellations, escalations, delays) arrive.
+  aliases: [same-day rescheduling, schedule re-optimization]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-DISP-2}
+  source: ADR 0020
+
+# Skill & credential assignment (CAP-FLD-DISP-3)
+- id: FUNC-fld-skill-credential-matching
+  term: Skill & Credential Matching
+  type: Function
+  definition: Matches a visit to a technician using required skill, certification, and site safety credential as hard constraints.
+  aliases: [hard-filter assignment, credential gating]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-DISP-3}
+  source: ADR 0020
+
+- id: FUNC-fld-proximity-assignment
+  term: Proximity & Territory Assignment
+  type: Function
+  definition: Weighs proximity, territory, and service commitment to choose among qualified technicians.
+  aliases: [territory assignment, proximity weighting]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-DISP-3}
+  source: ADR 0020
+
+# Route & territory planning (CAP-FLD-DISP-4)
+- id: FUNC-fld-route-optimization
+  term: Route Optimization
+  type: Function
+  definition: Sequences a technician's visits to minimize travel and idle time while honoring committed windows.
+  aliases: [route planning, travel optimization]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-DISP-4}
+  source: ADR 0020
+
+- id: FUNC-fld-territory-balancing
+  term: Territory Coverage Balancing
+  type: Function
+  definition: Balances workload and coverage across territories so demand is met without hot spots or gaps.
+  aliases: [coverage balancing, capacity balancing]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-DISP-4}
+  source: ADR 0020
+
+# En-route tracking & on-site status (CAP-FLD-DISP-5)
+- id: FUNC-fld-visit-status-tracking
+  term: Visit Status Tracking
+  type: Function
+  definition: Tracks each visit through assigned / en route / on site / in progress / complete states.
+  aliases: [job status tracking, visit lifecycle tracking]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-DISP-5}
+  source: ADR 0020
+
+- id: FUNC-fld-eta-arrival-notification
+  term: ETA & Arrival Notification
+  type: Function
+  definition: Provides arrival/ETA visibility to the requestor and coordinator from technician location.
+  aliases: [arrival notification, ETA visibility]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-DISP-5}
+  source: ADR 0020

@@ -1,0 +1,102 @@
+# ITPRA ontology — FUNCTION library, DCF-PWR (Power & Energy Distribution)
+# type: Function. ids FUNC-dcf-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
+# the function (ADR 0011).
+
+# Utility intake & primary supply (CAP-DCF-PWR-1)
+- id: FUNC-dcf-utility-intake
+  term: Utility Intake & Switchgear
+  type: Function
+  definition: Brings external supply into the facility through primary transformation and switchgear.
+  aliases: [grid intake, primary switchgear, incoming feed]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-PWR-1}
+  source: ADR 0022
+
+- id: FUNC-dcf-dual-feed-supply
+  term: Independent Feed Supply
+  type: Function
+  definition: Sources primary power from independent feeds to avoid a common upstream point of failure.
+  aliases: [dual utility feed, diverse supply]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-PWR-1}
+    - {rel: supports, target: CAP-DCF-RES-1}
+  source: ADR 0022
+
+# Backup generation (CAP-DCF-PWR-2)
+- id: FUNC-dcf-backup-generation
+  term: On-Site Backup Generation
+  type: Function
+  definition: Sustains full facility load through loss of primary supply using on-site generation with on-site fuel.
+  aliases: [standby generator, engine generation]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-PWR-2}
+  source: ADR 0022
+
+- id: FUNC-dcf-automatic-transfer
+  term: Automatic Source Transfer
+  type: Function
+  definition: Automatically transfers the load between primary supply and backup generation on source change.
+  aliases: [automatic transfer switch, ATS, source switching]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-PWR-2}
+  source: ADR 0022
+
+# Uninterruptible & conditioned power (CAP-DCF-PWR-3)
+- id: FUNC-dcf-uninterruptible-power
+  term: Uninterruptible Power Bridging
+  type: Function
+  definition: Uses stored energy to bridge the gap between loss of primary supply and backup generation reaching load.
+  aliases: [UPS, ride-through, stored-energy bridging]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-PWR-3}
+  source: ADR 0022
+
+- id: FUNC-dcf-power-conditioning
+  term: Power Conditioning
+  type: Function
+  definition: Stabilizes and conditions delivered power so equipment is isolated from upstream voltage/frequency disturbances.
+  aliases: [voltage stabilization, power quality]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-PWR-3}
+  source: ADR 0022
+
+# Power distribution to equipment (CAP-DCF-PWR-4)
+- id: FUNC-dcf-power-distribution
+  term: Power Distribution & Rack Feeds
+  type: Function
+  definition: Distributes conditioned power to racks via distribution boards and rack power feeds with protection.
+  aliases: [PDU feeds, distribution boards, busway]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-PWR-4}
+  source: ADR 0022
+
+- id: FUNC-dcf-dual-corded-feed
+  term: Independent Rack Feeds
+  type: Function
+  definition: Delivers power to each rack via independent feeds (A/B) to support distribution-path redundancy.
+  aliases: [A/B feed, dual-corded power, redundant rack feed]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-PWR-4}
+    - {rel: supports, target: CAP-DCF-RES-1}
+  source: ADR 0022
+
+# Power metering & electrical capacity (CAP-DCF-PWR-5)
+- id: FUNC-dcf-power-metering
+  term: Power Metering
+  type: Function
+  definition: Meters electrical draw from utility feed down to the rack/circuit for capacity and efficiency use.
+  aliases: [branch-circuit metering, rack power metering]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-PWR-5}
+    - {rel: supports, target: CAP-DCF-MON-2}
+  source: ADR 0022
+
+- id: FUNC-dcf-electrical-capacity-accounting
+  term: Electrical Capacity Accounting
+  type: Function
+  definition: Accounts for allocated vs available electrical capacity per area/rack so power is assigned within limits.
+  aliases: [power budget, kW allocation]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-PWR-5}
+    - {rel: supports, target: CAP-DCF-SPC-3}
+  source: ADR 0022

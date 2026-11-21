@@ -1,0 +1,45 @@
+# ITPRA ontology — GRC-INS (Security & Risk Posture Insight) capabilities
+# type: Capability. ids CAP-GRC-INS-<n>. Grouped under domain GRC-INS (ADR 0024). Enterprise security/risk
+# REPORTING layer — aggregates the other GRC groups + evidence the platform (ITO GOV) and estates supply;
+# distinct from platform self-measurement (ITO GOV) and observability (ITO OBS) (ADR 0024).
+
+- id: CAP-GRC-INS-1
+  term: Consolidated Security & Risk Posture Reporting
+  type: Capability
+  definition: >
+    Aggregates the outputs of the GRC groups — detections, risk register, compliance status, vulnerability
+    exposure, human risk — plus evidence supplied by the platform and other estates into a single,
+    consolidated enterprise security and risk posture, trended over time. The one place enterprise posture is
+    assembled.
+  relates_to:
+    - {rel: grouped_by, target: GRC-INS}
+    - {rel: consumed_by, target: PERSONA-grc-security-leadership}
+    - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
+  source: ADR 0024
+
+- id: CAP-GRC-INS-2
+  term: Control-Health & KRI/KPI Dashboards
+  type: Capability
+  definition: >
+    Provides operational dashboards of control health and key risk/performance indicators segmented by
+    estate, team, and population, so control owners and the SOC can see where controls are failing or risk is
+    concentrating and act. The operational reporting view of posture.
+  relates_to:
+    - {rel: grouped_by, target: GRC-INS}
+    - {rel: depends_on, target: CAP-GRC-INS-1}
+    - {rel: consumed_by, target: PERSONA-grc-security-operations}
+    - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
+  source: ADR 0024
+
+- id: CAP-GRC-INS-3
+  term: Board & Executive Security/Risk Reporting
+  type: Capability
+  definition: >
+    Produces board- and executive-level security and risk reporting — posture trends, top risks, control
+    investment, and obligation status — that informs strategy, budget, and risk-appetite decisions. The
+    audience-shaped reporting that communicates the risk strategy required by enterprise governance.
+  relates_to:
+    - {rel: grouped_by, target: GRC-INS}
+    - {rel: depends_on, target: CAP-GRC-INS-1}
+    - {rel: consumed_by, target: PERSONA-grc-security-leadership}
+  source: ADR 0024

@@ -1,0 +1,31 @@
+# ITPRA ontology — environment dimensions
+# The orthogonal axes a T1 capability is asserted to be invariant across (public/private/hybrid, container/VM).
+# Ratified by ADR 0014. A capability's `Environment applicability` field names which of these are variation
+# points whose binding is deferred to T2 (scenario) / T3 (runtime). type: Concept.
+
+- id: ENV-DIM-HOSTING
+  term: Hosting model
+  type: Concept
+  definition: >
+    The environment dimension describing where the platform and its workloads are hosted. Allowed values:
+    public (public cloud), private (private cloud / on-prem), hybrid (a managed combination). A T1
+    capability's outcome must hold across all values; how it is realized may vary, in which case hosting is
+    a variation point bound at T2/T3 (e.g. provider integration, network/identity model).
+  aliases: [deployment locus, hosting locus]
+  relates_to:
+    - {rel: applies_to, target: ENVIRONMENT}
+  source: ADR 0014
+
+- id: ENV-DIM-WORKLOAD
+  term: Workload form
+  type: Concept
+  definition: >
+    The environment dimension describing the form workloads take on the substrate. Allowed values:
+    container, VM (virtual machine), serverless (event-driven, provider-managed runtime with no
+    consumer-managed host). A T1 capability's outcome must hold across these forms; where realization
+    differs (e.g. packaging, isolation primitive, lifecycle, degree of host management), workload form is a
+    variation point bound at T2/T3.
+  aliases: [workload type, runtime form, compute model]
+  relates_to:
+    - {rel: applies_to, target: ENVIRONMENT}
+  source: ADR 0014

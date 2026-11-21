@@ -1,0 +1,109 @@
+# ITPRA ontology — neutral autonomy / automation-governance concepts
+# Cross-cutting Concept vocabulary for how the platform bounds autonomous action. Operating-model-neutral and
+# tool-neutral: no ITIL/DevOps process names, no products. These are NOT governance "moments" (those are the ADR
+# 0015 GC-* set in governance-constructs.yaml) — they are standing, governed artifacts the moments act on.
+# Minted under ADR 0028 (evaluate-not-auto-add per ADR 0011: the enforcement machinery — policy-as-code,
+# approval routing, privileged-access ceilings — already existed as functions; what was missing was the named
+# partition itself). ADR 0030 amends AUTON-BOUNDARY to reach actions selected at RUNTIME by the executing actor,
+# and mints the sibling AUTON-ACTOR. AUTON-ACTOR is deliberately a Concept, NOT a Persona: a persona is a human
+# ACCOUNTABLE role archetype (ADR 0012) and a delegated actor is never the accountable party. ADR 0030 completes
+# the set with AUTON-HARNESS (where the actor runs; the enforcement point) and AUTON-INFLIGHT-CONTROL (what the
+# accountable persona can still do while it runs). The four answer different questions: BOUNDARY = what may run
+# unattended; ACTOR = who runs it; HARNESS = where it runs; INFLIGHT-CONTROL = intervention during the run. ADR
+# 0030 also RULED that GC-APPROVAL already reaches plan-level approval, so no plan-approval concept is minted
+# (granularity is a scenario decision). ADR 0028 amends AUTON-BOUNDARY again: the partition is over an action
+# AND the part of the estate it lands in. Permission presumes controls (attribution, recording, interruption)
+# that are themselves FUNCTIONS, and functions are partitioned by COVERAGE-AREA - so the boundary granted
+# permission on the assumption of coverage it never checked. Sound in the enterprise-standard area; silently
+# unsound elsewhere.
+
+- id: AUTON-BOUNDARY
+  term: Automation boundary
+  type: Concept
+  definition: >
+    The explicit, governed partition of operational actions into those that may be executed autonomously
+    (unattended, by automation or by a delegated actor) and those that must pass an approval / decision
+    point before proceeding. The partition covers both actions enumerated in advance and actions SELECTED
+    AT RUNTIME by the executing actor; where the actor proposes a plan rather than a single action, the
+    partition applies to the actions the plan would take.
+    The boundary is itself a versioned, reviewable artifact, not an emergent property of tooling: an
+    accountable owner holds it, changes to it are introduced through a change point, and actions executed
+    under it are recorded so autonomous activity remains attributable, countable, and auditable. The
+    partition's granularity (risk tiers, blast-radius classes, identity ceilings) is a scenario decision;
+    T1 asserts only that the partition exists, is owned, and is enforced.
+    The partition is over an action AND the part of the estate that action lands in, not the action alone:
+    permission presumes that the controls making the action attributable, recorded, and interruptible are
+    actually provided where it lands. Where coverage of those controls is partitioned (COVERAGE-AREA), the
+    boundary is evaluated per area - an action inside the boundary in the enterprise-standard area is not
+    thereby inside it in an area those controls do not reach. T1 asserts the dependency; which areas exist
+    and how the partition differs across them are scenario decisions (ADR 0028).
+  aliases: [autonomous-action authorization, autonomy boundary]
+  relates_to:
+    - {rel: depends_on, target: GC-APPROVAL}
+    - {rel: applies_to, target: COVERAGE-AREA}
+    - {rel: depends_on, target: FUNC-policy-authoring}
+    - {rel: depends_on, target: FUNC-policy-evaluation}
+    - {rel: governs, target: FUNC-runbook-automation}
+    - {rel: governs, target: FUNC-event-triggered-execution}
+    - {rel: governs, target: FUNC-response-playbook-execution}
+    - {rel: governs, target: AUTON-ACTOR}
+    - {rel: governs, target: FUNC-tool-invocation-mediation}
+    - {rel: governs, target: FUNC-agent-execution-sandboxing}
+  source: ADR 0028 (amended by ADR 0030)
+
+- id: AUTON-ACTOR
+  term: Delegated actor
+  type: Concept
+  definition: >
+    A non-human actor that carries out operational or engineering action under authority delegated by an
+    accountable persona, which it never itself holds. It is identified as a distinct principal, its
+    delegated authority is bounded and revocable, and its actions are recorded against both itself and the
+    accountable persona so activity remains attributable. The actor is governed by the automation boundary
+    (AUTON-BOUNDARY) like any other autonomous action, including where it selects its actions at runtime.
+    T1 asserts the actor exists, is identified, is bounded, and is attributable; its internal construction,
+    autonomy grading, and lifecycle mechanics are scenario decisions.
+  aliases: [agentic actor, digital worker, AI agent, software agent, non-human actor]
+  relates_to:
+    - {rel: depends_on, target: GC-OWNERSHIP}
+    - {rel: depends_on, target: FUNC-privileged-access-management}
+  source: ADR 0030
+
+- id: AUTON-HARNESS
+  term: Agent harness
+  type: Concept
+  definition: >
+    The governed runtime environment that hosts a delegated actor's execution: it holds the actor's working
+    context, mediates every tool and system the actor may reach, enforces the automation boundary on each
+    action the actor selects, bounds the actor's resource and time budget for ACTIVE execution, and records
+    the resulting action trace. The budget bounds work in progress, not elapsed wall-clock time: a run
+    suspended on a timer or awaiting a signal, holding no resident compute, is not consuming it, and the
+    elapsed time of that suspension is governed by the validity of the permission the run acts under rather
+    than by the harness budget (ADR 0039). The harness is what the platform operates, governs, and can intervene in; the actor's reasoning
+    and the loop it runs are what execute INSIDE it. T1 asserts the harness exists, is governed, and is the
+    enforcement point where the boundary is applied; its construction, loop shape, and tool-protocol binding
+    are scenario decisions.
+  aliases: [scaffold, agentic execution loop, agent runtime, agent sandbox]
+  relates_to:
+    - {rel: applies_to, target: AUTON-ACTOR}
+    - {rel: depends_on, target: AUTON-BOUNDARY}
+    - {rel: depends_on, target: FUNC-policy-evaluation}
+    - {rel: depends_on, target: FUNC-audit-logging}
+  source: ADR 0030
+
+- id: AUTON-INFLIGHT-CONTROL
+  term: In-flight action control
+  type: Concept
+  definition: >
+    The ability to observe a delegated actor's execution while it is still running and intervene in it —
+    pause, RESUME, redirect, or terminate — without waiting for the action to complete and without relying
+    solely on the decision point that preceded it. Resume is named because a pause that cannot be resumed is
+    a terminate: the control is only complete if the run can be picked up where it stopped (ADR 0039). Distinct from the automation boundary, which decides BEFORE an
+    action proceeds, and from incident handling, which acts AFTER an outcome. The intervention point is the
+    harness. T1 asserts the control exists and is reachable by the accountable persona; the intervention
+    mechanism, its latency, and its granularity are scenario decisions.
+  aliases: [intervention point, pause and steer, run interruption, kill switch, resume a paused run]
+  relates_to:
+    - {rel: applies_to, target: AUTON-ACTOR}
+    - {rel: depends_on, target: AUTON-HARNESS}
+    - {rel: depends_on, target: GC-OWNERSHIP}
+  source: ADR 0030

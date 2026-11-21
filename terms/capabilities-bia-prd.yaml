@@ -1,0 +1,55 @@
+# ITPRA ontology — BIA-PRD (Product & User-Behavior Analytics) capabilities
+# type: Capability. ids CAP-BIA-PRD-<n>. Grouped under domain BIA-PRD (ADR 0026). Business product insight;
+# DISTINCT from security UEBA (ITO CAP-SEC-7) and operational AIOps (ITO CAP-OBS-6) per ADR 0026.
+
+- id: CAP-BIA-PRD-1
+  term: Behavioral Event Collection
+  type: Capability
+  definition: >
+    Captures product and digital-service usage events against a governed event taxonomy, so user-behavior
+    data is consistent, well-defined, and reusable across analyses — the instrumentation foundation for
+    product insight.
+  relates_to:
+    - {rel: grouped_by, target: BIA-PRD}
+    - {rel: depends_on, target: CAP-BIA-INT-2}
+    - {rel: consumed_by, target: PERSONA-bia-product-analyst}
+  source: ADR 0026
+
+- id: CAP-BIA-PRD-2
+  term: Journey, Funnel & Conversion Analysis
+  type: Capability
+  definition: >
+    Analyzes how users move through product journeys and conversion funnels, surfacing drop-off and
+    progression, so product and business teams can see where experiences succeed or lose people and act on it.
+  relates_to:
+    - {rel: grouped_by, target: BIA-PRD}
+    - {rel: depends_on, target: CAP-BIA-PRD-1}
+    - {rel: consumed_by, target: PERSONA-bia-product-analyst}
+    - {rel: consumed_by, target: PERSONA-bia-insight-consumer}
+  source: ADR 0026
+
+- id: CAP-BIA-PRD-3
+  term: Cohort, Retention & Engagement Analysis
+  type: Capability
+  definition: >
+    Measures retention, engagement, and the behavior of user cohorts over time, so teams understand which
+    users stay, which features drive value, and how engagement evolves — for business optimization, not
+    security detection.
+  relates_to:
+    - {rel: grouped_by, target: BIA-PRD}
+    - {rel: depends_on, target: CAP-BIA-PRD-1}
+    - {rel: consumed_by, target: PERSONA-bia-product-analyst}
+  source: ADR 0026
+
+- id: CAP-BIA-PRD-4
+  term: Experimentation & Insight Activation
+  type: Capability
+  definition: >
+    Measures controlled experiments (e.g. A/B tests) and activates the resulting insight back into product
+    and business decisions, so changes are validated by evidence and learnings reach the teams who act on
+    them.
+  relates_to:
+    - {rel: grouped_by, target: BIA-PRD}
+    - {rel: depends_on, target: CAP-BIA-PRD-2}
+    - {rel: consumed_by, target: PERSONA-bia-product-analyst}
+  source: ADR 0026

@@ -1,0 +1,212 @@
+# ITPRA ontology — entity types
+# The kinds of things the architecture is built from. Instances (capabilities, personas, journeys, …) live under
+# terms/; requirements live in consumers' registries (ADR 0001).
+
+- id: ITPRA_TIER
+  term: ITPRA Framework Tier
+  type: EntityType
+  definition: >
+    An abstraction layer of the ITPRA-Framework itself. T1 is tool-agnostic and operating-model-neutral;
+    T2 binds a scenario and one operating model; T3 binds concrete tools and is implementable. This is
+    distinct from any tiers a derived architecture may define internally (e.g. application, storage, or
+    support tiers) — those are different concepts and must use their own ontology terms. In document prose,
+    the shorthand T1/T2/T3 may be used where context makes the ITPRA-Framework meaning clear.
+  aliases: [Tier, framework tier]
+  deprecated: [level]            # "level" collides with operations support tiers — do not use
+
+- id: PLANE
+  term: Capability Plane
+  type: EntityType
+  definition: >
+    A grouping of related capability domains by platform concern — the layer above DOMAIN
+    (Capability → Domain → Plane → Tier). The seven ITPRA planes extend the Internal Developer Platform
+    five-plane model for an infrastructure platform. Members live in terms/planes.yaml. Ratified by ADR 0010.
+  aliases: [platform plane]
+  relates_to:
+    - {rel: grouped_by, target: ITPRA_TIER}
+
+- id: DOMAIN
+  term: Domain
+  type: EntityType
+  definition: >
+    A grouping of related capabilities (a functional area of the platform), itself grouped under a
+    capability plane.
+  relates_to:
+    - {rel: grouped_by, target: PLANE}
+    - {rel: belongs_to_service_domain, target: SERVICE_DOMAIN}
+
+- id: CAPABILITY
+  term: Capability
+  type: EntityType
+  definition: A tool-agnostic platform ability that delivers an outcome, independent of how it is built.
+  aliases: [platform capability]
+  deprecated: [feature]
+  relates_to:
+    - {rel: grouped_by, target: DOMAIN}
+    - {rel: consumed_by, target: PERSONA}
+    - {rel: realized_in, target: JOURNEY}
+    - {rel: depends_on, target: CAPABILITY}
+    - {rel: decomposes_into, target: CAPABILITY}
+    - {rel: derived_from, target: CAPABILITY}
+    - {rel: applies_to, target: CONCEPT}
+
+- id: FUNCTION
+  term: Function
+  type: EntityType
+  definition: >
+    A discrete unit of behavior finer-grained than a capability — the granular layer that T2 selects as
+    required features and T3 binds tools to (ADR 0011). One shared, cross-domain library (`FUNC-<slug>`): a
+    function `supports` one or more capabilities (many-to-many). Functions are flat — no tier annotation —
+    and may freely name a specific standard, protocol, or technique where that *is* the function (ADR 0011: no tier
+    field, no function `derived_from`). Distinct from a child capability
+    (`CAP-<DOMAIN>-<n>.<m>`), which is an outcome-level split.
+  relates_to:
+    - {rel: supports, target: CAPABILITY}
+    - {rel: depends_on, target: FUNCTION}
+    - {rel: applies_to, target: CONCEPT}
+
+- id: SERVICE
+  term: Service
+  type: EntityType
+  definition: An offering exposed to consumers that packages one or more capabilities for use.
+  relates_to:
+    - {rel: produces, target: CAPABILITY}
+    - {rel: consumed_by, target: PERSONA}
+
+- id: PERSONA
+  term: Persona
+  type: EntityType
+  definition: An archetypal role that interacts with the platform, with goals and success measures.
+  aliases: [role]
+  relates_to:
+    - {rel: owns, target: CAPABILITY}
+
+- id: JOURNEY_GROUP
+  term: Journey Group
+  type: EntityType
+  definition: >
+    A grouping of journeys by lifecycle phase (design / deploy / operate) or cross-cutting concern.
+    Members live in terms/journey-groups.yaml. Ratified by ADR 0013.
+  relates_to:
+    - {rel: grouped_by, target: ITPRA_TIER}
+
+- id: JOURNEY
+  term: Journey
+  type: EntityType
+  definition: An end-to-end story a persona follows to achieve an outcome across capabilities.
+  aliases: [user journey]
+  relates_to:
+    - {rel: grouped_by, target: JOURNEY_GROUP}
+    - {rel: consumed_by, target: PERSONA}
+    - {rel: depends_on, target: CAPABILITY}
+
+- id: WORKFLOW
+  term: Workflow
+  type: EntityType
+  definition: A diagrammable sequence of steps and branch points that realizes a journey or use case.
+  relates_to:
+    - {rel: realized_in, target: JOURNEY}
+
+- id: OPERATING_MODEL
+  term: Operating Model
+  type: EntityType
+  definition: >
+    The governance and ways-of-working framework an organization uses (e.g. ITIL v3 [legacy], ITIL v4,
+    ITIL v5, or non-ITIL DevOps). Bound only at T2; T1 stays neutral.
+  relates_to:
+    - {rel: governs, target: WORKFLOW}
+    - {rel: applies_to, target: ITPRA_TIER}
+
+- id: TENANT
+  term: Tenant
+  type: EntityType
+  definition: A consumer organization unit isolated within the platform (team, business unit, project, or an estate governed as one).
+  relates_to:
+    - {rel: consumed_by, target: PERSONA}
+
+- id: ENVIRONMENT
+  term: Environment
+  type: EntityType
+  definition: A runtime context the platform serves (e.g. public/private/hybrid cloud, container or VM).
+
+- id: SERVICE_DOMAIN
+  term: Service Domain
+  type: EntityType
+  definition: >
+    A domain of IT services in the enterprise landscape (TBM-tower / SIAM-tower style). The framework spans
+    eleven peer service domains, each authored as its own architecture. Service domains `interfaces_with`
+    each other across capability planes — context-boundary relationships, a C4 system-context view. Distinct
+    from a capability DOMAIN (the finer-grained grouping inside a service domain). Members live in
+    terms/service-domains.yaml. Web-grounded in the TBM Resource Towers, the SIAM tower model, and the ITIL
+    core IT functions. Ratified by ADR 0009.
+  aliases: [service block, service tower]
+  relates_to:
+    - {rel: interfaces_with, target: PLANE}
+
+- id: ADR
+  term: Architecture Decision Record
+  type: EntityType
+  definition: A dated, numbered record of a significant architecture decision and its rationale.
+  relates_to:
+    - {rel: supersedes, target: ADR}
+    - {rel: applies_to, target: ITPRA_TIER}
+
+- id: REQUIREMENT
+  term: Requirement
+  type: EntityType
+  definition: >
+    A one-line statement of something the platform must do (FR) or a quality it must exhibit (NFR), kept in a
+    consumer's requirement registry and traced to the capabilities that meet it and the journeys that
+    verify it. The generic kind; FR and NFR are its two forms (ADR 0008).
+  aliases: [requirement record]
+  relates_to:
+    - {rel: met_by, target: CAPABILITY}
+    - {rel: verified_by, target: JOURNEY}
+
+- id: NFR
+  term: Non-Functional Requirement
+  type: EntityType
+  definition: >
+    A one-line statement of a quality the platform must exhibit (NFR), categorized by a quality
+    attribute. Qualitative at T1; given measurable targets at T2/T3.
+  aliases: [quality requirement]
+  relates_to:
+    - {rel: categorized_as, target: QUALITY_ATTRIBUTE}
+    - {rel: met_by, target: CAPABILITY}
+    - {rel: verified_by, target: JOURNEY}
+
+- id: QUALITY_ATTRIBUTE
+  term: Quality Attribute
+  type: EntityType
+  definition: A category of non-functional concern (e.g. Availability, Security). Members live in terms/.
+  aliases: ["-ility"]
+
+- id: FR
+  term: Functional Requirement
+  type: EntityType
+  definition: >
+    A one-line statement of something the platform must do. Ids FR-<SUB>-<n>. Met by capabilities and verified by
+    journeys; the functional form of REQUIREMENT (ADR 0008).
+  aliases: [functional requirement record]
+  relates_to:
+    - {rel: met_by, target: CAPABILITY}
+    - {rel: verified_by, target: JOURNEY}
+  source: ADR 0008
+
+- id: CONCEPT
+  term: Concept
+  type: EntityType
+  definition: >
+    A defined idea the architecture relies on that is not an entity type, a relationship verb, or a quality
+    attribute - governance constructs, autonomy concepts, dimensions, knowledge roles, coverage areas. The entity
+    type of every `type: Concept` record (ADR 0008).
+  aliases: [concept record]
+  relates_to:
+    - {rel: applies_to, target: CONCEPT}
+    - {rel: applies_to, target: CAPABILITY}
+    - {rel: governs, target: FUNCTION}
+    - {rel: governs, target: CONCEPT}
+    - {rel: depends_on, target: CONCEPT}
+    - {rel: depends_on, target: FUNCTION}
+    - {rel: belongs_to_service_domain, target: SERVICE_DOMAIN}
+  source: ADR 0008

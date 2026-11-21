@@ -1,0 +1,52 @@
+# ITPRA ontology — DXC-JRN (Customer Journey Orchestration) capabilities
+# type: Capability. ids CAP-DXC-JRN-<n>. Grouped under domain DXC-JRN (ADR 0027).
+
+- id: CAP-DXC-JRN-1
+  term: Journey Design & Mapping
+  type: Capability
+  definition: >
+    Designs and maps the cross-channel customer journey — its stages, triggers, branches, and goals — so the
+    intended end-to-end experience is explicit and changeable before it is run.
+  relates_to:
+    - {rel: grouped_by, target: DXC-JRN}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-practitioner}
+  source: ADR 0027
+
+- id: CAP-DXC-JRN-2
+  term: Journey Execution & Orchestration
+  type: Capability
+  definition: >
+    Runs a designed journey for each customer — advancing them through stages and coordinating the next
+    action across channels — so the journey plays out consistently and in context for every customer.
+  relates_to:
+    - {rel: grouped_by, target: DXC-JRN}
+    - {rel: depends_on, target: CAP-DXC-JRN-1}
+    - {rel: consumed_by, target: PERSONA-dxc-customer}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-team}
+  source: ADR 0027
+
+- id: CAP-DXC-JRN-3
+  term: Real-Time Decisioning & Next-Best-Action
+  type: Capability
+  definition: >
+    Chooses the next best action or experience for a customer in the moment from their profile, context, and
+    behavioral signals, so the journey adapts to live intent rather than following a fixed path.
+  relates_to:
+    - {rel: grouped_by, target: DXC-JRN}
+    - {rel: depends_on, target: CAP-DXC-CDP-2}
+    - {rel: depends_on, target: CAP-DXC-PER-4}
+    - {rel: consumed_by, target: PERSONA-dxc-customer}
+  source: ADR 0027
+
+- id: CAP-DXC-JRN-4
+  term: Journey Analytics & Friction Insight
+  type: Capability
+  definition: >
+    Observes where customers are in their journeys and where friction, drop-off, or delay occurs, so the
+    experience team can see how journeys actually behave and where to improve them.
+  relates_to:
+    - {rel: grouped_by, target: DXC-JRN}
+    - {rel: depends_on, target: CAP-DXC-JRN-2}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-practitioner}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-team}
+  source: ADR 0027

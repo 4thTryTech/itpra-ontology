@@ -1,0 +1,89 @@
+# ITPRA ontology — FUNCTION library, FLD-FIX (Hardware Break-Fix & Depot Repair)
+# type: Function. ids FUNC-fld-<slug>. Functions `support` ≥1 capability. See ADR 0020.
+
+# On-site fault isolation & component swap (CAP-FLD-FIX-1)
+- id: FUNC-fld-fault-isolation
+  term: Hardware Fault Isolation
+  type: Function
+  definition: Isolates the failed component or unit in the equipment on site.
+  aliases: [fault localization, component diagnosis]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-FIX-1}
+  source: ADR 0020
+
+- id: FUNC-fld-component-swap
+  term: Component / Unit Swap
+  type: Function
+  definition: Replaces the failed part with a serviceable part from stock to restore service.
+  aliases: [part replacement, field replaceable unit swap]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-FIX-1}
+  source: ADR 0020
+
+# Warranty & advance-exchange (CAP-FLD-FIX-2)
+- id: FUNC-fld-warranty-entitlement-check
+  term: Warranty / Contract Entitlement Check
+  type: Function
+  definition: Confirms warranty or service-contract coverage for the failed asset before repair.
+  aliases: [entitlement verification, coverage check]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-FIX-2}
+  source: ADR 0020
+
+- id: FUNC-fld-advance-exchange
+  term: Advance Exchange
+  type: Function
+  definition: Ships a known-good unit ahead of the defective return so service is restored first.
+  aliases: [advance replacement, cross-ship]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-FIX-2}
+  source: ADR 0020
+
+# Defective-unit return & reverse logistics (CAP-FLD-FIX-3)
+- id: FUNC-fld-return-authorization
+  term: Return Authorization (RMA)
+  type: Function
+  definition: Raises a return material authorization and shipping label for the defective unit.
+  aliases: [RMA, return material authorization]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-FIX-3}
+  source: ADR 0020
+
+- id: FUNC-fld-reverse-logistics-tracking
+  term: Reverse-Logistics Tracking
+  type: Function
+  definition: Tracks the defective unit from the field back to the repair or replacement point.
+  aliases: [return tracking, reverse flow tracking]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-FIX-3}
+  source: ADR 0020
+
+# Depot repair & refurbishment (CAP-FLD-FIX-4)
+- id: FUNC-fld-depot-repair
+  term: Depot Repair & Test
+  type: Function
+  definition: Diagnoses, repairs, and tests a returned unit at a repair point.
+  aliases: [bench repair, repair execution]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-FIX-4}
+  source: ADR 0020
+
+- id: FUNC-fld-refurbish-restock
+  term: Refurbishment & Restock
+  type: Function
+  definition: Refurbishes a repaired unit and returns it to serviceable spares stock.
+  aliases: [refurbishment, return-to-stock]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-FIX-4}
+    - {rel: supports, target: CAP-FLD-LOG-4}
+  source: ADR 0020
+
+# Final disposition & recycling (CAP-FLD-FIX-5)
+- id: FUNC-fld-secure-disposal
+  term: Secure Disposal & Recycling
+  type: Function
+  definition: Disposes, recycles, or scraps a non-repairable unit against the required sanitization and environmental standards.
+  aliases: [e-waste disposal, secure scrap]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-FIX-5}
+  source: ADR 0020

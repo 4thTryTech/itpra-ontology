@@ -1,0 +1,56 @@
+# ITPRA ontology — GRC-POL (Policy, Standards & Control Governance) capabilities
+# type: Capability. ids CAP-GRC-POL-<n>. Grouped under domain GRC-POL (ADR 0024). Enterprise policy/control
+# AUTHORSHIP — sets the guardrails the platform (ITO FND/SEC) codifies and enforces; GRC
+# authors/approves/reviews, enforcement is downstream and NOT duplicated here (ADR 0024).
+
+- id: CAP-GRC-POL-1
+  term: Security Policy Lifecycle
+  type: Capability
+  definition: >
+    Authors, approves, publishes, reviews on cadence, and retires enterprise security policies — the
+    high-level rules every estate must observe — each with an owner, an approval authority, and a version
+    history. The source of the guardrails the platform and other estates enforce.
+  relates_to:
+    - {rel: grouped_by, target: GRC-POL}
+    - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
+    - {rel: consumed_by, target: PERSONA-grc-security-leadership}
+  source: ADR 0024
+
+- id: CAP-GRC-POL-2
+  term: Security Standards & Baseline Management
+  type: Capability
+  definition: >
+    Defines and maintains the security standards and configuration baselines that operationalize policy —
+    the specific, testable requirements estates implement — so policy intent becomes concrete, enforceable
+    expectations. Estates (the platform included) implement and test against these baselines.
+  relates_to:
+    - {rel: grouped_by, target: GRC-POL}
+    - {rel: depends_on, target: CAP-GRC-POL-1}
+    - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
+  source: ADR 0024
+
+- id: CAP-GRC-POL-3
+  term: Control Catalogue Governance & Ownership
+  type: Capability
+  definition: >
+    Governs the enterprise control catalogue — the canonical set of controls policies and standards require —
+    assigning control owners and maintaining control definitions and coverage, so every required control is
+    defined, owned, and traceable to the policy that mandates it and the obligation it satisfies.
+  relates_to:
+    - {rel: grouped_by, target: GRC-POL}
+    - {rel: depends_on, target: CAP-GRC-POL-1}
+    - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
+  source: ADR 0024
+
+- id: CAP-GRC-POL-4
+  term: Policy Exception & Waiver Governance
+  type: Capability
+  definition: >
+    Governs exceptions and waivers to policy and standards — requested, risk-assessed, time-boxed, approved at
+    the appropriate authority, and tracked to expiry — so deviations are deliberate, recorded, and linked to
+    the risk register rather than silent.
+  relates_to:
+    - {rel: grouped_by, target: GRC-POL}
+    - {rel: depends_on, target: CAP-GRC-POL-1}
+    - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
+  source: ADR 0024

@@ -1,0 +1,51 @@
+# ITPRA ontology — SVD-KNW (Knowledge & Self-Service Enablement) capabilities
+# type: Capability. ids CAP-SVD-KNW-<n>. Grouped under domain SVD-KNW (ADR 0019).
+
+- id: CAP-SVD-KNW-1
+  term: Self-Service Resolution Surface
+  type: Capability
+  definition: >
+    Lets a user find answers and resolve common issues or place standard requests themselves, at any time,
+    without contacting an agent — the foundational first layer that deflects demand and gives instant help.
+  relates_to:
+    - {rel: grouped_by, target: SVD-KNW}
+    - {rel: consumed_by, target: PERSONA-svd-requester}
+  source: ADR 0019
+
+- id: CAP-SVD-KNW-2
+  term: Knowledge Search & Contextual Surfacing
+  type: Capability
+  definition: >
+    Finds and surfaces the knowledge relevant to a contact's context — for the user in self-service and for
+    the agent while resolving — so the right answer is presented rather than re-researched.
+  relates_to:
+    - {rel: grouped_by, target: SVD-KNW}
+    - {rel: consumed_by, target: PERSONA-svd-requester}
+    - {rel: consumed_by, target: PERSONA-svd-agent}
+  source: ADR 0019
+
+- id: CAP-SVD-KNW-3
+  term: Knowledge Capture & Reuse
+  type: Capability
+  definition: >
+    Captures the resolution of a contact as reusable knowledge as a by-product of the work, and reuses
+    existing knowledge to resolve new contacts, so solving a problem once makes it cheaper to solve — or to
+    deflect — every time after.
+  relates_to:
+    - {rel: grouped_by, target: SVD-KNW}
+    - {rel: depends_on, target: CAP-SVD-KNW-2}
+    - {rel: consumed_by, target: PERSONA-svd-agent}
+  source: ADR 0019
+
+- id: CAP-SVD-KNW-4
+  term: Knowledge Health & Lifecycle
+  type: Capability
+  definition: >
+    Keeps the knowledge base trustworthy over time — reviewing, improving, and retiring articles for
+    accuracy, clarity, and coverage under collective ownership — so what self-service and agents rely on
+    stays correct and findable.
+  relates_to:
+    - {rel: grouped_by, target: SVD-KNW}
+    - {rel: depends_on, target: CAP-SVD-KNW-3}
+    - {rel: consumed_by, target: PERSONA-svd-coordinator}
+  source: ADR 0019

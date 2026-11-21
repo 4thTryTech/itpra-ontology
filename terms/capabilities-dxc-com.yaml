@@ -1,0 +1,52 @@
+# ITPRA ontology — DXC-COM (Digital Commerce) capabilities
+# type: Capability. ids CAP-DXC-COM-<n>. Grouped under domain DXC-COM (ADR 0027).
+
+- id: CAP-DXC-COM-1
+  term: Product Catalog & Merchandising
+  type: Capability
+  definition: >
+    Models, organizes, and presents the products or offerings a customer can buy — categories, attributes,
+    and merchandising rules — so the catalog is the authoritative, well-presented basis of the commerce
+    experience.
+  relates_to:
+    - {rel: grouped_by, target: DXC-COM}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-practitioner}
+  source: ADR 0027
+
+- id: CAP-DXC-COM-2
+  term: Product Search & Discovery
+  type: Capability
+  definition: >
+    Lets a customer find and browse offerings through search, navigation, and faceting, so customers can
+    locate what they want quickly within the catalog.
+  relates_to:
+    - {rel: grouped_by, target: DXC-COM}
+    - {rel: depends_on, target: CAP-DXC-COM-1}
+    - {rel: consumed_by, target: PERSONA-dxc-customer}
+  source: ADR 0027
+
+- id: CAP-DXC-COM-3
+  term: Cart & Checkout Experience
+  type: Capability
+  definition: >
+    Lets a customer assemble a purchase and complete it through a cart and checkout flow, so the customer can
+    convert intent into a placed order. Payment processing is a downstream mechanism this interfaces with.
+  relates_to:
+    - {rel: grouped_by, target: DXC-COM}
+    - {rel: depends_on, target: CAP-DXC-COM-2}
+    - {rel: consumed_by, target: PERSONA-dxc-customer}
+  source: ADR 0027
+
+- id: CAP-DXC-COM-4
+  term: Pricing, Promotions & Order Experience
+  type: Capability
+  definition: >
+    Applies pricing, promotions, and offers and gives the customer the post-purchase order and status
+    experience, so customers see correct prices and incentives and can track their orders. Order-fulfilment
+    execution is a back-office mechanism this interfaces with.
+  relates_to:
+    - {rel: grouped_by, target: DXC-COM}
+    - {rel: depends_on, target: CAP-DXC-COM-3}
+    - {rel: consumed_by, target: PERSONA-dxc-customer}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-practitioner}
+  source: ADR 0027

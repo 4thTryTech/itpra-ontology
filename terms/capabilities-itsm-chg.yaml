@@ -1,0 +1,58 @@
+# ITPRA ontology — ITSM-CHG (Cross-Domain Change Coordination) capabilities
+# type: Capability. ids CAP-ITSM-CHG-<n>. Grouped under domain ITSM-CHG (ADR 0025). Neutral cross-provider
+# coordination over GC-CHANGE / GC-APPROVAL / GC-RECORD.
+
+- id: CAP-ITSM-CHG-1
+  term: Cross-Provider Change Authorization
+  type: Capability
+  definition: >
+    Routes a change whose intent or impact crosses provider boundaries through a cross-provider decision point
+    before it takes effect — assessing it against enterprise policy and the authority of the affected owners —
+    so a multi-provider change cannot proceed without a recorded, attributable authorization.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-CHG}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-service-owner}
+  source: ADR 0025
+
+- id: CAP-ITSM-CHG-2
+  term: Change Scheduling & Deconfliction
+  type: Capability
+  definition: >
+    Maintains a cross-provider view of planned changes and deconflicts them against one another and against
+    service demand — sequencing, windowing, and freezing where needed — so changes from different providers do
+    not collide or compound risk on a shared end-to-end service.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-CHG}
+    - {rel: depends_on, target: CAP-ITSM-CHG-1}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-provider}
+  source: ADR 0025
+
+- id: CAP-ITSM-CHG-3
+  term: Cross-Provider Change Risk & Impact Assessment
+  type: Capability
+  definition: >
+    Assesses the end-to-end risk and impact of a change across the providers and services it touches — using
+    the integrated configuration view to find dependencies and affected services — so the decision point and
+    schedule are informed by the change's true cross-provider blast radius.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-CHG}
+    - {rel: depends_on, target: CAP-ITSM-CHG-1}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-provider}
+  source: ADR 0025
+
+- id: CAP-ITSM-CHG-4
+  term: Change Outcome & Record Reconciliation
+  type: Capability
+  definition: >
+    Confirms the outcome of a coordinated change across its providers and reconciles the resulting state into
+    the integrated record — capturing success, backout, or residual risk — so the end-to-end record stays a
+    trustworthy account of what changed and the change's effect is recoverable.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-CHG}
+    - {rel: depends_on, target: CAP-ITSM-CHG-2}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-provider}
+  source: ADR 0025

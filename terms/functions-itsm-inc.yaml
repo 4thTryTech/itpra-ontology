@@ -1,0 +1,79 @@
+# ITPRA ontology — FUNCTION library, ITSM-INC (Cross-Domain Incident & Problem Coordination)
+# type: Function. ids FUNC-itsm-<slug>. All T1-neutral. Functions `support` >=1 capability. See ADR 0025.
+
+# Cross-provider incident detection & triage (CAP-ITSM-INC-1)
+- id: FUNC-itsm-incident-correlation
+  term: Cross-Provider Incident Correlation
+  type: Function
+  definition: Correlates signals and reports that individually sit with different providers into one recognized incident.
+  aliases: [signal correlation, incident consolidation]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-INC-1}
+  source: ADR 0025
+
+- id: FUNC-itsm-incident-triage
+  term: Incident Impact Triage
+  type: Function
+  definition: Classifies a cross-provider disruption's impact and identifies the affected end-to-end service.
+  aliases: [impact assessment, incident classification]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-INC-1}
+  source: ADR 0025
+
+# End-to-end restoration coordination (CAP-ITSM-INC-2)
+- id: FUNC-itsm-restoration-coordination
+  term: Restoration Coordination
+  type: Function
+  definition: Drives each provider's response toward one restore objective, sequencing dependent actions to recover the service.
+  aliases: [recovery coordination, restore orchestration]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-INC-2}
+  source: ADR 0025
+
+# Major incident coordination & communication (CAP-ITSM-INC-3)
+- id: FUNC-itsm-major-incident-command
+  term: Major Incident Coordination
+  type: Function
+  definition: Establishes a single coordinating authority and mobilizes the right providers for a high-impact event.
+  aliases: [incident command, major-incident lead]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-INC-3}
+  source: ADR 0025
+
+- id: FUNC-itsm-stakeholder-communication
+  term: Stakeholder Communication
+  type: Function
+  definition: Keeps consumers and owners informed with timely, consistent status from one source during an event.
+  aliases: [status communication, incident notification]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-INC-3}
+  source: ADR 0025
+
+# Cross-provider problem & root-cause coordination (CAP-ITSM-INC-4)
+- id: FUNC-itsm-root-cause-coordination
+  term: Cross-Provider Root-Cause Coordination
+  type: Function
+  definition: Convenes providers and drives root-cause analysis across boundaries for one or more disruptions.
+  aliases: [root-cause analysis, problem investigation]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-INC-4}
+  source: ADR 0025
+
+- id: FUNC-itsm-corrective-action-tracking
+  term: Corrective Action Tracking
+  type: Function
+  definition: Tracks lasting corrective actions to closure across the providers that must act to prevent recurrence.
+  aliases: [known-error tracking, corrective action]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-INC-4}
+  source: ADR 0025
+
+# Incident & problem record integration (CAP-ITSM-INC-5)
+- id: FUNC-itsm-incident-record-consolidation
+  term: Incident & Problem Record Consolidation
+  type: Function
+  definition: Consolidates each provider's contribution into one trustworthy end-to-end incident/problem record.
+  aliases: [record consolidation, timeline assembly]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-INC-5}
+  source: ADR 0025

@@ -1,0 +1,99 @@
+# ITPRA ontology — FUNCTION library, SVD-HDL (Front-line Incident & Request Handling)
+# type: Function. ids FUNC-svd-<slug>. Functions `support` >=1 capability; NEVER derived_from on a Function (ADR
+# 0011). Neutral across tiered & swarming models (ADR 0019). See ADR 0019.
+
+# First-line resolution (CAP-SVD-HDL-1)
+- id: FUNC-svd-first-line-troubleshooting
+  term: First-Line Troubleshooting
+  type: Function
+  definition: Diagnoses and resolves a contact at the point of first contact using knowledge and available access.
+  aliases: [first-call resolution, frontline fix]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-HDL-1}
+  source: ADR 0019
+
+- id: FUNC-svd-remote-assist
+  term: Remote Assistance Session
+  type: Function
+  definition: Resolves a contact interactively with the user through a remote or co-browse session.
+  aliases: [remote support, screen share assist]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-HDL-1}
+  source: ADR 0019
+
+# Standard-request fulfilment coordination (CAP-SVD-HDL-2)
+- id: FUNC-svd-request-fulfilment
+  term: Request Fulfilment Coordination
+  type: Function
+  definition: Drives a standard request from intake through any approval to delivery, coordinating the fulfilling action.
+  aliases: [request handling, order coordination]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-HDL-2}
+  source: ADR 0019
+
+- id: FUNC-svd-approval-routing
+  term: Approval Routing
+  type: Function
+  definition: Routes a request needing authorization to the approver and records the decision before fulfilment.
+  aliases: [approval workflow, authorization gate]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-HDL-2}
+  source: ADR 0019
+
+# Handoff & resolver routing (CAP-SVD-HDL-3)
+- id: FUNC-svd-resolver-handoff
+  term: Resolver Handoff
+  type: Function
+  definition: Hands a contact and its full context to a resolver group when first-line resolution is not possible.
+  aliases: [escalation handoff, assignment to resolver, swarm pull-in]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-HDL-3}
+  source: ADR 0019
+
+- id: FUNC-svd-status-exchange
+  term: Resolver Status Exchange
+  type: Function
+  definition: Exchanges progress and status with the resolver so the desk and user stay informed during deeper work.
+  aliases: [bidirectional status, resolver updates]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-HDL-3}
+    - {rel: supports, target: CAP-SVD-HDL-4}
+  source: ADR 0019
+
+# Contact ownership & follow-up (CAP-SVD-HDL-4)
+- id: FUNC-svd-case-ownership
+  term: Case Ownership Tracking
+  type: Function
+  definition: Keeps one accountable owner per contact and tracks it across resolvers to closure.
+  aliases: [single owner, end-to-end ownership]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-HDL-4}
+  source: ADR 0019
+
+- id: FUNC-svd-followup-chasing
+  term: Progress Follow-up & Chasing
+  type: Function
+  definition: Monitors aging and stalled contacts and prompts action so none falls between teams.
+  aliases: [aging alerts, breach prevention, chasing]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-HDL-4}
+  source: ADR 0019
+
+# Resolution confirmation & closure (CAP-SVD-HDL-5)
+- id: FUNC-svd-resolution-confirmation
+  term: User Resolution Confirmation
+  type: Function
+  definition: Confirms with the user that the issue is resolved or the request delivered before closing.
+  aliases: [closure confirmation, user sign-off]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-HDL-5}
+  source: ADR 0019
+
+- id: FUNC-svd-closure-record
+  term: Closure & Outcome Recording
+  type: Function
+  definition: Records the outcome, resolution, and categorization at closure so the record is complete.
+  aliases: [closure coding, outcome capture]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-HDL-5}
+  source: ADR 0019

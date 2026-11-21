@@ -1,0 +1,238 @@
+# ITPRA ontology — Application Development & Maintenance (ADM) journey catalog
+# type: Journey. ids JRN-adm-<slug>. Each `grouped_by` exactly one EXISTING JourneyGroup
+# (JG-ONBOARDING..JG-EVOLUTION; reused, not redefined). Neutral — steps reference capabilities + neutral
+# governance construct points (request/approval/change/incident/record/feedback), never tools or named
+# processes. Relationships from the journey side: grouped_by, consumed_by (primary personas), depends_on
+# (capabilities exercised). Ratified by ADR 0021. Diagrams: WF-adm-<slug>.
+
+# ---- JG-ONBOARDING ----
+- id: JRN-adm-onboard-developer
+  term: Onboard a Developer onto the Platform
+  type: Journey
+  definition: >
+    Ready a new developer or application team to be productive — onboard them onto the platform's paved
+    roads, grant the access and tooling their role needs, and point them at the golden paths and templates —
+    so they reach productive contribution quickly with low cognitive load.
+  relates_to:
+    - {rel: grouped_by, target: JG-ONBOARDING}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+    - {rel: depends_on, target: CAP-ADM-DEX-1}
+    - {rel: depends_on, target: CAP-ADM-DEX-2}
+    - {rel: depends_on, target: CAP-ADM-DEX-3}
+  source: ADR 0021
+
+- id: JRN-adm-intake-new-application
+  term: Intake & Charter a New Application
+  type: Journey
+  definition: >
+    A new application demand is captured, business-cased, prioritized against the portfolio, and entered into
+    the inventory with an initial lifecycle state and roadmap — so new work enters through a governed front
+    door.
+  relates_to:
+    - {rel: grouped_by, target: JG-ONBOARDING}
+    - {rel: consumed_by, target: PERSONA-adm-business-owner}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+    - {rel: depends_on, target: CAP-ADM-APM-4}
+    - {rel: depends_on, target: CAP-ADM-APM-1}
+    - {rel: depends_on, target: CAP-ADM-APM-2}
+  source: ADR 0021
+
+# ---- JG-DELIVERY ----
+- id: JRN-adm-build-application-increment
+  term: Build an Application Increment
+  type: Journey
+  definition: >
+    An application team turns an increment of intent into working software — designing, implementing,
+    integrating, and packaging it on the platform's paved roads — ready to be verified and released.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+    - {rel: depends_on, target: CAP-ADM-ENG-1}
+    - {rel: depends_on, target: CAP-ADM-ENG-2}
+    - {rel: depends_on, target: CAP-ADM-ENG-3}
+    - {rel: depends_on, target: CAP-ADM-ENG-4}
+    - {rel: depends_on, target: CAP-ADM-ENG-6}
+    - {rel: depends_on, target: CAP-ADM-ENG-7}
+  source: ADR 0021
+
+- id: JRN-adm-assure-application-quality
+  term: Assure Application Quality
+  type: Journey
+  definition: >
+    An application increment is verified against its quality bar — functional and non-functional tests run on
+    ready test data and environments, and defects are managed — so it is demonstrably fit before release.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-adm-app-assurance}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+    - {rel: depends_on, target: CAP-ADM-QAT-1}
+    - {rel: depends_on, target: CAP-ADM-QAT-2}
+    - {rel: depends_on, target: CAP-ADM-QAT-3}
+    - {rel: depends_on, target: CAP-ADM-QAT-4}
+    - {rel: depends_on, target: CAP-ADM-QAT-5}
+    - {rel: depends_on, target: CAP-ADM-QAT-6}
+    - {rel: depends_on, target: CAP-ADM-QAT-7}
+  source: ADR 0021
+
+- id: JRN-adm-coordinate-application-release
+  term: Coordinate an Application Release
+  type: Journey
+  definition: >
+    A release of application change is planned, its cross-team and cross-application dependencies coordinated,
+    and it is rolled out progressively and verified — so change reaches production predictably and safely via
+    the consumed platform delivery path.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+    - {rel: depends_on, target: CAP-ADM-REL-1}
+    - {rel: depends_on, target: CAP-ADM-REL-2}
+    - {rel: depends_on, target: CAP-ADM-REL-4}
+  source: ADR 0021
+
+# ---- JG-OPERATIONS ----
+- id: JRN-adm-maintain-application-currency
+  term: Maintain Application Currency
+  type: Journey
+  definition: >
+    The application team keeps a delivered application current and durable — adapting it to environment change
+    and forestalling latent problems and technical debt — so it stays supportable over its life.
+  relates_to:
+    - {rel: grouped_by, target: JG-OPERATIONS}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+    - {rel: depends_on, target: CAP-ADM-SUP-3}
+    - {rel: depends_on, target: CAP-ADM-SUP-5}
+    - {rel: depends_on, target: CAP-ADM-APM-2}
+  source: ADR 0021
+
+- id: JRN-adm-observe-application-performance
+  term: Observe Application Performance & Usage
+  type: Journey
+  definition: >
+    The application team observes how the running application performs and how its features are used and
+    delivering, and feeds that insight into improvement and the roadmap.
+  relates_to:
+    - {rel: grouped_by, target: JG-OPERATIONS}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+    - {rel: depends_on, target: CAP-ADM-VAL-1}
+    - {rel: depends_on, target: CAP-ADM-VAL-2}
+    - {rel: depends_on, target: CAP-ADM-VAL-4}
+  source: ADR 0021
+
+# ---- JG-RESPONSE ----
+- id: JRN-adm-resolve-application-incident
+  term: Resolve an Application Incident
+  type: Journey
+  definition: >
+    A reported application issue is triaged and resolved — diagnosed from application behavior, worked around
+    or fixed via corrective maintenance — restoring correct behavior for users. Receives the routed issue;
+    does not own the contact channel.
+  relates_to:
+    - {rel: grouped_by, target: JG-RESPONSE}
+    - {rel: consumed_by, target: PERSONA-adm-app-support}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+    - {rel: depends_on, target: CAP-ADM-SUP-1}
+    - {rel: depends_on, target: CAP-ADM-SUP-2}
+    - {rel: depends_on, target: CAP-ADM-VAL-1}
+  source: ADR 0021
+
+- id: JRN-adm-stabilize-new-release
+  term: Stabilize a New Release (Hypercare)
+  type: Journey
+  definition: >
+    A newly released application is held in heightened-attention support immediately after go-live — issues
+    caught and resolved fast, the rollout verified — then transitioned to a steady-state support model once
+    stable.
+  relates_to:
+    - {rel: grouped_by, target: JG-RESPONSE}
+    - {rel: consumed_by, target: PERSONA-adm-app-support}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+    - {rel: depends_on, target: CAP-ADM-SUP-6}
+    - {rel: depends_on, target: CAP-ADM-SUP-1}
+    - {rel: depends_on, target: CAP-ADM-REL-4}
+  source: ADR 0021
+
+# ---- JG-GOVERNANCE ----
+- id: JRN-adm-review-portfolio
+  term: Review & Rationalize the Application Portfolio
+  type: Journey
+  definition: >
+    The business owner and application teams review the portfolio against value, fitness, cost, and risk and
+    decide each application's disposition — invest, tolerate, migrate, or eliminate — keeping the portfolio
+    optimized toward business value.
+  relates_to:
+    - {rel: grouped_by, target: JG-GOVERNANCE}
+    - {rel: consumed_by, target: PERSONA-adm-business-owner}
+    - {rel: consumed_by, target: PERSONA-adm-app-assurance}
+    - {rel: depends_on, target: CAP-ADM-APM-3}
+    - {rel: depends_on, target: CAP-ADM-APM-2}
+    - {rel: depends_on, target: CAP-ADM-VAL-3}
+  source: ADR 0021
+
+- id: JRN-adm-gate-release-readiness
+  term: Gate Release Readiness
+  type: Journey
+  definition: >
+    A release is evaluated against the quality bar, dependency status, and risk, and an accountable go/no-go
+    decision is recorded — so only releases that meet the bar proceed to production.
+  relates_to:
+    - {rel: grouped_by, target: JG-GOVERNANCE}
+    - {rel: consumed_by, target: PERSONA-adm-app-assurance}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+    - {rel: depends_on, target: CAP-ADM-REL-3}
+    - {rel: depends_on, target: CAP-ADM-QAT-1}
+    - {rel: depends_on, target: CAP-ADM-QAT-5}
+    - {rel: depends_on, target: CAP-ADM-QAT-6}
+  source: ADR 0021
+
+# ---- JG-EVOLUTION ----
+- id: JRN-adm-enhance-application-value
+  term: Enhance an Application for Value
+  type: Journey
+  definition: >
+    Informed by usage and value insight, the team plans and delivers value-adding enhancement (perfective
+    maintenance) to an application, then confirms the enhancement moved the intended outcome.
+  relates_to:
+    - {rel: grouped_by, target: JG-EVOLUTION}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+    - {rel: consumed_by, target: PERSONA-adm-business-owner}
+    - {rel: depends_on, target: CAP-ADM-SUP-4}
+    - {rel: depends_on, target: CAP-ADM-VAL-2}
+    - {rel: depends_on, target: CAP-ADM-VAL-3}
+  source: ADR 0021
+
+- id: JRN-adm-decommission-application
+  term: Decommission an Application
+  type: Journey
+  definition: >
+    An application at end of life is retired — its data migrated or archived, its access and integrations
+    removed, its platform resources released, and its record closed — so no orphaned application or data
+    persists.
+  relates_to:
+    - {rel: grouped_by, target: JG-EVOLUTION}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+    - {rel: consumed_by, target: PERSONA-adm-app-assurance}
+    - {rel: depends_on, target: CAP-ADM-APM-5}
+    - {rel: depends_on, target: CAP-ADM-APM-1}
+    - {rel: depends_on, target: CAP-ADM-ENG-5}
+  source: ADR 0021
+
+- id: JRN-adm-build-model-grounded-behaviour
+  term: Build & Evaluate Model-Grounded Behaviour
+  type: Journey
+  definition: >
+    An application team builds a slice of application behaviour that is generated at inference time rather
+    than written as deterministic logic - designing the components and what context they may see, bounding
+    what they may do and reach, versioning the artifacts that shape them, and gating the result on a scored
+    threshold rather than a pass/fail assertion, with adversarial testing feeding back into the bounds.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-adm-model-grounded-engineer}
+    - {rel: consumed_by, target: PERSONA-adm-ai-assurance}
+    - {rel: depends_on, target: CAP-ADM-ENG-6}
+    - {rel: depends_on, target: CAP-ADM-ENG-7}
+    - {rel: depends_on, target: CAP-ADM-ENG-2}
+    - {rel: depends_on, target: CAP-ADM-QAT-1}
+    - {rel: depends_on, target: CAP-ADM-QAT-6}
+    - {rel: depends_on, target: CAP-ADM-QAT-7}
+    - {rel: depends_on, target: CAP-ADM-VAL-5}
+  source: ADR 0016 (extended by ADR 0040)

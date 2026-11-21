@@ -1,0 +1,51 @@
+# ITPRA ontology — FUNCTION library, ITSM-CHG (Cross-Domain Change Coordination)
+# type: Function. ids FUNC-itsm-<slug>. All T1-neutral. Functions `support` >=1 capability. See ADR 0025.
+
+# Cross-provider change authorization (CAP-ITSM-CHG-1)
+- id: FUNC-itsm-change-authorization
+  term: Cross-Provider Change Authorization
+  type: Function
+  definition: Routes a multi-provider change through a recorded, attributable decision point before it takes effect.
+  aliases: [change authorization, change gate]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-CHG-1}
+  source: ADR 0025
+
+# Change scheduling & deconfliction (CAP-ITSM-CHG-2)
+- id: FUNC-itsm-change-calendar
+  term: Cross-Provider Change Calendar
+  type: Function
+  definition: Maintains a shared view of planned changes across providers for scheduling and windowing.
+  aliases: [change schedule, forward schedule of change]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-CHG-2}
+  source: ADR 0025
+
+- id: FUNC-itsm-change-deconfliction
+  term: Change Deconfliction
+  type: Function
+  definition: Detects and resolves collisions between changes from different providers on a shared service, including freezes.
+  aliases: [collision detection, change freeze]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-CHG-2}
+  source: ADR 0025
+
+# Cross-provider change risk & impact assessment (CAP-ITSM-CHG-3)
+- id: FUNC-itsm-change-impact-analysis
+  term: Cross-Provider Impact Analysis
+  type: Function
+  definition: Traces a change's dependencies and affected services across providers using the integrated configuration view.
+  aliases: [blast-radius analysis, dependency impact]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-CHG-3}
+  source: ADR 0025
+
+# Change outcome & record reconciliation (CAP-ITSM-CHG-4)
+- id: FUNC-itsm-change-outcome-reconciliation
+  term: Change Outcome Reconciliation
+  type: Function
+  definition: Confirms a coordinated change's outcome across providers and reconciles resulting state into the integrated record.
+  aliases: [post-change reconciliation, change closure]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-CHG-4}
+  source: ADR 0025

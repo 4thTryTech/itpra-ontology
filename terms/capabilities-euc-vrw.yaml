@@ -1,0 +1,44 @@
+# ITPRA ontology — EUC-VRW (Virtual & Remote Workspace) capabilities
+# type: Capability. ids CAP-EUC-VRW-<n>. The hosting compute/storage/network substrate is ITO SUB (interfaced
+# with, not owned); see ADR 0018.
+
+- id: CAP-EUC-VRW-1
+  term: Virtual & Hosted Desktop Provisioning
+  type: Capability
+  definition: >
+    Provisions a workforce user a virtual or hosted desktop decoupled from their physical device — a managed
+    desktop workspace delivered on demand to whatever endpoint they sign in from — so the working environment
+    is independent of the device in hand.
+  relates_to:
+    - {rel: grouped_by, target: EUC-VRW}
+    - {rel: consumed_by, target: PERSONA-euc-workforce-user}
+    - {rel: consumed_by, target: PERSONA-euc-workplace-team}
+  source: ADR 0018
+
+- id: CAP-EUC-VRW-2
+  term: Remote & Published Application Delivery
+  type: Capability
+  definition: >
+    Delivers an individual application remotely to the user's endpoint without provisioning a whole desktop —
+    a single hosted application usable from any entitled device — for use cases that need one app rather than
+    a full workspace.
+  relates_to:
+    - {rel: grouped_by, target: EUC-VRW}
+    - {rel: consumed_by, target: PERSONA-euc-workforce-user}
+    - {rel: consumed_by, target: PERSONA-euc-workplace-team}
+  source: ADR 0018
+
+- id: CAP-EUC-VRW-3
+  term: Remote Session Brokering & Access
+  type: Capability
+  definition: >
+    Connects an entitled user to their virtual desktop or published application — authenticating the session,
+    brokering it to an available host, and maintaining the connection — so users reliably reach the right
+    workspace from any location.
+  relates_to:
+    - {rel: grouped_by, target: EUC-VRW}
+    - {rel: depends_on, target: CAP-EUC-VRW-1}
+    - {rel: depends_on, target: CAP-EUC-IAM-3}
+    - {rel: consumed_by, target: PERSONA-euc-workforce-user}
+    - {rel: consumed_by, target: PERSONA-euc-workplace-team}
+  source: ADR 0018

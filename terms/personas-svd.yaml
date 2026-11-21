@@ -1,0 +1,52 @@
+# ITPRA ontology — Service Desk (SVD) personas
+# type: Persona. ids PERSONA-svd-<slug>. Coarse, tier-graduated neutral role archetypes (mirrors the persona
+# model, ADR 0012): each refines into granular roles at T2/T3. Capabilities reference these via `consumed_by`;
+# relationships are expressed from the capability/journey side. Ratified by ADR 0019.
+
+- id: PERSONA-svd-requester
+  term: Service Desk Requester
+  type: Persona
+  definition: >
+    The consumer of the service desk: any user — employee, contractor, or business consumer of IT — who
+    contacts the desk to report a disruption or raise a request, and who expects a single, low-friction
+    point of contact and clear status until resolution. The primary customer of the Service Desk domain. At
+    T2/T3 this refines into segments (knowledge worker, frontline/deskless worker, VIP/executive, external/
+    partner consumer).
+  aliases: [user, caller, end user, customer, contact]
+  source: ADR 0019
+
+- id: PERSONA-svd-agent
+  term: Service Desk Agent
+  type: Persona
+  definition: >
+    The front-line provider: receives contacts across channels, triages and classifies them, resolves at
+    first line where possible, fulfils standard requests, routes the rest, owns the contact through to
+    closure, and keeps the requester informed. Captures and reuses knowledge as part of resolving. At T2/T3
+    this refines into granular roles (first-line analyst, specialist/second-line analyst, swarm participant
+    — the tiered-vs-swarm split is an operating-model choice bound below the reference tier, ADR 0019).
+  aliases: [support analyst, help-desk agent, first-line analyst, service desk technician]
+  source: ADR 0019
+
+- id: PERSONA-svd-coordinator
+  term: Service Desk Coordinator
+  type: Persona
+  definition: >
+    The orchestration and assurance owner for the desk: runs queue, routing, and shift health, declares and
+    coordinates major incidents, owns proactive and outage communication, sets and reports service-level and
+    experience commitments, and drives continual improvement of the desk. At T2/T3 this refines into
+    granular roles (service desk manager/lead, major-incident manager, communications coordinator, knowledge
+    manager, experience/quality analyst).
+  aliases: [service desk manager, team lead, major-incident manager, shift lead]
+  source: ADR 0019
+
+- id: PERSONA-svd-resolver
+  term: Resolver Group Liaison
+  type: Persona
+  definition: >
+    The adjacent provider the desk hands off to: a resolver in another service domain (platform operations,
+    end-user computing, field support, application, network, security) that performs the deeper fulfilment
+    or technical restoration the front line routes to it, and that exchanges status back to the desk.
+    Modeled as a persona so handoff and status-exchange capabilities have a counterpart; it is not a service
+    desk role and refines into specific resolver teams at T2/T3.
+  aliases: [resolver group, fulfilment team, assignment group, downstream resolver]
+  source: ADR 0019

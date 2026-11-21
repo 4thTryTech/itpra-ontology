@@ -1,0 +1,80 @@
+# ITPRA ontology — FUNCTION library, DCF-SPC (Facility Space & Capacity)
+# type: Function. ids FUNC-dcf-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
+# the function (ADR 0011). Functions `support` >=1 capability (many-to-many). See ADR 0022.
+
+# White-space & floor provision (CAP-DCF-SPC-1)
+- id: FUNC-dcf-white-space-layout
+  term: White-Space Layout
+  type: Function
+  definition: Plans and lays out the equipment hall floor (raised-floor or slab) and structural support for hosted equipment.
+  aliases: [floor planning, hall layout, raised-floor design]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-SPC-1}
+  source: ADR 0022
+
+- id: FUNC-dcf-floor-loading-management
+  term: Floor Loading Management
+  type: Function
+  definition: Ensures equipment placement respects structural floor-loading limits of the space.
+  aliases: [structural loading, weight distribution]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-SPC-1}
+  source: ADR 0022
+
+# Rack & cabinet provision (CAP-DCF-SPC-2)
+- id: FUNC-dcf-rack-allocation
+  term: Rack & Cabinet Allocation
+  type: Function
+  definition: Assigns racks/cabinets to a tenant footprint and positions them in the layout.
+  aliases: [cabinet assignment, rack provisioning]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-SPC-2}
+  source: ADR 0022
+
+- id: FUNC-dcf-rack-mounting-securing
+  term: Rack Mounting & Securing
+  type: Function
+  definition: Physically mounts, levels, anchors, and secures racks and enclosures.
+  aliases: [rack installation, cabinet anchoring]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-SPC-2}
+  source: ADR 0022
+
+# Physical capacity management (CAP-DCF-SPC-3)
+- id: FUNC-dcf-space-power-cooling-allocation
+  term: Space / Power / Cooling Allocation
+  type: Function
+  definition: Allocates the three physical capacity dimensions (space, power, cooling) per area/rack within limits.
+  aliases: [footprint allocation, capacity reservation]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-SPC-3}
+    - {rel: supports, target: CAP-DCF-MON-3}
+  source: ADR 0022
+
+- id: FUNC-dcf-stranded-capacity-analysis
+  term: Stranded-Capacity Analysis
+  type: Function
+  definition: Identifies stranded or exhausted space/power/cooling so footprint is rebalanced.
+  aliases: [capacity reclamation, headroom analysis]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-SPC-3}
+  source: ADR 0022
+
+# Equipment install & decommission (CAP-DCF-SPC-4)
+- id: FUNC-dcf-equipment-install
+  term: Equipment Install & Bring-Up
+  type: Function
+  definition: Receives, racks, mounts, power/cable-connects, and brings up hosted equipment in the space.
+  aliases: [equipment racking, smart hands install, physical onboarding]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-SPC-4}
+  source: ADR 0022
+
+- id: FUNC-dcf-equipment-decommission
+  term: Equipment Decommission & Space Reclamation
+  type: Function
+  definition: De-cables, de-racks, removes equipment at end of life and reclaims the physical footprint.
+  aliases: [physical offboarding, de-racking, space reclaim]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-SPC-4}
+  source: ADR 0022

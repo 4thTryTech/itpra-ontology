@@ -1,0 +1,60 @@
+# ITPRA ontology — DCF-RES (Facility Resilience & Continuity) capabilities
+# type: Capability. ids CAP-DCF-RES-<n>. Grouped under domain DCF-RES (ADR 0022). Physical-facility resilience;
+# the platform's workload resilience/DR (ITO) runs on top.
+
+- id: CAP-DCF-RES-1
+  term: Facility Redundancy & Fault Tolerance
+  type: Capability
+  definition: >
+    Provides redundant, physically separated distribution paths for the critical power and cooling systems to
+    a rated topology, so the loss of any single component or path does not interrupt the hosted load and a
+    fault is contained to one path. The facility's rated physical-availability property.
+  relates_to:
+    - {rel: grouped_by, target: DCF-RES}
+    - {rel: depends_on, target: CAP-DCF-PWR-2}
+    - {rel: depends_on, target: CAP-DCF-COOL-1}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-tenant}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-compliance}
+  source: ADR 0022
+
+- id: CAP-DCF-RES-2
+  term: Concurrent Maintainability
+  type: Capability
+  definition: >
+    Allows any single capacity component or distribution path to be removed for planned maintenance with no
+    interruption to the hosted load, by serving the load over the remaining redundant paths during the work.
+  relates_to:
+    - {rel: grouped_by, target: DCF-RES}
+    - {rel: depends_on, target: CAP-DCF-RES-1}
+    - {rel: depends_on, target: CAP-DCF-MON-5}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-tenant}
+  source: ADR 0022
+
+- id: CAP-DCF-RES-3
+  term: Hazard Protection & Life-Safety
+  type: Capability
+  definition: >
+    Protects the facility and the hosted load against site-level hazards and protects life — fire and leak
+    detection and suppression, and related life-safety systems — so a hazard is detected and contained before
+    it harms people or the hosted equipment.
+  relates_to:
+    - {rel: grouped_by, target: DCF-RES}
+    - {rel: depends_on, target: CAP-DCF-MON-2}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-compliance}
+  source: ADR 0022
+
+- id: CAP-DCF-RES-4
+  term: Site Continuity & Failover
+  type: Capability
+  definition: >
+    Plans and exercises continuity against the loss of the whole facility — protection of the site and,
+    where required, failover of the hosting function to an independent secondary site — so a site-level loss
+    does not end the hosting service. The platform's workload-level DR (ITO) consumes this and runs on top.
+  relates_to:
+    - {rel: grouped_by, target: DCF-RES}
+    - {rel: depends_on, target: CAP-DCF-RES-1}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-compliance}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-tenant}
+  source: ADR 0022

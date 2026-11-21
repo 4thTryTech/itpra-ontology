@@ -1,0 +1,80 @@
+# ITPRA ontology — FUNCTION library, SVD-PRF (Support Performance & Insight)
+# type: Function. ids FUNC-svd-<slug>. Functions `support` >=1 capability; NEVER derived_from on a Function (ADR
+# 0011). See ADR 0019.
+
+# Contact analytics & reporting (CAP-SVD-PRF-1)
+- id: FUNC-svd-volume-analytics
+  term: Contact Volume & Flow Analytics
+  type: Function
+  definition: Reports contact volume, flow, and throughput across channels and resolver groups.
+  aliases: [volume reporting, queue analytics]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-PRF-1}
+  source: ADR 0019
+
+- id: FUNC-svd-operational-dashboards
+  term: Operational Dashboards
+  type: Function
+  definition: Presents live and historical desk performance to the desk and its stakeholders.
+  aliases: [service desk dashboard, KPI dashboard]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-PRF-1}
+  source: ADR 0019
+
+# Experience & outcome measurement (CAP-SVD-PRF-2)
+- id: FUNC-svd-experience-scoring
+  term: Experience-Outcome Scoring
+  type: Function
+  definition: Aggregates satisfaction, effort, and first-contact-resolution into the desk's experience and outcome measures.
+  aliases: [XLA scoring, experience index]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-PRF-2}
+  source: ADR 0019
+
+- id: FUNC-svd-fcr-measurement
+  term: First-Contact-Resolution Measurement
+  type: Function
+  definition: Measures how often contacts are resolved at first contact without a handoff.
+  aliases: [FCR rate, one-touch rate]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-PRF-2}
+  source: ADR 0019
+
+# Demand & trend analysis (CAP-SVD-PRF-3)
+- id: FUNC-svd-trend-analysis
+  term: Demand Trend Analysis
+  type: Function
+  definition: Analyzes contacts over time to surface recurring demand, emerging issues, and root causes to eliminate.
+  aliases: [pattern analysis, recurring-demand detection]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-PRF-3}
+  source: ADR 0019
+
+- id: FUNC-svd-shift-left-candidate-identification
+  term: Shift-Left Candidate Identification
+  type: Function
+  definition: Identifies high-volume contact types that are candidates for self-service or elimination at source.
+  aliases: [deflection candidates, automation candidates]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-PRF-3}
+    - {rel: supports, target: CAP-SVD-KNW-1}
+  source: ADR 0019
+
+# Continual service-desk improvement (CAP-SVD-PRF-4)
+- id: FUNC-svd-improvement-backlog
+  term: Improvement Backlog Management
+  type: Function
+  definition: Captures and prioritizes desk-improvement ideas from analytics, experience measures, and feedback.
+  aliases: [CSI register, improvement loop]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-PRF-4}
+  source: ADR 0019
+
+- id: FUNC-svd-feedback-loop
+  term: Feedback Loop Integration
+  type: Function
+  definition: Feeds captured feedback and review actions into the prioritized improvement of the desk.
+  aliases: [feedback intake, learning loop]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-PRF-4}
+  source: ADR 0019

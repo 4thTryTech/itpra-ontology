@@ -1,0 +1,99 @@
+# ITPRA ontology — FUNCTION library, GRC-SOC (Security Operations & Threat Response)
+# type: Function. ids FUNC-grc-<slug>. All T1-neutral; a function MAY name a security standard/technique where
+# that IS the function (ADR 0011). Functions `support` >=1 capability (many-to-many). See ADR 0024.
+
+# Enterprise security monitoring & event correlation (CAP-GRC-SOC-1)
+- id: FUNC-grc-security-event-aggregation
+  term: Security Event Aggregation
+  type: Function
+  definition: Collects and normalizes security-relevant events from estates across the enterprise into a common view.
+  aliases: [log aggregation, event ingestion, SIEM ingestion]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-SOC-1}
+  source: ADR 0024
+
+- id: FUNC-grc-cross-estate-correlation
+  term: Cross-Estate Correlation
+  type: Function
+  definition: Correlates events across estates and time to surface multi-stage and cross-domain attack patterns.
+  aliases: [event correlation, SIEM correlation, alert triage]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-SOC-1}
+  source: ADR 0024
+
+# Enterprise threat intelligence (CAP-GRC-SOC-2)
+- id: FUNC-grc-threat-intel-ingestion
+  term: Threat Intelligence Ingestion
+  type: Function
+  definition: Acquires and normalizes external and internal threat intelligence (indicators, TTPs, campaigns) for use in detection and analysis.
+  aliases: [CTI ingestion, indicator feed, STIX/TAXII ingestion]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-SOC-2}
+  source: ADR 0024
+
+- id: FUNC-grc-intel-enrichment
+  term: Intelligence Enrichment & Dissemination
+  type: Function
+  definition: Enriches detections and indicators with context and disseminates curated intelligence to consumers.
+  aliases: [indicator enrichment, intel sharing]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-SOC-2}
+    - {rel: supports, target: CAP-GRC-SOC-1}
+  source: ADR 0024
+
+# Threat hunting & adversary analysis (CAP-GRC-SOC-3)
+- id: FUNC-grc-hypothesis-hunting
+  term: Hypothesis-Driven Threat Hunting
+  type: Function
+  definition: Proactively searches telemetry against adversary-behavior hypotheses to find activity automated detection missed.
+  aliases: [threat hunting, proactive hunting]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-SOC-3}
+  source: ADR 0024
+
+- id: FUNC-grc-attack-technique-mapping
+  term: Adversary Technique Mapping
+  type: Function
+  definition: Maps observed activity to a structured catalogue of adversary tactics and techniques (e.g. MITRE ATT&CK) to assess coverage and gaps.
+  aliases: [MITRE ATT&CK mapping, technique coverage analysis]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-SOC-3}
+  source: ADR 0024
+
+# Major security incident coordination (CAP-GRC-SOC-4)
+- id: FUNC-grc-incident-declaration
+  term: Incident Declaration & Severity Classification
+  type: Function
+  definition: Declares a security incident, classifies its severity, and opens the coordinated response case.
+  aliases: [incident triage, severity classification]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-SOC-4}
+  source: ADR 0024
+
+- id: FUNC-grc-responder-coordination
+  term: Cross-Domain Responder Coordination
+  type: Function
+  definition: Convenes and coordinates responders and communications across affected estates and stakeholders during a major incident.
+  aliases: [incident command, war-room coordination, stakeholder comms]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-SOC-4}
+  source: ADR 0024
+
+# Security incident response & recovery (CAP-GRC-SOC-5)
+- id: FUNC-grc-containment-eradication
+  term: Containment & Eradication Direction
+  type: Function
+  definition: Directs containment and eradication actions across estates to stop and remove the threat.
+  aliases: [containment, eradication]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-SOC-5}
+  source: ADR 0024
+
+- id: FUNC-grc-post-incident-review
+  term: Post-Incident Review & Lessons Learned
+  type: Function
+  definition: Conducts post-incident analysis to reduce recurrence and improve handling, feeding prevention, detection, and the risk register.
+  aliases: [lessons learned, post-mortem, after-action review]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-SOC-5}
+  source: ADR 0024

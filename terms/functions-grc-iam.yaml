@@ -1,0 +1,110 @@
+# ITPRA ontology — FUNCTION library, GRC-IAM (Corporate Identity & Access Authority)
+# type: Function. ids FUNC-grc-<slug>. All T1-neutral; functions MAY name a standard/technique where that IS the
+# function (ADR 0011). Functions `support` >=1 capability. See ADR 0024.
+
+# Identity of record & authoritative sources (CAP-GRC-IAM-1)
+- id: FUNC-grc-authoritative-source-integration
+  term: Authoritative Source Integration
+  type: Function
+  definition: Ingests and reconciles identity data from authoritative sources (e.g. HR) to maintain the identity of record.
+  aliases: [HR feed, source-of-truth integration]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-IAM-1}
+  source: ADR 0024
+
+- id: FUNC-grc-identity-provisioning
+  term: Identity Provisioning & Synchronization
+  type: Function
+  definition: Provisions and synchronizes identities and core attributes to downstream systems from the identity of record.
+  aliases: [SCIM provisioning, directory synchronization, account provisioning]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-IAM-1}
+    - {rel: supports, target: CAP-GRC-IAM-3}
+  source: ADR 0024
+
+# Access governance & entitlement management (CAP-GRC-IAM-2)
+- id: FUNC-grc-entitlement-catalog
+  term: Entitlement Catalogue & Role Model
+  type: Function
+  definition: Maintains the catalogue of entitlements and the role/attribute model that defines grantable access.
+  aliases: [role model, RBAC/ABAC model, entitlement catalog]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-IAM-2}
+  source: ADR 0024
+
+- id: FUNC-grc-access-request-approval
+  term: Access Request & Approval
+  type: Function
+  definition: Handles requests for access and routes them for policy-conformant, owner-based approval.
+  aliases: [access request workflow, segregation-of-duties check]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-IAM-2}
+  source: ADR 0024
+
+# Joiner-mover-leaver lifecycle (CAP-GRC-IAM-3)
+- id: FUNC-grc-birthright-provisioning
+  term: Birthright Access Provisioning
+  type: Function
+  definition: Grants role-based birthright access automatically on join from the authoritative identity source.
+  aliases: [joiner provisioning, birthright access]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-IAM-3}
+  source: ADR 0024
+
+- id: FUNC-grc-deprovisioning
+  term: Access Recalculation & De-provisioning
+  type: Function
+  definition: Recalculates entitlements on role change and revokes access on leave so access reflects current standing.
+  aliases: [mover recalculation, leaver de-provisioning, access revocation]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-IAM-3}
+  source: ADR 0024
+
+# Access certification (CAP-GRC-IAM-4)
+- id: FUNC-grc-access-review-campaign
+  term: Access Review Campaign
+  type: Function
+  definition: Runs periodic or event-driven campaigns in which owners attest whether each grant is still warranted.
+  aliases: [access recertification, attestation campaign]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-IAM-4}
+  source: ADR 0024
+
+# Privileged access governance (CAP-GRC-IAM-5)
+- id: FUNC-grc-privileged-credential-vaulting
+  term: Privileged Credential Safeguarding
+  type: Function
+  definition: Safeguards and rotates privileged credentials so they are not held or shared in the clear.
+  aliases: [credential vaulting, secret rotation for privileged accounts]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-IAM-5}
+  source: ADR 0024
+
+- id: FUNC-grc-just-in-time-elevation
+  term: Just-in-Time Privileged Elevation
+  type: Function
+  definition: Grants time-bound, approved elevation to privileged access and monitors/records the session.
+  aliases: [JIT access, session brokering, privileged session monitoring]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-IAM-5}
+  source: ADR 0024
+
+# Delegated authority to non-human principals (ADR 0035)
+- id: FUNC-grc-delegated-authority-governance
+  term: Delegated Authority Governance
+  type: Function
+  definition: Governs what authority an accountable person may pass to a non-human principal acting on their behalf, and maintains the standing record binding each such principal to the person accountable for it. Transitive authority, bounded and revocable - distinct from a role grant, which gives a person access directly. Governs whether the delegation may exist; the credential that carries it is workload identity, owned by the platform.
+  aliases: [on-behalf-of governance, agent delegation governance, non-human principal accountability, delegation register]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-IAM-2}
+    - {rel: supports, target: CAP-GRC-IAM-5}
+  source: ADR 0035
+
+- id: FUNC-grc-delegated-authority-recertification
+  term: Delegated Authority Recertification
+  type: Function
+  definition: Re-attests that a non-human principal still warrants the authority delegated to it and that its accountable owner is still correct and still present, revoking what is no longer warranted. Closes the same entitlement-creep loop as access recertification, against principals that never leave the organisation and so are never caught by a leaver event.
+  aliases: [agent recertification, non-human entitlement review, delegation review]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-IAM-4}
+  source: ADR 0035

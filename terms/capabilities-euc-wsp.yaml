@@ -1,0 +1,51 @@
+# ITPRA ontology — EUC-WSP (Workspace & Productivity Services) capabilities
+# type: Capability. ids CAP-EUC-WSP-<n>. Grouped under domain EUC-WSP (ADR 0018).
+
+- id: CAP-EUC-WSP-1
+  term: Productivity & Collaboration Application Provisioning
+  type: Capability
+  definition: >
+    Provisions and licenses the productivity and collaboration applications a workforce user needs — documents,
+    messaging, meetings, and collaboration spaces — entitling the right applications to the right user on
+    request or by role.
+  relates_to:
+    - {rel: grouped_by, target: EUC-WSP}
+    - {rel: consumed_by, target: PERSONA-euc-workforce-user}
+    - {rel: consumed_by, target: PERSONA-euc-workplace-team}
+  source: ADR 0018
+
+- id: CAP-EUC-WSP-2
+  term: Workspace Configuration & Personalization
+  type: Capability
+  definition: >
+    Establishes and maintains the user's workspace settings, preferences, and profile so a consistent,
+    personalized working environment follows the user across the devices and sessions they are entitled to.
+  relates_to:
+    - {rel: grouped_by, target: EUC-WSP}
+    - {rel: consumed_by, target: PERSONA-euc-workforce-user}
+    - {rel: consumed_by, target: PERSONA-euc-workplace-team}
+  source: ADR 0018
+
+- id: CAP-EUC-WSP-3
+  term: File & Content Access
+  type: Capability
+  definition: >
+    Gives the workforce user governed access to their files and shared content from the endpoint —
+    synchronization, sharing, and offline availability — within the data-handling policy that applies to them.
+  relates_to:
+    - {rel: grouped_by, target: EUC-WSP}
+    - {rel: consumed_by, target: PERSONA-euc-workforce-user}
+    - {rel: consumed_by, target: PERSONA-euc-security-compliance}
+  source: ADR 0018
+
+- id: CAP-EUC-WSP-4
+  term: Peripheral & Output Services
+  type: Capability
+  definition: >
+    Connects the workforce user to the peripheral and output services their work requires — printing,
+    scanning, and managed peripherals — discoverable and usable from the endpoint under policy.
+  relates_to:
+    - {rel: grouped_by, target: EUC-WSP}
+    - {rel: consumed_by, target: PERSONA-euc-workforce-user}
+    - {rel: consumed_by, target: PERSONA-euc-workplace-team}
+  source: ADR 0018

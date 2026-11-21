@@ -1,0 +1,284 @@
+# ITPRA ontology — FUNCTION library, SECURITY (SEC) domain file
+# type: Function. ids FUNC-<slug> (slug-based, NO domain prefix — shared cross-domain). A function `supports`
+# one or more capabilities (many-to-many). Functions are flat — no tier annotation, no `derived_from` — per ADR
+# 0011 (which supersedes ADR 0011 §3 on function tiering). A function may freely name a specific standard,
+# protocol, or technique where that *is* the function. Technique acronyms like SAST/DAST/SCA/CSPM/MFA are kept
+# as ALIASES on the more general functions here. See ADR 0011.
+
+# Identity & authentication (supports CAP-SEC-1)
+- id: FUNC-credential-authentication
+  term: Credential Authentication
+  type: Function
+  definition: Verifies presented credentials to establish that a human or workload identity is who it claims.
+  aliases: [authentication, credential verification]
+  relates_to:
+    - {rel: supports, target: CAP-SEC-1}
+  source: ADR 0011
+
+- id: FUNC-multi-factor-authentication
+  term: Multi-Factor Authentication
+  type: Function
+  definition: >
+    Requires authenticating evidence from two or more distinct factor categories (knowledge, possession,
+    inherence) to strengthen identity assurance.
+  aliases: [MFA, step-up authentication]
+  relates_to:
+    - {rel: supports, target: CAP-SEC-1}
+  source: ADR 0011
+
+- id: FUNC-identity-federation
+  term: Identity Federation
+  type: Function
+  definition: Accepts identity assertions issued by a trusted external identity provider in place of local authentication.
+  aliases: [federated identity, identity brokering]
+  relates_to:
+    - {rel: supports, target: CAP-SEC-1}
+  source: ADR 0011
+
+- id: FUNC-session-token-management
+  term: Session & Token Management
+  type: Function
+  definition: Issues, validates, refreshes, and revokes the sessions and tokens that carry an authenticated identity.
+  aliases: [token issuance, session management]
+  relates_to:
+    - {rel: supports, target: CAP-SEC-1}
+  source: ADR 0011
+
+# Authorization & access control (supports CAP-SEC-2)
+- id: FUNC-authorization-decision
+  term: Authorization Decision
+  type: Function
+  definition: >
+    Evaluates an access request against access-control policy and returns an allow/deny decision. Shared with
+    multi-tenancy governance (tenant access boundaries).
+  aliases: [access decision, policy decision point]
+  relates_to:
+    - {rel: supports, target: CAP-SEC-2}
+    - {rel: supports, target: CAP-GOV-5}
+  source: ADR 0011
+
+- id: FUNC-entitlement-management
+  term: Entitlement Management
+  type: Function
+  definition: Defines and manages the roles, permissions, and entitlements that grant principals access.
+  aliases: [role management, RBAC administration, permission management]
+  relates_to:
+    - {rel: supports, target: CAP-SEC-2}
+  source: ADR 0011
+
+- id: FUNC-privileged-access-management
+  term: Privileged Access Management
+  type: Function
+  definition: Brokers and controls elevated/administrative access, granting it just-in-time and for a bounded scope and duration. Reaches principals whose specific action is chosen at runtime rather than declared at request time, where the ceiling is set over the reachable action space rather than a named action (ADR 0033).
+  aliases: [PAM, just-in-time access, privilege brokering, per-action credential ceiling]
+  relates_to:
+    - {rel: supports, target: CAP-SEC-2}
+  source: ADR 0011
+
+- id: FUNC-delegated-authority-chain
+  term: Delegated Authority Chain
+  type: Function
+  definition: Establishes, carries, and presents the chain of delegated authority behind an action a non-human principal takes on behalf of an accountable person - from that person, through any intermediating application, to the principal that executes. Makes the action attributable to the accountable person and not only to the executing principal, and makes the chain available for authorization decisions and for audit. GRC governs whether the delegation may exist (FUNC-grc-delegated-authority-governance); this establishes and presents it at runtime. The chain is named as a pattern, not bound to any protocol (ADR 0035).
+  aliases: [on-behalf-of chain, delegation chain, acting-party chain, transitive authority chain]
+  relates_to:
+    - {rel: supports, target: CAP-SEC-2}
+    - {rel: applies_to, target: AUTON-ACTOR}
+  source: ADR 0035
+
+- id: FUNC-access-review
+  term: Access Review
+  type: Function
+  definition: Periodically reviews and recertifies granted access so entitlements stay least-privilege over time.
+  aliases: [access certification, recertification, entitlement review]
+  relates_to:
+    - {rel: supports, target: CAP-SEC-2}
+  source: ADR 0011
+
+# Certificate & workload credential management (supports CAP-SEC-3)
+- id: FUNC-certificate-issuance
+  term: Certificate Issuance
+  type: Function
+  definition: Issues certificates and credentials to verified identities so they can prove identity and communicate securely.
+  aliases: [certificate enrollment, credential issuance]
+  relates_to:
+    - {rel: supports, target: CAP-SEC-3}
+  source: ADR 0011
+
+- id: FUNC-certificate-rotation
+  term: Certificate Rotation
+  type: Function
+  definition: Renews and rotates certificates/credentials before expiry to maintain continuous trust.
+  aliases: [certificate renewal, key rotation]
+  relates_to:
+    - {rel: supports, target: CAP-SEC-3}
+  source: ADR 0011
+
+- id: FUNC-certificate-revocation
+  term: Certificate Revocation
+  type: Function
+  definition: Revokes compromised or retired certificates/credentials and publishes their revoked status.
+  aliases: [revocation]
+  relates_to:
+    - {rel: supports, target: CAP-SEC-3}
+  source: ADR 0011
+
+- id: FUNC-workload-identity-provisioning
+  term: Workload Identity Provisioning
+  type: Function
+  definition: Provisions verifiable identities to workloads so services can mutually authenticate without static secrets.
+  aliases: [workload identity, service identity]
+  relates_to:
+    - {rel: supports, target: CAP-SEC-3}
+  source: ADR 0011
+
+# Vulnerability management (supports CAP-SEC-4)
+- id: FUNC-vulnerability-scanning
+  term: Vulnerability Scanning
+  type: Function
+  definition: Scans workloads, components, and images for known vulnerabilities and reports findings with severity.
+  aliases: [image scanning, vulnerability scan]
+  relates_to:
+    - {rel: supports, target: CAP-SEC-4}
+  source: ADR 0011
+
+- id: FUNC-software-composition-analysis
+  term: Software Composition Analysis
+  type: Function
+  definition: Identifies third-party and open-source components/dependencies and their known vulnerabilities and licenses.
+  aliases: [SCA, dependency scanning]
+  relates_to:
+    - {rel: supports, target: CAP-SEC-4}
+  source: ADR 0011
+
+- id: FUNC-configuration-posture-assessment
+  term: Configuration Posture Assessment
+  type: Function
+  definition: Evaluates cloud/cluster/component configuration against secure baselines and reports posture drift from them.
+  aliases: [posture assessment, CSPM, baseline compliance]
+  relates_to:
+    - {rel: supports, target: CAP-SEC-4}
+  source: ADR 0011
+
+- id: FUNC-vulnerability-prioritization
+  term: Vulnerability Prioritization
+  type: Function
+  definition: Risk-ranks findings by severity, exploitability, and exposure and tracks them through to remediation.
+  aliases: [risk prioritization, remediation tracking]
+  relates_to:
+    - {rel: supports, target: CAP-SEC-4}
+  source: ADR 0011
+
+# Admission & policy enforcement (supports CAP-SEC-5; pairs with FND-4 policy-evaluation later)
+- id: FUNC-admission-control
+  term: Admission Control
+  type: Function
+  definition: Intercepts proposed changes at the point of effect and admits or rejects them against policy.
+  aliases: [admission, gatekeeping]
+  relates_to:
+    - {rel: supports, target: CAP-SEC-5}
+  source: ADR 0011
+
+- id: FUNC-policy-enforcement
+  term: Policy Enforcement
+  type: Function
+  definition: Enforces a policy decision at runtime by blocking, mutating, or quarantining the non-compliant action.
+  aliases: [enforcement, runtime guardrail]
+  relates_to:
+    - {rel: supports, target: CAP-SEC-5}
+  source: ADR 0011
+
+# Security event detection & audit (supports CAP-SEC-6; audit-logging shared with GOV-6)
+- id: FUNC-security-event-aggregation
+  term: Security Event Aggregation
+  type: Function
+  definition: Collects and normalizes security-relevant events from across the estate for correlation and audit.
+  aliases: [SIEM ingestion, security log aggregation]
+  relates_to:
+    - {rel: supports, target: CAP-SEC-6}
+  source: ADR 0011
+
+- id: FUNC-audit-logging
+  term: Audit Logging
+  type: Function
+  definition: >
+    Records an attributable, tamper-evident trail of who did what and when. Shared across security event/audit
+    and governance audit & compliance evidence.
+  aliases: [audit trail, audit log]
+  relates_to:
+    - {rel: supports, target: CAP-SEC-6}
+    - {rel: supports, target: CAP-GOV-6}
+  source: ADR 0011
+
+# Threat detection (supports CAP-SEC-7; complements shared anomaly-detection + packet-analysis)
+- id: FUNC-signature-detection
+  term: Signature Detection
+  type: Function
+  definition: Detects known threats by matching traffic, files, or behavior against signatures and indicators of compromise.
+  aliases: [signature-based detection, IOC matching]
+  relates_to:
+    - {rel: supports, target: CAP-SEC-7}
+  source: ADR 0011
+
+- id: FUNC-behavioral-analytics
+  term: Behavioral Analytics
+  type: Function
+  definition: >
+    Profiles the normal behavior of users and entities (accounts, hosts, services, devices) over time and
+    flags deviations that indicate compromise, misuse, or insider risk — the user-and-entity-behavior-analytics
+    (UEBA) facet of threat detection. The behavior-profiling complement to generic series anomaly detection
+    (FUNC-anomaly-detection) and signature matching. Distinct from product/user behavior analytics, which is a
+    business-insight discipline (an SD-BUSINESS-ANALYTICS concern), not security.
+  aliases: [UEBA, user and entity behavior analytics, user behavior analytics, UBA, entity behavior analytics]
+  relates_to:
+    - {rel: supports, target: CAP-SEC-7}
+  source: ADR 0011
+
+# Security response orchestration (supports CAP-SEC-8; builds on CAP-AUT-6 orchestration)
+- id: FUNC-response-playbook-execution
+  term: Response Playbook Execution
+  type: Function
+  definition: Executes predefined automated response workflows triggered by detections, with optional human approval gates.
+  aliases: [playbook automation, automated response]
+  relates_to:
+    - {rel: supports, target: CAP-SEC-8}
+  source: ADR 0011
+
+- id: FUNC-incident-containment
+  term: Incident Containment
+  type: Function
+  definition: Executes containment actions — isolating hosts, blocking addresses, suspending accounts — to limit impact.
+  aliases: [containment, isolation, quarantine]
+  relates_to:
+    - {rel: supports, target: CAP-SEC-8}
+  source: ADR 0011
+
+- id: FUNC-threat-enrichment
+  term: Threat Enrichment
+  type: Function
+  definition: >
+    Enriches detections and cases with threat intelligence and context (reputation, indicators, asset/owner)
+    to speed triage. Shared across security response and security event detection.
+  aliases: [threat intelligence enrichment]
+  relates_to:
+    - {rel: supports, target: CAP-SEC-8}
+    - {rel: supports, target: CAP-SEC-6}
+  source: ADR 0011
+
+# Application security testing (supports CAP-SEC-9; neutral terms, SAST/DAST as aliases)
+- id: FUNC-source-code-security-testing
+  term: Source Code Security Testing
+  type: Function
+  definition: Analyzes application source, bytecode, or binaries for security flaws without executing the program.
+  aliases: [SAST, static application security testing]
+  relates_to:
+    - {rel: supports, target: CAP-SEC-9}
+  source: ADR 0011
+
+- id: FUNC-running-application-security-testing
+  term: Running Application Security Testing
+  type: Function
+  definition: Tests a running application for security flaws by exercising it from the outside, as an attacker would.
+  aliases: [DAST, dynamic application security testing]
+  relates_to:
+    - {rel: supports, target: CAP-SEC-9}
+  source: ADR 0011

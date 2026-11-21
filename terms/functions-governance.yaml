@@ -1,0 +1,212 @@
+# ITPRA ontology — FUNCTION library, GOVERNANCE & SERVICE MANAGEMENT (GOV) domain file
+# type: Function. ids FUNC-<slug> (slug-based, NO domain prefix — shared cross-domain). All T1 neutral. GOV
+# stays operating-model-NEUTRAL (request/approval/change/incident/record per ADR 0015); NO ITIL/DevOps
+# vocabulary (CMDB/RFC/CAB/service-desk) — operating-model mapping is a T2 concern. See ADR 0011.
+
+# Service request management (supports CAP-GOV-1; request-intake shared with EXP-1 later)
+- id: FUNC-request-intake
+  term: Request Intake
+  type: Function
+  definition: >
+    Captures and records a request for a platform service so it can be tracked to fulfillment. Shared with
+    the consumer self-service interface (submission).
+  aliases: [request capture, request logging]
+  relates_to:
+    - {rel: supports, target: CAP-GOV-1}
+    - {rel: supports, target: CAP-EXP-1}
+  source: ADR 0011
+
+- id: FUNC-request-fulfillment-tracking
+  term: Request Fulfillment Tracking
+  type: Function
+  definition: Drives a recorded request through its lifecycle to fulfillment, tracking status and handoffs.
+  aliases: [fulfillment tracking, request lifecycle tracking]
+  relates_to:
+    - {rel: supports, target: CAP-GOV-1}
+  source: ADR 0011
+
+# Change approval (supports CAP-GOV-2; the neutral change-authorization construct)
+- id: FUNC-approval-routing
+  term: Approval Routing
+  type: Function
+  definition: Routes an item to the appropriate approver(s) along a defined decision path before it takes effect.
+  aliases: [approval workflow, decision routing]
+  relates_to:
+    - {rel: supports, target: CAP-GOV-2}
+  source: ADR 0011
+
+- id: FUNC-approval-decision-capture
+  term: Approval Decision Capture
+  type: Function
+  definition: Records the approve/reject decision and its rationale against the item under review.
+  aliases: [approval recording, decision capture]
+  relates_to:
+    - {rel: supports, target: CAP-GOV-2}
+  source: ADR 0011
+
+# Incident & problem coordination (supports CAP-GOV-3; neutral disruption-response construct)
+- id: FUNC-incident-coordination
+  term: Incident Coordination
+  type: Function
+  definition: Records and coordinates response to a service disruption from detection through resolution.
+  aliases: [incident handling, incident response coordination]
+  relates_to:
+    - {rel: supports, target: CAP-GOV-3}
+  source: ADR 0011
+
+- id: FUNC-problem-management
+  term: Problem Management
+  type: Function
+  definition: Records and tracks underlying causes behind recurring disruptions to prevent their recurrence.
+  aliases: [underlying-cause management, problem records]
+  relates_to:
+    - {rel: supports, target: CAP-GOV-3}
+  source: ADR 0011
+
+- id: FUNC-post-incident-review
+  term: Post-Incident Review
+  type: Function
+  definition: Captures findings and learning after a disruption to drive corrective and preventive action.
+  aliases: [post-incident analysis, retrospective, learning review]
+  relates_to:
+    - {rel: supports, target: CAP-GOV-3}
+  source: ADR 0011
+
+# System-of-record (supports CAP-GOV-4; authoritative record other governance reasons over)
+- id: FUNC-resource-record-management
+  term: Resource Record Management
+  type: Function
+  definition: Maintains authoritative records of platform resources and their state as the system-of-record.
+  aliases: [resource inventory, asset record, system-of-record management]
+  relates_to:
+    - {rel: supports, target: CAP-GOV-4}
+  source: ADR 0011
+
+- id: FUNC-record-reconciliation
+  term: Record Reconciliation
+  type: Function
+  definition: Reconciles authoritative records against discovered/actual state to keep the system-of-record accurate.
+  aliases: [record refresh, state reconciliation]
+  relates_to:
+    - {rel: supports, target: CAP-GOV-4}
+  source: ADR 0011
+
+# Multi-tenancy governance (supports CAP-GOV-5; reuses FUNC-authorization-decision from SEC)
+- id: FUNC-tenant-isolation-enforcement
+  term: Tenant Isolation Enforcement
+  type: Function
+  definition: Enforces isolation boundaries between tenants so one tenant cannot access or affect another.
+  aliases: [tenant boundary enforcement, isolation enforcement]
+  relates_to:
+    - {rel: supports, target: CAP-GOV-5}
+  source: ADR 0011
+
+- id: FUNC-tenant-quota-management
+  term: Tenant Quota Management
+  type: Function
+  definition: Sets and enforces per-tenant resource quotas and limits to bound tenant consumption.
+  aliases: [quota management, tenant limits]
+  relates_to:
+    - {rel: supports, target: CAP-GOV-5}
+  source: ADR 0011
+
+# Audit & compliance evidence (supports CAP-GOV-6; reuses shared FUNC-audit-logging from SEC)
+- id: FUNC-compliance-evidence-collection
+  term: Compliance Evidence Collection
+  type: Function
+  definition: Gathers and retains evidence of control operation and platform activity for compliance demonstration.
+  aliases: [evidence collection, control evidence gathering]
+  relates_to:
+    - {rel: supports, target: CAP-GOV-6}
+  source: ADR 0011
+
+- id: FUNC-compliance-reporting
+  term: Compliance Reporting
+  type: Function
+  definition: Produces compliance reports and attestations mapping collected evidence to control requirements.
+  aliases: [compliance attestation, control reporting]
+  relates_to:
+    - {rel: supports, target: CAP-GOV-6}
+  source: ADR 0011
+
+# Service lifecycle management (supports CAP-GOV-8)
+- id: FUNC-service-onboarding
+  term: Service Onboarding
+  type: Function
+  definition: Brings a new service offering onto the platform, registering it and making it ready to consume.
+  aliases: [offering onboarding, service registration]
+  relates_to:
+    - {rel: supports, target: CAP-GOV-8}
+  source: ADR 0011
+
+- id: FUNC-service-decommissioning
+  term: Service Decommissioning
+  type: Function
+  definition: Retires a service offering from the platform, withdrawing it and cleaning up its dependencies.
+  aliases: [service retirement, offering withdrawal]
+  relates_to:
+    - {rel: supports, target: CAP-GOV-8}
+  source: ADR 0011
+
+# Operational knowledge management (supports CAP-GOV-9; knowledge-retrieval shared with EXP-5 later)
+- id: FUNC-knowledge-authoring
+  term: Knowledge Authoring
+  type: Function
+  definition: Creates and curates operational knowledge so it stays current and trusted.
+  aliases: [knowledge curation, article authoring]
+  relates_to:
+    - {rel: supports, target: CAP-GOV-9}
+  source: ADR 0011
+
+- id: FUNC-knowledge-retrieval
+  term: Knowledge Retrieval
+  type: Function
+  definition: >
+    Searches and retrieves operational knowledge for consumption by human and digital (agentic) workers.
+    Shared with consumer documentation and onboarding. How material is found - lexical or similarity
+    search, graph traversal, retrieval grounded in the governing semantic model, or a combination - is a
+    scenario variation point, not a separate function; retrieval-augmented generation is a composition of
+    this and other functions (ADR 0038).
+  aliases: [knowledge search, knowledge lookup]
+  relates_to:
+    - {rel: supports, target: CAP-GOV-9}
+    - {rel: supports, target: CAP-EXP-5}
+  source: ADR 0011
+
+# Defect & nomination capture (supports CAP-GOV-10; platform-as-a-product feedback intake)
+- id: FUNC-feedback-intake
+  term: Feedback Intake
+  type: Function
+  definition: Captures defects and feature/product nominations raised against the platform by consumers and operators.
+  aliases: [defect capture, nomination capture, feedback capture]
+  relates_to:
+    - {rel: supports, target: CAP-GOV-10}
+  source: ADR 0011
+
+- id: FUNC-feedback-triage
+  term: Feedback Triage
+  type: Function
+  definition: Classifies, deduplicates, and prioritizes incoming feedback so it can be routed to the backlog.
+  aliases: [defect triage, nomination triage]
+  relates_to:
+    - {rel: supports, target: CAP-GOV-10}
+  source: ADR 0011
+
+# Product backlog & roadmap (supports CAP-GOV-11; the platform-as-a-product management loop)
+- id: FUNC-backlog-management
+  term: Backlog Management
+  type: Function
+  definition: Maintains and prioritizes a product backlog of nominations, defects, and planned work.
+  aliases: [backlog prioritization, product backlog]
+  relates_to:
+    - {rel: supports, target: CAP-GOV-11}
+  source: ADR 0011
+
+- id: FUNC-roadmap-planning
+  term: Roadmap Planning
+  type: Function
+  definition: Plans and communicates a forward roadmap of platform capabilities and reports status to requesters.
+  aliases: [roadmap management, release planning]
+  relates_to:
+    - {rel: supports, target: CAP-GOV-11}
+  source: ADR 0011

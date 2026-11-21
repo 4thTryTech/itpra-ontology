@@ -1,0 +1,70 @@
+# ITPRA ontology — FUNCTION library, GRC-POL (Policy, Standards & Control Governance)
+# type: Function. ids FUNC-grc-<slug>. All T1-neutral; functions MAY name a standard/technique where that IS the
+# function (ADR 0011). Functions `support` >=1 capability. See ADR 0024.
+
+# Security policy lifecycle (CAP-GRC-POL-1)
+- id: FUNC-grc-policy-authoring
+  term: Policy Authoring & Approval
+  type: Function
+  definition: Drafts, reviews, and approves security policies through a defined authority with version history.
+  aliases: [policy drafting, policy approval, policy versioning]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-POL-1}
+  source: ADR 0024
+
+- id: FUNC-grc-policy-publication-review
+  term: Policy Publication & Periodic Review
+  type: Function
+  definition: Publishes and communicates policies to the workforce and re-reviews them on a defined cadence.
+  aliases: [policy communication, policy review cycle, attestation to policy]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-POL-1}
+  source: ADR 0024
+
+# Standards & baseline management (CAP-GRC-POL-2)
+- id: FUNC-grc-baseline-definition
+  term: Standard & Baseline Definition
+  type: Function
+  definition: Defines testable security standards and configuration baselines that operationalize policy intent.
+  aliases: [security baseline, hardening standard, configuration standard]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-POL-2}
+  source: ADR 0024
+
+# Control catalogue governance & ownership (CAP-GRC-POL-3)
+- id: FUNC-grc-control-catalog
+  term: Control Catalogue Maintenance
+  type: Function
+  definition: Maintains the canonical control catalogue and traces each control to the policy that mandates it and the obligation it satisfies.
+  aliases: [control library, control definition]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-POL-3}
+  source: ADR 0024
+
+- id: FUNC-grc-control-ownership-assignment
+  term: Control Ownership Assignment
+  type: Function
+  definition: Assigns and records an accountable owner for each control and tracks control coverage.
+  aliases: [control owner assignment, RACI for controls]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-POL-3}
+  source: ADR 0024
+
+# Policy exception & waiver governance (CAP-GRC-POL-4)
+- id: FUNC-grc-exception-workflow
+  term: Exception Request & Approval
+  type: Function
+  definition: Handles exception/waiver requests — risk-assessed, time-boxed, approved at the appropriate authority.
+  aliases: [waiver workflow, exception approval]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-POL-4}
+  source: ADR 0024
+
+- id: FUNC-grc-exception-expiry-tracking
+  term: Exception Expiry & Renewal Tracking
+  type: Function
+  definition: Tracks active exceptions to expiry and links them to the risk register so deviations are not silent.
+  aliases: [waiver expiry, exception register]
+  relates_to:
+    - {rel: supports, target: CAP-GRC-POL-4}
+  source: ADR 0024

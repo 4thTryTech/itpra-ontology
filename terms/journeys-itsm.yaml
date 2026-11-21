@@ -1,0 +1,225 @@
+# ITPRA ontology — IT Service Management & Integration (ITSM) journey catalog
+# type: Journey. ids JRN-itsm-<slug>. Each `grouped_by` exactly one EXISTING JourneyGroup
+# (JG-ONBOARDING..JG-EVOLUTION; reused, not redefined). Neutral — steps reference capabilities + neutral
+# governance construct points (request/approval/change/incident/problem/record/service-level/catalog/
+# ownership/feedback), never tools or named processes. Relationships from the journey side: grouped_by,
+# consumed_by (primary personas), depends_on (capabilities exercised). Ratified by ADR 0025. Diagrams:
+# WF-itsm-<slug>.
+
+# ---- JG-ONBOARDING ----
+- id: JRN-itsm-onboard-provider
+  term: Onboard a Service Provider
+  type: Journey
+  definition: >
+    A new internal domain or external supplier is brought into the coordinated chain — its scope, commitments,
+    engagement model, and record interfaces established, and its services reflected in the catalog and
+    ownership map — so it can contribute to end-to-end services under coordination.
+  relates_to:
+    - {rel: grouped_by, target: JG-ONBOARDING}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-provider}
+    - {rel: depends_on, target: CAP-ITSM-SLM-3}
+    - {rel: depends_on, target: CAP-ITSM-CAT-4}
+    - {rel: depends_on, target: CAP-ITSM-CFG-1}
+  source: ADR 0025
+
+- id: JRN-itsm-introduce-service
+  term: Introduce a Service into the Catalog
+  type: Journey
+  definition: >
+    A new end-to-end service is authorized into the portfolio, its offer defined with its providers and
+    fulfillment conditions, its end-to-end commitment composed, and it is published to the catalog with a clear
+    owner — so consumers can discover and request it.
+  relates_to:
+    - {rel: grouped_by, target: JG-ONBOARDING}
+    - {rel: consumed_by, target: PERSONA-itsm-service-owner}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: depends_on, target: CAP-ITSM-CAT-2}
+    - {rel: depends_on, target: CAP-ITSM-CAT-3}
+    - {rel: depends_on, target: CAP-ITSM-CAT-1}
+    - {rel: depends_on, target: CAP-ITSM-SLM-1}
+  source: ADR 0025
+
+# ---- JG-DELIVERY ----
+- id: JRN-itsm-fulfill-cross-domain-request
+  term: Fulfill a Cross-Domain Request
+  type: Journey
+  definition: >
+    A consumer requests a service from the catalog; the request is triaged, decomposed into provider-owned
+    steps, authorized, orchestrated across providers, and tracked to a recorded outcome — so the consumer
+    receives one fulfilled service regardless of how many providers contributed.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-itsm-consumer}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: depends_on, target: CAP-ITSM-REQ-1}
+    - {rel: depends_on, target: CAP-ITSM-REQ-2}
+    - {rel: depends_on, target: CAP-ITSM-REQ-4}
+    - {rel: depends_on, target: CAP-ITSM-REQ-3}
+  source: ADR 0025
+
+- id: JRN-itsm-coordinate-cross-provider-change
+  term: Coordinate a Cross-Provider Change
+  type: Journey
+  definition: >
+    A change spanning providers is assessed for cross-provider risk and impact, authorized through a decision
+    point, scheduled and deconflicted against other changes, executed by its providers, and its outcome
+    reconciled into the integrated record — so it proceeds without colliding and its effect is recorded.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-provider}
+    - {rel: depends_on, target: CAP-ITSM-CHG-3}
+    - {rel: depends_on, target: CAP-ITSM-CHG-1}
+    - {rel: depends_on, target: CAP-ITSM-CHG-2}
+    - {rel: depends_on, target: CAP-ITSM-CHG-4}
+  source: ADR 0025
+
+# ---- JG-OPERATIONS ----
+- id: JRN-itsm-monitor-service-levels
+  term: Monitor End-to-End Service Levels
+  type: Journey
+  definition: >
+    The integrator measures each end-to-end service against its composed commitment, watches headroom across
+    the provider chain, and surfaces where a provider's contribution risks breaching the whole — so attention
+    moves to the right provider before the commitment is missed.
+  relates_to:
+    - {rel: grouped_by, target: JG-OPERATIONS}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-service-owner}
+    - {rel: depends_on, target: CAP-ITSM-SLM-2}
+    - {rel: depends_on, target: CAP-ITSM-SLM-1}
+    - {rel: depends_on, target: CAP-ITSM-VAL-1}
+  source: ADR 0025
+
+- id: JRN-itsm-integrate-systems-of-record
+  term: Integrate the Systems of Record
+  type: Journey
+  definition: >
+    The integrator ingests, federates, normalizes, and reconciles each provider's authoritative records into
+    one integrated end-to-end view with a service-to-item relationship model — so cross-provider change,
+    incident, and ownership decisions can be traced on a trustworthy record.
+  relates_to:
+    - {rel: grouped_by, target: JG-OPERATIONS}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-provider}
+    - {rel: depends_on, target: CAP-ITSM-CFG-1}
+    - {rel: depends_on, target: CAP-ITSM-CFG-2}
+    - {rel: depends_on, target: CAP-ITSM-CFG-3}
+  source: ADR 0025
+
+# ---- JG-RESPONSE ----
+- id: JRN-itsm-coordinate-cross-provider-incident
+  term: Coordinate a Cross-Provider Incident
+  type: Journey
+  definition: >
+    A disruption to an end-to-end service is detected and triaged across provider boundaries, recognized as one
+    incident, and restoration is coordinated across the providers that must act toward a single restore
+    objective — so the consumer's service is recovered and the event recorded end-to-end.
+  relates_to:
+    - {rel: grouped_by, target: JG-RESPONSE}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-provider}
+    - {rel: depends_on, target: CAP-ITSM-INC-1}
+    - {rel: depends_on, target: CAP-ITSM-INC-2}
+    - {rel: depends_on, target: CAP-ITSM-INC-5}
+  source: ADR 0025
+
+- id: JRN-itsm-run-major-incident
+  term: Run a Major Cross-Provider Incident
+  type: Journey
+  definition: >
+    A high-impact disruption spanning providers is run as one orchestrated response — a single coordinating
+    authority mobilizes the right providers, drives restoration, and keeps consumers and owners informed with
+    consistent status — so a major event has one command and one source of truth.
+  relates_to:
+    - {rel: grouped_by, target: JG-RESPONSE}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-consumer}
+    - {rel: depends_on, target: CAP-ITSM-INC-3}
+    - {rel: depends_on, target: CAP-ITSM-INC-2}
+    - {rel: depends_on, target: CAP-ITSM-INC-1}
+  source: ADR 0025
+
+- id: JRN-itsm-resolve-cross-provider-problem
+  term: Resolve a Cross-Provider Problem
+  type: Journey
+  definition: >
+    The underlying cause of recurring disruptions whose root may span providers is investigated across
+    boundaries, and lasting corrective action is tracked to closure across the providers that must act — so
+    recurrence is prevented and the resolution recorded end-to-end.
+  relates_to:
+    - {rel: grouped_by, target: JG-RESPONSE}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-provider}
+    - {rel: depends_on, target: CAP-ITSM-INC-4}
+    - {rel: depends_on, target: CAP-ITSM-INC-5}
+    - {rel: depends_on, target: CAP-ITSM-CFG-3}
+  source: ADR 0025
+
+# ---- JG-GOVERNANCE ----
+- id: JRN-itsm-review-provider-performance
+  term: Review Provider Performance & Commitments
+  type: Journey
+  definition: >
+    The integrator and owners review each provider's performance against its commitments on a cadence, confirm
+    the chain underpinning each end-to-end commitment holds, and drive remediation of shortfalls — so the
+    provider chain is held to account on evidence.
+  relates_to:
+    - {rel: grouped_by, target: JG-GOVERNANCE}
+    - {rel: consumed_by, target: PERSONA-itsm-service-owner}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: depends_on, target: CAP-ITSM-SLM-4}
+    - {rel: depends_on, target: CAP-ITSM-SLM-3}
+    - {rel: depends_on, target: CAP-ITSM-SLM-2}
+  source: ADR 0025
+
+- id: JRN-itsm-assure-record-integrity
+  term: Assure Integrated-Record Integrity
+  type: Journey
+  definition: >
+    The integrator governs the integrity of the integrated record — confirming which source is authoritative
+    for which detail, assuring freshness and accuracy, and controlling who may write — so the flow-coordination
+    domains and the catalog rely on a trustworthy end-to-end record.
+  relates_to:
+    - {rel: grouped_by, target: JG-GOVERNANCE}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-service-owner}
+    - {rel: depends_on, target: CAP-ITSM-CFG-4}
+    - {rel: depends_on, target: CAP-ITSM-CFG-2}
+  source: ADR 0025
+
+# ---- JG-EVOLUTION ----
+- id: JRN-itsm-improve-service-value
+  term: Improve End-to-End Service Value
+  type: Journey
+  definition: >
+    The integrator measures consumer-experienced value and aggregated cross-provider performance, finds where
+    value is won or lost, and drives a prioritized improvement loop across the providers that must act — so the
+    end-to-end service measurably improves.
+  relates_to:
+    - {rel: grouped_by, target: JG-EVOLUTION}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-consumer}
+    - {rel: depends_on, target: CAP-ITSM-VAL-2}
+    - {rel: depends_on, target: CAP-ITSM-VAL-1}
+    - {rel: depends_on, target: CAP-ITSM-VAL-3}
+    - {rel: depends_on, target: CAP-ITSM-VAL-4}
+  source: ADR 0025
+
+- id: JRN-itsm-retire-or-transition-service
+  term: Retire or Transition a Service
+  type: Journey
+  definition: >
+    An end-of-life or re-sourced service is retired or transitioned across its providers — its catalog entry
+    and ownership updated, its commitments closed or re-composed, providers offboarded or onboarded, and the
+    integrated record reconciled — so the change of providers leaves a clean, accountable state.
+  relates_to:
+    - {rel: grouped_by, target: JG-EVOLUTION}
+    - {rel: consumed_by, target: PERSONA-itsm-service-owner}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: depends_on, target: CAP-ITSM-CAT-2}
+    - {rel: depends_on, target: CAP-ITSM-SLM-3}
+    - {rel: depends_on, target: CAP-ITSM-CFG-4}
+    - {rel: depends_on, target: CAP-ITSM-CAT-4}
+  source: ADR 0025

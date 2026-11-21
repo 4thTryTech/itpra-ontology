@@ -1,0 +1,81 @@
+# ITPRA ontology — FUNCTION library, SVD-MAJ (Major-Incident Coordination & Escalation)
+# type: Function. ids FUNC-svd-<slug>. Functions `support` >=1 capability; NEVER derived_from on a Function (ADR
+# 0011). See ADR 0019.
+
+# Major-incident declaration & mobilization (CAP-SVD-MAJ-1)
+- id: FUNC-svd-major-mobilization
+  term: Response Mobilization
+  type: Function
+  definition: Stands up a coordinated response and brings the right people together quickly on declaration.
+  aliases: [team activation, response stand-up]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-MAJ-1}
+  source: ADR 0019
+
+- id: FUNC-svd-stakeholder-notification
+  term: Initial Stakeholder Notification
+  type: Function
+  definition: Notifies the defined stakeholders that a major incident has been declared.
+  aliases: [declaration alert, mobilization notice]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-MAJ-1}
+  source: ADR 0019
+
+# Response coordination & command (CAP-SVD-MAJ-2)
+- id: FUNC-svd-coordination-bridge
+  term: Coordination Bridge
+  type: Function
+  definition: Provides one centralized coordination point/bridge driving and tracking restoration actions across resolvers.
+  aliases: [war room, conference bridge, command point]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-MAJ-2}
+  source: ADR 0019
+
+- id: FUNC-svd-action-tracking
+  term: Restoration Action Tracking
+  type: Function
+  definition: Tracks the actions and owners of a major-incident response so coordination stays organized.
+  aliases: [action log, task tracking]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-MAJ-2}
+  source: ADR 0019
+
+# Disruption communication (CAP-SVD-MAJ-3)
+- id: FUNC-svd-cadenced-updates
+  term: Cadenced Status Updates
+  type: Function
+  definition: Issues stakeholder and user updates on a predictable cadence during a disruption.
+  aliases: [periodic updates, status cadence]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-MAJ-3}
+  source: ADR 0019
+
+- id: FUNC-svd-audience-tailored-messaging
+  term: Audience-Tailored Messaging
+  type: Function
+  definition: Adapts disruption messages to the audience, keeping non-technical updates jargon-free.
+  aliases: [tailored comms, plain-language updates]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-MAJ-3}
+    - {rel: supports, target: CAP-SVD-COM-1}
+  source: ADR 0019
+
+# Post-disruption review & learning (CAP-SVD-MAJ-4)
+- id: FUNC-svd-post-incident-review
+  term: Post-Incident Review
+  type: Function
+  definition: Runs a structured, blameless review after restoration to find root cause and produce owned actions.
+  aliases: [post-mortem, blameless review, PIR]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-MAJ-4}
+  source: ADR 0019
+
+- id: FUNC-svd-improvement-action-tracking
+  term: Improvement Action Tracking
+  type: Function
+  definition: Tracks the time-bound improvement actions from a review through to completion.
+  aliases: [corrective actions, action follow-through]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-MAJ-4}
+    - {rel: supports, target: CAP-SVD-PRF-4}
+  source: ADR 0019

@@ -1,0 +1,79 @@
+# ITPRA ontology — FUNCTION library, FLD-SAFE (On-site Safety, Access & Escort)
+# type: Function. ids FUNC-fld-<slug>. Functions `support` ≥1 capability. See ADR 0020.
+
+# Site-access request & scheduling (CAP-FLD-SAFE-1)
+- id: FUNC-fld-access-preregistration
+  term: Access Pre-Registration
+  type: Function
+  definition: Pre-registers a visit and secures an approved access window at the controlled site.
+  aliases: [visit pre-registration, access request]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-SAFE-1}
+  source: ADR 0020
+
+# Safety induction & credential verification (CAP-FLD-SAFE-2)
+- id: FUNC-fld-safety-induction
+  term: Safety Induction
+  type: Function
+  definition: Confirms the worker has completed the site's mandatory safety/working-rules induction.
+  aliases: [site induction, safety briefing]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-SAFE-2}
+  source: ADR 0020
+
+- id: FUNC-fld-credential-verification
+  term: Credential & Insurance Verification
+  type: Function
+  definition: Verifies certifications, licenses, and insurances against the site's requirements before work is authorized.
+  aliases: [credential check, compliance verification]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-SAFE-2}
+  source: ADR 0020
+
+# Permit-to-work control (CAP-FLD-SAFE-3)
+- id: FUNC-fld-permit-to-work
+  term: Permit-to-Work
+  type: Function
+  definition: Authorizes specific high-risk work at a specific location and time with specified control measures.
+  aliases: [work permit, PTW]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-SAFE-3}
+  source: ADR 0020
+
+# Escort & chain-of-custody (CAP-FLD-SAFE-4)
+- id: FUNC-fld-escort-control
+  term: Escort Control
+  type: Function
+  definition: Keeps escort-only personnel with an authorized escort throughout the visit.
+  aliases: [visitor escort, escort enforcement]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-SAFE-4}
+  source: ADR 0020
+
+- id: FUNC-fld-chain-of-custody
+  term: Chain-of-Custody Tracking
+  type: Function
+  definition: Maintains a clear custody record for equipment moving between controlled zones.
+  aliases: [custody tracking, asset custody]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-SAFE-4}
+  source: ADR 0020
+
+# On-site safety compliance & incident handling (CAP-FLD-SAFE-5)
+- id: FUNC-fld-safe-work-practice
+  term: Safe-Work Practice Observance
+  type: Function
+  definition: Observes site rules and control measures during the work to keep the visit safe.
+  aliases: [safe working, control-measure adherence]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-SAFE-5}
+  source: ADR 0020
+
+- id: FUNC-fld-safety-incident-handling
+  term: Safety Incident & Near-Miss Handling
+  type: Function
+  definition: Records, reports, and responds to a safety incident or near-miss on site.
+  aliases: [incident reporting, near-miss capture]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-SAFE-5}
+  source: ADR 0020

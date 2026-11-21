@@ -1,0 +1,65 @@
+# ITPRA ontology — FUNCTION library, BIA-SCI (Data Science & Advanced Analytics)
+# type: Function. ids FUNC-bia-<slug>. T1-neutral (ADR 0011). Functions `support` ≥1 capability. See ADR 0026.
+
+- id: FUNC-bia-notebook-workspace
+  term: Collaborative Notebook Workspace
+  type: Function
+  definition: Provides a governed, shareable, reproducible environment for exploratory analysis and experimentation.
+  aliases: [analytics workbench, notebook environment]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-SCI-1}
+  source: ADR 0026
+
+- id: FUNC-bia-feature-engineering
+  term: Feature Engineering
+  type: Function
+  definition: Derives and curates reusable analytical features with consistent definitions for training and scoring.
+  aliases: [feature store, feature pipeline]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-SCI-2}
+  source: ADR 0026
+
+- id: FUNC-bia-model-training
+  term: Model Training & Evaluation
+  type: Function
+  definition: Trains candidate models and evaluates them against validation criteria and business objectives.
+  aliases: [model fitting, cross-validation, model selection]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-SCI-3}
+  source: ADR 0026
+
+- id: FUNC-bia-experiment-tracking
+  term: Experiment & Model Tracking
+  type: Function
+  definition: Records model experiments, parameters, datasets, and results for reproducibility and comparison.
+  aliases: [run tracking, model registry lineage]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-SCI-3}
+  source: ADR 0026
+
+- id: FUNC-bia-model-serving
+  term: Model Serving & Scoring
+  type: Function
+  definition: Serves deployed models to produce predictions/scores via batch or on-demand requests.
+  aliases: [batch scoring, online inference, prediction service]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-SCI-4}
+  source: ADR 0026
+
+- id: FUNC-bia-model-monitoring
+  term: Model & Drift Monitoring
+  type: Function
+  definition: Monitors deployed-model accuracy, stability, and data/concept drift against documented retrain triggers.
+  aliases: [drift detection, model performance monitoring]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-SCI-5}
+  source: ADR 0026
+
+- id: FUNC-bia-model-versioning
+  term: Model Version Governance
+  type: Function
+  definition: Versions and governs models across their lifecycle from candidate to retired.
+  aliases: [model registry, model lifecycle governance]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-SCI-5}
+  source: ADR 0026

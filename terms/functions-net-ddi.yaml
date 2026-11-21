@@ -1,0 +1,49 @@
+# ITPRA ontology — FUNCTION library, NET-DDI (Naming, Addressing & DNS)
+# type: Function. ids FUNC-net-<slug>. T1-neutral; a function MAY name a standard/technique where that IS the
+# function (ADR 0011). See ADR 0023.
+
+- id: FUNC-net-dns-resolution
+  term: DNS Resolution
+  type: Function
+  definition: Resolves names to addresses (authoritative and recursive) so services are reachable by name.
+  aliases: [name resolution, recursive resolver, authoritative DNS]
+  relates_to:
+    - {rel: supports, target: CAP-NET-DDI-1}
+  source: ADR 0023
+
+- id: FUNC-net-dns-zone-management
+  term: DNS Zone Management
+  type: Function
+  definition: Authors and maintains the enterprise DNS zones and their records.
+  aliases: [zone administration, DNS record management]
+  relates_to:
+    - {rel: supports, target: CAP-NET-DDI-1}
+    - {rel: supports, target: CAP-NET-DDI-4}
+  source: ADR 0023
+
+- id: FUNC-net-dynamic-host-configuration
+  term: Dynamic Host Configuration
+  type: Function
+  definition: Assigns addresses and host configuration dynamically to devices joining the network (DHCP).
+  aliases: [DHCP, address leasing, host autoconfiguration]
+  relates_to:
+    - {rel: supports, target: CAP-NET-DDI-2}
+  source: ADR 0023
+
+- id: FUNC-net-address-plan-management
+  term: Address-Plan Management
+  type: Function
+  definition: Maintains the authoritative record of subnets, pools, and assignments — the enterprise address plan (IPAM).
+  aliases: [IPAM, address inventory, subnet management]
+  relates_to:
+    - {rel: supports, target: CAP-NET-DDI-3}
+  source: ADR 0023
+
+- id: FUNC-net-namespace-reconciliation
+  term: Name / Address Reconciliation
+  type: Function
+  definition: Reconciles names and addresses across on-premises and cloud estates to keep them consistent and conflict-free.
+  aliases: [hybrid DNS sync, address overlap detection]
+  relates_to:
+    - {rel: supports, target: CAP-NET-DDI-4}
+  source: ADR 0023

@@ -1,0 +1,52 @@
+# ITPRA ontology — NET-DDI (Naming, Addressing & DNS) capabilities
+# type: Capability. ids CAP-NET-DDI-<n>. Grouped under domain NET-DDI (ADR 0023).
+
+- id: CAP-NET-DDI-1
+  term: Enterprise DNS Resolution & Zones
+  type: Capability
+  definition: >
+    Provides authoritative and recursive name resolution and manages the enterprise DNS zones, so services and
+    hosts are reliably reachable by name across the enterprise and at the internet edge.
+  relates_to:
+    - {rel: grouped_by, target: NET-DDI}
+    - {rel: consumed_by, target: PERSONA-net-consumer}
+    - {rel: consumed_by, target: PERSONA-net-engineering-team}
+  source: ADR 0023
+
+- id: CAP-NET-DDI-2
+  term: Dynamic Address Assignment
+  type: Capability
+  definition: >
+    Assigns network addresses and host configuration dynamically to devices joining the enterprise network,
+    drawing from the governed address plan so hosts are configured consistently without manual setup.
+  relates_to:
+    - {rel: grouped_by, target: NET-DDI}
+    - {rel: depends_on, target: CAP-NET-DDI-3}
+    - {rel: consumed_by, target: PERSONA-net-consumer}
+    - {rel: consumed_by, target: PERSONA-net-engineering-team}
+  source: ADR 0023
+
+- id: CAP-NET-DDI-3
+  term: IP Address-Space Management
+  type: Capability
+  definition: >
+    Maintains the authoritative record of the enterprise address space — subnets, pools, and assignments — as
+    the address plan the rest of the network relies on, keeping it accurate and conflict-free across sites.
+  relates_to:
+    - {rel: grouped_by, target: NET-DDI}
+    - {rel: consumed_by, target: PERSONA-net-engineering-team}
+    - {rel: consumed_by, target: PERSONA-net-architect}
+  source: ADR 0023
+
+- id: CAP-NET-DDI-4
+  term: Hybrid Naming & Addressing Consistency
+  type: Capability
+  definition: >
+    Keeps the enterprise name space and address plan consistent and conflict-free across on-premises and cloud/
+    multi-cloud estates, so names resolve and addresses do not overlap regardless of where a service lives.
+  relates_to:
+    - {rel: grouped_by, target: NET-DDI}
+    - {rel: depends_on, target: CAP-NET-DDI-1}
+    - {rel: depends_on, target: CAP-NET-DDI-3}
+    - {rel: consumed_by, target: PERSONA-net-engineering-team}
+  source: ADR 0023

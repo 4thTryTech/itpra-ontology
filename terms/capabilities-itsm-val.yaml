@@ -1,0 +1,58 @@
+# ITPRA ontology — ITSM-VAL (Service Performance & Value Insight) capabilities
+# type: Capability. ids CAP-ITSM-VAL-<n>. Grouped under domain ITSM-VAL (ADR 0025). Neutral cross-provider
+# coordination over GC-SERVICE-LEVEL / GC-FEEDBACK.
+
+- id: CAP-ITSM-VAL-1
+  term: End-to-End Service Performance Insight
+  type: Capability
+  definition: >
+    Aggregates the performance of an end-to-end service across all its providers into one view — how the whole
+    service is performing, not just each part — so the integrator and owners can see end-to-end health and
+    where in the chain performance is won or lost.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-VAL}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-service-owner}
+  source: ADR 0025
+
+- id: CAP-ITSM-VAL-2
+  term: Service Value & Experience Measurement
+  type: Capability
+  definition: >
+    Measures the value and experience an end-to-end service delivers as the consumer perceives it — outcome and
+    satisfaction, not only whether operational targets were met — so the enterprise can see the gap between
+    "metrics met" and "consumer well served" across the whole service.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-VAL}
+    - {rel: consumed_by, target: PERSONA-itsm-consumer}
+    - {rel: consumed_by, target: PERSONA-itsm-service-owner}
+  source: ADR 0025
+
+- id: CAP-ITSM-VAL-3
+  term: Cross-Provider Improvement Coordination
+  type: Capability
+  definition: >
+    Turns performance and value insight into a prioritized, cross-provider improvement loop — capturing
+    feedback and improvement ideas, prioritizing them against value, and driving them across the providers that
+    must act — so the end-to-end service measurably improves over time.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-VAL}
+    - {rel: depends_on, target: CAP-ITSM-VAL-2}
+    - {rel: depends_on, target: CAP-ITSM-VAL-1}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-service-owner}
+  source: ADR 0025
+
+- id: CAP-ITSM-VAL-4
+  term: Service Reporting & Insight Coordination
+  type: Capability
+  definition: >
+    Produces the end-to-end reporting and insight consumers and owners rely on — consolidating cross-provider
+    performance, value, service-level, and improvement status into trustworthy, audience-appropriate views — so
+    decisions about the service are made on one coherent account rather than fragmented per-provider reports.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-VAL}
+    - {rel: depends_on, target: CAP-ITSM-VAL-1}
+    - {rel: consumed_by, target: PERSONA-itsm-service-owner}
+    - {rel: consumed_by, target: PERSONA-itsm-consumer}
+  source: ADR 0025

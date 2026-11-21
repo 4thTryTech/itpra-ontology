@@ -1,0 +1,69 @@
+# ITPRA ontology — FUNCTION library, FLD-LOG (Spares, Stock & Logistics)
+# type: Function. ids FUNC-fld-<slug>. Functions `support` ≥1 capability. See ADR 0020.
+
+# Spares demand planning (CAP-FLD-LOG-1)
+- id: FUNC-fld-spares-forecasting
+  term: Spares Demand Forecasting
+  type: Function
+  definition: Forecasts part demand from failure rates, installed base, and planned work.
+  aliases: [parts forecasting, demand planning]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-LOG-1}
+  source: ADR 0020
+
+# Multi-echelon stock positioning (CAP-FLD-LOG-2)
+- id: FUNC-fld-echelon-positioning
+  term: Multi-Echelon Positioning
+  type: Function
+  definition: Places spares across central depot, field depots, and customer-site stock to meet response targets.
+  aliases: [echelon stocking, network positioning]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-LOG-2}
+  source: ADR 0020
+
+- id: FUNC-fld-spares-pooling
+  term: Spares Pooling
+  type: Function
+  definition: Pools demand across locations or participants into a shared buffer to cut total inventory.
+  aliases: [risk pooling, shared spares pool]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-LOG-2}
+  source: ADR 0020
+
+# Trunk-stock management & visibility (CAP-FLD-LOG-3)
+- id: FUNC-fld-trunk-stock-management
+  term: Trunk-Stock Management
+  type: Function
+  definition: Manages the frontline stock a technician carries to scheduled and emergency jobs.
+  aliases: [van stock, mobile inventory]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-LOG-3}
+  source: ADR 0020
+
+- id: FUNC-fld-stock-visibility
+  term: Stock Visibility & Reconciliation
+  type: Function
+  definition: Maintains visibility of what stock is held and where, and reconciles it against consumption.
+  aliases: [inventory visibility, stock reconciliation]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-LOG-3}
+  source: ADR 0020
+
+# Replenishment & requisition (CAP-FLD-LOG-4)
+- id: FUNC-fld-auto-replenishment
+  term: Automated Replenishment
+  type: Function
+  definition: Tops up echelons automatically as parts are consumed against demand signals.
+  aliases: [auto-replenish, stock top-up]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-LOG-4}
+  source: ADR 0020
+
+- id: FUNC-fld-part-requisition
+  term: Part Requisition to Point of Work
+  type: Function
+  definition: Requisitions a needed part and routes it to the technician or site for the visit.
+  aliases: [parts requisition, part order]
+  relates_to:
+    - {rel: supports, target: CAP-FLD-LOG-4}
+  source: ADR 0020

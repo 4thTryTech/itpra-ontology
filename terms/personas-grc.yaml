@@ -1,0 +1,49 @@
+# ITPRA ontology — Enterprise Security, Risk & Compliance (GRC) personas
+# type: Persona. ids PERSONA-grc-<slug>. Coarse, tier-graduated neutral role archetypes (mirrors the persona
+# model, ADR 0012): each refines into granular roles at T2/T3. Capabilities reference these via `consumed_by`;
+# relationships are expressed from the capability/journey side. Ratified by ADR 0024.
+
+- id: PERSONA-grc-security-leadership
+  term: Security & Risk Leadership
+  type: Persona
+  definition: >
+    The accountable owner of enterprise security and risk — sets risk appetite and strategy, owns the
+    enterprise security policy and control framework at the highest level, accepts residual risk, and reports
+    posture to the board. The "govern" role of the security/risk function. At T2/T3 this refines into
+    granular roles (CISO, chief risk officer, security/risk steering board, business information security
+    officer).
+  aliases: [CISO, security leadership, chief risk officer, security governance board]
+  source: ADR 0024
+
+- id: PERSONA-grc-security-operations
+  term: Security Operations & Response
+  type: Persona
+  definition: >
+    The detect-and-respond owner — runs enterprise security monitoring, threat intelligence, hunting, and the
+    coordination and execution of security incident response across estates (the SOC/CSIRT role). At T2/T3
+    this refines into granular roles (SOC analyst tiers, threat hunter, threat-intelligence analyst, incident
+    responder/handler, CSIRT lead).
+  aliases: [SOC, SOC analyst, CSIRT, incident responder, threat hunter, security operations]
+  source: ADR 0024
+
+- id: PERSONA-grc-risk-compliance
+  term: Risk, Compliance & Audit
+  type: Persona
+  definition: >
+    The assurance owner — runs enterprise risk assessment and the risk register, the control framework,
+    internal and external audit, continuous control monitoring and evidence, regulatory-change management, and
+    the security awareness programme. At T2/T3 this refines into granular roles (risk analyst, compliance
+    officer, internal auditor, audit liaison, control owner, awareness programme manager).
+  aliases: [risk and compliance, compliance officer, internal audit, GRC analyst, control owner]
+  source: ADR 0024
+
+- id: PERSONA-grc-identity-governance
+  term: Identity & Access Governance
+  type: Persona
+  definition: >
+    The identity-authority owner — maintains the enterprise identity of record and authoritative sources,
+    governs entitlements and the access lifecycle, runs access certification, and governs privileged access.
+    At T2/T3 this refines into granular roles (IAM/IGA engineer, access-governance analyst, privileged-access
+    administrator, identity product owner).
+  aliases: [IAM team, identity governance, access governance, IGA, privileged access administrator]
+  source: ADR 0024

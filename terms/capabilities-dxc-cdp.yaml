@@ -1,0 +1,64 @@
+# ITPRA ontology — DXC-CDP (Customer Data & Profiles) capabilities
+# type: Capability. ids CAP-DXC-CDP-<n>. Grouped under domain DXC-CDP (ADR 0027).
+
+- id: CAP-DXC-CDP-1
+  term: Customer Data Ingestion & Integration
+  type: Capability
+  definition: >
+    Collects and consolidates first-party customer data from digital channels and source systems into the
+    customer-data tier, so customer signals from across touchpoints are brought together in one place.
+  relates_to:
+    - {rel: grouped_by, target: DXC-CDP}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-team}
+  source: ADR 0027
+
+- id: CAP-DXC-CDP-2
+  term: Identity Resolution & Unified Profile
+  type: Capability
+  definition: >
+    Links disparate customer identifiers into a single persistent unified profile via deterministic and
+    probabilistic matching, so the organization has one trustworthy view of each customer across touchpoints.
+  relates_to:
+    - {rel: grouped_by, target: DXC-CDP}
+    - {rel: depends_on, target: CAP-DXC-CDP-1}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-team}
+  source: ADR 0027
+
+- id: CAP-DXC-CDP-3
+  term: Audience & Segment Build
+  type: Capability
+  definition: >
+    Builds and maintains reusable audiences and segments from the unified profiles, so the same governed
+    audience definitions feed personalization, journeys, commerce, and downstream analytics.
+  relates_to:
+    - {rel: grouped_by, target: DXC-CDP}
+    - {rel: depends_on, target: CAP-DXC-CDP-2}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-practitioner}
+  source: ADR 0027
+
+- id: CAP-DXC-CDP-4
+  term: Consent & Preference Management
+  type: Capability
+  definition: >
+    Operates the customer-facing consent and preference experience — capturing, recording, and honoring what
+    each customer permits and prefers — so customer data is used only within the consent the customer has
+    given. Applies enterprise privacy obligations rather than authoring them.
+  relates_to:
+    - {rel: grouped_by, target: DXC-CDP}
+    - {rel: consumed_by, target: PERSONA-dxc-customer}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-governance}
+  source: ADR 0027
+
+- id: CAP-DXC-CDP-5
+  term: Profile Activation & Data Distribution
+  type: Capability
+  definition: >
+    Makes unified profiles and audiences available — in real time where needed — to the personalization,
+    journey, commerce, and channel domains and to downstream analytics, within consent, so the customer view
+    is usable where the experience is decided and delivered.
+  relates_to:
+    - {rel: grouped_by, target: DXC-CDP}
+    - {rel: depends_on, target: CAP-DXC-CDP-2}
+    - {rel: depends_on, target: CAP-DXC-CDP-4}
+    - {rel: consumed_by, target: PERSONA-dxc-experience-team}
+  source: ADR 0027

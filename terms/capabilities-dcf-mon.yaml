@@ -1,0 +1,70 @@
+# ITPRA ontology — DCF-MON (Facility Monitoring & Management) capabilities
+# type: Capability. ids CAP-DCF-MON-<n>. Grouped under domain DCF-MON (ADR 0022); the neutral DCIM concern.
+# Distinct from the platform's workload observability (ITO OBS).
+
+- id: CAP-DCF-MON-1
+  term: Physical Asset & Inventory Management
+  type: Capability
+  definition: >
+    Maintains an authoritative inventory of the facility's physical assets — racks, hosted equipment,
+    power and cooling units, and their location and lifecycle state — as the trustworthy record of what is
+    physically present, where, and connected to what.
+  relates_to:
+    - {rel: grouped_by, target: DCF-MON}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-compliance}
+  source: ADR 0022
+
+- id: CAP-DCF-MON-2
+  term: Environmental & Power Monitoring
+  type: Capability
+  definition: >
+    Continuously measures the physical state of the facility — temperature, humidity, airflow, and electrical
+    draw across the space and racks — and surfaces it in real time, so the physical envelope and load are
+    always observable and alertable.
+  relates_to:
+    - {rel: grouped_by, target: DCF-MON}
+    - {rel: depends_on, target: CAP-DCF-MON-1}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+  source: ADR 0022
+
+- id: CAP-DCF-MON-3
+  term: Facility Capacity Planning
+  type: Capability
+  definition: >
+    Analyzes facility space, power, and cooling headroom from the monitored and metered data and forecasts
+    future need, so footprint is allocated within physical limits and exhaustion or stranded capacity is
+    foreseen and avoided.
+  relates_to:
+    - {rel: grouped_by, target: DCF-MON}
+    - {rel: depends_on, target: CAP-DCF-MON-2}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-tenant}
+  source: ADR 0022
+
+- id: CAP-DCF-MON-4
+  term: Energy & Efficiency Measurement
+  type: Capability
+  definition: >
+    Computes and reports the facility's energy- and resource-efficiency from metered power, cooling, and
+    environmental data — recognized facility-efficiency metrics — so efficiency is a governed, reportable
+    outcome that drives improvement and meets sustainability obligations.
+  relates_to:
+    - {rel: grouped_by, target: DCF-MON}
+    - {rel: depends_on, target: CAP-DCF-MON-2}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-compliance}
+  source: ADR 0022
+
+- id: CAP-DCF-MON-5
+  term: Facility Maintenance Management
+  type: Capability
+  definition: >
+    Plans and tracks maintenance of the physical plant — preventive and corrective work on power, cooling,
+    and security systems, including testing of redundancy and failover — so the physical infrastructure stays
+    reliable and its redundancy actually works when called on.
+  relates_to:
+    - {rel: grouped_by, target: DCF-MON}
+    - {rel: depends_on, target: CAP-DCF-MON-1}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+  source: ADR 0022

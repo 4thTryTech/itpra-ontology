@@ -1,0 +1,71 @@
+# ITPRA ontology — FLD-SAFE (On-site Safety, Access & Escort) capabilities
+# type: Capability. ids CAP-FLD-SAFE-<n>. Grouped under domain FLD-SAFE (ADR 0020).
+
+- id: CAP-FLD-SAFE-1
+  term: Site-Access Request & Scheduling
+  type: Capability
+  definition: >
+    Requests and schedules a technician's physical access to a controlled site — pre-registering the visit
+    and securing an approved access window — so the visit is authorized and expected before the technician
+    arrives, rather than turned away at the door.
+  relates_to:
+    - {rel: grouped_by, target: FLD-SAFE}
+    - {rel: consumed_by, target: PERSONA-fld-field-coordinator}
+    - {rel: consumed_by, target: PERSONA-fld-site-custodian}
+  source: ADR 0020
+
+- id: CAP-FLD-SAFE-2
+  term: Safety Induction & Credential Verification
+  type: Capability
+  definition: >
+    Ensures each field worker has completed the required site safety induction and holds valid credentials,
+    insurances, and certifications before work is authorized — verified against the site's requirements — so
+    only inducted, qualified, cleared people perform work.
+  relates_to:
+    - {rel: grouped_by, target: FLD-SAFE}
+    - {rel: depends_on, target: CAP-FLD-SAFE-1}
+    - {rel: consumed_by, target: PERSONA-fld-field-technician}
+    - {rel: consumed_by, target: PERSONA-fld-site-custodian}
+  source: ADR 0020
+
+- id: CAP-FLD-SAFE-3
+  term: Permit-to-Work Control
+  type: Capability
+  definition: >
+    Obtains and operates under a formal permit-to-work for high-risk tasks — authorizing specific work, at a
+    specific location, for a specific time, with specified control measures in place — so hazardous field
+    work proceeds only under explicit, controlled authorization.
+  relates_to:
+    - {rel: grouped_by, target: FLD-SAFE}
+    - {rel: depends_on, target: CAP-FLD-SAFE-2}
+    - {rel: consumed_by, target: PERSONA-fld-field-technician}
+    - {rel: consumed_by, target: PERSONA-fld-site-custodian}
+  source: ADR 0020
+
+- id: CAP-FLD-SAFE-4
+  term: Escort & Chain-of-Custody
+  type: Capability
+  definition: >
+    Manages escorted access and custody within controlled zones — keeping escort-only personnel with an
+    authorized escort and maintaining a clear chain of custody for equipment moving between zones — so
+    presence and movement on site stay accountable throughout the visit.
+  relates_to:
+    - {rel: grouped_by, target: FLD-SAFE}
+    - {rel: depends_on, target: CAP-FLD-SAFE-1}
+    - {rel: consumed_by, target: PERSONA-fld-field-technician}
+    - {rel: consumed_by, target: PERSONA-fld-site-custodian}
+  source: ADR 0020
+
+- id: CAP-FLD-SAFE-5
+  term: On-Site Safety Compliance & Incident Handling
+  type: Capability
+  definition: >
+    Upholds safe working practice on site and handles any safety incident — observing site rules and control
+    measures during the work, and recording, reporting, and responding to a near-miss or incident — so field
+    work is conducted safely and exceptions are captured and acted on.
+  relates_to:
+    - {rel: grouped_by, target: FLD-SAFE}
+    - {rel: depends_on, target: CAP-FLD-SAFE-3}
+    - {rel: consumed_by, target: PERSONA-fld-field-technician}
+    - {rel: consumed_by, target: PERSONA-fld-site-custodian}
+  source: ADR 0020

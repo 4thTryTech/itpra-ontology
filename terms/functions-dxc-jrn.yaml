@@ -1,0 +1,80 @@
+# ITPRA ontology — FUNCTION library, DXC-JRN (Customer Journey Orchestration)
+# type: Function. ids FUNC-dxc-<slug>. All T1-neutral; a function MAY name a recognized technique where that IS
+# the function (ADR 0011).
+
+# Journey design & mapping (CAP-DXC-JRN-1)
+- id: FUNC-dxc-journey-mapping
+  term: Journey Mapping
+  type: Function
+  definition: Maps the cross-channel customer journey — stages, triggers, branches, and goals.
+  aliases: [journey design, journey map, flow design]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-JRN-1}
+  source: ADR 0027
+
+- id: FUNC-dxc-trigger-definition
+  term: Trigger & Branch Definition
+  type: Function
+  definition: Defines the triggers and branch logic that move a customer through journey stages.
+  aliases: [trigger flows, branch logic, journey rules]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-JRN-1}
+  source: ADR 0027
+
+# Journey execution & orchestration (CAP-DXC-JRN-2)
+- id: FUNC-dxc-journey-execution
+  term: Journey Execution
+  type: Function
+  definition: Advances each customer through a designed journey and coordinates the next action across channels.
+  aliases: [journey runtime, orchestration engine, journey state]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-JRN-2}
+  source: ADR 0027
+
+- id: FUNC-dxc-cross-channel-coordination
+  term: Cross-Channel Coordination
+  type: Function
+  definition: Coordinates a customer's next step consistently across the channels they use.
+  aliases: [omnichannel coordination, channel handoff]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-JRN-2}
+    - {rel: supports, target: CAP-DXC-CHN-1}
+  source: ADR 0027
+
+# Real-time decisioning & next-best-action (CAP-DXC-JRN-3)
+- id: FUNC-dxc-next-best-action
+  term: Next-Best-Action Decisioning
+  type: Function
+  definition: Chooses the next best action/experience for a customer in the moment from profile and signals.
+  aliases: [next-best-action, real-time decisioning, NBA]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-JRN-3}
+  source: ADR 0027
+
+- id: FUNC-dxc-signal-ingest
+  term: Behavioral Signal Intake
+  type: Function
+  definition: Takes in live behavioral and context signals to inform real-time decisioning.
+  aliases: [signal intake, real-time events, behavioral signals]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-JRN-3}
+  source: ADR 0027
+
+# Journey analytics & friction insight (CAP-DXC-JRN-4)
+- id: FUNC-dxc-journey-analytics
+  term: Journey Analytics
+  type: Function
+  definition: Analyzes where customers are in journeys and how journeys actually behave.
+  aliases: [journey tracking, path analysis, funnel analysis]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-JRN-4}
+  source: ADR 0027
+
+- id: FUNC-dxc-friction-detection
+  term: Friction Detection
+  type: Function
+  definition: Detects drop-off, delay, and friction points along customer journeys.
+  aliases: [drop-off detection, friction insight, bottleneck detection]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-JRN-4}
+  source: ADR 0027

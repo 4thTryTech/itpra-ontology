@@ -1,0 +1,89 @@
+# ITPRA ontology — FUNCTION library, DXC-CDP (Customer Data & Profiles)
+# type: Function. ids FUNC-dxc-<slug>. All T1-neutral; a function MAY name a recognized technique where that IS
+# the function (ADR 0011).
+
+# Customer data ingestion & integration (CAP-DXC-CDP-1)
+- id: FUNC-dxc-data-collection
+  term: First-Party Data Collection
+  type: Function
+  definition: Collects first-party customer data and events from digital channels and source systems.
+  aliases: [event collection, data ingestion, tagging]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-CDP-1}
+  source: ADR 0027
+
+- id: FUNC-dxc-source-integration
+  term: Source System Integration
+  type: Function
+  definition: Connects and consolidates customer data from CRM, support, commerce, and other source systems.
+  aliases: [data integration, connectors, source connectors]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-CDP-1}
+  source: ADR 0027
+
+# Identity resolution & unified profile (CAP-DXC-CDP-2)
+- id: FUNC-dxc-identity-resolution
+  term: Identity Resolution
+  type: Function
+  definition: Links disparate customer identifiers into one identity via deterministic and probabilistic matching. The same match / merge / survive-under-source-authority behaviour as FUNC-bia-golden-record and FUNC-itsm-record-reconciliation, over customer identities; graph-based matching is a technique variant of it (ADR 0031).
+  aliases: [identity graph, identity stitching, deterministic and probabilistic matching]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-CDP-2}
+  source: ADR 0027
+
+- id: FUNC-dxc-unified-profile
+  term: Unified Profile Assembly
+  type: Function
+  definition: Assembles and maintains the single persistent profile per customer from resolved identities.
+  aliases: [golden profile, single customer view, persistent profile]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-CDP-2}
+  source: ADR 0027
+
+# Audience & segment build (CAP-DXC-CDP-3)
+- id: FUNC-dxc-segment-build
+  term: Segment Build
+  type: Function
+  definition: Builds reusable audiences/segments from unified profiles for shared use across DXC.
+  aliases: [audience build, segment definition]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-CDP-3}
+  source: ADR 0027
+
+# Consent & preference management (CAP-DXC-CDP-4)
+- id: FUNC-dxc-consent-capture
+  term: Consent Capture & Enforcement
+  type: Function
+  definition: Captures, records, and enforces customer consent so data use stays within what is permitted.
+  aliases: [consent management, consent record, consent enforcement]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-CDP-4}
+  source: ADR 0027
+
+- id: FUNC-dxc-preference-center
+  term: Preference Center
+  type: Function
+  definition: Lets customers set and manage their communication and data-use preferences.
+  aliases: [preference management, opt-in opt-out]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-CDP-4}
+  source: ADR 0027
+
+# Profile activation & data distribution (CAP-DXC-CDP-5)
+- id: FUNC-dxc-profile-activation
+  term: Profile Activation
+  type: Function
+  definition: Makes profiles/audiences available, in real time where needed, to personalization, journeys, and commerce.
+  aliases: [audience activation, real-time activation, reverse ETL]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-CDP-5}
+  source: ADR 0027
+
+- id: FUNC-dxc-data-distribution
+  term: Profile Data Distribution
+  type: Function
+  definition: Distributes customer profiles and audiences to downstream destinations within consent.
+  aliases: [data distribution, profile export, downstream sync]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-CDP-5}
+  source: ADR 0027

@@ -1,0 +1,139 @@
+# ITPRA ontology — SEC (Security & Identity) capabilities
+# type: Capability. ids CAP-SEC-<n>. Grouped under domain SEC (ADR 0017).
+
+- id: CAP-SEC-1
+  term: Identity & Authentication
+  type: Capability
+  definition: >
+    Authenticates every human and workload identity before granting access, establishing who or what is
+    making a request, including identity federation.
+  relates_to:
+    - {rel: grouped_by, target: SEC}
+    - {rel: consumed_by, target: PERSONA-security-compliance}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+  source: ADR 0017
+
+- id: CAP-SEC-2
+  term: Authorization & Access Control
+  type: Capability
+  definition: >
+    Authorizes actions against least-privilege access policies and ensures every action is attributable to
+    an authenticated identity. Where the acting identity is a delegated actor (AUTON-ACTOR), attribution
+    resolves through the chain of delegated authority to the accountable persona whose authority the actor
+    carries, so an action is never attributable only to the principal that executed it. Establishing and
+    presenting that chain is a runtime concern owned here; whether a delegation may exist at all is governed
+    by GRC (FUNC-grc-delegated-authority-governance). Chain representation, propagation mechanism, and depth
+    limits bind at T2/T3 (ADR 0035).
+  relates_to:
+    - {rel: grouped_by, target: SEC}
+    - {rel: depends_on, target: CAP-SEC-1}
+    - {rel: applies_to, target: AUTON-ACTOR}
+    - {rel: consumed_by, target: PERSONA-security-compliance}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+  source: ADR 0017
+
+- id: CAP-SEC-3
+  term: Certificate & Workload Credential Management
+  type: Capability
+  definition: >
+    Issues, rotates, and revokes certificates and workload credentials (PKI / workload identity), so
+    services can prove identity and communicate securely.
+  relates_to:
+    - {rel: grouped_by, target: SEC}
+    - {rel: depends_on, target: CAP-FND-2}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+    - {rel: consumed_by, target: PERSONA-security-compliance}
+  source: ADR 0017
+
+- id: CAP-SEC-4
+  term: Vulnerability Management
+  type: Capability
+  definition: >
+    Scans workloads, components, and dependencies (software composition analysis) and container/VM images
+    for known vulnerabilities and reports findings with severity, so risk can be prioritized and remediated.
+    Also evaluates cloud and cluster configuration posture against best-practice baselines (the posture-
+    management facet); posture drift detection is CAP-AUT-3 and runtime threat detection is CAP-SEC-7.
+    Application source/running-app testing (SAST/DAST) is CAP-SEC-9.
+  aliases: [software composition analysis, SCA, image scanning, cloud security posture management, CSPM, container security, workload security]
+  relates_to:
+    - {rel: grouped_by, target: SEC}
+    - {rel: consumed_by, target: PERSONA-security-compliance}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+  source: ADR 0017
+
+- id: CAP-SEC-5
+  term: Admission & Policy Enforcement
+  type: Capability
+  definition: >
+    Enforces admission and policy controls that block non-compliant changes at the point of effect —
+    the runtime enforcement of policy (the change-time evaluation is CAP-FND-4).
+  relates_to:
+    - {rel: grouped_by, target: SEC}
+    - {rel: depends_on, target: CAP-FND-4}
+    - {rel: consumed_by, target: PERSONA-security-compliance}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+  source: ADR 0017
+
+- id: CAP-SEC-6
+  term: Security Event Detection & Audit
+  type: Capability
+  definition: >
+    Aggregates, correlates, records, and alerts on security-relevant events, producing the attributable
+    audit trail of who did what and when (the SIEM/audit layer). Active network/host intrusion detection is
+    CAP-SEC-7, whose detections this layer correlates and records.
+  relates_to:
+    - {rel: grouped_by, target: SEC}
+    - {rel: depends_on, target: CAP-OBS-1}
+    - {rel: consumed_by, target: PERSONA-security-compliance}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+  source: ADR 0017
+
+- id: CAP-SEC-7
+  term: Threat Detection
+  type: Capability
+  definition: >
+    Detects intrusions and malicious activity by analyzing network traffic and host/workload behavior using
+    signature and anomaly/behavioral methods — the detection-sensing layer that feeds security event
+    correlation/audit (CAP-SEC-6) and incident coordination (CAP-GOV-3). Distinct from vulnerability
+    management (CAP-SEC-4, which finds weaknesses) and from the SIEM/audit layer (CAP-SEC-6).
+  aliases: [intrusion detection, NIDS, HIDS, network detection, endpoint detection, NDR, EDR, DDoS detection, volumetric attack detection, UEBA, user and entity behavior analytics, behavioral analytics]
+  relates_to:
+    - {rel: grouped_by, target: SEC}
+    - {rel: depends_on, target: CAP-OBS-1}
+    - {rel: consumed_by, target: PERSONA-security-compliance}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+  source: ADR 0017
+
+- id: CAP-SEC-8
+  term: Security Response Orchestration
+  type: Capability
+  definition: >
+    Automates and orchestrates security incident response — triage, enrichment, containment, and
+    remediation — via playbooks triggered by detections, coordinating actions across security and platform
+    controls. Builds on the general orchestration engine (CAP-AUT-6) and the detection layer
+    (CAP-SEC-6/CAP-SEC-7); security incidents are tracked as cases via CAP-GOV-3. (The "SOAR" capability.)
+  aliases: [SOAR, security orchestration automation and response, automated incident response, security playbooks]
+  relates_to:
+    - {rel: grouped_by, target: SEC}
+    - {rel: depends_on, target: CAP-AUT-6}
+    - {rel: depends_on, target: CAP-SEC-7}
+    - {rel: depends_on, target: CAP-GOV-3}
+    - {rel: consumed_by, target: PERSONA-security-compliance}
+    - {rel: consumed_by, target: PERSONA-platform-team}
+  source: ADR 0017
+
+- id: CAP-SEC-9
+  term: Application Security Testing
+  type: Capability
+  definition: >
+    Tests application source (SAST) and running applications (DAST), and optionally instrumented runtime
+    (IAST), for security vulnerabilities, integrated as delivery-pipeline gates. Complements Vulnerability
+    Management (CAP-SEC-4, which covers workloads/components/dependencies/SCA and container/VM images);
+    SEC-9 targets the application code and the running application. Findings feed CAP-SEC-6.
+  aliases: [AST, SAST, DAST, IAST]
+  relates_to:
+    - {rel: grouped_by, target: SEC}
+    - {rel: depends_on, target: CAP-DEL-1}
+    - {rel: consumed_by, target: PERSONA-security-compliance}
+    - {rel: consumed_by, target: PERSONA-platform-consumer}
+  source: ADR 0017

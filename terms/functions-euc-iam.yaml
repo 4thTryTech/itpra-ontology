@@ -1,0 +1,60 @@
+# ITPRA ontology — FUNCTION library, EUC-IAM (Workforce Identity & Access)
+# type: Function. ids FUNC-euc-<slug>.
+
+# Workforce access onboarding (CAP-EUC-IAM-1)
+- id: FUNC-euc-access-provisioning
+  term: Role-Based Access Provisioning
+  type: Function
+  definition: Provisions and adjusts a workforce member's entitlements by role across their workplace resources.
+  aliases: [entitlement provisioning, joiner-mover-leaver provisioning, RBAC provisioning]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-IAM-1}
+  source: ADR 0018
+
+- id: FUNC-euc-access-review
+  term: Access Review & Recertification
+  type: Function
+  definition: Periodically reviews and recertifies workforce entitlements to keep access aligned to role.
+  aliases: [entitlement review, access recertification]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-IAM-1}
+  source: ADR 0018
+
+# Sign-in experience (CAP-EUC-IAM-2)
+- id: FUNC-euc-multi-factor-authentication
+  term: Multi-Factor Authentication
+  type: Function
+  definition: Verifies workforce identity with more than one factor at sign-in.
+  aliases: [MFA, strong authentication, two-factor authentication]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-IAM-2}
+  source: ADR 0018
+
+- id: FUNC-euc-single-sign-on
+  term: Single Sign-On
+  type: Function
+  definition: Lets a user authenticate once and reach the applications they are entitled to without re-entering credentials.
+  aliases: [SSO, federated sign-on, passwordless sign-on]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-IAM-2}
+  source: ADR 0018
+
+# Device-posture-conditioned access (CAP-EUC-IAM-3)
+- id: FUNC-euc-conditional-access
+  term: Conditional Access Evaluation
+  type: Function
+  definition: Evaluates identity, device posture, and request context to admit, restrict, or deny access to a resource.
+  aliases: [context-based access, risk-based access, zero-trust access decision]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-IAM-3}
+  source: ADR 0018
+
+# Self-service credential & access recovery (CAP-EUC-IAM-4)
+- id: FUNC-euc-self-service-password-reset
+  term: Self-Service Credential Reset
+  type: Function
+  definition: Lets a verified user reset their own credentials and unlock routine access without an agent.
+  aliases: [self-service password reset, SSPR, account unlock]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-IAM-4}
+  source: ADR 0018

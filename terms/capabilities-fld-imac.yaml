@@ -1,0 +1,70 @@
+# ITPRA ontology — FLD-IMAC (Install · Move · Add · Change) capabilities
+# type: Capability. ids CAP-FLD-IMAC-<n>. Grouped under domain FLD-IMAC (ADR 0020).
+
+- id: CAP-FLD-IMAC-1
+  term: Physical Install & Commissioning
+  type: Capability
+  definition: >
+    Sets up, physically installs, cables, and commissions new equipment at a location — racking, mounting,
+    connecting, and bringing it to a working, recorded state integrated with the existing estate — so
+    authorized new hardware reaches productive use on site.
+  relates_to:
+    - {rel: grouped_by, target: FLD-IMAC}
+    - {rel: consumed_by, target: PERSONA-fld-field-technician}
+    - {rel: consumed_by, target: PERSONA-fld-service-requestor}
+  source: ADR 0020
+
+- id: CAP-FLD-IMAC-2
+  term: Asset Move & Relocation
+  type: Capability
+  definition: >
+    Relocates assets between positions, rooms, buildings, or sites — de-cabling, transporting, re-installing,
+    and re-commissioning — planned to minimize downtime and preserve custody, so equipment moves without
+    loss, damage, or untracked change of location.
+  relates_to:
+    - {rel: grouped_by, target: FLD-IMAC}
+    - {rel: depends_on, target: CAP-FLD-IMAC-1}
+    - {rel: consumed_by, target: PERSONA-fld-field-technician}
+    - {rel: consumed_by, target: PERSONA-fld-service-requestor}
+  source: ADR 0020
+
+- id: CAP-FLD-IMAC-3
+  term: On-Site Add & Expansion
+  type: Capability
+  definition: >
+    Adds hardware to extend capacity or function on site — additional units, components, peripherals, or
+    cabling — verifying physical compatibility and integrating with minimal disruption, so the estate grows
+    without destabilizing what is already in place.
+  relates_to:
+    - {rel: grouped_by, target: FLD-IMAC}
+    - {rel: depends_on, target: CAP-FLD-IMAC-1}
+    - {rel: consumed_by, target: PERSONA-fld-field-technician}
+  source: ADR 0020
+
+- id: CAP-FLD-IMAC-4
+  term: On-Site Change & Reconfiguration
+  type: Capability
+  definition: >
+    Performs the physical part of a controlled change in place — re-cabling, hardware upgrade, component
+    reconfiguration, or repositioning — as authorized, so the change is executed by hand on site and the
+    result is reported back to the record of truth.
+  relates_to:
+    - {rel: grouped_by, target: FLD-IMAC}
+    - {rel: depends_on, target: CAP-FLD-IMAC-1}
+    - {rel: consumed_by, target: PERSONA-fld-field-technician}
+    - {rel: consumed_by, target: PERSONA-fld-service-requestor}
+  source: ADR 0020
+
+- id: CAP-FLD-IMAC-5
+  term: De-Install & Disposal Handover
+  type: Capability
+  definition: >
+    De-installs equipment at end of life or relocation, prepares it for disposal or return — disconnecting,
+    removing, and handing it into the disposal/recycling or return path against any data-sanitization
+    requirement — so retired equipment leaves the location safely and is recorded as removed.
+  relates_to:
+    - {rel: grouped_by, target: FLD-IMAC}
+    - {rel: depends_on, target: CAP-FLD-IMAC-2}
+    - {rel: consumed_by, target: PERSONA-fld-field-technician}
+    - {rel: consumed_by, target: PERSONA-fld-site-custodian}
+  source: ADR 0020

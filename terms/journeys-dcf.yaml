@@ -1,0 +1,238 @@
+# ITPRA ontology — Data Center & Facilities (DCF) journey catalog
+# type: Journey. ids JRN-dcf-<slug>. Each `grouped_by` exactly one EXISTING JourneyGroup
+# (JG-ONBOARDING..JG-EVOLUTION; reused, not redefined). Neutral — steps reference capabilities + neutral
+# governance construct points (request/approval/change/incident/record/feedback), never tools or named
+# processes. Relationships from the journey side: grouped_by, consumed_by (primary personas), depends_on
+# (capabilities exercised). Ratified by ADR 0022. Diagrams: WF-dcf-<slug>.
+
+# ---- JG-ONBOARDING ----
+- id: JRN-dcf-commission-facility
+  term: Commission a Facility into Service
+  type: Journey
+  definition: >
+    Bring a new or expanded physical hosting facility (or hall) into service — establishing the space,
+    electrical plant, cooling, cabling, physical security, monitoring, and rated resilience — so it is ready
+    to host equipment to a known availability class.
+  relates_to:
+    - {rel: grouped_by, target: JG-ONBOARDING}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-compliance}
+    - {rel: depends_on, target: CAP-DCF-SPC-1}
+    - {rel: depends_on, target: CAP-DCF-PWR-1}
+    - {rel: depends_on, target: CAP-DCF-COOL-1}
+    - {rel: depends_on, target: CAP-DCF-RES-1}
+    - {rel: depends_on, target: CAP-DCF-MON-1}
+  source: ADR 0022
+
+- id: JRN-dcf-onboard-tenant-footprint
+  term: Onboard a Tenant Footprint
+  type: Journey
+  definition: >
+    Allocate a tenant a physical footprint — space, racks, a power budget, cooling, cabling, and physical
+    access — within the facility's capacity limits, so the platform or business can place equipment in a
+    ready, governed footprint.
+  relates_to:
+    - {rel: grouped_by, target: JG-ONBOARDING}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-tenant}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+    - {rel: depends_on, target: CAP-DCF-SPC-2}
+    - {rel: depends_on, target: CAP-DCF-SPC-3}
+    - {rel: depends_on, target: CAP-DCF-PWR-4}
+    - {rel: depends_on, target: CAP-DCF-CAB-1}
+    - {rel: depends_on, target: CAP-DCF-SEC-2}
+  source: ADR 0022
+
+- id: JRN-dcf-install-equipment
+  term: Install Hosted Equipment
+  type: Journey
+  definition: >
+    Physically onboard a tenant's equipment into its footprint — receive, rack, connect power and cabling,
+    bring up, and record it — so the equipment is live in the facility and reflected in the facility record.
+  relates_to:
+    - {rel: grouped_by, target: JG-ONBOARDING}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-tenant}
+    - {rel: depends_on, target: CAP-DCF-SPC-4}
+    - {rel: depends_on, target: CAP-DCF-PWR-4}
+    - {rel: depends_on, target: CAP-DCF-CAB-1}
+    - {rel: depends_on, target: CAP-DCF-MON-1}
+  source: ADR 0022
+
+# ---- JG-DELIVERY ----
+- id: JRN-dcf-provision-power-cooling
+  term: Provision Power & Cooling to a Footprint
+  type: Journey
+  definition: >
+    Deliver clean, redundant power and adequate cooling to a footprint within the safe environmental envelope,
+    so the hosted equipment is continuously powered and kept within reliability limits.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-tenant}
+    - {rel: depends_on, target: CAP-DCF-PWR-3}
+    - {rel: depends_on, target: CAP-DCF-PWR-4}
+    - {rel: depends_on, target: CAP-DCF-COOL-2}
+    - {rel: depends_on, target: CAP-DCF-COOL-3}
+  source: ADR 0022
+
+- id: JRN-dcf-establish-cross-connect
+  term: Establish a Physical Cross-Connect
+  type: Journey
+  definition: >
+    Provision a governed physical cross-connect between a tenant and another tenant, a carrier, or the network
+    demarcation, so the tenant's equipment is physically interconnected over a documented cabling path.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-tenant}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+    - {rel: depends_on, target: CAP-DCF-CAB-3}
+    - {rel: depends_on, target: CAP-DCF-CAB-2}
+    - {rel: depends_on, target: CAP-DCF-CAB-1}
+  source: ADR 0022
+
+# ---- JG-OPERATIONS ----
+- id: JRN-dcf-monitor-facility-health
+  term: Monitor Facility Health
+  type: Journey
+  definition: >
+    Continuously observe the facility's physical state — environmental envelope, power draw, and equipment
+    status — so the physical environment is known in real time and deviations are surfaced before they harm
+    the hosted load.
+  relates_to:
+    - {rel: grouped_by, target: JG-OPERATIONS}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+    - {rel: depends_on, target: CAP-DCF-MON-2}
+    - {rel: depends_on, target: CAP-DCF-COOL-2}
+    - {rel: depends_on, target: CAP-DCF-PWR-5}
+  source: ADR 0022
+
+- id: JRN-dcf-manage-physical-capacity
+  term: Manage Physical Capacity
+  type: Journey
+  definition: >
+    Track and forecast the facility's space, power, and cooling headroom and allocate footprint within limits,
+    so capacity is assigned deliberately and exhaustion or stranded capacity is foreseen and avoided.
+  relates_to:
+    - {rel: grouped_by, target: JG-OPERATIONS}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-tenant}
+    - {rel: depends_on, target: CAP-DCF-MON-3}
+    - {rel: depends_on, target: CAP-DCF-SPC-3}
+    - {rel: depends_on, target: CAP-DCF-PWR-5}
+  source: ADR 0022
+
+- id: JRN-dcf-optimize-energy-efficiency
+  term: Measure & Improve Energy Efficiency
+  type: Journey
+  definition: >
+    Measure the facility's energy and resource efficiency, locate overhead in power and cooling, and feed
+    improvements back, so efficiency is a governed, improving, reportable outcome.
+  relates_to:
+    - {rel: grouped_by, target: JG-OPERATIONS}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-compliance}
+    - {rel: depends_on, target: CAP-DCF-MON-4}
+    - {rel: depends_on, target: CAP-DCF-COOL-3}
+    - {rel: depends_on, target: CAP-DCF-PWR-5}
+  source: ADR 0022
+
+# ---- JG-RESPONSE ----
+- id: JRN-dcf-respond-power-event
+  term: Respond to a Power or Cooling Event
+  type: Journey
+  definition: >
+    A loss of primary supply or a cooling/environmental excursion is ridden through and contained — backup
+    generation and uninterruptible power carry the load, cooling is restored, and the event is recorded — so
+    the hosted load is not interrupted or harmed.
+  relates_to:
+    - {rel: grouped_by, target: JG-RESPONSE}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-tenant}
+    - {rel: depends_on, target: CAP-DCF-PWR-2}
+    - {rel: depends_on, target: CAP-DCF-PWR-3}
+    - {rel: depends_on, target: CAP-DCF-COOL-1}
+    - {rel: depends_on, target: CAP-DCF-RES-1}
+  source: ADR 0022
+
+- id: JRN-dcf-respond-physical-security-incident
+  term: Respond to a Physical Security Incident
+  type: Journey
+  definition: >
+    A physical intrusion or unauthorized-access event is detected, triaged, and contained — the area secured,
+    the event verified on surveillance, and an evidentiary record produced — so physical compromise is limited
+    and evidencable.
+  relates_to:
+    - {rel: grouped_by, target: JG-RESPONSE}
+    - {rel: consumed_by, target: PERSONA-dcf-physical-security-officer}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-compliance}
+    - {rel: depends_on, target: CAP-DCF-SEC-4}
+    - {rel: depends_on, target: CAP-DCF-SEC-1}
+    - {rel: depends_on, target: CAP-DCF-SEC-5}
+  source: ADR 0022
+
+- id: JRN-dcf-respond-hazard
+  term: Respond to a Facility Hazard
+  type: Journey
+  definition: >
+    A site-level hazard (fire or leak) is detected and contained — suppression and life-safety systems act,
+    occupants are protected, and the hosted load is safeguarded or safely failed over — so the hazard does not
+    harm people or end the hosting service.
+  relates_to:
+    - {rel: grouped_by, target: JG-RESPONSE}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-compliance}
+    - {rel: depends_on, target: CAP-DCF-RES-3}
+    - {rel: depends_on, target: CAP-DCF-MON-2}
+    - {rel: depends_on, target: CAP-DCF-RES-4}
+  source: ADR 0022
+
+# ---- JG-GOVERNANCE ----
+- id: JRN-dcf-audit-physical-access
+  term: Audit Physical Access
+  type: Journey
+  definition: >
+    Facility assurance reviews who physically accessed which zones against authorization, drives remediation
+    of anomalies, and produces physical-access audit evidence, so physical access is demonstrably governed.
+  relates_to:
+    - {rel: grouped_by, target: JG-GOVERNANCE}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-compliance}
+    - {rel: consumed_by, target: PERSONA-dcf-physical-security-officer}
+    - {rel: depends_on, target: CAP-DCF-SEC-5}
+    - {rel: depends_on, target: CAP-DCF-SEC-3}
+    - {rel: depends_on, target: CAP-DCF-SEC-2}
+  source: ADR 0022
+
+- id: JRN-dcf-attest-facility-resilience
+  term: Attest Facility Resilience & Availability
+  type: Journey
+  definition: >
+    Facility assurance verifies the facility's redundancy, concurrent maintainability, and continuity against
+    its rated availability class — including evidence that redundancy and failover have been tested — and
+    produces resilience attestation evidence.
+  relates_to:
+    - {rel: grouped_by, target: JG-GOVERNANCE}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-compliance}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+    - {rel: depends_on, target: CAP-DCF-RES-1}
+    - {rel: depends_on, target: CAP-DCF-RES-2}
+    - {rel: depends_on, target: CAP-DCF-MON-5}
+    - {rel: depends_on, target: CAP-DCF-RES-4}
+  source: ADR 0022
+
+# ---- JG-EVOLUTION ----
+- id: JRN-dcf-decommission-footprint
+  term: Decommission & Reclaim a Footprint
+  type: Journey
+  definition: >
+    Retire a tenant footprint at end of life — remove equipment, de-cable and de-rack, revoke physical access,
+    reclaim the space/power/cooling capacity, and close the records — so the footprint is cleanly reclaimed
+    with no residual allocation or access.
+  relates_to:
+    - {rel: grouped_by, target: JG-EVOLUTION}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-tenant}
+    - {rel: depends_on, target: CAP-DCF-SPC-4}
+    - {rel: depends_on, target: CAP-DCF-SPC-3}
+    - {rel: depends_on, target: CAP-DCF-SEC-2}
+    - {rel: depends_on, target: CAP-DCF-MON-1}
+  source: ADR 0022

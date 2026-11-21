@@ -1,0 +1,120 @@
+# ITPRA ontology — FUNCTION library, SVD-CON (Contact & Intake Channels)
+# type: Function. ids FUNC-svd-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
+# the function (ADR 0011). Functions `support` >=1 capability (many-to-many). NEVER use derived_from on a
+# Function. See ADR 0019.
+
+# Multi-channel contact intake (CAP-SVD-CON-1)
+- id: FUNC-svd-voice-intake
+  term: Voice Contact Intake
+  type: Function
+  definition: Receives and logs a contact arriving by voice/telephony into the desk.
+  aliases: [phone intake, call intake]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-CON-1}
+  source: ADR 0019
+
+- id: FUNC-svd-conversational-intake
+  term: Conversational & Messaging Intake
+  type: Function
+  definition: Receives a contact through interactive chat or messaging, including a conversational virtual assistant front end.
+  aliases: [chat intake, messaging intake, chatbot front door]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-CON-1}
+    - {rel: supports, target: CAP-SVD-KNW-1}
+  source: ADR 0019
+
+- id: FUNC-svd-portal-intake
+  term: Self-Service Portal Intake
+  type: Function
+  definition: Receives a contact submitted through a self-service portal or request form.
+  aliases: [portal submission, web form intake]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-CON-1}
+  source: ADR 0019
+
+- id: FUNC-svd-asynchronous-intake
+  term: Asynchronous Message Intake
+  type: Function
+  definition: Receives a contact arriving asynchronously (email or message) and turns it into a tracked record.
+  aliases: [email intake, message-to-ticket]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-CON-1}
+  source: ADR 0019
+
+# Unified contact queue & record (CAP-SVD-CON-2)
+- id: FUNC-svd-omnichannel-queue
+  term: Unified Omnichannel Queue
+  type: Function
+  definition: Consolidates contacts from all channels into one managed work queue so none is missed.
+  aliases: [single queue, unified inbox, omnichannel queue]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-CON-2}
+  source: ADR 0019
+
+- id: FUNC-svd-contact-record
+  term: Contact Record Management
+  type: Function
+  definition: Maintains one authoritative record per contact capturing its state, history, and outcome.
+  aliases: [ticket record, case record]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-CON-2}
+    - {rel: supports, target: CAP-SVD-HDL-4}
+  source: ADR 0019
+
+# Requester identity & entitlement verification (CAP-SVD-CON-3)
+- id: FUNC-svd-requester-identification
+  term: Requester Identification
+  type: Function
+  definition: Establishes and verifies the identity of the contacting user against the identity of record.
+  aliases: [caller verification, requester lookup]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-CON-3}
+  source: ADR 0019
+
+- id: FUNC-svd-entitlement-check
+  term: Entitlement & Segment Check
+  type: Function
+  definition: Determines the services, entitlements, and segment that apply to the requester at intake.
+  aliases: [entitlement lookup, service eligibility]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-CON-3}
+    - {rel: supports, target: CAP-SVD-COM-4}
+  source: ADR 0019
+
+# Contact context capture (CAP-SVD-CON-4)
+- id: FUNC-svd-context-capture
+  term: Contact Context Capture
+  type: Function
+  definition: Captures the symptom, affected service, and relevant environment/history for the contact.
+  aliases: [intake context, symptom capture]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-CON-4}
+  source: ADR 0019
+
+- id: FUNC-svd-history-correlation
+  term: Requester History Correlation
+  type: Function
+  definition: Surfaces the requester's prior contacts and assets to inform handling without re-asking.
+  aliases: [contact history, customer 360 at intake]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-CON-4}
+  source: ADR 0019
+
+# Channel & session continuity (CAP-SVD-CON-5)
+- id: FUNC-svd-channel-handover
+  term: Cross-Channel Handover
+  type: Function
+  definition: Carries a contact's identity and context when a user moves from one channel to another mid-interaction.
+  aliases: [chat-to-voice handover, channel switch continuity]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-CON-5}
+  source: ADR 0019
+
+- id: FUNC-svd-session-resumption
+  term: Session Resumption
+  type: Function
+  definition: Lets a user resume an existing contact later without restarting, preserving thread and context.
+  aliases: [conversation resume, thread continuity]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-CON-5}
+  source: ADR 0019

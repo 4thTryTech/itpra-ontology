@@ -1,0 +1,114 @@
+# ITPRA ontology — ADM-QAT (Application Quality & Testing) capabilities
+# type: Capability. ids CAP-ADM-QAT-<n>. Grouped under domain ADM-QAT (ADR 0021). Verifies the application
+# against a product-quality model (ISO/IEC 25010); the platform may provide test-execution surface consumed.
+
+- id: CAP-ADM-QAT-1
+  term: Application Quality Bar & Fitness Criteria
+  type: Capability
+  definition: >
+    Defines the application's quality bar — the functional and non-functional fitness criteria it must meet,
+    expressed against a product-quality model — so "good enough to ship" is explicit, agreed, and testable
+    rather than implicit. Where behaviour is generated rather than written, the criterion is STATISTICAL
+    rather than pass/fail — an agreed threshold over a scored sample — but it is set, agreed, and
+    gated here the same way (CAP-ADM-QAT-6; ADR 0034).
+  relates_to:
+    - {rel: grouped_by, target: ADM-QAT}
+    - {rel: consumed_by, target: PERSONA-adm-app-assurance}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+  source: ADR 0021
+
+- id: CAP-ADM-QAT-2
+  term: Functional Test Design & Execution
+  type: Capability
+  definition: >
+    Designs and runs tests that verify the application does what it should — correctness and completeness of
+    behavior across levels (unit, integration, system, acceptance) — so functional defects are caught before
+    users meet them.
+  relates_to:
+    - {rel: grouped_by, target: ADM-QAT}
+    - {rel: depends_on, target: CAP-ADM-QAT-1}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+  source: ADR 0021
+
+- id: CAP-ADM-QAT-3
+  term: Non-Functional & Quality-Attribute Testing
+  type: Capability
+  definition: >
+    Verifies the application's non-functional qualities — performance, reliability, security, and
+    compatibility/interoperability — at the application level, so the application meets its quality-attribute
+    targets and not only its functional ones.
+  relates_to:
+    - {rel: grouped_by, target: ADM-QAT}
+    - {rel: depends_on, target: CAP-ADM-QAT-1}
+    - {rel: consumed_by, target: PERSONA-adm-app-assurance}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+  source: ADR 0021
+
+- id: CAP-ADM-QAT-4
+  term: Test Data & Environment Readiness
+  type: Capability
+  definition: >
+    Prepares representative, governed test data and ready test environments for the application — so tests
+    are repeatable and meaningful without exposing sensitive production data. Consumes platform-provided
+    environments where available.
+  relates_to:
+    - {rel: grouped_by, target: ADM-QAT}
+    - {rel: depends_on, target: CAP-ADM-QAT-2}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+  source: ADR 0021
+
+- id: CAP-ADM-QAT-5
+  term: Continuous Quality Verification & Defect Management
+  type: Capability
+  definition: >
+    Verifies quality continuously as the application changes and manages the defect lifecycle — capture,
+    triage, prioritize, resolve, and confirm — so quality is sustained over the application's life and
+    regressions are caught early. Evaluation of generated behaviour rides this same substrate: regression
+    evaluation gates on a statistical threshold rather than an assertion, but runs on the same continuous
+    verification path (FUNC-adm-regression-evaluation; ADR 0034).
+  relates_to:
+    - {rel: grouped_by, target: ADM-QAT}
+    - {rel: depends_on, target: CAP-ADM-QAT-2}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+    - {rel: consumed_by, target: PERSONA-adm-app-assurance}
+  source: ADR 0021
+
+- id: CAP-ADM-QAT-6
+  term: Generative & Trajectory Evaluation
+  type: Capability
+  definition: >
+    Evaluates the quality of application output that has no single correct answer, and of the PATH an
+    autonomous component took to produce it. A distinct capability rather than a stretch of functional
+    testing: there is no single ground truth to assert against, scoring is partly performed by a model whose
+    agreement with expert judgement must itself be measured and maintained, and the trajectory is a
+    first-class target with no deterministic analogue. Gates release on statistical fitness rather than
+    pass/fail, following the same gating pattern the quality bar already uses (CAP-ADM-QAT-1). Distinct from
+    runtime guardrails, which act online and per request; evaluation is offline and sampled. Which metrics,
+    which thresholds, and multi-trial reliability measures bind at T2.
+  aliases: [evals, generative evaluation, agent evaluation, output quality evaluation, trajectory evaluation]
+  relates_to:
+    - {rel: grouped_by, target: ADM-QAT}
+    - {rel: depends_on, target: CAP-ADM-QAT-1}
+    - {rel: depends_on, target: CAP-ADM-QAT-5}
+    - {rel: consumed_by, target: PERSONA-adm-ai-assurance}
+    - {rel: consumed_by, target: PERSONA-adm-model-grounded-engineer}
+  source: ADR 0034
+
+- id: CAP-ADM-QAT-7
+  term: AI Red-Teaming & Adversarial Testing
+  type: Capability
+  definition: >
+    Deliberately attacks the application's model-grounded and autonomous behaviour to find failures that
+    ordinary evaluation does not surface - adversarial inputs, boundary evasion, tool misuse, and
+    harmful-output elicitation - and feeds what it finds back into guardrail design and the quality bar.
+    Kept a SIBLING to generative evaluation (CAP-ADM-QAT-6) rather than folded into it, mirroring how
+    security and resilience testing sit as siblings to conventional application testing: the practice, the
+    cadence, and the tooling are independently chosen and independently updated. Attack taxonomies and
+    coverage targets bind at T2/T3.
+  aliases: [red teaming, adversarial testing, AI safety testing, attack simulation]
+  relates_to:
+    - {rel: grouped_by, target: ADM-QAT}
+    - {rel: depends_on, target: CAP-ADM-QAT-1}
+    - {rel: consumed_by, target: PERSONA-adm-ai-assurance}
+    - {rel: consumed_by, target: PERSONA-adm-app-assurance}
+  source: ADR 0034

@@ -1,0 +1,53 @@
+# ITPRA ontology — ADM-DEX (Developer Enablement & Experience) capabilities
+# type: Capability. ids CAP-ADM-DEX-<n>. Grouped under domain ADM-DEX (ADR 0021). CONSUMER view of using the
+# platform: adopts/consumes the platform's paved roads, self-service, and developer portal — does NOT build the
+# internal developer platform (that is ITO EXP/DEL) (ADR 0021).
+
+- id: CAP-ADM-DEX-1
+  term: Developer Onboarding & Enablement
+  type: Capability
+  definition: >
+    Readies a developer or application team to be productive on the platform — onboarding onto its paved
+    roads, granting the access and tooling their role needs, and building the skills to use them — so people
+    reach productive contribution quickly.
+  relates_to:
+    - {rel: grouped_by, target: ADM-DEX}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+  source: ADR 0021
+
+- id: CAP-ADM-DEX-2
+  term: Self-Service Environment & Resource Access
+  type: Capability
+  definition: >
+    Lets a developer obtain the environments and resources they need to build and test — on demand, through
+    the platform's self-service surface — without manual platform-team steps, so work is not blocked on
+    provisioning. Consumes the platform self-service; does not provide it.
+  relates_to:
+    - {rel: grouped_by, target: ADM-DEX}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+  source: ADR 0021
+
+- id: CAP-ADM-DEX-3
+  term: Golden-Path & Template Reuse
+  type: Capability
+  definition: >
+    Adopts the platform's golden paths, starter templates, and reusable building blocks for common
+    application needs — so teams follow good practice by default and avoid rebuilding undifferentiated
+    plumbing, lowering cognitive load.
+  relates_to:
+    - {rel: grouped_by, target: ADM-DEX}
+    - {rel: depends_on, target: CAP-ADM-DEX-1}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+  source: ADR 0021
+
+- id: CAP-ADM-DEX-4
+  term: Developer Experience Feedback & Improvement
+  type: Capability
+  definition: >
+    Captures the application team's experience of building on the platform — friction, gaps, and satisfaction
+    — and feeds it into the application practice and across the boundary to the platform, so the experience
+    measurably improves over time.
+  relates_to:
+    - {rel: grouped_by, target: ADM-DEX}
+    - {rel: consumed_by, target: PERSONA-adm-app-team}
+  source: ADR 0021

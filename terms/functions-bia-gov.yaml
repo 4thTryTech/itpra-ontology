@@ -1,0 +1,117 @@
+# ITPRA ontology — FUNCTION library, BIA-GOV (Data Governance, Quality & Master Data)
+# type: Function. ids FUNC-bia-<slug>. T1-neutral (ADR 0011). Governs BUSINESS data; applies the enterprise
+# control catalog (ADR 0026). Functions `support` ≥1 capability. See ADR 0026. ADR 0037: glossary, ontology
+# modelling, and semantic model publication functions minted (none names a standard or version); the `business
+# glossary` alias moves off metadata management onto the glossary function; reference-data control stretched to
+# hierarchical vocabularies. ADR 0031 D4: quality rules may be sourced from the governing semantic model
+# (authoring-time conformance) - no conformance function.
+
+- id: FUNC-bia-stewardship-assignment
+  term: Stewardship & Ownership Assignment
+  type: Function
+  definition: Assigns accountable ownership and stewardship over business data domains and assets.
+  aliases: [data ownership, stewardship model]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-GOV-1}
+  source: ADR 0026
+
+- id: FUNC-bia-data-classification
+  term: Data Classification
+  type: Function
+  definition: Classifies business data by sensitivity and policy category to drive handling and access.
+  aliases: [sensitivity labeling, data tagging]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-GOV-1}
+    - {rel: supports, target: CAP-BIA-GOV-6}
+  source: ADR 0026
+
+- id: FUNC-bia-metadata-management
+  term: Metadata Management
+  type: Function
+  definition: Captures and maintains technical and business metadata about data assets. Agreed business-term definitions are the glossary (FUNC-bia-glossary-management), which metadata references rather than holds.
+  aliases: [technical metadata, business metadata]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-GOV-2}
+  source: ADR 0026
+
+- id: FUNC-bia-lineage-tracing
+  term: Data Lineage Tracing
+  type: Function
+  definition: Traces end-to-end lineage of data from source to insight for understanding and impact analysis.
+  aliases: [lineage, impact analysis, provenance]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-GOV-2}
+  source: ADR 0026
+
+- id: FUNC-bia-quality-profiling
+  term: Data Quality Profiling & Rules
+  type: Function
+  definition: Profiles data and evaluates quality rules across dimensions (accuracy, completeness, consistency, timeliness, validity, uniqueness). Validity rules may be sourced from the governing semantic model (CAP-BIA-GOV-7) and are re-evaluated when that model changes, so content is checked against the meaning it claims to conform to (authoring-time conformance; ADR 0031).
+  aliases: [data profiling, quality rules, validation checks]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-GOV-3}
+  source: ADR 0026
+
+- id: FUNC-bia-quality-remediation
+  term: Quality Monitoring & Remediation
+  type: Function
+  definition: Monitors quality over time and drives correction of detected issues.
+  aliases: [data cleansing, remediation workflow]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-GOV-3}
+  source: ADR 0026
+
+- id: FUNC-bia-golden-record
+  term: Golden Record Mastering
+  type: Function
+  definition: Matches, merges, and survives records into a single authoritative golden record for a master entity. The same match / merge / survive-under-source-authority behaviour as FUNC-dxc-identity-resolution and FUNC-itsm-record-reconciliation, over a different entity population; graph-based matching is a technique variant of it (ADR 0031).
+  aliases: [match-merge, entity resolution, survivorship]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-GOV-4}
+  source: ADR 0026
+
+- id: FUNC-bia-reference-data-control
+  term: Reference Data Control
+  type: Function
+  definition: Governs controlled value sets, code lists, and hierarchical controlled vocabularies and taxonomies - preferred and alternate terms, broader / narrower and associative relations - and manages mappings between schemes.
+  aliases: [code list management, controlled vocabulary, value set, taxonomy, thesaurus]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-GOV-5}
+  source: ADR 0026
+
+- id: FUNC-bia-privacy-policy-enforcement
+  term: Privacy & Retention Policy Enforcement
+  type: Function
+  definition: Enforces consent, retention, residency, and access policy over business data and produces compliance evidence.
+  aliases: [consent enforcement, retention policy, residency control]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-GOV-6}
+  source: ADR 0026
+
+- id: FUNC-bia-glossary-management
+  term: Business Glossary Management
+  type: Function
+  definition: Maintains agreed, human-readable definitions of business terms under accountable business ownership, with approval of new and changed definitions and a versioned history, so every later stage of the semantic progression starts from an agreed meaning.
+  aliases: [business glossary, term definitions, glossary stewardship]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-GOV-7}
+  source: ADR 0037
+
+- id: FUNC-bia-ontology-modelling
+  term: Ontology Modelling & Versioning
+  type: Function
+  definition: Defines the classes, properties, relationships, and constraints of the governing semantic model and releases it in versions; a breaking change carries a migration path and a deprecation window so dependent content, semantic definitions, and actors are not broken silently.
+  aliases: [ontology engineering, conceptual modelling, schema versioning, knowledge modelling]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-GOV-7}
+  source: ADR 0037
+
+- id: FUNC-bia-semantic-model-publication
+  term: Semantic Model Publication
+  type: Function
+  definition: Publishes a governed vocabulary or ontology release in a standard machine-readable form, with its version and ownership, so systems and delegated actors that did not author it can discover and consume it. The standard used is a scenario decision.
+  aliases: [vocabulary publication, ontology publishing, machine-readable vocabulary]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-GOV-7}
+    - {rel: supports, target: CAP-BIA-GOV-5}
+  source: ADR 0037

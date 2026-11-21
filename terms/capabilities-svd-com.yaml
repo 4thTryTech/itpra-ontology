@@ -1,0 +1,56 @@
+# ITPRA ontology — SVD-COM (Customer Communication & Satisfaction) capabilities
+# type: Capability. ids CAP-SVD-COM-<n>. Grouped under domain SVD-COM (ADR 0019).
+
+- id: CAP-SVD-COM-1
+  term: Proactive Status & Outage Communication
+  type: Capability
+  definition: >
+    Tells users proactively about service status, planned changes, and known issues before or as they are
+    affected — so people are informed rather than surprised, and avoidable contacts are prevented. Distinct
+    from in-disruption major-incident updates, which SVD-MAJ owns.
+  relates_to:
+    - {rel: grouped_by, target: SVD-COM}
+    - {rel: consumed_by, target: PERSONA-svd-requester}
+    - {rel: consumed_by, target: PERSONA-svd-coordinator}
+  source: ADR 0019
+
+- id: CAP-SVD-COM-2
+  term: Service-Level Expectation & Commitment
+  type: Capability
+  definition: >
+    Sets and communicates clear, neutral expectations about how the desk will respond and resolve, and
+    commits to them, so users know what to expect and the desk has an explicit standard to be measured
+    against. The measurable target is set at T2.
+  relates_to:
+    - {rel: grouped_by, target: SVD-COM}
+    - {rel: consumed_by, target: PERSONA-svd-requester}
+    - {rel: consumed_by, target: PERSONA-svd-coordinator}
+  source: ADR 0019
+
+- id: CAP-SVD-COM-3
+  term: Satisfaction & Effort Feedback Capture
+  type: Capability
+  definition: >
+    Asks users how the interaction felt and how much effort it took, and captures that feedback against the
+    contact, so the desk learns the experience it delivered and can act on it — the experience signal behind
+    its outcome measures.
+  relates_to:
+    - {rel: grouped_by, target: SVD-COM}
+    - {rel: depends_on, target: CAP-SVD-HDL-5}
+    - {rel: consumed_by, target: PERSONA-svd-requester}
+    - {rel: consumed_by, target: PERSONA-svd-coordinator}
+  source: ADR 0019
+
+- id: CAP-SVD-COM-4
+  term: Consumer Segment & High-Touch Handling
+  type: Capability
+  definition: >
+    Recognizes that different consumers need different handling — segments, high-touch or critical consumers,
+    and external parties — and applies the appropriate level of service and relationship to each, so service
+    matches the consumer's need and entitlement.
+  relates_to:
+    - {rel: grouped_by, target: SVD-COM}
+    - {rel: depends_on, target: CAP-SVD-CON-3}
+    - {rel: consumed_by, target: PERSONA-svd-requester}
+    - {rel: consumed_by, target: PERSONA-svd-coordinator}
+  source: ADR 0019

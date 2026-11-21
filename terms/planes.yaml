@@ -1,0 +1,74 @@
+# ITPRA ontology — capability planes
+# The seven planes capability domains are grouped under (Capability -> Domain -> Plane -> Tier). Extends the
+# Internal Developer Platform (IDP) five-plane model for an infrastructure platform. Ratified by ADR 0010. type:
+# Plane. Member domains carry the `grouped_by` link (see the domains files).
+
+- id: PLANE-EXPERIENCE
+  term: Experience
+  type: Plane
+  definition: >
+    The consumer-facing plane: how platform consumers discover, request, and use the platform —
+    self-service interfaces, catalog, golden paths, programmatic interfaces, documentation, onboarding.
+    Corresponds to the IDP Developer Control Plane.
+  aliases: [experience plane, consumer control plane]
+  source: ADR 0010
+
+- id: PLANE-DELIVERY
+  term: Delivery
+  type: Plane
+  definition: >
+    Getting workloads provisioned and shipped — realizing desired state, and building, testing, and
+    releasing software onto the platform. Corresponds to the IDP Integration &
+    Delivery Plane.
+  aliases: [delivery plane, integration and delivery plane]
+  source: ADR 0010
+
+- id: PLANE-RESOURCE
+  term: Resource
+  type: Plane
+  definition: >
+    The substrate and backing services workloads run on and consume — compute, network, storage,
+    exposure, and managed data / streaming / cache services. Corresponds to the IDP
+    Resource Plane.
+  aliases: [resource plane]
+  source: ADR 0010
+
+- id: PLANE-FOUNDATION
+  term: Foundation
+  type: Plane
+  definition: >
+    The platform's own control-plane backbone every other plane reconciles against — versioned source of
+    truth, secrets, artifact / image registry, policy-as-code, and provenance. An ITPRA
+    addition beyond the IDP five (which folds secrets into its Security plane).
+  aliases: [foundation plane, control plane]
+  source: ADR 0010
+
+- id: PLANE-OPERATIONS
+  term: Operations
+  type: Plane
+  definition: >
+    Keeping the platform healthy, resilient, and economical at runtime — observability and day-2
+    operations, resilience and continuity, and cost and capacity. Broadens the
+    IDP Monitoring & Logging Plane.
+  aliases: [operations plane, run plane]
+  source: ADR 0010
+
+- id: PLANE-SECURITY
+  term: Security
+  type: Plane
+  definition: >
+    Protecting the platform and its tenants — identity and authentication, authorization, certificate and
+    workload-credential management, admission / policy enforcement, vulnerability and threat management,
+    and security response. Corresponds to the IDP Security Plane.
+  aliases: [security plane]
+  source: ADR 0010
+
+- id: PLANE-GOVERNANCE
+  term: Governance
+  type: Plane
+  definition: >
+    The management wrapper that keeps the platform well-governed and accountable — neutral governance
+    constructs, multi-tenancy governance, service lifecycle, compliance and audit evidence, and platform
+    measurement. An ITPRA addition beyond the IDP five; operating-model mapping happens at T2.
+  aliases: [governance plane]
+  source: ADR 0010

@@ -1,0 +1,70 @@
+# ITPRA ontology — FUNCTION library, ITSM-CFG (System-of-Record & Configuration Integration)
+# type: Function. ids FUNC-itsm-<slug>. Federation/normalization/reconciliation are neutral data-integration
+# techniques nameable at T1 (ADR 0011). Functions `support` >=1 capability. See ADR 0025.
+
+# Federated system-of-record integration (CAP-ITSM-CFG-1)
+- id: FUNC-itsm-record-federation
+  term: Record Federation
+  type: Function
+  definition: Links to each provider's authoritative record as the source for its own detail rather than copying everything centrally.
+  aliases: [federation, source linking]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-CFG-1}
+  source: ADR 0025
+
+- id: FUNC-itsm-discovery-ingestion
+  term: Discovery & Record Ingestion
+  type: Function
+  definition: Ingests items from provider discovery, monitoring, asset, and service-management records into the integrated view.
+  aliases: [data ingestion, discovery integration]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-CFG-1}
+  source: ADR 0025
+
+# Record normalization & reconciliation (CAP-ITSM-CFG-2)
+- id: FUNC-itsm-record-normalization
+  term: Record Normalization
+  type: Function
+  definition: Maps items from differing provider models into a consistent shared set.
+  aliases: [normalization, schema mapping]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-CFG-2}
+  source: ADR 0025
+
+- id: FUNC-itsm-record-reconciliation
+  term: Record Reconciliation
+  type: Function
+  definition: Resolves duplicates and conflicts across sources to keep the integrated view coherent and lean. The same match / merge / survive-under-source-authority behaviour as FUNC-bia-golden-record and FUNC-dxc-identity-resolution, over configuration records, with precedence set by FUNC-itsm-authority-governance; graph-based matching is a technique variant of it (ADR 0031).
+  aliases: [reconciliation, deduplication]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-CFG-2}
+  source: ADR 0025
+
+# Service-to-item relationship mapping (CAP-ITSM-CFG-3)
+- id: FUNC-itsm-relationship-modeling
+  term: Service Relationship Modeling
+  type: Function
+  definition: Models the dependencies linking each end-to-end service to the items and providers that deliver it.
+  aliases: [service mapping, dependency graph]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-CFG-3}
+  source: ADR 0025
+
+# Record integrity & authority governance (CAP-ITSM-CFG-4)
+- id: FUNC-itsm-authority-governance
+  term: Source Authority Governance
+  type: Function
+  definition: Defines which source is authoritative for which detail and who may write to the integrated record.
+  aliases: [authoritative source, write governance]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-CFG-4}
+  source: ADR 0025
+
+- id: FUNC-itsm-record-quality-assurance
+  term: Record Quality Assurance
+  type: Function
+  definition: Assures the freshness and accuracy of the integrated record so flow-coordination domains can rely on it.
+  aliases: [data quality, freshness assurance]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-CFG-4}
+  source: ADR 0025

@@ -1,0 +1,91 @@
+# ITPRA ontology — FUNCTION library, ADM-VAL (Application Performance & Value Insight)
+# type: Function. ids FUNC-adm-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
+# the function (ADR 0011). Observes the APPLICATION & its value; consumes platform/workload observability (ITO
+# OBS). See ADR 0021.
+
+# Performance & behavior insight (CAP-ADM-VAL-1)
+- id: FUNC-adm-application-performance-monitoring
+  term: Application Performance Monitoring
+  type: Function
+  definition: Observes the running application's response time, error rate, and user-facing performance to surface issues.
+  aliases: [APM, application telemetry, behavior monitoring]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-VAL-1}
+  source: ADR 0021
+
+- id: FUNC-adm-distributed-tracing
+  term: Application Tracing
+  type: Function
+  definition: Traces requests through the application to locate the source of latency or error.
+  aliases: [distributed tracing, request tracing]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-VAL-1}
+  source: ADR 0021
+
+# Feature adoption & usage (CAP-ADM-VAL-2)
+- id: FUNC-adm-usage-analytics
+  term: Feature Usage & Adoption Analytics
+  type: Function
+  definition: Measures feature uptake, usage patterns, and abandonment to learn what delivers value.
+  aliases: [product analytics, adoption metrics, usage telemetry]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-VAL-2}
+  source: ADR 0021
+
+# Business value & outcome (CAP-ADM-VAL-3)
+- id: FUNC-adm-value-outcome-tracking
+  term: Business-Value Outcome Tracking
+  type: Function
+  definition: Connects shipped application change to business outcomes against its intent.
+  aliases: [outcome metrics, value KPIs, benefit realization]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-VAL-3}
+  source: ADR 0021
+
+# Engineering flow & delivery (CAP-ADM-VAL-4)
+- id: FUNC-adm-delivery-flow-metrics
+  term: Delivery & Flow Metrics
+  type: Function
+  definition: Measures the application practice's flow, delivery cadence, change-failure rate, and time-to-restore.
+  aliases: [DORA metrics, flow metrics, delivery KPIs]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-VAL-4}
+  source: ADR 0021
+
+# Agentic execution explainability (CAP-ADM-VAL-5) — ADR 0040
+- id: FUNC-adm-execution-decision-trace-capture
+  term: Execution Decision-Trace Capture
+  type: Function
+  definition: >
+    Captures, for each execution of a model-grounded or autonomous component, the record that lets it be accounted
+    for afterwards — the inputs, the effective context and instructions, the model binding, each decision and
+    tool-use step with its inputs and results, and the output — as a per-execution trace tree rather than a
+    request timing trace.
+  aliases: [agent trace capture, decision trace capture, execution record capture]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-VAL-5}
+  source: ADR 0040
+
+- id: FUNC-adm-execution-account-rendering
+  term: Execution Account Rendering
+  type: Function
+  definition: >
+    Renders a captured execution as an intelligible account for the people accountable for the application and
+    for those affected — why the component made the choices it did, on what input, with what result — in a form a
+    non-engineer can follow, independent of whether the execution was ever scored.
+  aliases: [trace rendering for the accountable, explanation rendering, decision explanation]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-VAL-5}
+  source: ADR 0040
+
+- id: FUNC-adm-execution-record-retention
+  term: Execution-Record Retention & Redaction
+  type: Function
+  definition: >
+    Keeps execution records for as long as accountability and obligation require and no longer, and minimises what
+    they hold — redacting or withholding content whose retention the source's own restrictions forbid — so that
+    accounting for an execution does not itself become a data-protection exposure.
+  aliases: [execution log retention, trace redaction, execution record minimisation]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-VAL-5}
+  source: ADR 0040

@@ -1,0 +1,100 @@
+# ITPRA ontology — IT Service Management & Integration (ITSM) capability domains
+# type: Domain. The `id` IS the domain code used in capability ids: CAP-<id>-<n> (child: CAP-<id>-<n>.<m>). ITSM
+# is the ENTERPRISE CROSS-DOMAIN service-integration / coordination wrapper (a service integrator / retained
+# org; SIAM). Its capabilities are NEUTRAL coordination over the framework's neutral governance constructs
+# (GC-*) — distinct from any one provider's own internal governance (e.g. ITO GOV). Every domain is `grouped_by`
+# the EXISTING governance plane (SD-SERVICE-MGMT interfaces_with PLANE-GOVERNANCE; ADR 0009). Taxonomy ratified
+# by ADR 0025; scope/boundary ADR 0025; T1-neutrality note ADR 0025. Owning service domain: SD-SERVICE-MGMT.
+
+- id: ITSM-CAT
+  term: Service Catalog & Portfolio Coordination
+  type: Domain
+  definition: >
+    The enterprise-wide, cross-provider surface of what services are offered and where each sits in its
+    lifecycle — an end-to-end service catalog of requestable services with their fulfillment conditions, and a
+    service portfolio spanning pipeline, live, and retired services across all providers. Coordinates each
+    service's offer and ownership across providers; distinct from a single provider's own local offer surface
+    (e.g. the platform's own consumer experience/governance).
+  relates_to:
+    - {rel: grouped_by, target: PLANE-GOVERNANCE}
+    - {rel: belongs_to_service_domain, target: SD-SERVICE-MGMT}
+  source: ADR 0025
+
+- id: ITSM-REQ
+  term: Cross-Domain Request & Fulfillment Orchestration
+  type: Domain
+  definition: >
+    The single front door for consumer demand and the end-to-end orchestration of its fulfillment across
+    multiple providers — receiving, validating, and routing a request, decomposing it into provider-owned
+    steps, orchestrating those steps, and tracking the whole to a recorded outcome. Coordinates across
+    providers; each provider executes its own step.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-GOVERNANCE}
+    - {rel: belongs_to_service_domain, target: SD-SERVICE-MGMT}
+  source: ADR 0025
+
+- id: ITSM-CHG
+  term: Cross-Domain Change Coordination
+  type: Domain
+  definition: >
+    The coordination of changes whose intent or impact spans multiple providers — authorizing them through a
+    cross-provider decision point, deconflicting and scheduling them against one another, and assessing
+    cross-provider risk and impact — so changes proceed without colliding and with their effect recorded.
+    Coordinates the seams between providers; each provider executes its own change.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-GOVERNANCE}
+    - {rel: belongs_to_service_domain, target: SD-SERVICE-MGMT}
+  source: ADR 0025
+
+- id: ITSM-INC
+  term: Cross-Domain Incident & Problem Coordination
+  type: Domain
+  definition: >
+    The coordinated handling of disruptions and their underlying causes when they span providers — detecting
+    and triaging across boundaries, coordinating restoration of an end-to-end service (including high-impact /
+    major events) with stakeholder communications, and driving root-cause analysis and lasting corrective
+    action across providers. The integrator coordinates and assures; each provider performs its own response.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-GOVERNANCE}
+    - {rel: belongs_to_service_domain, target: SD-SERVICE-MGMT}
+  source: ADR 0025
+
+- id: ITSM-SLM
+  term: Service-Level & Supplier/Provider Management
+  type: Domain
+  definition: >
+    The commitment and assurance of end-to-end service levels across the provider chain, and the management of
+    the providers/suppliers that underpin them — composing per-provider commitments into one end-to-end
+    commitment, watching headroom against it, and managing each provider's relationship, onboarding, and
+    performance against its commitments. The commitment a consumer is given, the internal alignments that
+    support it, and the supplier commitments that underpin it, expressed neutrally.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-GOVERNANCE}
+    - {rel: belongs_to_service_domain, target: SD-SERVICE-MGMT}
+  source: ADR 0025
+
+- id: ITSM-CFG
+  term: System-of-Record & Configuration Integration
+  type: Domain
+  definition: >
+    The integration of authoritative records across providers into a trustworthy end-to-end view of what is in
+    service and how it relates — federating, normalizing, and reconciling each provider's own records into an
+    integrated service-and-relationship model that underpins the flow-coordination domains and the catalog.
+    Each provider keeps its own record of record; this domain integrates rather than replaces them.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-GOVERNANCE}
+    - {rel: belongs_to_service_domain, target: SD-SERVICE-MGMT}
+  source: ADR 0025
+
+- id: ITSM-VAL
+  term: Service Performance & Value Insight
+  type: Domain
+  definition: >
+    The end-to-end view of how the integrated service performs and the value and experience it delivers to the
+    consumer — aggregating cross-provider performance, measuring consumer-experienced value and outcome, and
+    closing a prioritized cross-provider improvement loop. The whole-service outcome, distinct from any one
+    provider's operational telemetry and from business/product analytics.
+  relates_to:
+    - {rel: grouped_by, target: PLANE-GOVERNANCE}
+    - {rel: belongs_to_service_domain, target: SD-SERVICE-MGMT}
+  source: ADR 0025

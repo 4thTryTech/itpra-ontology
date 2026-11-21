@@ -1,0 +1,58 @@
+# ITPRA ontology — ITSM-REQ (Cross-Domain Request & Fulfillment Orchestration) capabilities
+# type: Capability. ids CAP-ITSM-REQ-<n>. Grouped under domain ITSM-REQ (ADR 0025). Neutral cross-provider
+# coordination over GC-REQUEST (+ GC-APPROVAL / GC-RECORD).
+
+- id: CAP-ITSM-REQ-1
+  term: Cross-Domain Request Intake & Triage
+  type: Capability
+  definition: >
+    Receives, validates, and triages a consumer's demand at a single front door — confirming entitlement and
+    completeness and classifying it — so every cross-provider request enters one accountable, recorded flow
+    regardless of which providers will ultimately fulfill it.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-REQ}
+    - {rel: consumed_by, target: PERSONA-itsm-consumer}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+  source: ADR 0025
+
+- id: CAP-ITSM-REQ-2
+  term: Request Routing & Decomposition
+  type: Capability
+  definition: >
+    Decomposes a request into the provider-owned steps it requires and routes each step to the responsible
+    provider — using the service ownership map — so a request that spans providers is broken into the right
+    work assigned to the right parties.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-REQ}
+    - {rel: depends_on, target: CAP-ITSM-REQ-1}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-provider}
+  source: ADR 0025
+
+- id: CAP-ITSM-REQ-3
+  term: Fulfillment Orchestration & Tracking
+  type: Capability
+  definition: >
+    Orchestrates the provider-owned steps of a request to completion — sequencing dependencies, passing
+    hand-offs across providers, and tracking the whole to a recorded outcome with status visible to the
+    consumer — so an end-to-end request is fulfilled and accounted for even though many providers contribute.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-REQ}
+    - {rel: depends_on, target: CAP-ITSM-REQ-2}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-consumer}
+  source: ADR 0025
+
+- id: CAP-ITSM-REQ-4
+  term: Request Authorization Coordination
+  type: Capability
+  definition: >
+    Coordinates the decision points a request must pass before and during fulfillment — entitlement, policy,
+    or authority gates that may sit with different providers or owners — so a cross-provider request proceeds
+    only with the required approvals, each attributable and recorded.
+  relates_to:
+    - {rel: grouped_by, target: ITSM-REQ}
+    - {rel: depends_on, target: CAP-ITSM-REQ-1}
+    - {rel: consumed_by, target: PERSONA-itsm-integrator}
+    - {rel: consumed_by, target: PERSONA-itsm-service-owner}
+  source: ADR 0025

@@ -1,0 +1,90 @@
+# ITPRA ontology — FUNCTION library, SVD-KNW (Knowledge & Self-Service Enablement)
+# type: Function. ids FUNC-svd-<slug>. Functions `support` >=1 capability; NEVER derived_from on a Function (ADR
+# 0011). See ADR 0019.
+
+# Self-service resolution surface (CAP-SVD-KNW-1)
+- id: FUNC-svd-self-service-portal
+  term: Self-Service Portal
+  type: Function
+  definition: Presents a user-facing surface to find answers, follow guided resolution, and raise standard requests unaided.
+  aliases: [help center, self-service catalog]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-KNW-1}
+  source: ADR 0019
+
+- id: FUNC-svd-guided-resolution
+  term: Guided Self-Resolution
+  type: Function
+  definition: Walks a user through a step-by-step or automated flow that resolves a common issue without an agent.
+  aliases: [guided flow, self-help workflow, automated resolution]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-KNW-1}
+  source: ADR 0019
+
+- id: FUNC-svd-deflection-measurement
+  term: Deflection / Containment Measurement
+  type: Function
+  definition: Measures how many contacts self-service resolves before reaching an agent.
+  aliases: [deflection rate, containment rate]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-KNW-1}
+    - {rel: supports, target: CAP-SVD-PRF-1}
+  source: ADR 0019
+
+# Knowledge search & contextual surfacing (CAP-SVD-KNW-2)
+- id: FUNC-svd-knowledge-search
+  term: Knowledge Search
+  type: Function
+  definition: Finds relevant knowledge by natural-language query for users and agents.
+  aliases: [knowledge retrieval, semantic search]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-KNW-2}
+  source: ADR 0019
+
+- id: FUNC-svd-contextual-surfacing
+  term: Contextual Knowledge Surfacing
+  type: Function
+  definition: Surfaces knowledge matched to the contact's context to the agent or user without an explicit search.
+  aliases: [suggested articles, context-aware recommendations]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-KNW-2}
+    - {rel: supports, target: CAP-SVD-HDL-1}
+  source: ADR 0019
+
+# Knowledge capture & reuse (CAP-SVD-KNW-3)
+- id: FUNC-svd-knowledge-capture
+  term: In-Workflow Knowledge Capture
+  type: Function
+  definition: Captures the resolution of a contact as a reusable knowledge article as a by-product of the work.
+  aliases: [capture-as-you-resolve, solve-loop capture]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-KNW-3}
+  source: ADR 0019
+
+- id: FUNC-svd-knowledge-reuse
+  term: Knowledge Reuse Linking
+  type: Function
+  definition: Links a resolved contact to the knowledge that resolved it and reuses existing content for new contacts.
+  aliases: [article linking, reuse tracking]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-KNW-3}
+  source: ADR 0019
+
+# Knowledge health & lifecycle (CAP-SVD-KNW-4)
+- id: FUNC-svd-content-health
+  term: Knowledge Content Health
+  type: Function
+  definition: Assesses and improves article accuracy, clarity, completeness, and metadata over time.
+  aliases: [content quality, article review]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-KNW-4}
+  source: ADR 0019
+
+- id: FUNC-svd-knowledge-lifecycle
+  term: Knowledge Lifecycle Management
+  type: Function
+  definition: Reviews, publishes, archives, and retires knowledge under collective ownership.
+  aliases: [article lifecycle, knowledge governance]
+  relates_to:
+    - {rel: supports, target: CAP-SVD-KNW-4}
+  source: ADR 0019

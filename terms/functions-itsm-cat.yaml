@@ -1,0 +1,62 @@
+# ITPRA ontology — FUNCTION library, ITSM-CAT (Service Catalog & Portfolio Coordination)
+# type: Function. ids FUNC-itsm-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
+# the function (ADR 0011). Functions `support` >=1 capability (many-to-many). See ADR 0025.
+
+# End-to-end service catalog (CAP-ITSM-CAT-1)
+- id: FUNC-itsm-catalog-publication
+  term: Catalog Publication
+  type: Function
+  definition: Publishes requestable services with their description, owner, and fulfillment conditions to the consumer-facing catalog.
+  aliases: [catalog management, offer publication]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-CAT-1}
+  source: ADR 0025
+
+- id: FUNC-itsm-service-discovery-presentation
+  term: Service Discovery & Presentation
+  type: Function
+  definition: Lets a consumer browse, search, and select services without needing to know which providers deliver them.
+  aliases: [catalog browse, service findability]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-CAT-1}
+  source: ADR 0025
+
+# Service portfolio coordination (CAP-ITSM-CAT-2)
+- id: FUNC-itsm-portfolio-lifecycle-tracking
+  term: Portfolio Lifecycle Tracking
+  type: Function
+  definition: Tracks each service across pipeline, live, and retired states and the decisions moving it between them.
+  aliases: [service pipeline tracking, portfolio state]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-CAT-2}
+  source: ADR 0025
+
+- id: FUNC-itsm-service-introduce-retire
+  term: Service Introduce / Retire Coordination
+  type: Function
+  definition: Coordinates authorizing a new service into the catalog and retiring an end-of-life service across its providers.
+  aliases: [service onboarding, service retirement]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-CAT-2}
+  source: ADR 0025
+
+# Service definition & offer coordination (CAP-ITSM-CAT-3)
+- id: FUNC-itsm-offer-definition
+  term: Offer Definition
+  type: Function
+  definition: Captures an offer's fulfillment conditions, contributing providers and steps, and published presentation with its owner.
+  aliases: [service definition, offer specification]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-CAT-3}
+  source: ADR 0025
+
+# End-to-end service ownership mapping (CAP-ITSM-CAT-4)
+- id: FUNC-itsm-ownership-mapping
+  term: Service Ownership Mapping
+  type: Function
+  definition: Maintains the accountable owner and responsible providers per end-to-end service.
+  aliases: [accountability mapping, RACI mapping]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-CAT-4}
+    - {rel: supports, target: CAP-ITSM-REQ-2}
+  source: ADR 0025

@@ -1,0 +1,51 @@
+# ITPRA ontology — FUNCTION library, EUC-DEX (Endpoint Observability & Digital Employee Experience)
+# type: Function. ids FUNC-euc-<slug>.
+
+# Endpoint telemetry & inventory (CAP-EUC-DEX-1)
+- id: FUNC-euc-endpoint-telemetry
+  term: Endpoint Telemetry Collection
+  type: Function
+  definition: Collects near-real-time device, application, and connection telemetry from workforce endpoints.
+  aliases: [endpoint metrics, experience telemetry, device telemetry]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-DEX-1}
+  source: ADR 0018
+
+# Digital-experience scoring & analytics (CAP-EUC-DEX-2)
+- id: FUNC-euc-experience-scoring
+  term: Digital-Experience Scoring
+  type: Function
+  definition: Computes composite digital-experience scores across device, application, and connection performance.
+  aliases: [DEX score, experience index]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-DEX-2}
+  source: ADR 0018
+
+- id: FUNC-euc-experience-analytics
+  term: Experience Root-Cause Analytics
+  type: Function
+  definition: Analyzes experience telemetry to locate the root causes of poor workforce digital experience.
+  aliases: [root-cause analytics, experience analytics]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-DEX-2}
+  source: ADR 0018
+
+# Proactive experience remediation (CAP-EUC-DEX-3) — also supported by FUNC-euc-automated-remediation (EUC-SUP)
+- id: FUNC-euc-proactive-detection
+  term: Proactive Experience Detection
+  type: Function
+  definition: Detects experience degradation across the estate before users report it and triggers remediation.
+  aliases: [proactive detection, pre-emptive detection]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-DEX-3}
+  source: ADR 0018
+
+# Experience sentiment & feedback (CAP-EUC-DEX-4)
+- id: FUNC-euc-sentiment-collection
+  term: Experience Sentiment Collection
+  type: Function
+  definition: Captures workforce-reported experience and satisfaction and feeds it into the improvement loop.
+  aliases: [sentiment survey, experience feedback, eNPS collection]
+  relates_to:
+    - {rel: supports, target: CAP-EUC-DEX-4}
+  source: ADR 0018

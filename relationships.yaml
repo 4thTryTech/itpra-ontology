@@ -1,0 +1,104 @@
+# ITPRA ontology — relationship types
+# The verbs usable in a term's `relates_to.rel`. The canonical validation list is in schema.yaml:relationships;
+# these records give each verb a human definition (and feed the generated glossary).
+
+- id: grouped_by
+  term: grouped by
+  type: RelationshipType
+  definition: The subject is organized under / belongs to the target grouping.
+
+- id: consumed_by
+  term: consumed by
+  type: RelationshipType
+  definition: The subject is used by the target persona, a human role archetype; a delegated actor's use counts as its accountable persona's (ADR 0030).
+
+- id: realized_in
+  term: realized in
+  type: RelationshipType
+  definition: The subject is exercised by / made concrete in the target journey or workflow.
+
+- id: depends_on
+  term: depends on
+  type: RelationshipType
+  definition: The subject requires the target to function.
+
+- id: decomposes_into
+  term: decomposes into
+  type: RelationshipType
+  definition: >
+    The subject (a broader capability) decomposes into finer child capabilities (the target). Used when a
+    T1 capability fans out into more granular T2 child capabilities, or for any parent/child capability
+    breakdown. The child capability also records `derived_from` its parent capability.
+
+- id: supports
+  term: supports
+  type: RelationshipType
+  definition: >
+    The subject (a function) supports / helps realize the target capability. Many-to-many: one function may
+    support several capabilities across domains (e.g. event correlation supports both observability and
+    security), and a capability is realized by several functions. The function↔capability link of the
+    granular function layer (ADR 0011).
+
+- id: met_by
+  term: met by
+  type: RelationshipType
+  definition: The subject requirement is satisfied by the target architecture element.
+
+- id: verified_by
+  term: verified by
+  type: RelationshipType
+  definition: The subject is demonstrated or evidenced by the target journey or check.
+
+- id: categorized_as
+  term: categorized as
+  type: RelationshipType
+  definition: The subject belongs to the target category (e.g. an NFR's quality attribute).
+
+- id: derived_from
+  term: derived from
+  type: RelationshipType
+  definition: >
+    The subject child capability is derived from the target parent capability. Used only in capability
+    decomposition (the reciprocal of `decomposes_into`); NOT valid on Function records (ADR 0011).
+
+- id: supersedes
+  term: supersedes
+  type: RelationshipType
+  definition: The subject replaces the target (e.g. one ADR superseding another).
+
+- id: owns
+  term: owns
+  type: RelationshipType
+  definition: The subject persona is accountable for the target element.
+
+- id: governs
+  term: governs
+  type: RelationshipType
+  definition: The subject operating model or policy constrains the target.
+
+- id: applies_to
+  term: applies to
+  type: RelationshipType
+  definition: The subject is relevant to the target scope.
+
+- id: produces
+  term: produces
+  type: RelationshipType
+  definition: The subject yields or exposes the target.
+
+- id: interfaces_with
+  term: interfaces with
+  type: RelationshipType
+  definition: >
+    The subject exchanges with the target across a boundary, where neither contains the other (e.g. one
+    service domain interfaces with another service domain's capability plane). Used for context-boundary
+    relationships.
+
+- id: belongs_to_service_domain
+  term: belongs to service domain
+  type: RelationshipType
+  definition: >
+    The subject term is owned by the target ServiceDomain — its single owning service domain. SINGLE-VALUED:
+    a term names at most one owning service domain (ADR 0009, one-to-one cardinality). Used to attribute a
+    term (e.g. a placement concept, a capability domain) to its owning service domain. Every Domain record
+    carries exactly one, the first service domain's included (ADR 0009).

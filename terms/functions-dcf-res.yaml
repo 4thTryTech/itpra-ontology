@@ -1,0 +1,79 @@
+# ITPRA ontology — FUNCTION library, DCF-RES (Facility Resilience & Continuity)
+# type: Function. ids FUNC-dcf-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
+# the function (ADR 0011).
+
+# Facility redundancy & fault tolerance (CAP-DCF-RES-1)
+- id: FUNC-dcf-redundant-path-design
+  term: Redundant Distribution-Path Design
+  type: Function
+  definition: Designs redundant, physically separated power/cooling distribution paths to a rated topology.
+  aliases: [N+1 design, 2N design, redundancy topology, physical path separation]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-RES-1}
+  source: ADR 0022
+
+- id: FUNC-dcf-fault-isolation
+  term: Fault Isolation & Containment
+  type: Function
+  definition: Contains a fault to a single distribution path so it cannot defeat the redundant path.
+  aliases: [fault containment, single-point-of-failure elimination]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-RES-1}
+  source: ADR 0022
+
+# Concurrent maintainability (CAP-DCF-RES-2)
+- id: FUNC-dcf-concurrent-maintenance
+  term: Concurrent-Maintenance Operation
+  type: Function
+  definition: Serves the load over remaining redundant paths while one path is removed for planned maintenance.
+  aliases: [concurrent maintainability, no-downtime maintenance]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-RES-2}
+  source: ADR 0022
+
+# Hazard protection & life-safety (CAP-DCF-RES-3)
+- id: FUNC-dcf-fire-detection-suppression
+  term: Fire Detection & Suppression
+  type: Function
+  definition: Detects and suppresses fire in the facility, protecting people and the hosted load.
+  aliases: [fire suppression, smoke detection, clean-agent suppression]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-RES-3}
+  source: ADR 0022
+
+- id: FUNC-dcf-leak-detection
+  term: Leak & Water Detection
+  type: Function
+  definition: Detects coolant/water leaks under floor and around cooling plant before they reach equipment.
+  aliases: [leak detection, water sensing]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-RES-3}
+  source: ADR 0022
+
+- id: FUNC-dcf-life-safety-systems
+  term: Life-Safety Systems
+  type: Function
+  definition: Provides emergency egress, lighting, and related life-safety systems for occupant protection.
+  aliases: [emergency egress, life safety, EPO]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-RES-3}
+  source: ADR 0022
+
+# Site continuity & failover (CAP-DCF-RES-4)
+- id: FUNC-dcf-site-continuity-planning
+  term: Site Continuity Planning
+  type: Function
+  definition: Plans and exercises continuity against the loss of the whole facility.
+  aliases: [facility continuity, business continuity planning]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-RES-4}
+  source: ADR 0022
+
+- id: FUNC-dcf-secondary-site-failover
+  term: Secondary-Site Failover
+  type: Function
+  definition: Fails the hosting function over to an independent secondary site where required.
+  aliases: [site failover, geographic redundancy, secondary facility]
+  relates_to:
+    - {rel: supports, target: CAP-DCF-RES-4}
+  source: ADR 0022

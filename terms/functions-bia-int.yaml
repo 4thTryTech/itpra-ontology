@@ -1,0 +1,67 @@
+# ITPRA ontology — FUNCTION library, BIA-INT (Data Integration & Ingestion)
+# type: Function. ids FUNC-bia-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
+# the function (ADR 0011). Functions `support` ≥1 capability (many-to-many). See ADR 0026.
+
+- id: FUNC-bia-batch-ingestion
+  term: Batch Ingestion
+  type: Function
+  definition: Acquires data from a source on a scheduled or triggered batch run and lands it with completeness checks.
+  aliases: [scheduled extract, bulk load]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-INT-1}
+  source: ADR 0026
+
+- id: FUNC-bia-stream-ingestion
+  term: Stream Ingestion
+  type: Function
+  definition: Consumes a continuous event/data stream into the analytical estate for low-latency analytics.
+  aliases: [event ingestion, real-time ingest]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-INT-2}
+    - {rel: supports, target: CAP-BIA-PRD-1}
+  source: ADR 0026
+
+- id: FUNC-bia-change-data-capture
+  term: Change-Data Capture
+  type: Function
+  definition: Detects and emits incremental row-level changes from a source system so analytical copies stay current without full reloads.
+  aliases: [CDC, log-based replication]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-INT-3}
+  source: ADR 0026
+
+- id: FUNC-bia-data-replication
+  term: Data Replication
+  type: Function
+  definition: Copies source datasets into the analytical estate and keeps the copy synchronized.
+  aliases: [source replication, mirroring]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-INT-3}
+  source: ADR 0026
+
+- id: FUNC-bia-data-transformation
+  term: Data Transformation
+  type: Function
+  definition: Cleanses, conforms, and reshapes ingested data into consistent, analysis-ready form.
+  aliases: [ELT transformation, data shaping]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-INT-4}
+  source: ADR 0026
+
+- id: FUNC-bia-pipeline-orchestration
+  term: Pipeline Orchestration
+  type: Function
+  definition: Schedules and coordinates dependent data-processing tasks with retries and failure visibility.
+  aliases: [workflow orchestration, DAG scheduling]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-INT-4}
+  source: ADR 0026
+
+- id: FUNC-bia-data-virtualization
+  term: Data Virtualization
+  type: Function
+  definition: Exposes data residing in multiple sources through one logical, query-time access surface without physically consolidating it.
+  aliases: [data federation, logical data access]
+  relates_to:
+    - {rel: supports, target: CAP-BIA-INT-5}
+  source: ADR 0026

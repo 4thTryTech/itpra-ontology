@@ -1,0 +1,70 @@
+# ITPRA ontology — DCF-SEC (Physical Security & Access Control) capabilities
+# type: Capability. ids CAP-DCF-SEC-<n>. Grouped under domain DCF-SEC (ADR 0022). Physical security only —
+# distinct from logical/identity security (ITO SEC / enterprise GRC).
+
+- id: CAP-DCF-SEC-1
+  term: Perimeter & Site Security
+  type: Capability
+  definition: >
+    Secures the outermost layer of the facility — the site boundary and approaches — with physical barriers,
+    vehicle control/standoff, and perimeter detection, so unauthorized presence is deterred and detected
+    before reaching the building.
+  relates_to:
+    - {rel: grouped_by, target: DCF-SEC}
+    - {rel: consumed_by, target: PERSONA-dcf-physical-security-officer}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+  source: ADR 0022
+
+- id: CAP-DCF-SEC-2
+  term: Layered Physical Access Control
+  type: Capability
+  definition: >
+    Controls physical access through concentric zones from building entry to the rack — staffed/credentialed
+    entry, anti-tailgating vestibules, zoned least-privilege access, and rack-level locking — so only
+    authorized people, by role and zone, can physically reach the equipment.
+  relates_to:
+    - {rel: grouped_by, target: DCF-SEC}
+    - {rel: depends_on, target: CAP-DCF-SEC-1}
+    - {rel: consumed_by, target: PERSONA-dcf-physical-security-officer}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-tenant}
+  source: ADR 0022
+
+- id: CAP-DCF-SEC-3
+  term: Visitor & Escort Management
+  type: Capability
+  definition: >
+    Manages non-staff physical presence — visitor registration, authorization, badging, and escort rules —
+    so every visitor is identified, authorized, time-bounded, and accompanied per policy while in the facility.
+  relates_to:
+    - {rel: grouped_by, target: DCF-SEC}
+    - {rel: depends_on, target: CAP-DCF-SEC-2}
+    - {rel: consumed_by, target: PERSONA-dcf-physical-security-officer}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-tenant}
+  source: ADR 0022
+
+- id: CAP-DCF-SEC-4
+  term: Surveillance & Physical Intrusion Detection
+  type: Capability
+  definition: >
+    Provides continuous physical awareness of the facility — camera coverage aligned to entries and access
+    points and physical intrusion/anomaly detection — so physical events are observed in real time and
+    captured as an evidentiary record.
+  relates_to:
+    - {rel: grouped_by, target: DCF-SEC}
+    - {rel: depends_on, target: CAP-DCF-SEC-1}
+    - {rel: consumed_by, target: PERSONA-dcf-physical-security-officer}
+  source: ADR 0022
+
+- id: CAP-DCF-SEC-5
+  term: Physical Access Logging & Audit Evidence
+  type: Capability
+  definition: >
+    Records every physical access and security event — who entered which zone, when, and under what
+    authorization — and produces tamper-evident audit evidence, so physical access is demonstrably governed
+    and evidencable to assurance and the enterprise security domain.
+  relates_to:
+    - {rel: grouped_by, target: DCF-SEC}
+    - {rel: depends_on, target: CAP-DCF-SEC-2}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-compliance}
+    - {rel: consumed_by, target: PERSONA-dcf-physical-security-officer}
+  source: ADR 0022

@@ -1,0 +1,55 @@
+# ITPRA ontology — DCF-COOL (Cooling & Environmental Control) capabilities
+# type: Capability. ids CAP-DCF-COOL-<n>. Grouped under domain DCF-COOL (ADR 0022).
+
+- id: CAP-DCF-COOL-1
+  term: Heat Removal & Cooling Provision
+  type: Capability
+  definition: >
+    Removes the heat the hosted equipment generates and supplies cool air/medium to the white-space — the
+    facility's cooling plant and its distribution — so equipment is continuously cooled to within a safe
+    operating range.
+  relates_to:
+    - {rel: grouped_by, target: DCF-COOL}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-tenant}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+  source: ADR 0022
+
+- id: CAP-DCF-COOL-2
+  term: Environmental Envelope Control
+  type: Capability
+  definition: >
+    Keeps temperature and humidity within a defined safe operating envelope measured at the equipment inlet,
+    controlling both ends of the range, so equipment stays within reliability limits without excess energy.
+  relates_to:
+    - {rel: grouped_by, target: DCF-COOL}
+    - {rel: depends_on, target: CAP-DCF-COOL-1}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-tenant}
+  source: ADR 0022
+
+- id: CAP-DCF-COOL-3
+  term: Airflow Management & Containment
+  type: Capability
+  definition: >
+    Manages airflow through the white-space — hot/cold aisle organization, aisle containment, and blanking —
+    to prevent recirculation and hot spots and to reduce cooling energy, improving both reliability and
+    efficiency of heat removal.
+  relates_to:
+    - {rel: grouped_by, target: DCF-COOL}
+    - {rel: depends_on, target: CAP-DCF-COOL-1}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+  source: ADR 0022
+
+- id: CAP-DCF-COOL-4
+  term: High-Density & Liquid Cooling Provision
+  type: Capability
+  definition: >
+    Provides enhanced heat removal for high-density footprints that air alone cannot cool — close-coupled,
+    direct-to-equipment, or immersion cooling — so dense equipment can be hosted within a safe envelope. The
+    physical cooling delivery; the dense workloads it serves are an ITO SUB concern this interfaces with.
+  relates_to:
+    - {rel: grouped_by, target: DCF-COOL}
+    - {rel: depends_on, target: CAP-DCF-COOL-1}
+    - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
+    - {rel: consumed_by, target: PERSONA-dcf-facility-tenant}
+  source: ADR 0022

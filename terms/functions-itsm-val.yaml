@@ -1,0 +1,52 @@
+# ITPRA ontology — FUNCTION library, ITSM-VAL (Service Performance & Value Insight)
+# type: Function. ids FUNC-itsm-<slug>. All T1-neutral. Functions `support` >=1 capability. See ADR 0025.
+
+# End-to-end service performance insight (CAP-ITSM-VAL-1)
+- id: FUNC-itsm-performance-aggregation
+  term: Cross-Provider Performance Aggregation
+  type: Function
+  definition: Aggregates per-provider performance into one end-to-end view of how the whole service performs.
+  aliases: [performance roll-up, end-to-end metrics]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-VAL-1}
+  source: ADR 0025
+
+# Service value & experience measurement (CAP-ITSM-VAL-2)
+- id: FUNC-itsm-experience-measurement
+  term: Experience Measurement
+  type: Function
+  definition: Measures consumer-perceived value, outcome, and satisfaction of an end-to-end service.
+  aliases: [experience scoring, satisfaction measurement, XLA measurement]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-VAL-2}
+  source: ADR 0025
+
+- id: FUNC-itsm-feedback-capture
+  term: Consumer Feedback Capture
+  type: Function
+  definition: Captures consumer feedback and improvement ideas about the end-to-end service.
+  aliases: [feedback capture, voice of the customer]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-VAL-2}
+    - {rel: supports, target: CAP-ITSM-VAL-3}
+  source: ADR 0025
+
+# Cross-provider improvement coordination (CAP-ITSM-VAL-3)
+- id: FUNC-itsm-improvement-prioritization
+  term: Improvement Prioritization
+  type: Function
+  definition: Prioritizes improvement ideas against value and drives them across the providers that must act.
+  aliases: [improvement backlog, value prioritization]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-VAL-3}
+  source: ADR 0025
+
+# Service reporting & insight coordination (CAP-ITSM-VAL-4)
+- id: FUNC-itsm-service-reporting
+  term: End-to-End Service Reporting
+  type: Function
+  definition: Consolidates cross-provider performance, value, service-level, and improvement status into audience-appropriate reports.
+  aliases: [service report, insight dashboard]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-VAL-4}
+  source: ADR 0025

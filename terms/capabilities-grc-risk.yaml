@@ -1,0 +1,74 @@
+# ITPRA ontology — GRC-RISK (Enterprise Vulnerability, Threat & Risk Management) capabilities
+# type: Capability. ids CAP-GRC-RISK-<n>. Grouped under domain GRC-RISK (ADR 0024). Enterprise risk AUTHORITY —
+# owns the risk register/treatment/acceptance and aggregates findings the platform (ITO SEC CAP-SEC-4/7) and
+# other estates supply; does NOT run the platform's own scanners (ADR 0024).
+
+- id: CAP-GRC-RISK-1
+  term: Enterprise Risk Assessment & Treatment
+  type: Capability
+  definition: >
+    Runs the enterprise information-security risk lifecycle — establishing context, identifying, analyzing,
+    and evaluating risk, and selecting treatment (avoid / mitigate / transfer / accept) — so security risk is
+    understood and deliberately handled against enterprise risk appetite. AI and agentic systems are
+    assessed through this same lifecycle; classifying such a system by risk is the entry point that
+    determines which obligations and controls then apply (FUNC-grc-ai-system-risk-classification;
+    ADR 0035).
+  relates_to:
+    - {rel: grouped_by, target: GRC-RISK}
+    - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
+    - {rel: consumed_by, target: PERSONA-grc-security-leadership}
+  source: ADR 0024
+
+- id: CAP-GRC-RISK-2
+  term: Risk Register & KRI Tracking
+  type: Capability
+  definition: >
+    Maintains the enterprise risk register as the system of record for every identified risk — its
+    treatment, owner, target date, residual risk, and the key risk indicator that monitors it — so risks are
+    tracked to closure and posture is evidenced over time.
+  relates_to:
+    - {rel: grouped_by, target: GRC-RISK}
+    - {rel: depends_on, target: CAP-GRC-RISK-1}
+    - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
+  source: ADR 0024
+
+- id: CAP-GRC-RISK-3
+  term: Risk Acceptance & Exception Governance
+  type: Capability
+  definition: >
+    Governs explicit risk-acceptance and exception decisions — risk-assessing, time-boxing, approving at the
+    appropriate authority, and tracking to expiry the residual risk an estate is permitted to carry. The
+    formal "authorize" decision that records accepted residual risk.
+  relates_to:
+    - {rel: grouped_by, target: GRC-RISK}
+    - {rel: depends_on, target: CAP-GRC-RISK-2}
+    - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
+    - {rel: consumed_by, target: PERSONA-grc-security-leadership}
+  source: ADR 0024
+
+- id: CAP-GRC-RISK-4
+  term: Enterprise Vulnerability & Exposure Oversight
+  type: Capability
+  definition: >
+    Aggregates vulnerability and exposure findings the platform and other estates report, prioritizes them by
+    enterprise risk (not just technical severity), and tracks remediation against risk appetite across the
+    estate. The enterprise oversight above each estate's own scanning; it does not perform the scans.
+  relates_to:
+    - {rel: grouped_by, target: GRC-RISK}
+    - {rel: depends_on, target: CAP-GRC-RISK-2}
+    - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
+    - {rel: consumed_by, target: PERSONA-grc-security-operations}
+  source: ADR 0024
+
+- id: CAP-GRC-RISK-5
+  term: Threat & Risk Landscape Analysis
+  type: Capability
+  definition: >
+    Analyzes the evolving threat and risk landscape — emerging adversary trends, sector threats, and
+    aggregate exposure — to inform risk appetite, control priorities, and the enterprise security strategy.
+    Synthesizes threat intelligence and risk-register signals into forward-looking risk insight.
+  relates_to:
+    - {rel: grouped_by, target: GRC-RISK}
+    - {rel: depends_on, target: CAP-GRC-RISK-1}
+    - {rel: consumed_by, target: PERSONA-grc-security-leadership}
+  source: ADR 0024

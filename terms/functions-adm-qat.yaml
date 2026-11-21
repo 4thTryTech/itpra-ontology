@@ -1,0 +1,165 @@
+# ITPRA ontology — FUNCTION library, ADM-QAT (Application Quality & Testing)
+# type: Function. ids FUNC-adm-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
+# the function (ADR 0011). Functions `support` ≥1 capability (many-to-many). See ADR 0021.
+
+# Quality bar & fitness (CAP-ADM-QAT-1)
+- id: FUNC-adm-quality-bar-definition
+  term: Quality Bar Definition
+  type: Function
+  definition: Expresses the application's functional and non-functional fitness criteria against a product-quality model (ISO/IEC 25010).
+  aliases: [definition of done, fitness criteria, acceptance criteria]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-QAT-1}
+  source: ADR 0021
+
+# Functional test (CAP-ADM-QAT-2)
+- id: FUNC-adm-functional-testing
+  term: Functional Testing
+  type: Function
+  definition: Designs and runs tests verifying the application's behavior is correct and complete across test levels.
+  aliases: [unit testing, integration testing, system testing, acceptance testing]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-QAT-2}
+  source: ADR 0021
+
+- id: FUNC-adm-test-automation
+  term: Test Automation
+  type: Function
+  definition: Automates test execution so functional verification runs repeatably on every change.
+  aliases: [automated testing, regression automation]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-QAT-2}
+    - {rel: supports, target: CAP-ADM-QAT-5}
+  source: ADR 0021
+
+# Non-functional test (CAP-ADM-QAT-3)
+- id: FUNC-adm-performance-testing
+  term: Performance Testing
+  type: Function
+  definition: Verifies the application's performance and behavior under load against its targets.
+  aliases: [load testing, stress testing, scalability testing]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-QAT-3}
+  source: ADR 0021
+
+- id: FUNC-adm-application-security-testing
+  term: Application Security Testing
+  type: Function
+  definition: Tests the application for security weaknesses at the application level before release.
+  aliases: [SAST, DAST, application vulnerability testing]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-QAT-3}
+  source: ADR 0021
+
+# Test data & environment (CAP-ADM-QAT-4)
+- id: FUNC-adm-test-data-management
+  term: Test Data Management
+  type: Function
+  definition: Prepares representative, governed test data without exposing sensitive production data.
+  aliases: [test data provisioning, data masking, synthetic test data]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-QAT-4}
+  source: ADR 0021
+
+- id: FUNC-adm-test-environment-provisioning
+  term: Test Environment Readiness
+  type: Function
+  definition: Makes ready test environments available for the application, consuming platform self-service where provided.
+  aliases: [test environment management, environment provisioning]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-QAT-4}
+  source: ADR 0021
+
+# Continuous quality & defect mgmt (CAP-ADM-QAT-5)
+- id: FUNC-adm-defect-management
+  term: Defect Management
+  type: Function
+  definition: Captures, triages, prioritizes, resolves, and confirms defects across the application's life.
+  aliases: [bug tracking, defect lifecycle, issue triage]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-QAT-5}
+  source: ADR 0021
+
+# Generative & trajectory evaluation (CAP-ADM-QAT-6) and adversarial testing (CAP-ADM-QAT-7) - ADR 0034
+- id: FUNC-adm-eval-set-curation
+  term: Evaluation Set Curation
+  type: Function
+  definition: Builds and maintains the curated reference cases an application's non-deterministic behaviour is scored against, including their provenance and whether a case has leaked into the trained behaviour it is meant to test. Contamination governance is part of curation, not a separate practice.
+  aliases: [golden dataset, eval set, reference cases, benchmark curation]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-QAT-6}
+  source: ADR 0034
+
+- id: FUNC-adm-deterministic-assertion-scoring
+  term: Deterministic Assertion Scoring
+  type: Function
+  definition: Scores generated output against checks that have an unambiguous answer - format, schema, required or forbidden content, exact match - so the part of quality that CAN be asserted is asserted cheaply.
+  aliases: [assertion scoring, rule-based scoring, programmatic scoring]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-QAT-6}
+  source: ADR 0034
+
+- id: FUNC-adm-model-graded-scoring
+  term: Model-Graded Scoring
+  type: Function
+  definition: Scores generated output using a model as the grader where no deterministic assertion applies. Carries a standing validity caveat - grader agreement with expert judgement is partial and degrades as generation becomes less constrained, so a score is evidence rather than ground truth and is only meaningful alongside its calibration.
+  aliases: [LLM-as-judge, model-as-judge, automated grading, AI grader]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-QAT-6}
+  source: ADR 0034
+
+- id: FUNC-adm-judge-calibration
+  term: Human Review & Judge Calibration
+  type: Function
+  definition: Samples scored output for expert review and measures how far the automated grader agrees with that judgement, re-tuning or replacing the grader when agreement drifts. Makes model-graded scoring accountable rather than assumed.
+  aliases: [judge calibration, annotation review, grader validation, human-in-the-loop review]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-QAT-6}
+  source: ADR 0034
+
+- id: FUNC-adm-trajectory-scoring
+  term: Trajectory & Tool-Use Scoring
+  type: Function
+  definition: Scores the PATH an autonomous component took - which steps it chose, which tools it called and with what, what it retried or abandoned - independently of whether the final answer was acceptable. A correct answer reached by an unacceptable path is a failure this surfaces and output scoring does not.
+  aliases: [trajectory evaluation, tool-use correctness, path scoring, step-level evaluation]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-QAT-6}
+  source: ADR 0034
+
+- id: FUNC-adm-regression-evaluation
+  term: Regression Evaluation Gating
+  type: Function
+  definition: Re-runs the curated evaluation set on change and gates promotion on the result, so behaviour that degrades is caught before release. Its own function rather than a case of test automation, because the gate is a statistical threshold rather than a pass/fail assertion; it rides the same continuous-verification substrate.
+  aliases: [eval gating, evaluation-driven development, eval in CI, behaviour regression gate]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-QAT-6}
+    - {rel: supports, target: CAP-ADM-QAT-5}
+  source: ADR 0034
+
+- id: FUNC-adm-production-evaluation-sampling
+  term: Production Evaluation Sampling
+  type: Function
+  definition: Samples real application traffic and scores it against the same criteria used offline, so quality is measured on the distribution the application actually sees rather than only on curated cases.
+  aliases: [online evaluation, production evals, live sampling, in-production scoring]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-QAT-6}
+  source: ADR 0034
+
+- id: FUNC-adm-guardrail-effectiveness-evaluation
+  term: Guardrail Effectiveness Evaluation
+  type: Function
+  definition: Measures offline, against curated and adversarial cases, how reliably an application's guardrails hold - what they catch, what they let through, and what they block that they should not. Evaluates the guardrail; it does not perform the guardrail's runtime job.
+  aliases: [guardrail testing, boundary effectiveness, safety evaluation]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-QAT-6}
+    - {rel: supports, target: CAP-ADM-ENG-7}
+  source: ADR 0034
+
+- id: FUNC-adm-adversarial-testing
+  term: Adversarial Testing
+  type: Function
+  definition: Deliberately attacks the application's model-grounded behaviour - adversarial and manipulated inputs, boundary evasion, tool misuse, harmful-output elicitation - to find failures ordinary evaluation does not reach, and records what it finds against the quality bar.
+  aliases: [red teaming, attack simulation, jailbreak testing, abuse-case testing]
+  relates_to:
+    - {rel: supports, target: CAP-ADM-QAT-7}
+  source: ADR 0034

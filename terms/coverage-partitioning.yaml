@@ -1,0 +1,40 @@
+# ITPRA ontology — neutral coverage-partitioning concepts
+# Cross-cutting Concept vocabulary for the case where one function's coverage is PARTITIONED across the estate
+# and provided by DIFFERENT tools per partition, simultaneously — not one coverage whose internals vary (that is
+# the ENV-DIM-* idea, ADR 0014). Operating-model- and tool-neutral: no products, no ITIL/ DevOps process names,
+# no actual zone names. Minted under ADR 0029 (evaluate-not-auto-add per ADR 0011: the binding machinery —
+# functions and the T3 tool index — already existed; what was missing was the named partition the coverage is
+# split across, and the assertion that a baseline covers everything not overridden).
+
+- id: COVERAGE-AREA
+  term: Coverage area
+  type: Concept
+  definition: >
+    A bounded partition of the estate within which a function's coverage is provided as a unit. A function
+    may require simultaneous, distinct coverage in two or more coverage areas at once — because a single
+    realization cannot span them all — where a hard boundary withholds reach (the control plane cannot get
+    there), trust (security isolation will not expose the area to a shared plane), jurisdiction (regulation
+    forbids the data or operation leaving the boundary), or accountability (a different party owns the area).
+    This is genuine duplication (multiple coexisting coverages of the same function), distinct from an
+    environment dimension (ENV-DIM-*), where one coverage's internals vary across an axis but the outcome is
+    a single whole. T1 asserts only that coverage MAY be partitioned this way and that one BASELINE
+    (enterprise-standard) area covers the estate wherever no area-specific partition overrides it; the actual
+    areas, their drivers, and which functions need per-area coverage are scenario decisions bound at T2, and
+    the specific tool per area is bound at T3 (tools never enter the ontology).
+  aliases: [landscape area, coverage zone, estate partition, coverage partition]
+  relates_to:
+    - {rel: applies_to, target: ENVIRONMENT}
+    - {rel: applies_to, target: FUNCTION}
+  source: ADR 0029
+
+- id: AREA-baseline
+  term: Enterprise-standard coverage area
+  type: Concept
+  definition: >
+    The default coverage area every function is served in unless a derived architecture declares an override area
+    for it: the enterprise standard tool coverage. Named in every T2/T3 manifest by convention and defaulted by the
+    linter; declared here so the id resolves as a term (ADR 0008, taking up ADR 0029).
+  aliases: [baseline area, enterprise standard area]
+  relates_to:
+    - {rel: applies_to, target: COVERAGE-AREA}
+  source: ADR 0029

@@ -1,0 +1,56 @@
+# ITPRA ontology — FLD-LOG (Spares, Stock & Logistics) capabilities
+# type: Capability. ids CAP-FLD-LOG-<n>. Grouped under domain FLD-LOG (ADR 0020).
+
+- id: CAP-FLD-LOG-1
+  term: Spares Demand Planning
+  type: Capability
+  definition: >
+    Forecasts which service parts will be needed, where, and when — from failure rates, the installed base,
+    and planned work — so the spares network is stocked against real demand rather than guesswork, balancing
+    holding cost against the risk of a missing part.
+  relates_to:
+    - {rel: grouped_by, target: FLD-LOG}
+    - {rel: consumed_by, target: PERSONA-fld-field-service-lead}
+    - {rel: consumed_by, target: PERSONA-fld-field-coordinator}
+  source: ADR 0020
+
+- id: CAP-FLD-LOG-2
+  term: Multi-Echelon Stock Positioning
+  type: Capability
+  definition: >
+    Positions spares across the echelons of the service network — central depot, field depots, and pooled
+    or customer-site stock — so each part sits close enough to where it is needed to meet the response
+    commitment without over-stocking every location.
+  relates_to:
+    - {rel: grouped_by, target: FLD-LOG}
+    - {rel: depends_on, target: CAP-FLD-LOG-1}
+    - {rel: consumed_by, target: PERSONA-fld-field-service-lead}
+  source: ADR 0020
+
+- id: CAP-FLD-LOG-3
+  term: Trunk-Stock Management & Visibility
+  type: Capability
+  definition: >
+    Manages the frontline stock a technician carries to the job and keeps it visible — knowing what each
+    technician holds and where — so the part needed for a scheduled or emergency visit is on hand and the
+    carried inventory can be optimized and replenished.
+  relates_to:
+    - {rel: grouped_by, target: FLD-LOG}
+    - {rel: depends_on, target: CAP-FLD-LOG-2}
+    - {rel: consumed_by, target: PERSONA-fld-field-technician}
+    - {rel: consumed_by, target: PERSONA-fld-field-coordinator}
+  source: ADR 0020
+
+- id: CAP-FLD-LOG-4
+  term: Replenishment & Requisition
+  type: Capability
+  definition: >
+    Tops up consumed stock and fulfils part requests against demand signals — automatically replenishing
+    echelons as parts are used and requisitioning a needed part to the point of work — so the network stays
+    serviceable and a technician can pull the right part on demand.
+  relates_to:
+    - {rel: grouped_by, target: FLD-LOG}
+    - {rel: depends_on, target: CAP-FLD-LOG-3}
+    - {rel: consumed_by, target: PERSONA-fld-field-technician}
+    - {rel: consumed_by, target: PERSONA-fld-field-coordinator}
+  source: ADR 0020

@@ -1,0 +1,195 @@
+# ITPRA ontology — Service Desk (SVD) journey catalog
+# type: Journey. ids JRN-svd-<slug>. Each `grouped_by` exactly one EXISTING JourneyGroup
+# (JG-ONBOARDING..JG-EVOLUTION; reused, not redefined). Neutral — steps reference capabilities + neutral
+# governance construct points (request/approval/change/incident/problem/record/feedback/service-level), never
+# tools or named processes. Relationships from the journey side: grouped_by, consumed_by (primary personas),
+# depends_on (capabilities exercised). Ratified by ADR 0019. Diagrams: WF-svd-<slug>.
+
+# ---- JG-ONBOARDING ----
+- id: JRN-svd-onboard-consumer-to-desk
+  term: Onboard a Consumer to the Service Desk
+  type: Journey
+  definition: >
+    Establish a new user or consumer group as a known requester of the desk — their identity, entitlements,
+    segment, and the channels they can use — so their first contact is recognized and handled correctly.
+  relates_to:
+    - {rel: grouped_by, target: JG-ONBOARDING}
+    - {rel: consumed_by, target: PERSONA-svd-requester}
+    - {rel: consumed_by, target: PERSONA-svd-coordinator}
+    - {rel: depends_on, target: CAP-SVD-CON-3}
+    - {rel: depends_on, target: CAP-SVD-COM-4}
+    - {rel: depends_on, target: CAP-SVD-CON-1}
+  source: ADR 0019
+
+# ---- JG-DELIVERY ----
+- id: JRN-svd-resolve-self-service
+  term: Resolve via Self-Service
+  type: Journey
+  definition: >
+    A user finds an answer or completes a standard request unaided through the self-service surface and
+    contextual knowledge, resolving their need without ever reaching an agent.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-svd-requester}
+    - {rel: depends_on, target: CAP-SVD-KNW-1}
+    - {rel: depends_on, target: CAP-SVD-KNW-2}
+  source: ADR 0019
+
+- id: JRN-svd-log-and-triage-contact
+  term: Log & Triage a Contact
+  type: Journey
+  definition: >
+    A user contacts the desk through a channel; the desk identifies them, captures context, classifies the
+    contact, determines its priority, and routes it to the right place to be worked.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-svd-requester}
+    - {rel: consumed_by, target: PERSONA-svd-agent}
+    - {rel: depends_on, target: CAP-SVD-CON-1}
+    - {rel: depends_on, target: CAP-SVD-CON-3}
+    - {rel: depends_on, target: CAP-SVD-CON-4}
+    - {rel: depends_on, target: CAP-SVD-TRI-1}
+    - {rel: depends_on, target: CAP-SVD-TRI-2}
+    - {rel: depends_on, target: CAP-SVD-TRI-3}
+  source: ADR 0019
+
+- id: JRN-svd-resolve-at-first-contact
+  term: Resolve a Contact at First Line
+  type: Journey
+  definition: >
+    An agent resolves the user's issue in the first interaction using surfaced knowledge and available
+    access, confirms resolution with the user, captures the resolution as knowledge, and closes.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-svd-requester}
+    - {rel: consumed_by, target: PERSONA-svd-agent}
+    - {rel: depends_on, target: CAP-SVD-HDL-1}
+    - {rel: depends_on, target: CAP-SVD-KNW-2}
+    - {rel: depends_on, target: CAP-SVD-KNW-3}
+    - {rel: depends_on, target: CAP-SVD-HDL-5}
+  source: ADR 0019
+
+- id: JRN-svd-fulfil-standard-request
+  term: Fulfil a Standard Request
+  type: Journey
+  definition: >
+    A user raises a standard, pre-defined request; the desk confirms entitlement, obtains any required
+    approval, coordinates fulfilment with the resolver who delivers it, and closes on confirmation.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-svd-requester}
+    - {rel: consumed_by, target: PERSONA-svd-resolver}
+    - {rel: depends_on, target: CAP-SVD-HDL-2}
+    - {rel: depends_on, target: CAP-SVD-CON-3}
+    - {rel: depends_on, target: CAP-SVD-HDL-5}
+  source: ADR 0019
+
+- id: JRN-svd-handoff-to-resolver
+  term: Hand Off a Contact to a Resolver
+  type: Journey
+  definition: >
+    A contact the desk cannot resolve at first line is handed off to the right resolver group with full
+    context; the desk retains ownership, exchanges status, and keeps the user informed through to closure.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-svd-agent}
+    - {rel: consumed_by, target: PERSONA-svd-resolver}
+    - {rel: depends_on, target: CAP-SVD-HDL-3}
+    - {rel: depends_on, target: CAP-SVD-TRI-3}
+    - {rel: depends_on, target: CAP-SVD-HDL-4}
+  source: ADR 0019
+
+# ---- JG-OPERATIONS ----
+- id: JRN-svd-manage-queue-and-ownership
+  term: Manage the Queue & Contact Ownership
+  type: Journey
+  definition: >
+    The desk keeps the unified queue healthy day to day — owning each contact, chasing aging or stalled
+    work across resolvers, and tracking commitments — so nothing falls between teams.
+  relates_to:
+    - {rel: grouped_by, target: JG-OPERATIONS}
+    - {rel: consumed_by, target: PERSONA-svd-agent}
+    - {rel: consumed_by, target: PERSONA-svd-coordinator}
+    - {rel: depends_on, target: CAP-SVD-CON-2}
+    - {rel: depends_on, target: CAP-SVD-HDL-4}
+    - {rel: depends_on, target: CAP-SVD-COM-2}
+  source: ADR 0019
+
+- id: JRN-svd-communicate-proactively
+  term: Communicate Proactively to Users
+  type: Journey
+  definition: >
+    The desk informs users ahead of impact about service status, known issues, and planned changes, so
+    people are prepared and avoidable contacts are prevented.
+  relates_to:
+    - {rel: grouped_by, target: JG-OPERATIONS}
+    - {rel: consumed_by, target: PERSONA-svd-requester}
+    - {rel: consumed_by, target: PERSONA-svd-coordinator}
+    - {rel: depends_on, target: CAP-SVD-COM-1}
+  source: ADR 0019
+
+# ---- JG-RESPONSE ----
+- id: JRN-svd-coordinate-major-incident
+  term: Coordinate a Major Incident
+  type: Journey
+  definition: >
+    On objective criteria the desk declares a major incident, mobilizes and coordinates the response from
+    one point across resolvers, communicates to users and stakeholders on a predictable cadence, and closes
+    when service is restored.
+  relates_to:
+    - {rel: grouped_by, target: JG-RESPONSE}
+    - {rel: consumed_by, target: PERSONA-svd-coordinator}
+    - {rel: consumed_by, target: PERSONA-svd-resolver}
+    - {rel: depends_on, target: CAP-SVD-TRI-5}
+    - {rel: depends_on, target: CAP-SVD-MAJ-1}
+    - {rel: depends_on, target: CAP-SVD-MAJ-2}
+    - {rel: depends_on, target: CAP-SVD-MAJ-3}
+  source: ADR 0019
+
+- id: JRN-svd-review-after-major-incident
+  term: Review After a Major Incident
+  type: Journey
+  definition: >
+    After restoration the desk runs a blameless review to find root cause and produce owned, time-bound
+    improvement actions, feeding them into the continual-improvement loop.
+  relates_to:
+    - {rel: grouped_by, target: JG-RESPONSE}
+    - {rel: consumed_by, target: PERSONA-svd-coordinator}
+    - {rel: consumed_by, target: PERSONA-svd-resolver}
+    - {rel: depends_on, target: CAP-SVD-MAJ-4}
+    - {rel: depends_on, target: CAP-SVD-PRF-4}
+  source: ADR 0019
+
+# ---- JG-GOVERNANCE ----
+- id: JRN-svd-measure-experience-and-satisfaction
+  term: Measure Experience & Satisfaction
+  type: Journey
+  definition: >
+    The desk captures satisfaction and effort feedback after contacts and reports its experience and
+    outcome measures alongside operational performance, so it is judged on how users fared.
+  relates_to:
+    - {rel: grouped_by, target: JG-GOVERNANCE}
+    - {rel: consumed_by, target: PERSONA-svd-requester}
+    - {rel: consumed_by, target: PERSONA-svd-coordinator}
+    - {rel: depends_on, target: CAP-SVD-COM-3}
+    - {rel: depends_on, target: CAP-SVD-PRF-2}
+    - {rel: depends_on, target: CAP-SVD-PRF-1}
+  source: ADR 0019
+
+# ---- JG-EVOLUTION ----
+- id: JRN-svd-shift-left-and-improve
+  term: Shift Demand Left & Improve the Desk
+  type: Journey
+  definition: >
+    The desk analyzes contact trends to find recurring demand, turns high-volume contacts into self-service
+    or eliminates them at source, curates the knowledge base, and feeds improvements into a prioritized loop
+    that evolves the desk as a service.
+  relates_to:
+    - {rel: grouped_by, target: JG-EVOLUTION}
+    - {rel: consumed_by, target: PERSONA-svd-coordinator}
+    - {rel: consumed_by, target: PERSONA-svd-resolver}
+    - {rel: depends_on, target: CAP-SVD-PRF-3}
+    - {rel: depends_on, target: CAP-SVD-PRF-4}
+    - {rel: depends_on, target: CAP-SVD-KNW-4}
+    - {rel: depends_on, target: CAP-SVD-KNW-1}
+  source: ADR 0019

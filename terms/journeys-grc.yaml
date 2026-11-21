@@ -1,0 +1,200 @@
+# ITPRA ontology — Enterprise Security, Risk & Compliance (GRC) journey catalog
+# type: Journey. ids JRN-grc-<slug>. Each `grouped_by` exactly one EXISTING JourneyGroup
+# (JG-ONBOARDING..JG-EVOLUTION; reused, not redefined). Neutral — steps reference capabilities + neutral
+# governance construct points (request/approval/change/incident/problem/record/feedback), never tools or named
+# processes. Relationships from the journey side: grouped_by, consumed_by (primary personas), depends_on
+# (capabilities exercised). Ratified by ADR 0024. Diagrams: WF-grc-<slug>.
+
+# ---- JG-ONBOARDING ----
+- id: JRN-grc-onboard-estate-governance
+  term: Bring a New Estate Under Security Governance
+  type: Journey
+  definition: >
+    Bring a new estate (e.g. a platform, application landscape, or business unit) under enterprise security
+    governance — assign its applicable controls and baselines, register its risks, establish monitoring and
+    evidence feeds, and place it in scope of compliance.
+  relates_to:
+    - {rel: grouped_by, target: JG-ONBOARDING}
+    - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
+    - {rel: consumed_by, target: PERSONA-grc-security-operations}
+    - {rel: depends_on, target: CAP-GRC-POL-3}
+    - {rel: depends_on, target: CAP-GRC-CMP-1}
+    - {rel: depends_on, target: CAP-GRC-RISK-2}
+    - {rel: depends_on, target: CAP-GRC-SOC-1}
+  source: ADR 0024
+
+- id: JRN-grc-grant-workforce-access
+  term: Grant & Govern Workforce Access
+  type: Journey
+  definition: >
+    A new or moving workforce member receives least-privilege access from the identity of record — birthright
+    access on join, recalculated on role change — governed against the entitlement model, with privileged
+    access handled under stricter control.
+  relates_to:
+    - {rel: grouped_by, target: JG-ONBOARDING}
+    - {rel: consumed_by, target: PERSONA-grc-identity-governance}
+    - {rel: depends_on, target: CAP-GRC-IAM-1}
+    - {rel: depends_on, target: CAP-GRC-IAM-2}
+    - {rel: depends_on, target: CAP-GRC-IAM-3}
+    - {rel: depends_on, target: CAP-GRC-IAM-5}
+  source: ADR 0024
+
+# ---- JG-DELIVERY ----
+- id: JRN-grc-author-security-policy
+  term: Author & Publish a Security Policy or Standard
+  type: Journey
+  definition: >
+    Author, approve, and publish a new or revised security policy or standard — establishing the control(s)
+    it requires and communicating the guardrail to the estates that must enforce it.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
+    - {rel: consumed_by, target: PERSONA-grc-security-leadership}
+    - {rel: depends_on, target: CAP-GRC-POL-1}
+    - {rel: depends_on, target: CAP-GRC-POL-2}
+    - {rel: depends_on, target: CAP-GRC-POL-3}
+  source: ADR 0024
+
+- id: JRN-grc-onboard-compliance-obligation
+  term: Onboard a New Compliance Obligation
+  type: Journey
+  definition: >
+    A new regulation, standard, or contractual obligation is taken on — assessed for impact, mapped to the
+    enterprise control framework, gaps identified and treated, and evidence collection established so the
+    obligation can be attested.
+  relates_to:
+    - {rel: grouped_by, target: JG-DELIVERY}
+    - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
+    - {rel: depends_on, target: CAP-GRC-CMP-5}
+    - {rel: depends_on, target: CAP-GRC-CMP-1}
+    - {rel: depends_on, target: CAP-GRC-CMP-4}
+    - {rel: depends_on, target: CAP-GRC-RISK-1}
+  source: ADR 0024
+
+# ---- JG-OPERATIONS ----
+- id: JRN-grc-monitor-and-hunt
+  term: Monitor & Hunt Across the Enterprise
+  type: Journey
+  definition: >
+    The security operations centre continuously monitors and correlates enterprise security events, enriches
+    them with threat intelligence, and proactively hunts for undetected adversary activity — surfacing
+    threats and feeding new detections back into monitoring.
+  relates_to:
+    - {rel: grouped_by, target: JG-OPERATIONS}
+    - {rel: consumed_by, target: PERSONA-grc-security-operations}
+    - {rel: depends_on, target: CAP-GRC-SOC-1}
+    - {rel: depends_on, target: CAP-GRC-SOC-2}
+    - {rel: depends_on, target: CAP-GRC-SOC-3}
+  source: ADR 0024
+
+- id: JRN-grc-run-access-certification
+  term: Run an Access Certification Campaign
+  type: Journey
+  definition: >
+    A periodic access review campaign runs — owners and managers attest whether each grant is still
+    warranted, unwarranted access is revoked, and the attestation evidence is recorded for compliance.
+  relates_to:
+    - {rel: grouped_by, target: JG-OPERATIONS}
+    - {rel: consumed_by, target: PERSONA-grc-identity-governance}
+    - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
+    - {rel: depends_on, target: CAP-GRC-IAM-4}
+    - {rel: depends_on, target: CAP-GRC-IAM-2}
+  source: ADR 0024
+
+- id: JRN-grc-deliver-awareness
+  term: Deliver Awareness & Run a Phishing Simulation
+  type: Journey
+  definition: >
+    The awareness programme delivers role-relevant training and runs a controlled phishing/social-engineering
+    simulation, measuring susceptibility and reporting behavior, and targeting follow-up intervention at
+    high-risk populations.
+  relates_to:
+    - {rel: grouped_by, target: JG-OPERATIONS}
+    - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
+    - {rel: depends_on, target: CAP-GRC-AWR-1}
+    - {rel: depends_on, target: CAP-GRC-AWR-2}
+    - {rel: depends_on, target: CAP-GRC-AWR-3}
+  source: ADR 0024
+
+# ---- JG-RESPONSE ----
+- id: JRN-grc-respond-major-incident
+  term: Respond to a Major Security Incident
+  type: Journey
+  definition: >
+    A major or cross-domain security incident is declared, coordinated across estates, contained, eradicated,
+    and recovered, with privileged access curtailed as needed and lessons captured that feed prevention,
+    detection, and the risk register.
+  relates_to:
+    - {rel: grouped_by, target: JG-RESPONSE}
+    - {rel: consumed_by, target: PERSONA-grc-security-operations}
+    - {rel: consumed_by, target: PERSONA-grc-security-leadership}
+    - {rel: depends_on, target: CAP-GRC-SOC-4}
+    - {rel: depends_on, target: CAP-GRC-SOC-5}
+    - {rel: depends_on, target: CAP-GRC-IAM-5}
+    - {rel: depends_on, target: CAP-GRC-SOC-1}
+  source: ADR 0024
+
+# ---- JG-GOVERNANCE ----
+- id: JRN-grc-assess-and-treat-risk
+  term: Assess & Treat an Enterprise Risk
+  type: Journey
+  definition: >
+    An identified security risk is assessed (context, analysis, evaluation), a treatment is selected and
+    owned, the risk is entered in the register with a monitoring indicator, and residual risk is tracked to
+    closure.
+  relates_to:
+    - {rel: grouped_by, target: JG-GOVERNANCE}
+    - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
+    - {rel: consumed_by, target: PERSONA-grc-security-leadership}
+    - {rel: depends_on, target: CAP-GRC-RISK-1}
+    - {rel: depends_on, target: CAP-GRC-RISK-2}
+    - {rel: depends_on, target: CAP-GRC-RISK-4}
+  source: ADR 0024
+
+- id: JRN-grc-govern-exception
+  term: Govern a Policy Exception or Risk Acceptance
+  type: Journey
+  definition: >
+    An estate requests a deviation from policy or acceptance of residual risk; it is risk-assessed,
+    time-boxed, approved at the appropriate authority, linked to the risk register, and tracked to expiry.
+  relates_to:
+    - {rel: grouped_by, target: JG-GOVERNANCE}
+    - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
+    - {rel: consumed_by, target: PERSONA-grc-security-leadership}
+    - {rel: depends_on, target: CAP-GRC-POL-4}
+    - {rel: depends_on, target: CAP-GRC-RISK-3}
+  source: ADR 0024
+
+- id: JRN-grc-conduct-audit
+  term: Conduct an Audit & Produce Attestation Evidence
+  type: Journey
+  definition: >
+    An internal or external audit runs against the control framework — control health is monitored, evidence
+    is marshalled (including evidence supplied by the platform and other estates), findings are tracked to
+    remediation, and the attestation or certification is produced.
+  relates_to:
+    - {rel: grouped_by, target: JG-GOVERNANCE}
+    - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
+    - {rel: depends_on, target: CAP-GRC-CMP-2}
+    - {rel: depends_on, target: CAP-GRC-CMP-3}
+    - {rel: depends_on, target: CAP-GRC-CMP-4}
+    - {rel: depends_on, target: CAP-GRC-CMP-1}
+  source: ADR 0024
+
+# ---- JG-EVOLUTION ----
+- id: JRN-grc-report-and-evolve-posture
+  term: Report & Evolve Security and Risk Posture
+  type: Journey
+  definition: >
+    The consolidated enterprise security and risk posture is assembled, reported to operational owners and to
+    the board, and used — with threat/risk-landscape analysis — to evolve risk appetite, control priorities,
+    and the security strategy.
+  relates_to:
+    - {rel: grouped_by, target: JG-EVOLUTION}
+    - {rel: consumed_by, target: PERSONA-grc-security-leadership}
+    - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
+    - {rel: depends_on, target: CAP-GRC-INS-1}
+    - {rel: depends_on, target: CAP-GRC-INS-2}
+    - {rel: depends_on, target: CAP-GRC-INS-3}
+    - {rel: depends_on, target: CAP-GRC-RISK-5}
+  source: ADR 0024

@@ -1,0 +1,80 @@
+# ITPRA ontology — FUNCTION library, DXC-PER (Personalization & Targeting)
+# type: Function. ids FUNC-dxc-<slug>. All T1-neutral; a function MAY name a recognized technique where that IS
+# the function (ADR 0011).
+
+# Audience segmentation & targeting (CAP-DXC-PER-1)
+- id: FUNC-dxc-rule-based-segmentation
+  term: Rule-Based Segmentation
+  type: Function
+  definition: Defines audiences from explicit attribute and behavior rules.
+  aliases: [rule-based audiences, attribute segmentation]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-PER-1}
+  source: ADR 0027
+
+- id: FUNC-dxc-predictive-segmentation
+  term: Predictive Segmentation
+  type: Function
+  definition: Predicts audience membership or propensity from behavioral models (micro-segmentation).
+  aliases: [predictive audiences, propensity modeling, micro-segmentation]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-PER-1}
+  source: ADR 0027
+
+# Content & offer personalization (CAP-DXC-PER-2)
+- id: FUNC-dxc-dynamic-content
+  term: Dynamic Content Selection
+  type: Function
+  definition: Selects which content/layout variant a context sees at delivery time.
+  aliases: [dynamic content, content targeting, adaptive content]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-PER-2}
+  source: ADR 0027
+
+- id: FUNC-dxc-offer-personalization
+  term: Offer Personalization
+  type: Function
+  definition: Tailors the offers and promotions presented to an audience or individual.
+  aliases: [offer targeting, next-best-offer]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-PER-2}
+  source: ADR 0027
+
+# Recommendation (CAP-DXC-PER-3)
+- id: FUNC-dxc-content-recommendation
+  term: Content Recommendation
+  type: Function
+  definition: Recommends relevant content items to a customer from context and behavior.
+  aliases: [content recommendations, related content]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-PER-3}
+  source: ADR 0027
+
+- id: FUNC-dxc-product-recommendation
+  term: Product Recommendation
+  type: Function
+  definition: Recommends relevant products or next items to a customer.
+  aliases: [product recommendations, recommended for you, recommender]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-PER-3}
+    - {rel: supports, target: CAP-DXC-COM-2}
+  source: ADR 0027
+
+# Personalization decisioning & rules (CAP-DXC-PER-4)
+- id: FUNC-dxc-decision-rules
+  term: Decision Rules Management
+  type: Function
+  definition: Maintains the governed ruleset that selects the next best experience for a context.
+  aliases: [personalization rules, decision logic, targeting rules]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-PER-4}
+  source: ADR 0027
+
+- id: FUNC-dxc-personalization-guardrails
+  term: Personalization Guardrails
+  type: Function
+  definition: Constrains personalization to brand, fairness, and consent guardrails and keeps it explainable.
+  aliases: [personalization governance, fairness guardrails, explainability]
+  relates_to:
+    - {rel: supports, target: CAP-DXC-PER-4}
+  source: ADR 0027

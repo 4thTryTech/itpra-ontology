@@ -1,0 +1,70 @@
+# ITPRA ontology — SVD-TRI (Triage, Classification & Routing) capabilities
+# type: Capability. ids CAP-SVD-TRI-<n>. Grouped under domain SVD-TRI (ADR 0019).
+
+- id: CAP-SVD-TRI-1
+  term: Contact Classification
+  type: Capability
+  definition: >
+    Determines what a contact is — a disruption to a service or a standard request — and which service it
+    affects, recording a consistent classification that drives prioritization and routing. Reduces
+    misclassification, the primary cause of slow or misdirected resolution.
+  relates_to:
+    - {rel: grouped_by, target: SVD-TRI}
+    - {rel: depends_on, target: CAP-SVD-CON-4}
+    - {rel: consumed_by, target: PERSONA-svd-agent}
+  source: ADR 0019
+
+- id: CAP-SVD-TRI-2
+  term: Priority Determination
+  type: Capability
+  definition: >
+    Derives the priority of a contact consistently and objectively from its business impact and urgency, so
+    effort is ordered by importance rather than by who shouts loudest, and the basis of the priority is
+    recorded. The numeric scale is set at T2.
+  relates_to:
+    - {rel: grouped_by, target: SVD-TRI}
+    - {rel: depends_on, target: CAP-SVD-TRI-1}
+    - {rel: consumed_by, target: PERSONA-svd-agent}
+    - {rel: consumed_by, target: PERSONA-svd-coordinator}
+  source: ADR 0019
+
+- id: CAP-SVD-TRI-3
+  term: Routing & Assignment
+  type: Capability
+  definition: >
+    Directs each contact to the right place to be worked — first-line resolution or a specific resolver
+    group — based on its classification, the skills and availability required, and the requester's context,
+    so it reaches a competent owner the first time.
+  relates_to:
+    - {rel: grouped_by, target: SVD-TRI}
+    - {rel: depends_on, target: CAP-SVD-TRI-1}
+    - {rel: consumed_by, target: PERSONA-svd-agent}
+    - {rel: consumed_by, target: PERSONA-svd-resolver}
+  source: ADR 0019
+
+- id: CAP-SVD-TRI-4
+  term: Duplicate & Recurrence Linking
+  type: Capability
+  definition: >
+    Recognizes when a new contact relates to others — duplicates of one event, or instances of a known
+    recurring cause — and links them, so a widespread event is seen as one thing, recurring pain is visible,
+    and the user can be associated with an existing fix or known cause.
+  relates_to:
+    - {rel: grouped_by, target: SVD-TRI}
+    - {rel: depends_on, target: CAP-SVD-CON-2}
+    - {rel: consumed_by, target: PERSONA-svd-agent}
+    - {rel: consumed_by, target: PERSONA-svd-coordinator}
+  source: ADR 0019
+
+- id: CAP-SVD-TRI-5
+  term: Severity Escalation Governance
+  type: Capability
+  definition: >
+    Governs raising a contact's severity — including declaring it a major incident — against defined,
+    objective criteria, so escalation is a controlled, recorded decision rather than an ad-hoc reaction, and
+    high-severity work gets the right attention promptly.
+  relates_to:
+    - {rel: grouped_by, target: SVD-TRI}
+    - {rel: depends_on, target: CAP-SVD-TRI-2}
+    - {rel: consumed_by, target: PERSONA-svd-coordinator}
+  source: ADR 0019

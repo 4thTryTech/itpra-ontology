@@ -1,0 +1,43 @@
+# ITPRA ontology — GRC-AWR (Security Awareness & Human Risk Assurance) capabilities
+# type: Capability. ids CAP-GRC-AWR-<n>. Grouped under domain GRC-AWR (ADR 0024). Enterprise HUMAN-risk function
+# — targets people across all estates; distinct from EUC device/workspace experience and from platform
+# capabilities (the platform has no workforce to train) (ADR 0024).
+
+- id: CAP-GRC-AWR-1
+  term: Security Awareness & Training Programme
+  type: Capability
+  definition: >
+    Designs and delivers the enterprise security awareness and training programme — role-relevant education on
+    safe behavior, threats, and reporting — so the workforce can recognize and respond to security risk. The
+    structured curriculum that builds security culture across all estates.
+  relates_to:
+    - {rel: grouped_by, target: GRC-AWR}
+    - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
+  source: ADR 0024
+
+- id: CAP-GRC-AWR-2
+  term: Phishing & Social-Engineering Simulation
+  type: Capability
+  definition: >
+    Runs controlled phishing and social-engineering simulations and exercises that safely expose the
+    workforce to realistic attacks, measuring not just susceptibility but how quickly people recognize and
+    report — the practical complement to awareness training.
+  relates_to:
+    - {rel: grouped_by, target: GRC-AWR}
+    - {rel: depends_on, target: CAP-GRC-AWR-1}
+    - {rel: consumed_by, target: PERSONA-grc-security-operations}
+  source: ADR 0024
+
+- id: CAP-GRC-AWR-3
+  term: Human-Risk Measurement & Intervention
+  type: Capability
+  definition: >
+    Measures human security risk across the workforce — behavioral metrics and risk scores by role/team/
+    population — identifies high-risk groups, and targets intervention and content, so the enterprise human-
+    risk posture is understood and reduced over time. Feeds the consolidated security/risk posture.
+  relates_to:
+    - {rel: grouped_by, target: GRC-AWR}
+    - {rel: depends_on, target: CAP-GRC-AWR-2}
+    - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
+    - {rel: consumed_by, target: PERSONA-grc-security-leadership}
+  source: ADR 0024

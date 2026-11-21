@@ -1,0 +1,70 @@
+# ITPRA ontology — FUNCTION library, ITSM-SLM (Service-Level & Supplier/Provider Management)
+# type: Function. ids FUNC-itsm-<slug>. All T1-neutral. Functions `support` >=1 capability. See ADR 0025.
+
+# End-to-end service-level commitment (CAP-ITSM-SLM-1)
+- id: FUNC-itsm-commitment-composition
+  term: Commitment Composition
+  type: Function
+  definition: Composes per-provider commitments into one end-to-end commitment a consumer is given for a whole service.
+  aliases: [SLA composition, end-to-end target]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-SLM-1}
+  source: ADR 0025
+
+# Service-level monitoring & headroom (CAP-ITSM-SLM-2)
+- id: FUNC-itsm-service-level-monitoring
+  term: Service-Level Monitoring
+  type: Function
+  definition: Measures the end-to-end service against its commitment across the provider chain.
+  aliases: [SLA monitoring, level tracking]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-SLM-2}
+  source: ADR 0025
+
+- id: FUNC-itsm-breach-risk-alerting
+  term: Breach-Risk Alerting
+  type: Function
+  definition: Surfaces where a provider's contribution risks breaching the end-to-end commitment before it is missed.
+  aliases: [headroom alerting, breach prediction]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-SLM-2}
+  source: ADR 0025
+
+# Supplier & provider relationship management (CAP-ITSM-SLM-3)
+- id: FUNC-itsm-provider-onboarding
+  term: Provider Onboarding / Offboarding
+  type: Function
+  definition: Brings a provider/supplier into or out of the coordinated chain with its scope and engagement model.
+  aliases: [supplier onboarding, provider transition]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-SLM-3}
+  source: ADR 0025
+
+- id: FUNC-itsm-commitment-register
+  term: Provider Commitment Register
+  type: Function
+  definition: Records each provider's scope, commitments, and engagement model as the basis for assurance.
+  aliases: [contract register, commitment catalog]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-SLM-3}
+  source: ADR 0025
+
+# Provider performance & commitment assurance (CAP-ITSM-SLM-4)
+- id: FUNC-itsm-provider-performance-review
+  term: Provider Performance Review
+  type: Function
+  definition: Assesses each provider's performance against its commitments and feeds results into service-level decisions.
+  aliases: [supplier scorecard, performance review]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-SLM-4}
+  source: ADR 0025
+
+# Internal alignment coordination (CAP-ITSM-SLM-5)
+- id: FUNC-itsm-internal-alignment
+  term: Internal Alignment Coordination
+  type: Function
+  definition: Makes explicit the responsibilities and hand-offs between contributing teams that an end-to-end commitment depends on.
+  aliases: [OLA coordination, responsibility alignment]
+  relates_to:
+    - {rel: supports, target: CAP-ITSM-SLM-5}
+  source: ADR 0025

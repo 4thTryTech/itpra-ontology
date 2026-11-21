@@ -1,0 +1,62 @@
+# ITPRA ontology — service-domain term placements
+# type: Concept. ids SDP-<slug> ("service-domain placement"). Ratified by ADR 0009. A placement records an
+# industry capability that belongs to a service domain whose capability domains have not yet been authored — so
+# the term has a correct, single owning service domain without premature capability modeling. Each has exactly
+# ONE `belongs_to_service_domain` (single-valued, ADR 0009). A placement is a promissory note: it carries no
+# requirement and is not a `supports` target; it is elevated to a real capability when its service domain's
+# capability domains are authored. Acronym categories as aliases are T1-acceptable
+
+- id: SDP-uem
+  term: Unified Endpoint Management
+  type: Concept
+  definition: >
+    Comprehensive management and security of all workforce endpoints — mobile, desktop, laptop, and IoT — from
+    one control plane. Supersets two facets: mobile device management (MDM — enroll, configure, encrypt,
+    locate, lock/wipe the device) and mobile application management (MAM — manage/secure business apps on the
+    device, leaving personal apps/data untouched). The platform supplies identity the endpoint estate consumes,
+    but does not manage end-user devices (CAP-SEC-1 interfaces; device management is End-User Computing).
+  aliases: [UEM, endpoint management, MDM, mobile device management, MAM, mobile application management, EMM]
+  relates_to:
+    - {rel: belongs_to_service_domain, target: SD-END-USER}
+  source: ADR 0009
+
+- id: SDP-rpa
+  term: Robotic Process Automation
+  type: Concept
+  definition: >
+    Business-process automation using software robots that mimic human actions at the application UI level —
+    clicking, entering data, moving files across apps — to automate repetitive, rule-based office work.
+    Distinct from the platform's operational task orchestration / IT runbook automation (CAP-AUT-6): RPA
+    automates BUSINESS processes for application consumers, an Application Development & Maintenance concern.
+  aliases: [RPA, business process automation, software bots, BPA]
+  relates_to:
+    - {rel: belongs_to_service_domain, target: SD-APP-DEV}
+  source: ADR 0009
+
+- id: SDP-product-analytics
+  term: Product & User Behavior Analytics
+  type: Concept
+  definition: >
+    Analytics over how users/customers behave with a product or digital service — engagement, funnels,
+    retention, conversion — to drive business and product insight (the marketing/product origin of user
+    behavior analytics). Distinct from security UEBA (FUNC-behavioral-analytics → CAP-SEC-7), operational
+    AIOps anomaly detection (CAP-OBS-6), and digital experience monitoring (CAP-OBS-9). A business-insight
+    discipline owned by Business Intelligence & Analytics.
+  aliases: [product analytics, user behavior analytics, behavioral analytics, digital analytics, customer analytics]
+  relates_to:
+    - {rel: belongs_to_service_domain, target: SD-BUSINESS-ANALYTICS}
+  source: ADR 0009
+
+- id: SDP-dxm
+  term: Digital Experience Management
+  type: Concept
+  definition: >
+    Compose, manage, deliver, and optimize contextualized customer-facing digital experiences across channels
+    — content management, personalization, customer journey orchestration, customer data, experimentation,
+    digital commerce (a digital experience platform / DXP). Distinct from Digital Experience MONITORING
+    (CAP-OBS-9), which observes end-user experience: DXM creates/delivers experience, DEM measures it. Owned by
+    the Digital Experience & Channels domain.
+  aliases: [DXM, DXP, digital experience platform, experience management]
+  relates_to:
+    - {rel: belongs_to_service_domain, target: SD-DIGITAL-EXPERIENCE}
+  source: ADR 0009
