@@ -2,14 +2,15 @@
 
 Changes to the vocabulary, newest first. Versions follow [ADR 0003](decisions/0003-versioning-releases-and-pinning.md).
 
-## 4.0.0 — unreleased
+## 4.0.0 — 2026-11-21
 
 First public release of the ITPRA ontology as its own repository. The content equals `3.16.3`; what changes is the
 consumption contract: a public location, the CC BY 4.0 and Apache-2.0 licences, identifiers minted under
 `https://itpra.4thtry.tech/`, and the obligation to pin a release.
 
-Imported: `schema.yaml`, `entities.yaml`, `relationships.yaml`, `terms/` (1,594 records), `decisions/` (0001–0040),
-`tools/adr-lint.py` with its tests and the `decisions-lint` workflow.
+Contents: `schema.yaml`, `entities.yaml`, `relationships.yaml`, `terms/` (1,594 records), `decisions/` (0001–0040),
+the six CI checks under `tools/` with their tests, and the `release` workflow, which builds the source archive
+`itpra-ontology-X.Y.Z.tar.gz` with its `sha256` from the tag and publishes the immutable release.
 
 ## Before 4.0.0
 

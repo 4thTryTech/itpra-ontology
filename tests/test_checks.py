@@ -62,3 +62,27 @@ class Scan(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+notes = load("release-notes")
+
+
+class ReleaseNotes(unittest.TestCase):
+    CHANGELOG = "# Changelog\n\nIntro.\n\n## 4.1.0 — 2026-12-01\n\nAdded a term.\n\n## 4.0.0 — 2026-11-21\n\nFirst release.\nTwo lines.\n\n## Before 4.0.0\n\nHistory.\n"
+
+    def test_section_is_the_body_under_the_version_heading(self):
+        self.assertEqual(notes.section(self.CHANGELOG, "4.0.0"), "First release.\nTwo lines.\n")
+        self.assertEqual(notes.section(self.CHANGELOG, "4.1.0"), "Added a term.\n")
+
+    def test_missing_version_is_none_and_prefixes_do_not_match(self):
+        self.assertIsNone(notes.section(self.CHANGELOG, "4.0"))
+        self.assertIsNone(notes.section(self.CHANGELOG, "3.16.3"))
+
+    def test_main_fails_without_a_section(self):
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "CHANGELOG.md"
+            path.write_text(self.CHANGELOG, encoding="utf-8")
+            import contextlib, io
+            with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+                self.assertEqual(notes.main(["4.0.0", "--changelog", str(path)]), 0)
+                self.assertEqual(notes.main(["9.9.9", "--changelog", str(path)]), 1)

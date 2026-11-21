@@ -5,7 +5,9 @@ domains, capabilities, functions, personas, journeys, workflows, dimensions, gov
 and cross-cutting concepts an enterprise IT platform is described with. Tool-agnostic, neutral to any operating model,
 and machine-readable so that architecture documents can be checked against it ([ADR 0001](decisions/0001-purpose-scope-and-tier-neutrality.md)).
 
-**Status:** first public release `4.0.0` in preparation. The content is at `3.16.3`, which is what `4.0.0` publishes.
+**Status:** current release `4.0.0` (2026-11-21), the first public release. Its content is the vocabulary at `3.16.3`;
+what is new is the consumption contract. Releases from `4.0.0` on are listed in [CHANGELOG.md](CHANGELOG.md) and on the
+repository's Releases page, each with its source archive and `sha256`.
 
 ## What is here
 
@@ -69,4 +71,4 @@ repository at `4.0.0`. The decision records consolidate what was decided in that
 | 3.14.0 – 3.15.0 | 2026-09 | Durable execution; agentic execution explainability |
 | 3.16.0 | 2026-09-24 | Schema formalisation: verbs declared with domain, range and cardinality; `CONCEPT` and `FR` entity types; id and `source` conventions |
 | 3.16.1 – 3.16.3 | 2026-11-21 | Preparation for publication: the base IRI; citations re-pointed to these records; comments scrubbed; three engineering definitions complete the durable-execution obligations |
-| 4.0.0 | pending | First public release: a new location, the licences, minted IRIs and the pinning contract; no term changes |
+| 4.0.0 | 2026-11-21 | First public release: a new location, the licences, minted IRIs and the pinning contract; no term changes |

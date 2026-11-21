@@ -8,7 +8,7 @@
 # licence change; MINOR = additive terms/types/verbs/fields and a term retirement; PATCH = editorial wording,
 # comments, metadata. Every change bumps ontology_version in the same change (ADR 0003); consumers pin a release.
 schema_version: 2
-ontology_version: 3.16.3
+ontology_version: 4.0.0
 
 # ---- id rules -------------------------------------------------------------
 id:

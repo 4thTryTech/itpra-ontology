@@ -1,0 +1,65 @@
+name: release
+
+# A release is a tag vX.Y.Z on master with an immutable release carrying the source archive and its hash (ADR 0003).
+# Pushing the tag runs this: the tag must equal ontology_version, CHANGELOG.md must have the section, the archive is
+# built from the tag, and the release is published with the archive and its sha256. A tag vX.Y.Z-rc.N is a pre-release.
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.ref_name }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: The tag names the version in schema.yaml
+        run: |
+          version="${TAG#v}"
+          base="${version%%-rc.*}"
+          declared="$(sed -n 's/^ontology_version:[[:space:]]*\([0-9][0-9.]*\).*/\1/p' schema.yaml)"
+          if [ "$base" != "$declared" ]; then
+            echo "::error::tag $TAG does not match ontology_version $declared in schema.yaml"; exit 1
+          fi
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+          echo "BASE_VERSION=$base" >> "$GITHUB_ENV"
+      - name: Release notes come from CHANGELOG.md
+        run: python3 tools/release-notes.py "$BASE_VERSION" > notes.md
+      - name: Build the source archive and its hash
+        run: |
+          name="itpra-ontology-$VERSION"
+          git archive --format=tar.gz --prefix="$name/" -o "$name.tar.gz" "$TAG"
+          sha256sum "$name.tar.gz" > "$name.tar.gz.sha256"
+          cat "$name.tar.gz.sha256"
+          {
+            echo
+            echo "## Pinning"
+            echo
+            echo "- Tag \`$TAG\` at commit \`$(git rev-parse "$TAG^{commit}")\`"
+            echo "- Archive \`$name.tar.gz\`, sha256 \`$(cut -d' ' -f1 "$name.tar.gz.sha256")\`"
+            echo "- Verify with \`sha256sum -c $name.tar.gz.sha256\`"
+          } >> notes.md
+          echo "ARCHIVE=$name.tar.gz" >> "$GITHUB_ENV"
+      - name: Publish the release
+        run: |
+          if existing="$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" --jq .immutable 2>/dev/null)"; then
+            if [ "$existing" = "true" ]; then echo "release $TAG already exists and is immutable"; exit 0; fi
+            echo "::error::a mutable release $TAG already exists — delete it, enable immutable releases, re-run"; exit 1
+          fi
+          flags=(--verify-tag --title "ITPRA ontology $VERSION" --notes-file notes.md)
+          case "$VERSION" in *-rc.*) flags+=(--prerelease);; esac
+          gh release create "$TAG" "$ARCHIVE" "$ARCHIVE.sha256" "${flags[@]}"
+      - name: The published release is immutable
+        run: |
+          immutable="$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" --jq .immutable)"
+          echo "immutable: $immutable"
+          if [ "$immutable" != "true" ]; then
+            echo "::error::release $TAG is published but not immutable — enable immutable releases in the repository settings, delete this release and re-run (ADR 0003 §4)"
+            exit 1
+          fi
