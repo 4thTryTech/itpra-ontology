@@ -45,9 +45,9 @@ LinkML artefacts. Everything a *consumer* layers on top is the **overlay**, an o
 | `excluded_dirs` | Directory names the input-path guard refuses at any depth, case-insensitively, beyond the built-in `dist`, `public` and `__pycache__`. |
 
 Without the table, `build` emits `schema` + `t1` + `inferred` only, `validate` loads no requirements
-shapes, `validate --authoring` checks the term files only, and `parity` refuses to run (exit 1). A
-configuration that still carries `requirements_glob` under `[paths]` is read as an overlay with that one
-key.
+shapes, `validate --authoring` checks the term files only, and `parity` compares the ontology's own lint
+rather than a consumer's linter. A configuration that still carries `requirements_glob` under `[paths]` is
+read as an overlay with that one key.
 
 ## Commands
 
@@ -59,10 +59,11 @@ key.
 | `gen-prefixes [--check]` | Regenerates `schema/generated/itpra-prefixes.linkml.yaml` from `[iri]`. Sorted, LF. `--check` as above. |
 | `gen-verb-shapes [--check]` | Regenerates `shapes/generated/verb-pairs.ttl` (rule `B-22`: one SHACL-SPARQL shape per verb, allowing only the (subject class, object class) pairs its `itpra_verb` annotation declares) from `schema/itpra.linkml.yaml`. `shapes/generated/` is owned by this command; never edit it by hand. `--check` as above. |
 | `gen-artifacts [--check]` | Regenerates `<dist_dir>/schema/` (`itpra.schema.json`, `itpra_models.py`, `itpra.owl.nt`, `itpra.shacl.nt`, `doc/`) from the LinkML schema. Two runs are byte-identical. `--check` regenerates into a temporary directory and exits 1 on any difference. |
+| `lint [--root DIR] [--json]` | Lints the vocabulary with the ontology's own rules (`itpra_onto.lint`; the register's `core`-home rows: file shape, required and unknown fields, unique ids and the id pattern, known types and verbs, resolving targets, `derived_from` kept off Functions, the `source:` grammar and resolving decision citations, the two version numbers). Standard library plus PyYAML only, so a consumer's linter imports the same module and runs it first (ADR 0042 D1). Exit 1 on any error; `--json` prints the findings and nothing else. |
 | `validate --authoring [--quiet]` | LinkML-validates every term file (and, with an overlay, every registry) against `schema/itpra.linkml.yaml`, in-process, closed mode. One line per file and a total; exit 0 only if every file passes. `--quiet` prints failing files only. See [`schema/README.md`](schema/README.md). |
 | `validate [--shapes DIR] [--json]` | Emits, applies the rules and SHACL-validates the result against `shapes/` (or `DIR`). One line per finding, sorted, then a summary. Exit 0 only when no `sh:Violation` fired; a `sh:Warning` is advisory. `--json` prints a JSON list of `rule`/`subject`/`severity`/`message` and nothing else on stdout. An input the emitter refuses is reported as an `emit-error` finding (exit 1), never a traceback. |
 | `build [--out DIR] [--no-store] [--check]` | Emits, applies the rules, adds the `provenance` graph, canonicalises and writes `<dist_dir>/rdf/` (or `DIR`), then loads the embedded store unless `--no-store`. `--check` builds into a temporary directory, never touches the store, and exits 1 if `base/` would differ from what is on disk or is missing. |
-| `parity [--json] [--fixtures] [--sub X ...]` | Overlay only. Compares the consumer's linter with the shapes over the comparable rule ids: the real tree by default (`--sub X`, repeatable, restricts the linter side to those registries), or fixture by fixture with `--fixtures` (`--sub` ignored). `--json` prints one object and nothing else. |
+| `parity [--json] [--fixtures] [--sub X ...]` | Compares a linter with the shapes over the comparable rule ids. Without an `[overlay]`: the ontology's own lint over the `core`-home rows (core mode). With one: the consumer's linter (`[overlay] linter_script`) over every comparable row. The real tree by default (`--sub X`, repeatable, restricts the consumer's linter to those registries), or fixture by fixture with `--fixtures` (`--sub` ignored; registry fixtures are skipped in core mode). `--json` prints one object and nothing else. |
 | `release` | Not implemented yet. Exits 1 while `[iri] base` has a `.invalid` host; otherwise prints that it is not implemented and exits 2. |
 
 `python -m itpra_onto.profile` prints the per-verb profile read off the data (type pairs with counts,
@@ -185,27 +186,35 @@ triggers becomes one synthetic `emit-error` finding; such a fixture names its gu
 and sits beside the positive one as `<rule-id>-emit-guard.yaml`. A rule no mutation can reach is proven by
 quad injection in its group's test module.
 
-## Parity (overlay only)
+## Parity
 
-`itpra-onto parity` (`itpra_onto.parity`) compares the consumer's linter (`[overlay] linter_script`,
-`--json`) with the shapes over the same `(rule, subject, severity)` triples (ADR 0042 D5). On conflict the
-rule text wins (ADR 0042 D6).
+`itpra-onto parity` (`itpra_onto.parity`) compares a linter with the shapes over the same `(rule, subject,
+severity)` triples (ADR 0042 D5). On conflict the rule text wins (ADR 0042 D6). Two modes, chosen by the
+configuration: **core mode** without an `[overlay]` — the ontology's own lint (`itpra_onto.lint`, in process)
+over the register's `core`-home comparable rows (`field-missing`, `id-pattern`, `target-unresolved`,
+`function-derived-from`; `type-unknown`, `verb-unknown` and `relates-to-malformed` through the emitter's
+refusals); **overlay mode** with one — the consumer's linter (`[overlay] linter_script`, `--json`, which runs
+the same core first and adds its own rules) over every comparable row. The register's `home` column says which
+rows are the core's.
 
 - **Comparable ids:** Table A rows whose mechanism is `core` or `sparql`, parsed from the register at run
-  time (a parse failure is a `ParityError`). `python` rows are reported as `outside_scope`, never compared;
+  time (a parse failure is a `ParityError`); in core mode only those whose `home` is `core` or `both`, the
+  consumer-home ones joining `outside_scope`. `python` rows are reported as `outside_scope`, never compared;
   Table B rules have no linter analogue and are proven by fixture only.
 - **Emit-time mapping:** ids the emitter refuses before any graph exists (Table A's `generated` rows plus
   `relates-to-malformed` and `req-link-malformed`) reach SHACL only as `emit-error`; `--fixtures` matches
   the linter's finding for the id recovered from the fixture's filename against that marker, by subject.
-- **Real tree:** the linter runs once per registry (`--sub X` restricts) and its findings are unioned and
-  deduplicated (a shared-term defect would otherwise count once per registry); SHACL runs once over the
-  whole dataset; linter findings on EntityType meta-edges are excluded and reported. Exit 0 iff
-  `linter_only` and `shacl_only` are empty and there are no `emit_errors`. `--json` keys: `comparable_rules`,
+- **Real tree:** in overlay mode the consumer's linter runs once per registry (`--sub X` restricts) and its
+  findings are unioned and deduplicated (a shared-term defect would otherwise count once per registry); in
+  core mode the lint runs once over the vocabulary. SHACL runs once over the whole dataset; linter findings
+  on EntityType meta-edges are excluded and reported. Exit 0 iff `linter_only` and `shacl_only` are empty and
+  there are no `emit_errors`. `--json` keys: `mode`, `comparable_rules`,
   `linter`, `shacl`, `linter_only`, `shacl_only`, `stricter_findings`, `outside_scope`, `meta_edge_excluded`,
   `emit_errors`.
-- **`--fixtures`:** every fixture with `expect.count >= 1` is materialised into a temporary tree (the
-  vocabulary, the fixture's registry and a byte-identical copy of the linter script, which locates its
-  repository from its own path) for the linter; the SHACL side stays the in-memory harness. Verdicts: `both`,
+- **`--fixtures`:** every fixture with `expect.count >= 1` is materialised into a temporary tree mirroring
+  the real layout (the vocabulary and, in overlay mode, the fixture's registry and a byte-identical copy of
+  the consumer's linter, which locates its repository from its own path) for the linter side; the SHACL side
+  stays the in-memory harness. Core mode skips the registry fixtures. Verdicts: `both`,
   `shacl-only` (expected for every stricter rule), `linter-only`, `neither`. Exit 0 unless a comparable or
   emit-time-mapped rule verdicts `neither` or `linter-only`; exit 2 is a usage error; a `ParityError` propagates.
 
