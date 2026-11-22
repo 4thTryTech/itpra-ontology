@@ -60,3 +60,6 @@ cites the record that minted or changed it as `ADR NNNN`. From outside this repo
 | 0038 | [Obligations of derived knowledge](0038-obligations-of-derived-knowledge.md) | Accepted | 2026-11-21 |
 | 0039 | [Durable execution](0039-durable-execution.md) | Accepted | 2026-11-21 |
 | 0040 | [Agentic execution explainability](0040-agentic-execution-explainability.md) | Accepted | 2026-11-21 |
+| 0041 | [The RDF projection: the YAML stays authoritative; emitted graphs are derived](0041-the-rdf-projection-roles-modelling-and-derivation.md) | Accepted | 2026-11-22 |
+| 0042 | [Validation parity: one rule register, shapes beside the linter, fixtures, the parity check](0042-validation-parity-register-shapes-fixtures-and-the-parity-check.md) | Accepted | 2026-11-22 |
+| 0043 | [Builds, artefacts and the consumer overlay: the core from the vocabulary alone](0043-builds-artefacts-and-the-consumer-overlay.md) | Accepted | 2026-11-22 |
