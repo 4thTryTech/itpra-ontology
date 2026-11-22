@@ -1,0 +1,16 @@
+# GENERATED FILE - DO NOT EDIT BY HAND.
+# Source:     itpra-onto.toml [iri] (base, id_path, onto_path, graph_path) — the base IRI is a
+#             configuration item, never hard-coded (ADR 0004).
+# Generator:  src/itpra_onto/gen_prefixes.py
+# Regenerate: itpra-onto gen-prefixes
+# Check:      itpra-onto gen-prefixes --check
+default_prefix: itpra-o
+description: 'itpra: / itpra-o: / itpra-g: prefix declarations generated from itpra-onto.toml [iri]. Imported
+  by itpra.linkml.yaml (in memory, via itpra_onto.schema_loading) and by itpra-enums.linkml.yaml. Do not
+  edit by hand.'
+id: https://itpra.4thtry.tech/linkml/itpra-prefixes
+name: itpra-prefixes
+prefixes:
+  itpra: https://itpra.4thtry.tech/id/
+  itpra-g: https://itpra.4thtry.tech/graph/
+  itpra-o: https://itpra.4thtry.tech/onto#

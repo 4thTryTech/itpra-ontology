@@ -1,0 +1,20 @@
+# B-13 (shapes/crossfield.ttl, itpra-o:DecidedInAdrNodeShape) is DEFENCE IN DEPTH against an emitter
+# regression: no authoring-YAML mutation can make the emitter itself produce a malformed decidedIn/
+# amendedBy/extendedBy node, so B-13's genuine firing is proven only by injecting bad quads straight into
+# an emitted dataset, bypassing the emitter (tests/test_shapes_crossfield.py's
+# test_b13_fires_on_injected_malformed_adr_nodes and test_b13_amended_by_without_its_decided_in_twin_is_
+# still_targeted). This is the `count: 0` clean-case half (fixtures.py's grammar): a LEGAL but unpadded
+# `source` value -- "ADR 12" rather than the already-normalised "ADR-0012" -- is exactly the kind of edit
+# a naive author might expect to slip past the strict grammar and reach the graph malformed. It does
+# not: the emitter's `source` grammar zero-pads every bare ADR reference before it ever becomes a
+# `decidedIn` object (`parse_source`), so this mutation reaches the graph as a perfectly well-formed
+# `ADR-0012` node and B-13 stays silent. (The sibling fixture, `B-13-emit-guard.yaml`, covers the OTHER
+# half: a `source` value the grammar rejects outright, at emit time, before any graph exists.)
+rule: B-13
+expect:
+  severity: Violation
+  focus: CAP-FND-1
+  count: 0
+mutate:
+  id: CAP-FND-1
+  set: {source: "ADR 12"}

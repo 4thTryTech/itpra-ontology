@@ -1,0 +1,13 @@
+# CQ13 (part 2) — every distinct rdf:type object used in the inferred graph.
+#
+# test_competency.py checks each is the schema-declared BoundaryGovernedFunction class (carrying an
+# rdfs:comment starting "derived by rule"; see cq-25) — the inferred graph mints no other class.
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT DISTINCT ?type
+WHERE {
+  GRAPH itpra-g:inferred {
+    ?s rdf:type ?type .
+  }
+}

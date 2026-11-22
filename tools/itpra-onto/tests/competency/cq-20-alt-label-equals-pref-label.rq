@@ -1,0 +1,17 @@
+# CQ10 (part 2) — any subject in t1 whose skos:altLabel (an alias) equals its own skos:prefLabel (its
+# `term`), compared CASE-INSENSITIVELY (ADR 0007 is itself case-insensitive on this point; a join on
+# the raw literal value, as an earlier version of this query did, would miss e.g. an alias that differs
+# from the pref label only in case)?
+#
+# Expected to be EMPTY. `skos:` is declared directly here for the same reason as cq-19.
+
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+
+SELECT ?s ?pref ?alt
+WHERE {
+  GRAPH itpra-g:t1 {
+    ?s skos:prefLabel ?pref ;
+       skos:altLabel ?alt .
+    FILTER(LCASE(STR(?pref)) = LCASE(STR(?alt)))
+  }
+}

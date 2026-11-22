@@ -1,0 +1,20 @@
+# Proves itpra-o:InPlaneExactlyOneShape (structural.ttl item 8; Table B B-19, CQ3): the Domain FND loses its
+# grouped_by edge to PLANE-FOUNDATION (its belongs_to_service_domain edge is kept). rules/10-capability-in-
+# plane.rq derives a Capability's inPlane through its Domain's grouped_by Plane, so no inPlane is derived for
+# any FND capability, while inServiceDomain (rules/20, through the Domain's belongs_to_service_domain) still
+# is: exactly one B-19 Violation on CAP-FND-1 (the InPlane arm; the InServiceDomain arm stays satisfied).
+#
+# The defect the mutation introduces on FND itself (a Domain with no grouped_by: B-2) lands on the focus FND,
+# not on CAP-FND-1, so the no-cascade check on CAP-FND-1 holds. Retargeting CAP-FND-1's own grouped_by onto
+# a Persona would instead also be reported by the generated B-22 shape (grouped_by's allowed pairs) on
+# CAP-FND-1 — not a single-rule proof, hence the Domain-side mutation.
+rule: B-19
+expect:
+  severity: Violation
+  focus: CAP-FND-1
+  count: 1
+mutate:
+  id: FND
+  set:
+    relates_to:
+      - {rel: belongs_to_service_domain, target: SD-IT-OPERATIONS}

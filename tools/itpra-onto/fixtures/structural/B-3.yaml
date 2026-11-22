@@ -1,0 +1,15 @@
+# Proves itpra-o:GroupedByMaxCountShape (structural.ttl item 5; Table B B-3): a Domain (FND) with a SECOND
+# grouped_by edge (to PLANE-RESOURCE, alongside its real PLANE-FOUNDATION) raises exactly one Violation of
+# B-3. A Domain, not a Capability, is used deliberately: FND's own inPlane/inServiceDomain are not
+# themselves checked by anything (B-19 targets itpra:CAPABILITY only) — the fan-out effect (every
+# Capability grouped under FND now derives two distinct inPlane values, tripping B-19 on THEIR OWN foci)
+# lands on different subjects than "FND" itself, so it never enters this fixture's same-focus cascade
+# check. append_relates_to keeps FND's original grouped_by/belongs_to_service_domain edges intact.
+rule: B-3
+expect:
+  severity: Violation
+  focus: FND
+  count: 1
+mutate:
+  id: FND
+  append_relates_to: {rel: grouped_by, target: PLANE-RESOURCE}

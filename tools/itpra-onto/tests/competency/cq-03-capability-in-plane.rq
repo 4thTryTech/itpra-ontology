@@ -1,0 +1,11 @@
+# CQ3 (plane half) — every Capability's itpra-o:inPlane edge, one row per (capability, plane).
+#
+# test_competency.py groups these rows by capability to check the cardinality is exactly one per
+# capability, and by plane to report the plane distribution table.
+
+SELECT ?cap ?plane
+WHERE {
+  GRAPH itpra-g:inferred {
+    ?cap itpra-o:inPlane ?plane .
+  }
+}

@@ -1,0 +1,24 @@
+# Proves the generated B-22 shape for grouped_by (shapes/generated/verb-pairs.ttl,
+# itpra-o:VerbPairsGroupedByShape): JRN-adm-onboard-developer's grouped_by
+# edge is retargeted from JG-ONBOARDING (a JourneyGroup — the allowed pair (Journey, JourneyGroup)) onto
+# PERSONA-adm-app-team (a real, resolved Persona record). grouped_by's itpra_verb pairs are (Capability,
+# Domain), (Domain, Plane), (Journey, JourneyGroup); (Journey, Persona) is not among them -> one Violation.
+#
+# A clean single-rule proof: the target resolves, so target-unresolved is silent; the Journey still carries
+# exactly one grouped_by, so B-2/B-3 are silent; B-19 (the inferred inPlane/inServiceDomain roll-up) targets
+# Capabilities only, and no rule derives anything from a Journey's grouped_by, so nothing cascades. Every
+# other edge is kept as authored. The linter has no domain/range check at all (verdict: shacl-only).
+rule: B-22
+expect:
+  severity: Violation
+  focus: JRN-adm-onboard-developer
+  count: 1
+mutate:
+  id: JRN-adm-onboard-developer
+  set:
+    relates_to:
+      - {rel: grouped_by, target: PERSONA-adm-app-team}
+      - {rel: consumed_by, target: PERSONA-adm-app-team}
+      - {rel: depends_on, target: CAP-ADM-DEX-1}
+      - {rel: depends_on, target: CAP-ADM-DEX-2}
+      - {rel: depends_on, target: CAP-ADM-DEX-3}

@@ -1,0 +1,14 @@
+# CQ13 (part 1) — every distinct predicate used in the inferred graph, other than rdf:type.
+#
+# test_competency.py checks each is one of the four schema-declared roll-up/reverse-link properties
+# (each carrying an rdfs:comment starting "derived by rule"; see cq-25).
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT DISTINCT ?p
+WHERE {
+  GRAPH itpra-g:inferred {
+    ?s ?p ?o .
+  }
+  FILTER(?p != rdf:type)
+}

@@ -1,0 +1,9 @@
+terms:
+  - id: "1-BAD-ID"
+    term: Invalid Id Fixture
+    type: Capability
+    definition: A fixture record whose id violates the Term.id pattern (must start with a letter), for itpra-onto's smoke tests only.
+  - id: FUNC-TEST-1
+    term: Test Function One
+    type: Function
+    definition: A second fixture record for itpra-onto's smoke tests only.

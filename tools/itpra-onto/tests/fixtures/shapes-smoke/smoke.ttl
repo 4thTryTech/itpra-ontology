@@ -1,0 +1,41 @@
+# Smoke shapes for tests/test_shacl.py. NOT under shapes/ -- not part of the real shape files; two tiny,
+# self-contained shapes proving the harness itself works, independent of structural/crossfield/requirements.
+#
+# No @prefix declarations here (itpra_onto.shacl.load_shapes prepends the standard block at load time --
+# see that module's docstring): itpra:/itpra-o:/itpra-g: plus sh:/rdf:/rdfs:/skos:/owl:/xsd:/dcterms:/prov:
+# are all already bound by the time this file is parsed.
+
+# (a) SHACL Core: every itpra:CAPABILITY has >=1 skos:prefLabel (the `term` field; field-missing's shape).
+# A single named PropertyShape -- no `sh:property [...]` blank-node wrapper -- so sh:sourceShape resolves
+# straight to this node, where itpra-o:ruleId lives (see shacl.py's module docstring).
+itpra-o:SmokeCapabilityHasLabelShape
+    a sh:PropertyShape ;
+    sh:targetClass itpra:CAPABILITY ;
+    sh:path skos:prefLabel ;
+    sh:minCount 1 ;
+    sh:severity sh:Violation ;
+    itpra-o:ruleId "smoke-capability-has-label" .
+
+# (b) SHACL-SPARQL: no subject's skos:altLabel equals its own skos:prefLabel, case-insensitively (the real
+# B-8 rule's exact shape, proving the sh:sparql/$this path the crossfield shape file relies on).
+# sh:prefixes points at itpra-o:shapesPrefixes, the synthetic owl:Ontology node itpra_onto.shacl injects at
+# load time (never written to this file) -- see shacl.py's module docstring for why ANY value here is
+# enough to pull in every one of that node's sh:declare prefixes.
+itpra-o:SmokeAltLabelSelfCollisionShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf skos:prefLabel ;
+    sh:severity sh:Violation ;
+    itpra-o:ruleId "smoke-alt-label-self-collision" ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "alt label collides with prefLabel, case-insensitively" ;
+        sh:prefixes itpra-o:shapesPrefixes ;
+        sh:select """
+            SELECT $this
+            WHERE {
+                $this skos:prefLabel ?pref .
+                $this skos:altLabel ?alt .
+                FILTER(LCASE(STR(?pref)) = LCASE(STR(?alt)))
+            }
+        """ ;
+    ] .

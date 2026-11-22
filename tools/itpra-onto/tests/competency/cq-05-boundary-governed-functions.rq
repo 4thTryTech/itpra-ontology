@@ -1,0 +1,11 @@
+# CQ4 — the boundary-governed function set materialised by the rules (itpra-o:BoundaryGovernedFunction).
+#
+# test_competency.py compares this set against the consumer's linter's own `_boundary_governed_functions`
+# helper (imported by path, as test_rules.py already does), not just its size.
+
+SELECT ?func
+WHERE {
+  GRAPH itpra-g:inferred {
+    ?func a itpra-o:BoundaryGovernedFunction .
+  }
+}

@@ -1,0 +1,37 @@
+[project]
+name = "itpra-onto"
+version = "0.1.0"
+description = "The ITPRA ontology-as-code pipeline: YAML -> LinkML authoring schema -> RDF in named graphs -> SPARQL rules -> SHACL -> Oxigraph -> canonical artefacts"
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    "pyyaml==6.0.3",
+    "rdflib==7.6.0",
+    "pyoxigraph==0.5.11",
+    "pyshacl[oxigraph]==0.40.1",
+    "linkml==1.11.1",
+    "linkml-runtime==1.11.1",
+]
+
+[project.scripts]
+itpra-onto = "itpra_onto.cli:main"
+
+[dependency-groups]
+dev = [
+    "pytest==9.1.1",
+]
+
+[build-system]
+requires = ["hatchling==1.32.4"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/itpra_onto"]
+
+[tool.pytest.ini_options]
+# rdflib 7.6.0 deprecation warnings raised from inside pySHACL's own rdflib usage (Dataset.identifier /
+# default_context); not this package's code. Everything else stays visible.
+filterwarnings = [
+    "ignore:Dataset.identifier is deprecated:DeprecationWarning:rdflib",
+    "ignore:Dataset.default_context is deprecated:DeprecationWarning:rdflib",
+]

@@ -1,0 +1,18 @@
+# Proves itpra-o:GroupedByMinCountShape (structural.ttl item 5; Table B B-2): a Domain (SUB) with zero
+# grouped_by edges raises exactly one Violation of B-2. `set` (a full relates_to replacement), not
+# `delete: [relates_to]`, keeps belongs_to_service_domain intact at count 1 — deleting the whole list would
+# ALSO drop belongs_to_service_domain to 0, cascading into B-3-belongs-to-service-domain on the SAME focus
+# (a second Violation-severity rule id on SUB, which assert_fixture's no-cascade check would reject). A
+# Journey/Capability was deliberately NOT used here: removing a Capability's own grouped_by additionally
+# zeroes its derived inPlane/inServiceDomain (rules/10-.../20-...), cascading into B-19 on the same focus;
+# a Domain carries no such derived roll-up onto itself, so it is the clean choice.
+rule: B-2
+expect:
+  severity: Violation
+  focus: SUB
+  count: 1
+mutate:
+  id: SUB
+  set:
+    relates_to:
+      - {rel: belongs_to_service_domain, target: SD-IT-OPERATIONS}

@@ -1,0 +1,519 @@
+# GENERATED FILE - DO NOT EDIT BY HAND.
+# Source:     schema/itpra.linkml.yaml - the `itpra_verb` annotation of every slot in the `verbs` subset;
+#             `pairs` = the ALLOWED (subject, object) combinations (ADR 0041 D1, ADR 0042 D2).
+# Generator:  src/itpra_onto/gen_verb_shapes.py
+# Regenerate: itpra-onto gen-verb-shapes
+# Check:      itpra-onto gen-verb-shapes --check
+#
+# Rule B-22 (shapes/REGISTER.md Table B): an edge whose object is a resolved record, and whose (subject
+# class, object class) is not among the verb's allowed pairs, is a Violation. Dangling objects are left to
+# target-unresolved / req-target-unresolved. No @prefix block and no base IRI: itpra_onto.shacl.load_shapes
+# prepends both at load time, as for the hand-written shapes/*.ttl files.
+
+# applies_to (evidence: data; predicate itpra-o:appliesTo); allowed pairs: (Capability, Concept), (Concept, Capability), (Concept, Concept), (Concept, EntityType), (Function, Concept)
+itpra-o:VerbPairsAppliesToShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf itpra-o:appliesTo ;
+    sh:severity sh:Violation ;
+    itpra-o:ruleId "B-22" ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "B-22: applies_to edge {$this} -> {?value}: subject class {?subjectClass} with object class {?objectClass} is not an allowed pair for applies_to (itpra_verb pairs: (Capability, Concept), (Concept, Capability), (Concept, Concept), (Concept, EntityType), (Function, Concept))" ;
+        sh:prefixes itpra-o:shapesPrefixes ;
+        sh:select """
+            SELECT DISTINCT $this ?value ?subjectClass ?objectClass
+            WHERE {
+                $this itpra-o:appliesTo ?value .
+                $this rdf:type ?subjectClass .
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                ?value rdf:type ?objectClass .
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER NOT EXISTS {
+                    $this rdf:type ?s .
+                    ?value rdf:type ?o .
+                    FILTER(
+                        (?s = itpra:CAPABILITY && ?o = itpra:CONCEPT) ||
+                        (?s = itpra:CONCEPT && ?o = itpra:CAPABILITY) ||
+                        (?s = itpra:CONCEPT && ?o = itpra:CONCEPT) ||
+                        (?s = itpra:CONCEPT && ?o = itpra-o:EntityType) ||
+                        (?s = itpra:FUNCTION && ?o = itpra:CONCEPT)
+                    )
+                }
+            }
+        """ ;
+    ] .
+
+# belongs_to_service_domain (evidence: data; predicate itpra-o:belongsToServiceDomain); allowed pairs: (Concept, ServiceDomain), (Domain, ServiceDomain)
+itpra-o:VerbPairsBelongsToServiceDomainShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf itpra-o:belongsToServiceDomain ;
+    sh:severity sh:Violation ;
+    itpra-o:ruleId "B-22" ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "B-22: belongs_to_service_domain edge {$this} -> {?value}: subject class {?subjectClass} with object class {?objectClass} is not an allowed pair for belongs_to_service_domain (itpra_verb pairs: (Concept, ServiceDomain), (Domain, ServiceDomain))" ;
+        sh:prefixes itpra-o:shapesPrefixes ;
+        sh:select """
+            SELECT DISTINCT $this ?value ?subjectClass ?objectClass
+            WHERE {
+                $this itpra-o:belongsToServiceDomain ?value .
+                $this rdf:type ?subjectClass .
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                ?value rdf:type ?objectClass .
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER NOT EXISTS {
+                    $this rdf:type ?s .
+                    ?value rdf:type ?o .
+                    FILTER(
+                        (?s = itpra:CONCEPT && ?o = itpra:SERVICE_DOMAIN) ||
+                        (?s = itpra:DOMAIN && ?o = itpra:SERVICE_DOMAIN)
+                    )
+                }
+            }
+        """ ;
+    ] .
+
+# categorized_as (evidence: data; predicate itpra-o:categorizedAs); allowed pairs: (NFR, QualityAttribute)
+itpra-o:VerbPairsCategorizedAsShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf itpra-o:categorizedAs ;
+    sh:severity sh:Violation ;
+    itpra-o:ruleId "B-22" ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "B-22: categorized_as edge {$this} -> {?value}: subject class {?subjectClass} with object class {?objectClass} is not an allowed pair for categorized_as (itpra_verb pairs: (NFR, QualityAttribute))" ;
+        sh:prefixes itpra-o:shapesPrefixes ;
+        sh:select """
+            SELECT DISTINCT $this ?value ?subjectClass ?objectClass
+            WHERE {
+                $this itpra-o:categorizedAs ?value .
+                $this rdf:type ?subjectClass .
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                ?value rdf:type ?objectClass .
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER NOT EXISTS {
+                    $this rdf:type ?s .
+                    ?value rdf:type ?o .
+                    FILTER(
+                        (?s = itpra:NFR && ?o = itpra:QUALITY_ATTRIBUTE)
+                    )
+                }
+            }
+        """ ;
+    ] .
+
+# consumed_by (evidence: data; predicate itpra-o:consumedBy); allowed pairs: (Capability, Persona), (Journey, Persona)
+itpra-o:VerbPairsConsumedByShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf itpra-o:consumedBy ;
+    sh:severity sh:Violation ;
+    itpra-o:ruleId "B-22" ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "B-22: consumed_by edge {$this} -> {?value}: subject class {?subjectClass} with object class {?objectClass} is not an allowed pair for consumed_by (itpra_verb pairs: (Capability, Persona), (Journey, Persona))" ;
+        sh:prefixes itpra-o:shapesPrefixes ;
+        sh:select """
+            SELECT DISTINCT $this ?value ?subjectClass ?objectClass
+            WHERE {
+                $this itpra-o:consumedBy ?value .
+                $this rdf:type ?subjectClass .
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                ?value rdf:type ?objectClass .
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER NOT EXISTS {
+                    $this rdf:type ?s .
+                    ?value rdf:type ?o .
+                    FILTER(
+                        (?s = itpra:CAPABILITY && ?o = itpra:PERSONA) ||
+                        (?s = itpra:JOURNEY && ?o = itpra:PERSONA)
+                    )
+                }
+            }
+        """ ;
+    ] .
+
+# decomposes_into (evidence: meta-only; predicate itpra-o:decomposesInto); allowed pairs: (Capability, Capability)
+itpra-o:VerbPairsDecomposesIntoShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf itpra-o:decomposesInto ;
+    sh:severity sh:Violation ;
+    itpra-o:ruleId "B-22" ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "B-22: decomposes_into edge {$this} -> {?value}: subject class {?subjectClass} with object class {?objectClass} is not an allowed pair for decomposes_into (itpra_verb pairs: (Capability, Capability))" ;
+        sh:prefixes itpra-o:shapesPrefixes ;
+        sh:select """
+            SELECT DISTINCT $this ?value ?subjectClass ?objectClass
+            WHERE {
+                $this itpra-o:decomposesInto ?value .
+                $this rdf:type ?subjectClass .
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                ?value rdf:type ?objectClass .
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER NOT EXISTS {
+                    $this rdf:type ?s .
+                    ?value rdf:type ?o .
+                    FILTER(
+                        (?s = itpra:CAPABILITY && ?o = itpra:CAPABILITY)
+                    )
+                }
+            }
+        """ ;
+    ] .
+
+# depends_on (evidence: data; predicate itpra-o:dependsOn); allowed pairs: (Capability, Capability), (Concept, Concept), (Concept, Function), (Function, Function), (Journey, Capability)
+itpra-o:VerbPairsDependsOnShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf itpra-o:dependsOn ;
+    sh:severity sh:Violation ;
+    itpra-o:ruleId "B-22" ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "B-22: depends_on edge {$this} -> {?value}: subject class {?subjectClass} with object class {?objectClass} is not an allowed pair for depends_on (itpra_verb pairs: (Capability, Capability), (Concept, Concept), (Concept, Function), (Function, Function), (Journey, Capability))" ;
+        sh:prefixes itpra-o:shapesPrefixes ;
+        sh:select """
+            SELECT DISTINCT $this ?value ?subjectClass ?objectClass
+            WHERE {
+                $this itpra-o:dependsOn ?value .
+                $this rdf:type ?subjectClass .
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                ?value rdf:type ?objectClass .
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER NOT EXISTS {
+                    $this rdf:type ?s .
+                    ?value rdf:type ?o .
+                    FILTER(
+                        (?s = itpra:CAPABILITY && ?o = itpra:CAPABILITY) ||
+                        (?s = itpra:CONCEPT && ?o = itpra:CONCEPT) ||
+                        (?s = itpra:CONCEPT && ?o = itpra:FUNCTION) ||
+                        (?s = itpra:FUNCTION && ?o = itpra:FUNCTION) ||
+                        (?s = itpra:JOURNEY && ?o = itpra:CAPABILITY)
+                    )
+                }
+            }
+        """ ;
+    ] .
+
+# derived_from (evidence: definition; predicate itpra-o:derivedFrom); allowed pairs: (Capability, Capability)
+itpra-o:VerbPairsDerivedFromShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf itpra-o:derivedFrom ;
+    sh:severity sh:Violation ;
+    itpra-o:ruleId "B-22" ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "B-22: derived_from edge {$this} -> {?value}: subject class {?subjectClass} with object class {?objectClass} is not an allowed pair for derived_from (itpra_verb pairs: (Capability, Capability))" ;
+        sh:prefixes itpra-o:shapesPrefixes ;
+        sh:select """
+            SELECT DISTINCT $this ?value ?subjectClass ?objectClass
+            WHERE {
+                $this itpra-o:derivedFrom ?value .
+                $this rdf:type ?subjectClass .
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                ?value rdf:type ?objectClass .
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER NOT EXISTS {
+                    $this rdf:type ?s .
+                    ?value rdf:type ?o .
+                    FILTER(
+                        (?s = itpra:CAPABILITY && ?o = itpra:CAPABILITY)
+                    )
+                }
+            }
+        """ ;
+    ] .
+
+# governs (evidence: data; predicate itpra-o:governs); allowed pairs: (Concept, Concept), (Concept, Function)
+itpra-o:VerbPairsGovernsShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf itpra-o:governs ;
+    sh:severity sh:Violation ;
+    itpra-o:ruleId "B-22" ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "B-22: governs edge {$this} -> {?value}: subject class {?subjectClass} with object class {?objectClass} is not an allowed pair for governs (itpra_verb pairs: (Concept, Concept), (Concept, Function))" ;
+        sh:prefixes itpra-o:shapesPrefixes ;
+        sh:select """
+            SELECT DISTINCT $this ?value ?subjectClass ?objectClass
+            WHERE {
+                $this itpra-o:governs ?value .
+                $this rdf:type ?subjectClass .
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                ?value rdf:type ?objectClass .
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER NOT EXISTS {
+                    $this rdf:type ?s .
+                    ?value rdf:type ?o .
+                    FILTER(
+                        (?s = itpra:CONCEPT && ?o = itpra:CONCEPT) ||
+                        (?s = itpra:CONCEPT && ?o = itpra:FUNCTION)
+                    )
+                }
+            }
+        """ ;
+    ] .
+
+# grouped_by (evidence: data; predicate itpra-o:groupedBy); allowed pairs: (Capability, Domain), (Domain, Plane), (Journey, JourneyGroup)
+itpra-o:VerbPairsGroupedByShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf itpra-o:groupedBy ;
+    sh:severity sh:Violation ;
+    itpra-o:ruleId "B-22" ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "B-22: grouped_by edge {$this} -> {?value}: subject class {?subjectClass} with object class {?objectClass} is not an allowed pair for grouped_by (itpra_verb pairs: (Capability, Domain), (Domain, Plane), (Journey, JourneyGroup))" ;
+        sh:prefixes itpra-o:shapesPrefixes ;
+        sh:select """
+            SELECT DISTINCT $this ?value ?subjectClass ?objectClass
+            WHERE {
+                $this itpra-o:groupedBy ?value .
+                $this rdf:type ?subjectClass .
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                ?value rdf:type ?objectClass .
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER NOT EXISTS {
+                    $this rdf:type ?s .
+                    ?value rdf:type ?o .
+                    FILTER(
+                        (?s = itpra:CAPABILITY && ?o = itpra:DOMAIN) ||
+                        (?s = itpra:DOMAIN && ?o = itpra:PLANE) ||
+                        (?s = itpra:JOURNEY && ?o = itpra:JOURNEY_GROUP)
+                    )
+                }
+            }
+        """ ;
+    ] .
+
+# interfaces_with (evidence: data; predicate itpra-o:interfacesWith); allowed pairs: (ServiceDomain, Plane)
+itpra-o:VerbPairsInterfacesWithShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf itpra-o:interfacesWith ;
+    sh:severity sh:Violation ;
+    itpra-o:ruleId "B-22" ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "B-22: interfaces_with edge {$this} -> {?value}: subject class {?subjectClass} with object class {?objectClass} is not an allowed pair for interfaces_with (itpra_verb pairs: (ServiceDomain, Plane))" ;
+        sh:prefixes itpra-o:shapesPrefixes ;
+        sh:select """
+            SELECT DISTINCT $this ?value ?subjectClass ?objectClass
+            WHERE {
+                $this itpra-o:interfacesWith ?value .
+                $this rdf:type ?subjectClass .
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                ?value rdf:type ?objectClass .
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER NOT EXISTS {
+                    $this rdf:type ?s .
+                    ?value rdf:type ?o .
+                    FILTER(
+                        (?s = itpra:SERVICE_DOMAIN && ?o = itpra:PLANE)
+                    )
+                }
+            }
+        """ ;
+    ] .
+
+# met_by (evidence: data; predicate itpra-o:metBy); allowed pairs: (FR, Capability), (NFR, Capability)
+itpra-o:VerbPairsMetByShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf itpra-o:metBy ;
+    sh:severity sh:Violation ;
+    itpra-o:ruleId "B-22" ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "B-22: met_by edge {$this} -> {?value}: subject class {?subjectClass} with object class {?objectClass} is not an allowed pair for met_by (itpra_verb pairs: (FR, Capability), (NFR, Capability))" ;
+        sh:prefixes itpra-o:shapesPrefixes ;
+        sh:select """
+            SELECT DISTINCT $this ?value ?subjectClass ?objectClass
+            WHERE {
+                $this itpra-o:metBy ?value .
+                $this rdf:type ?subjectClass .
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                ?value rdf:type ?objectClass .
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER NOT EXISTS {
+                    $this rdf:type ?s .
+                    ?value rdf:type ?o .
+                    FILTER(
+                        (?s = itpra:FR && ?o = itpra:CAPABILITY) ||
+                        (?s = itpra:NFR && ?o = itpra:CAPABILITY)
+                    )
+                }
+            }
+        """ ;
+    ] .
+
+# owns (evidence: meta-only; predicate itpra-o:owns); allowed pairs: (Persona, Capability)
+itpra-o:VerbPairsOwnsShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf itpra-o:owns ;
+    sh:severity sh:Violation ;
+    itpra-o:ruleId "B-22" ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "B-22: owns edge {$this} -> {?value}: subject class {?subjectClass} with object class {?objectClass} is not an allowed pair for owns (itpra_verb pairs: (Persona, Capability))" ;
+        sh:prefixes itpra-o:shapesPrefixes ;
+        sh:select """
+            SELECT DISTINCT $this ?value ?subjectClass ?objectClass
+            WHERE {
+                $this itpra-o:owns ?value .
+                $this rdf:type ?subjectClass .
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                ?value rdf:type ?objectClass .
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER NOT EXISTS {
+                    $this rdf:type ?s .
+                    ?value rdf:type ?o .
+                    FILTER(
+                        (?s = itpra:PERSONA && ?o = itpra:CAPABILITY)
+                    )
+                }
+            }
+        """ ;
+    ] .
+
+# produces (evidence: meta-only; predicate itpra-o:produces); allowed pairs: none; unresolvable (no record class): (SERVICE, Capability)
+itpra-o:VerbPairsProducesShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf itpra-o:produces ;
+    sh:severity sh:Violation ;
+    itpra-o:ruleId "B-22" ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "B-22: produces edge {$this} -> {?value}: subject class {?subjectClass} with object class {?objectClass} is not an allowed pair for produces (itpra_verb pairs: none)" ;
+        sh:prefixes itpra-o:shapesPrefixes ;
+        sh:select """
+            SELECT DISTINCT $this ?value ?subjectClass ?objectClass
+            WHERE {
+                $this itpra-o:produces ?value .
+                $this rdf:type ?subjectClass .
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                ?value rdf:type ?objectClass .
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER NOT EXISTS {
+                    $this rdf:type ?s .
+                    ?value rdf:type ?o .
+                    FILTER(
+                        false
+                    )
+                }
+            }
+        """ ;
+    ] .
+
+# realized_in (evidence: data; predicate itpra-o:realizedIn); allowed pairs: (Workflow, Journey)
+itpra-o:VerbPairsRealizedInShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf itpra-o:realizedIn ;
+    sh:severity sh:Violation ;
+    itpra-o:ruleId "B-22" ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "B-22: realized_in edge {$this} -> {?value}: subject class {?subjectClass} with object class {?objectClass} is not an allowed pair for realized_in (itpra_verb pairs: (Workflow, Journey))" ;
+        sh:prefixes itpra-o:shapesPrefixes ;
+        sh:select """
+            SELECT DISTINCT $this ?value ?subjectClass ?objectClass
+            WHERE {
+                $this itpra-o:realizedIn ?value .
+                $this rdf:type ?subjectClass .
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                ?value rdf:type ?objectClass .
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER NOT EXISTS {
+                    $this rdf:type ?s .
+                    ?value rdf:type ?o .
+                    FILTER(
+                        (?s = itpra:WORKFLOW && ?o = itpra:JOURNEY)
+                    )
+                }
+            }
+        """ ;
+    ] .
+
+# supersedes (evidence: meta-only; predicate itpra-o:supersedes); allowed pairs: none; unresolvable (no record class): (ADR, ADR)
+itpra-o:VerbPairsSupersedesShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf itpra-o:supersedes ;
+    sh:severity sh:Violation ;
+    itpra-o:ruleId "B-22" ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "B-22: supersedes edge {$this} -> {?value}: subject class {?subjectClass} with object class {?objectClass} is not an allowed pair for supersedes (itpra_verb pairs: none)" ;
+        sh:prefixes itpra-o:shapesPrefixes ;
+        sh:select """
+            SELECT DISTINCT $this ?value ?subjectClass ?objectClass
+            WHERE {
+                $this itpra-o:supersedes ?value .
+                $this rdf:type ?subjectClass .
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                ?value rdf:type ?objectClass .
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER NOT EXISTS {
+                    $this rdf:type ?s .
+                    ?value rdf:type ?o .
+                    FILTER(
+                        false
+                    )
+                }
+            }
+        """ ;
+    ] .
+
+# supports (evidence: data; predicate itpra-o:supports); allowed pairs: (Function, Capability)
+itpra-o:VerbPairsSupportsShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf itpra-o:supports ;
+    sh:severity sh:Violation ;
+    itpra-o:ruleId "B-22" ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "B-22: supports edge {$this} -> {?value}: subject class {?subjectClass} with object class {?objectClass} is not an allowed pair for supports (itpra_verb pairs: (Function, Capability))" ;
+        sh:prefixes itpra-o:shapesPrefixes ;
+        sh:select """
+            SELECT DISTINCT $this ?value ?subjectClass ?objectClass
+            WHERE {
+                $this itpra-o:supports ?value .
+                $this rdf:type ?subjectClass .
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                ?value rdf:type ?objectClass .
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER NOT EXISTS {
+                    $this rdf:type ?s .
+                    ?value rdf:type ?o .
+                    FILTER(
+                        (?s = itpra:FUNCTION && ?o = itpra:CAPABILITY)
+                    )
+                }
+            }
+        """ ;
+    ] .
+
+# verified_by (evidence: data; predicate itpra-o:verifiedBy); allowed pairs: (FR, Journey), (NFR, Journey)
+itpra-o:VerbPairsVerifiedByShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf itpra-o:verifiedBy ;
+    sh:severity sh:Violation ;
+    itpra-o:ruleId "B-22" ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "B-22: verified_by edge {$this} -> {?value}: subject class {?subjectClass} with object class {?objectClass} is not an allowed pair for verified_by (itpra_verb pairs: (FR, Journey), (NFR, Journey))" ;
+        sh:prefixes itpra-o:shapesPrefixes ;
+        sh:select """
+            SELECT DISTINCT $this ?value ?subjectClass ?objectClass
+            WHERE {
+                $this itpra-o:verifiedBy ?value .
+                $this rdf:type ?subjectClass .
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                ?value rdf:type ?objectClass .
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER NOT EXISTS {
+                    $this rdf:type ?s .
+                    ?value rdf:type ?o .
+                    FILTER(
+                        (?s = itpra:FR && ?o = itpra:JOURNEY) ||
+                        (?s = itpra:NFR && ?o = itpra:JOURNEY)
+                    )
+                }
+            }
+        """ ;
+    ] .

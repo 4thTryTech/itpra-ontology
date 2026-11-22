@@ -1,0 +1,11 @@
+# CQ9 (part 3) — journeys with no `consumedBy` edge to any persona.
+#
+# Expected to be EMPTY: every Journey must be consumed by at least one Persona.
+
+SELECT ?journey
+WHERE {
+  GRAPH itpra-g:t1 {
+    ?journey a itpra:JOURNEY .
+    FILTER NOT EXISTS { ?journey itpra-o:consumedBy ?persona }
+  }
+}

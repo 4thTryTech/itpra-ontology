@@ -1,0 +1,23 @@
+# Proves itpra-o:InDomainMinCountShape (structural.ttl item 8; Table B B-18, CQ2): the derived itpra-o:
+# inDomain edge (rules/30-function-in-domain.rq: Function -supports-> Capability -groupedBy-> Domain) is
+# entirely derived, so this fixture mutates the CAUSE, not the Function itself. FUNC-adm-application-
+# inventory supports exactly one Capability, CAP-ADM-APM-1; deleting CAP-ADM-APM-1's own relates_to (so it
+# no longer resolves any grouped_by Domain) makes the Function's inDomain rollup empty.
+#
+# This DOES also fire B-2 (groupedBy min1) and B-19 (inPlane/inServiceDomain exactly 1) — but both land on
+# CAP-ADM-APM-1's own focus, a different subject than FUNC-adm-application-inventory (this fixture's
+# expect.focus), so assert_fixture's cascade check (same-focus only) does not see them. A second Function,
+# FUNC-adm-capability-mapping, ALSO supports only CAP-ADM-APM-1 and so also derives zero inDomain — that
+# raises B-18 on ITS OWN focus too, again a different subject, again outside this fixture's scope.
+# No mutation on the Function's own record could isolate B-18 from B-2-supports (see B-2-supports' own
+# note in structural.ttl): zero supports always implies zero inDomain for the SAME
+# subject. Mutating the capability instead of the function is exactly what avoids that unavoidable
+# same-focus coupling.
+rule: B-18
+expect:
+  severity: Violation
+  focus: FUNC-adm-application-inventory
+  count: 1
+mutate:
+  id: CAP-ADM-APM-1
+  delete: [relates_to]

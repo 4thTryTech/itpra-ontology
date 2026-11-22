@@ -1,0 +1,23 @@
+# Rule 30 — function-in-domain.
+#
+# Every Function `supports` one or more Capabilities, and every Capability is `groupedBy` exactly one
+# Domain. This rule derives `itpra-o:inDomain` for the function from each capability it supports; a
+# function supporting capabilities in more than one domain gets one `inDomain` triple per distinct
+# domain (SPARQL CONSTRUCT already deduplicates repeated solutions onto the same triple).
+# Reads the asserted `t1` graph only.
+#
+# The PREFIX block (itpra:, itpra-o:, itpra-g:) is prepended at run time from `itpra-onto.toml`
+# `[iri]` (ADR 0004) — this file names no base IRI and declares no PREFIX itself.
+
+CONSTRUCT {
+  ?func itpra-o:inDomain ?domain .
+}
+WHERE {
+  GRAPH itpra-g:t1 {
+    ?func a itpra:FUNCTION ;
+          itpra-o:supports ?cap .
+    ?cap a itpra:CAPABILITY ;
+         itpra-o:groupedBy ?domain .
+    ?domain a itpra:DOMAIN .
+  }
+}

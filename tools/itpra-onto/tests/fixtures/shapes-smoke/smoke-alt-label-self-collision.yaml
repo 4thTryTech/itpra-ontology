@@ -1,0 +1,17 @@
+# Proves the SHACL-SPARQL (sh:sparql / $this) path against smoke.ttl's shape (b), independent of any real
+# corpus content: a brand-new synthetic Capability record whose skos:altLabel matches its own skos:prefLabel
+# case-insensitively must raise exactly one Violation, on itself.
+rule: smoke-alt-label-self-collision
+expect:
+  severity: Violation
+  focus: CAP-FIXTURE-ALT-COLLIDE
+  count: 1
+add:
+  file: terms
+  record:
+    id: CAP-FIXTURE-ALT-COLLIDE
+    type: Capability
+    term: Fixture Alt Collision
+    definition: A synthetic record that exists only to prove the smoke-alt-label-self-collision shape fires.
+    aliases: [fixture alt collision]
+    relates_to: []

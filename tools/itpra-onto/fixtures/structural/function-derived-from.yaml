@@ -1,0 +1,17 @@
+# Proves itpra-o:FunctionDerivedFromShape (structural.ttl item 4; ADR 0011): appending ANY derived_from
+# edge to a real Function raises exactly one Violation, regardless of the target's own validity.
+# FUNC-adm-lifecycle-state-tracking's own `supports` edge is untouched, so B-2-supports/B-18 are unaffected.
+#
+# cofires B-22, by construction: derived_from's itpra_verb pairs allow only (Capability,
+# Capability), so a Function's derived_from edge is ALSO outside the verb's allowed pairs — the one defect
+# that two stated rules both describe (function-derived-from = the verb's `cardinality` {Function, max 0};
+# B-22 = its `pairs`). No mutation can fire function-derived-from without B-22 on the same focus.
+rule: function-derived-from
+expect:
+  severity: Violation
+  focus: FUNC-adm-lifecycle-state-tracking
+  count: 1
+  cofires: [B-22]
+mutate:
+  id: FUNC-adm-lifecycle-state-tracking
+  append_relates_to: {rel: derived_from, target: CAP-FND-1}

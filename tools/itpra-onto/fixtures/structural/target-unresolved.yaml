@@ -1,0 +1,13 @@
+# Proves the TargetUnresolved*Shape family (structural.ttl item 3): appending a `supports` edge to a
+# non-existent target on a real Function raises exactly one Violation of target-unresolved, on that same
+# Function. FUNC-adm-roadmap-management already carries one valid `supports` edge (to CAP-ADM-APM-2, kept
+# intact), so this does not also trip B-2-supports (supports count is now 2, still >=1) or B-18 (the
+# function's real, valid supports edge still resolves its inDomain rollup).
+rule: target-unresolved
+expect:
+  severity: Violation
+  focus: FUNC-adm-roadmap-management
+  count: 1
+mutate:
+  id: FUNC-adm-roadmap-management
+  append_relates_to: {rel: supports, target: NOPE-1}

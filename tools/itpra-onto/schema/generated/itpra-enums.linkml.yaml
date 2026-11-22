@@ -1,0 +1,54 @@
+# GENERATED FILE - DO NOT EDIT BY HAND.
+# Source:     schema.yaml of the vocabulary (its `types:` and `relationships:` lists stay authored there;
+#             these LinkML enums are derived from them — ADR 0041 D5) and itpra-onto.toml [iri] (this
+#             module's `id:`; ADR 0004).
+# Generator:  src/itpra_onto/gen_enums.py
+# Regenerate: itpra-onto gen-enums
+# Check:      itpra-onto gen-enums --check
+default_prefix: itpra-o
+description: Enums generated from the vocabulary's schema.yaml (types, relationships). Imported by itpra.linkml.yaml.
+  Do not edit by hand.
+enums:
+  EntityTypeEnum:
+    description: Allowed values of a term record's `type` field (schema.yaml `types:`).
+    permissible_values:
+      Capability: {}
+      Concept: {}
+      Domain: {}
+      EntityType: {}
+      Function: {}
+      Journey: {}
+      JourneyGroup: {}
+      Persona: {}
+      Plane: {}
+      QualityAttribute: {}
+      RelationshipType: {}
+      ServiceDomain: {}
+      Workflow: {}
+  RelationshipVerbEnum:
+    description: Allowed values of `relates_to[].rel` (schema.yaml `relationships:`).
+    permissible_values:
+      applies_to: {}
+      belongs_to_service_domain: {}
+      categorized_as: {}
+      consumed_by: {}
+      decomposes_into: {}
+      depends_on: {}
+      derived_from: {}
+      governs: {}
+      grouped_by: {}
+      interfaces_with: {}
+      met_by: {}
+      owns: {}
+      produces: {}
+      realized_in: {}
+      supersedes: {}
+      supports: {}
+      verified_by: {}
+id: https://itpra.4thtry.tech/linkml/itpra-enums
+imports:
+- linkml:types
+- itpra-prefixes.linkml
+name: itpra-enums
+prefixes:
+  linkml: https://w3id.org/linkml/

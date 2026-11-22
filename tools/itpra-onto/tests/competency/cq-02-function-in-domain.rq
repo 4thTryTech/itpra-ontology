@@ -1,0 +1,13 @@
+# CQ2 — which (Function, Domain) pairs does the rule-derived itpra-o:inDomain edge hold?
+#
+# NOT "every Function reaches exactly one Domain" — a function may support capabilities that live in
+# several domains, so this is a multiset read straight off the inferred graph; the competency test
+# compares the full pair set to a YAML-computed set and reports how many functions span more than one
+# domain, rather than asserting a false one-to-one invariant.
+
+SELECT ?func ?domain
+WHERE {
+  GRAPH itpra-g:inferred {
+    ?func itpra-o:inDomain ?domain .
+  }
+}

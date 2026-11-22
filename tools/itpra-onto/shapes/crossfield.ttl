@@ -1,0 +1,109 @@
+# crossfield.ttl -- the `crossfield` shape file (SHACL-SPARQL). shapes/REGISTER.md is the contract:
+# Table B rows B-8 and B-13, severities per Table C. B-9 (an alias equal to a DIFFERENT record's prefLabel)
+# is "no rule, by design" in the register and is deliberately NOT built here.
+#
+# Conventions (itpra_onto.shacl module docstring):
+#   * no @prefix block -- itpra:/itpra-o:/itpra-g: and the W3C prefixes are prepended at load time;
+#   * every rule-bearing shape is ONE named node carrying its target, sh:severity and itpra-o:ruleId;
+#     the sh:sparql constraint is a blank node inside it (sh:sourceShape resolves to the outer node);
+#   * every sh:sparql node sets `sh:prefixes itpra-o:shapesPrefixes`, which is what makes pySHACL inject
+#     the itpra:/itpra-o:/skos: prefix declarations into the query text;
+#   * the data graph is the union of t1 + req/* + inferred copied into one default graph, so no query
+#     below uses a GRAPH clause;
+#   * each SELECT returns $this and ?value (and ?path where the property varies) so the report names the
+#     offending value; sh:message templates it with {?value}.
+
+# ---------------------------------------------------------------------------------------------------------
+# B-8 -- alt-label self-collision (ADR 0007). No skos:altLabel of a subject equals that SAME subject's
+# skos:prefLabel, compared case-insensitively on the lexical form. SHACL Core's sh:disjoint compares RDF
+# terms exactly (no case folding), hence SPARQL. Targets every skos:Concept (terms in t1 and FR/NFR
+# records in req/* both carry an explicit skos:Concept type).
+itpra-o:AltLabelSelfCollisionShape
+    a sh:NodeShape ;
+    sh:targetClass skos:Concept ;
+    sh:severity sh:Violation ;
+    itpra-o:ruleId "B-8" ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "skos:altLabel \"{?value}\" of {$this} equals its own skos:prefLabel \"{?pref}\" case-insensitively (ADR 0007: remove the alias)" ;
+        sh:prefixes itpra-o:shapesPrefixes ;
+        sh:select """
+            SELECT $this ?value ?pref ?path
+            WHERE {
+                $this skos:prefLabel ?pref .
+                $this skos:altLabel ?value .
+                FILTER(LCASE(STR(?value)) = LCASE(STR(?pref)))
+                BIND(skos:altLabel AS ?path)
+            }
+        """ ;
+    ] .
+
+# ---------------------------------------------------------------------------------------------------------
+# B-8-pref-label-unique -- a subject has at most one skos:prefLabel per language tag (SKOS integrity
+# condition S14; CQ19 "duplicate pref labels"). Kept in this file because it is a same-subject cross-value
+# comparison over every skos:Concept rather than a per-class cardinality. Ownership split: structural.ttl's
+# field-missing shape keeps ONLY sh:minCount 1 on skos:prefLabel (the missing-label case); THIS shape owns
+# the duplicate case exclusively -- a bare sh:maxCount 1 in structural.ttl would incorrectly reject two
+# prefLabels in two different languages, which SKOS permits, so the two shapes are not actually redundant
+# even where they might look it. One finding per surplus label value (a subject with two labels in one
+# language raises two findings).
+# Defence in depth: `term` is a scalar in the authoring YAML, so the emitter cannot produce two
+# prefLabels on one subject from a well-formed record (proven by direct quad injection in
+# tests/test_shapes_crossfield.py; the `count: 0` clean-case fixture,
+# fixtures/crossfield/B-8-pref-label-unique.yaml, documents the nearest an authoring mutation can get).
+itpra-o:PrefLabelUniqueShape
+    a sh:NodeShape ;
+    sh:targetClass skos:Concept ;
+    sh:severity sh:Violation ;
+    itpra-o:ruleId "B-8-pref-label-unique" ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "{$this} has more than one skos:prefLabel in one language: \"{?value}\" and \"{?other}\" (SKOS S14: at most one preferred label per language tag)" ;
+        sh:prefixes itpra-o:shapesPrefixes ;
+        sh:select """
+            SELECT $this ?value ?other ?path
+            WHERE {
+                $this skos:prefLabel ?value .
+                $this skos:prefLabel ?other .
+                FILTER(?value != ?other && LANG(?value) = LANG(?other))
+                BIND(skos:prefLabel AS ?path)
+            }
+        """ ;
+    ] .
+
+# ---------------------------------------------------------------------------------------------------------
+# B-13 -- every itpra-o:decidedIn object (and every amendedBy/extendedBy object: sub-properties of
+# decidedIn, emitted alongside it, but targeted here in their own right so a regression emitting one
+# WITHOUT its decidedIn twin is still caught) is an IRI in the id namespace whose local name is ADR-NNNN,
+# four digits. SHACL Core sh:pattern tests literals, not IRI local names, hence SPARQL. (The three
+# properties are matched with FILTER ... IN, not VALUES: SHACL-SPARQL forbids VALUES in a constraint's
+# query and pySHACL enforces that with a ValidationFailure.)
+#
+# Namespace-independent: no shape file may write the base IRI (ADR 0004), so the id namespace is read
+# from the injected `itpra:` prefix -- STR(itpra:) expands to the configured id namespace at run time and
+# STRAFTER(..., STR(itpra:)) is "" for a node outside it, which then fails the regex.
+#
+# Defence in depth: the emitter builds these objects from `source` via its strict ADR grammar and always
+# zero-pads, so no well-formed (or malformed) `source` can produce a bad node; this shape guards against
+# an emitter regression and is proven by direct quad injection in tests/test_shapes_crossfield.py.
+itpra-o:DecidedInAdrNodeShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf itpra-o:decidedIn , itpra-o:amendedBy , itpra-o:extendedBy ;
+    sh:severity sh:Violation ;
+    itpra-o:ruleId "B-13" ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "{$this} {?path} object {?value} is not an ADR-NNNN node in the id namespace (four-digit decision number)" ;
+        sh:prefixes itpra-o:shapesPrefixes ;
+        sh:select """
+            SELECT $this ?path ?value
+            WHERE {
+                $this ?path ?value .
+                FILTER(?path IN (itpra-o:decidedIn, itpra-o:amendedBy, itpra-o:extendedBy))
+                FILTER(
+                    !isIRI(?value)
+                    || !REGEX(STRAFTER(STR(?value), STR(itpra:)), "^ADR-[0-9]{4}$")
+                )
+            }
+        """ ;
+    ] .

@@ -1,0 +1,12 @@
+# CQ3 (service-domain half) — every Capability's itpra-o:inServiceDomain edge, one row per
+# (capability, service domain).
+#
+# test_competency.py groups these rows by capability to check the cardinality is exactly one per
+# capability, and by service domain to report the "capabilities per service domain" table.
+
+SELECT ?cap ?sd
+WHERE {
+  GRAPH itpra-g:inferred {
+    ?cap itpra-o:inServiceDomain ?sd .
+  }
+}

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """check-links.py — every relative link in a Markdown file must resolve to a file in this repository.
 
-Web links (http, https, mailto) are not fetched. Anchors are stripped. Exit 1 on any broken link.
+Web links (http, https, mailto) are not fetched. Anchors are stripped. Hidden directories (`.git`, `.venv`, …)
+and `dist/` — environments and build output, never sources — are not scanned. Exit 1 on any broken link.
 Usage:  python tools/check-links.py [--root DIR]
 """
 from __future__ import annotations
@@ -13,12 +14,18 @@ from pathlib import Path
 
 LINK_RE = re.compile(r"\[[^\]]*\]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)")
 SKIP = ("http://", "https://", "mailto:", "#")
+SKIP_DIR_NAMES = {"dist"}
+
+
+def _skipped(md: Path, root: Path) -> bool:
+    dirs = md.relative_to(root).parts[:-1]
+    return any(d.startswith(".") or d in SKIP_DIR_NAMES for d in dirs)
 
 
 def broken_links(root: Path) -> list[str]:
     problems: list[str] = []
     for md in sorted(root.rglob("*.md")):
-        if ".git" in md.parts:
+        if _skipped(md, root):
             continue
         for n, line in enumerate(md.read_text(encoding="utf-8").split("\n"), 1):
             for target in LINK_RE.findall(line):

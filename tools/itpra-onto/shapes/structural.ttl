@@ -1,0 +1,433 @@
+# structural.ttl — the `structural` shape file (SHACL Core; shapes/REGISTER.md "Shape files and their
+# fixtures"). Targets: t1, inferred (validated as the union with req/* the harness always assembles —
+# shacl.py module docstring point 1 — but every shape below is scoped, by sh:targetClass or
+# sh:targetSubjectsOf a term-only predicate, to never fire on a req/<X> subject; that scoping is spelled
+# out per shape below).
+#
+# No @prefix block here (itpra_onto.shacl.load_shapes prepends itpra:/itpra-o:/itpra-g: plus the W3C/DCMI
+# constants at load time — see that module's docstring). Every shape is a single, named (non-blank) node
+# carrying its target, path, constraint, sh:severity and itpra-o:ruleId directly (shacl.py's "single, named
+# shape node" convention) — never nested inside a blank-node sh:property [...] wrapper.
+#
+# The 13 term classes (schema.yaml `types:`; schema/itpra.linkml.yaml `classes:`), reused below wherever a
+# shape says "every term class": itpra:CAPABILITY, itpra:FUNCTION, itpra:PERSONA, itpra:JOURNEY,
+# itpra:WORKFLOW, itpra:JOURNEY_GROUP, itpra:DOMAIN, itpra:PLANE, itpra:SERVICE_DOMAIN,
+# itpra:QUALITY_ATTRIBUTE, itpra:CONCEPT, itpra-o:EntityType, itpra-o:RelationshipType. Requirement
+# records (FR/NFR ⊑ itpra:REQUIREMENT) are never one of these 13 — deliberately out of scope here
+# (shapes/REGISTER.md: requirement records are the `requirements` shape file's business).
+
+# =========================================================================================================
+# 1. field-missing (Table A A1) — every term has at least one skos:prefLabel, skos:definition and
+#    dcterms:identifier. PRESENCE ONLY: the linter's field-missing asks "is the field absent (or
+#    whitespace-only)", never "is it there twice", so a sh:maxCount here would report, under the linter's own
+#    comparable id, a defect the linter never reports (two records sharing one id merge onto one IRI with two
+#    definitions). A duplicated record on the graph side is B-12's business (exactly one authoringFile per
+#    subject); on the YAML side, id-duplicate's. Scoped by sh:targetClass to the 13 term classes only (never
+#    skos:Concept broadly, which would also catch Requirement records — out of scope here per the register).
+#
+#    prefLabel upper bound: this shape keeps ONLY sh:minCount 1 on skos:prefLabel (the missing-label case,
+#    field-missing's own business). The upper bound — at most one prefLabel PER LANGUAGE TAG — is owned
+#    exclusively by crossfield.ttl's B-8-pref-label-unique (itpra-o:PrefLabelUniqueShape, SKOS S14): a bare
+#    sh:maxCount 1 here would be both the wrong rule (it would reject two prefLabels in two DIFFERENT
+#    languages, which SKOS permits) and a duplicate enforcement point for the one case it would correctly
+#    catch. skos:definition and dcterms:identifier carry no sh:maxCount either (presence only — see above).
+
+itpra-o:FieldMissingPrefLabelShape
+    a sh:PropertyShape ;
+    sh:targetClass itpra:CAPABILITY, itpra:FUNCTION, itpra:PERSONA, itpra:JOURNEY, itpra:WORKFLOW,
+        itpra:JOURNEY_GROUP, itpra:DOMAIN, itpra:PLANE, itpra:SERVICE_DOMAIN, itpra:QUALITY_ATTRIBUTE,
+        itpra:CONCEPT, itpra-o:EntityType, itpra-o:RelationshipType ;
+    sh:path skos:prefLabel ;
+    sh:minCount 1 ;
+    sh:severity sh:Violation ;
+    sh:message "a term record must carry at least one skos:prefLabel (the authored `term` field)" ;
+    itpra-o:ruleId "field-missing" .
+
+itpra-o:FieldMissingDefinitionShape
+    a sh:PropertyShape ;
+    sh:targetClass itpra:CAPABILITY, itpra:FUNCTION, itpra:PERSONA, itpra:JOURNEY, itpra:WORKFLOW,
+        itpra:JOURNEY_GROUP, itpra:DOMAIN, itpra:PLANE, itpra:SERVICE_DOMAIN, itpra:QUALITY_ATTRIBUTE,
+        itpra:CONCEPT, itpra-o:EntityType, itpra-o:RelationshipType ;
+    sh:path skos:definition ;
+    sh:minCount 1 ;
+    sh:severity sh:Violation ;
+    sh:message "a term record must carry a skos:definition (the authored `definition` field)" ;
+    itpra-o:ruleId "field-missing" .
+
+itpra-o:FieldMissingIdentifierShape
+    a sh:PropertyShape ;
+    sh:targetClass itpra:CAPABILITY, itpra:FUNCTION, itpra:PERSONA, itpra:JOURNEY, itpra:WORKFLOW,
+        itpra:JOURNEY_GROUP, itpra:DOMAIN, itpra:PLANE, itpra:SERVICE_DOMAIN, itpra:QUALITY_ATTRIBUTE,
+        itpra:CONCEPT, itpra-o:EntityType, itpra-o:RelationshipType ;
+    sh:path dcterms:identifier ;
+    sh:minCount 1 ;
+    sh:severity sh:Violation ;
+    sh:message "a term record must carry a dcterms:identifier (the authored `id` field)" ;
+    itpra-o:ruleId "field-missing" .
+
+# =========================================================================================================
+# 2. id-pattern (Table A A2) — dcterms:identifier matches schema/itpra.linkml.yaml's `id` slot pattern
+#    (= schema.yaml id.pattern, test-enforced): ^[A-Za-z][A-Za-z0-9_.-]*$. Same 13-class scope as
+#    field-missing, for the same reason.
+
+itpra-o:IdPatternShape
+    a sh:PropertyShape ;
+    sh:targetClass itpra:CAPABILITY, itpra:FUNCTION, itpra:PERSONA, itpra:JOURNEY, itpra:WORKFLOW,
+        itpra:JOURNEY_GROUP, itpra:DOMAIN, itpra:PLANE, itpra:SERVICE_DOMAIN, itpra:QUALITY_ATTRIBUTE,
+        itpra:CONCEPT, itpra-o:EntityType, itpra-o:RelationshipType ;
+    sh:path dcterms:identifier ;
+    sh:pattern "^[A-Za-z][A-Za-z0-9_.-]*$" ;
+    sh:severity sh:Violation ;
+    sh:message "a record id must match ^[A-Za-z][A-Za-z0-9_.-]*$ (schema.yaml id.pattern)" ;
+    itpra-o:ruleId "id-pattern" .
+
+# =========================================================================================================
+# 3. target-unresolved (Table A A6; also stands in for `relates-to-malformed`, Table A pre-A: at the graph
+#    level a malformed relates_to entry either never reaches the graph, or — once pivoted onto one predicate
+#    per verb — is exactly the same defect a dangling target already is; kept as one mechanism, not two
+#    shapes, matching the register's own text for that row).
+#
+#    Every object of a *term-carried* verb predicate (carried_by: relates_to in the itpra_verb annotation —
+#    14 of the 17: the 17 minus met_by/verified_by/categorized_as, all three `carried_by: slot:...` and
+#    domain-restricted to FR/NFR, so they never appear on a t1 subject at all) is an IRI that is itself a
+#    TERM with a type in the data — sh:class skos:Concept (every term AND requirement record is explicitly
+#    typed skos:Concept by the emitter, so this passes for any real record and fails for a dangling IRI with
+#    no rdf:type triple at all), plus section 3a below for a target that names a REQUIREMENT record.
+#    Whether a resolved term target has the RIGHT class for the verb is B-22's business
+#    (shapes/generated/verb-pairs.ttl), not this rule's. met_by/verified_by/categorized_as are deliberately
+#    excluded (shapes/REGISTER.md Table A: target-unresolved's own row scopes to `t1` only, not `req/*`;
+#    the register's separate `req-target-unresolved` (A13) and B-1 rows own met_by/verified_by/
+#    categorized_as, with a softer per-prefix fallback this shape must not shadow with a stricter Violation
+#    — sh:targetSubjectsOf, not sh:targetClass, is what keeps this shape off req/* subjects: only
+#    term_triples()'s `_verb_edges` ever emits these 14 predicates at all).
+
+itpra-o:TargetUnresolvedGroupedByShape
+    a sh:PropertyShape ;
+    sh:targetSubjectsOf itpra-o:groupedBy ;
+    sh:path itpra-o:groupedBy ;
+    sh:class skos:Concept ;
+    sh:severity sh:Violation ;
+    sh:message "grouped_by target does not resolve to a known record" ;
+    itpra-o:ruleId "target-unresolved" .
+
+itpra-o:TargetUnresolvedConsumedByShape
+    a sh:PropertyShape ;
+    sh:targetSubjectsOf itpra-o:consumedBy ;
+    sh:path itpra-o:consumedBy ;
+    sh:class skos:Concept ;
+    sh:severity sh:Violation ;
+    sh:message "consumed_by target does not resolve to a known record" ;
+    itpra-o:ruleId "target-unresolved" .
+
+itpra-o:TargetUnresolvedRealizedInShape
+    a sh:PropertyShape ;
+    sh:targetSubjectsOf itpra-o:realizedIn ;
+    sh:path itpra-o:realizedIn ;
+    sh:class skos:Concept ;
+    sh:severity sh:Violation ;
+    sh:message "realized_in target does not resolve to a known record" ;
+    itpra-o:ruleId "target-unresolved" .
+
+itpra-o:TargetUnresolvedDependsOnShape
+    a sh:PropertyShape ;
+    sh:targetSubjectsOf itpra-o:dependsOn ;
+    sh:path itpra-o:dependsOn ;
+    sh:class skos:Concept ;
+    sh:severity sh:Violation ;
+    sh:message "depends_on target does not resolve to a known record" ;
+    itpra-o:ruleId "target-unresolved" .
+
+itpra-o:TargetUnresolvedDecomposesIntoShape
+    a sh:PropertyShape ;
+    sh:targetSubjectsOf itpra-o:decomposesInto ;
+    sh:path itpra-o:decomposesInto ;
+    sh:class skos:Concept ;
+    sh:severity sh:Violation ;
+    sh:message "decomposes_into target does not resolve to a known record" ;
+    itpra-o:ruleId "target-unresolved" .
+
+itpra-o:TargetUnresolvedSupportsShape
+    a sh:PropertyShape ;
+    sh:targetSubjectsOf itpra-o:supports ;
+    sh:path itpra-o:supports ;
+    sh:class skos:Concept ;
+    sh:severity sh:Violation ;
+    sh:message "supports target does not resolve to a known record" ;
+    itpra-o:ruleId "target-unresolved" .
+
+itpra-o:TargetUnresolvedDerivedFromShape
+    a sh:PropertyShape ;
+    sh:targetSubjectsOf itpra-o:derivedFrom ;
+    sh:path itpra-o:derivedFrom ;
+    sh:class skos:Concept ;
+    sh:severity sh:Violation ;
+    sh:message "derived_from target does not resolve to a known record" ;
+    itpra-o:ruleId "target-unresolved" .
+
+itpra-o:TargetUnresolvedSupersedesShape
+    a sh:PropertyShape ;
+    sh:targetSubjectsOf itpra-o:supersedes ;
+    sh:path itpra-o:supersedes ;
+    sh:class skos:Concept ;
+    sh:severity sh:Violation ;
+    sh:message "supersedes target does not resolve to a known record" ;
+    itpra-o:ruleId "target-unresolved" .
+
+itpra-o:TargetUnresolvedOwnsShape
+    a sh:PropertyShape ;
+    sh:targetSubjectsOf itpra-o:owns ;
+    sh:path itpra-o:owns ;
+    sh:class skos:Concept ;
+    sh:severity sh:Violation ;
+    sh:message "owns target does not resolve to a known record" ;
+    itpra-o:ruleId "target-unresolved" .
+
+itpra-o:TargetUnresolvedGovernsShape
+    a sh:PropertyShape ;
+    sh:targetSubjectsOf itpra-o:governs ;
+    sh:path itpra-o:governs ;
+    sh:class skos:Concept ;
+    sh:severity sh:Violation ;
+    sh:message "governs target does not resolve to a known record" ;
+    itpra-o:ruleId "target-unresolved" .
+
+itpra-o:TargetUnresolvedAppliesToShape
+    a sh:PropertyShape ;
+    sh:targetSubjectsOf itpra-o:appliesTo ;
+    sh:path itpra-o:appliesTo ;
+    sh:class skos:Concept ;
+    sh:severity sh:Violation ;
+    sh:message "applies_to target does not resolve to a known record" ;
+    itpra-o:ruleId "target-unresolved" .
+
+itpra-o:TargetUnresolvedProducesShape
+    a sh:PropertyShape ;
+    sh:targetSubjectsOf itpra-o:produces ;
+    sh:path itpra-o:produces ;
+    sh:class skos:Concept ;
+    sh:severity sh:Violation ;
+    sh:message "produces target does not resolve to a known record" ;
+    itpra-o:ruleId "target-unresolved" .
+
+itpra-o:TargetUnresolvedInterfacesWithShape
+    a sh:PropertyShape ;
+    sh:targetSubjectsOf itpra-o:interfacesWith ;
+    sh:path itpra-o:interfacesWith ;
+    sh:class skos:Concept ;
+    sh:severity sh:Violation ;
+    sh:message "interfaces_with target does not resolve to a known record" ;
+    itpra-o:ruleId "target-unresolved" .
+
+itpra-o:TargetUnresolvedBelongsToServiceDomainShape
+    a sh:PropertyShape ;
+    sh:targetSubjectsOf itpra-o:belongsToServiceDomain ;
+    sh:path itpra-o:belongsToServiceDomain ;
+    sh:class skos:Concept ;
+    sh:severity sh:Violation ;
+    sh:message "belongs_to_service_domain target does not resolve to a known record" ;
+    itpra-o:ruleId "target-unresolved" .
+
+# =========================================================================================================
+# 3a. target-unresolved, requirement-target arm. The linter's target-unresolved looks a relates_to target
+#     up among TERM ids only, so a target naming a requirement record (FR/NFR) does not resolve there — but
+#     the requirement is typed skos:Concept, so the sh:class shapes above let it pass. This one shape
+#     reports it under the same rule id. SHACL-SPARQL rather than a Core `sh:not [ sh:class
+#     itpra:REQUIREMENT ]` on each shape above: measured with pySHACL 0.40.1 over the real corpus, the 14
+#     sh:not constraints took this file from seconds to over four minutes; one SPARQL constraint costs
+#     well under a second. Targets the subjects of the same 14 term-carried predicates.
+
+itpra-o:TargetUnresolvedRequirementShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf itpra-o:groupedBy, itpra-o:consumedBy, itpra-o:realizedIn, itpra-o:dependsOn,
+        itpra-o:decomposesInto, itpra-o:supports, itpra-o:derivedFrom, itpra-o:supersedes, itpra-o:owns,
+        itpra-o:governs, itpra-o:appliesTo, itpra-o:produces, itpra-o:interfacesWith,
+        itpra-o:belongsToServiceDomain ;
+    sh:severity sh:Violation ;
+    itpra-o:ruleId "target-unresolved" ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "{?path} target {?value} is a requirement record, not a term (relates_to targets resolve among term ids only)" ;
+        sh:prefixes itpra-o:shapesPrefixes ;
+        sh:select """
+            SELECT DISTINCT $this ?path ?value
+            WHERE {
+                $this ?path ?value .
+                FILTER(?path IN (itpra-o:groupedBy, itpra-o:consumedBy, itpra-o:realizedIn, itpra-o:dependsOn,
+                    itpra-o:decomposesInto, itpra-o:supports, itpra-o:derivedFrom, itpra-o:supersedes,
+                    itpra-o:owns, itpra-o:governs, itpra-o:appliesTo, itpra-o:produces, itpra-o:interfacesWith,
+                    itpra-o:belongsToServiceDomain))
+                ?value rdf:type itpra:REQUIREMENT .
+            }
+        """ ;
+    ] .
+
+# =========================================================================================================
+# 4. function-derived-from (Table A A7; ADR 0011) — a itpra:FUNCTION carries no itpra-o:derivedFrom edge
+#    at all.
+
+itpra-o:FunctionDerivedFromShape
+    a sh:PropertyShape ;
+    sh:targetClass itpra:FUNCTION ;
+    sh:path itpra-o:derivedFrom ;
+    sh:maxCount 0 ;
+    sh:severity sh:Violation ;
+    sh:message "a Function must carry no derived_from edge (ADR 0011)" ;
+    itpra-o:ruleId "function-derived-from" .
+
+# =========================================================================================================
+# 5. B-2 / B-3 (Table B) — itpra-o:groupedBy exactly one on itpra:CAPABILITY, itpra:DOMAIN, itpra:JOURNEY
+#    (schema/itpra.linkml.yaml grouped_by itpra_verb cardinality: {subject: Capability|Domain|Journey,
+#    min:1, max:1} for all three). B-2 = the min arm, B-3 = the max arm — two shapes, two ruleIds, since
+#    each is its own Table B row with its own id.
+
+itpra-o:GroupedByMinCountShape
+    a sh:PropertyShape ;
+    sh:targetClass itpra:CAPABILITY, itpra:DOMAIN, itpra:JOURNEY ;
+    sh:path itpra-o:groupedBy ;
+    sh:minCount 1 ;
+    sh:severity sh:Violation ;
+    sh:message "a Capability/Domain/Journey must carry at least one grouped_by edge (B-2)" ;
+    itpra-o:ruleId "B-2" .
+
+itpra-o:GroupedByMaxCountShape
+    a sh:PropertyShape ;
+    sh:targetClass itpra:CAPABILITY, itpra:DOMAIN, itpra:JOURNEY ;
+    sh:path itpra-o:groupedBy ;
+    sh:maxCount 1 ;
+    sh:severity sh:Violation ;
+    sh:message "a Capability/Domain/Journey must carry at most one grouped_by edge (B-3)" ;
+    itpra-o:ruleId "B-3" .
+
+# =========================================================================================================
+# 5a. B-3-belongs-to-service-domain (Table B; named in the family of B-3 since it is the same "declared
+#     cardinality restated at the graph level" shape of an upper-bound-bearing verb). From the SAME
+#     belongs_to_service_domain itpra_verb annotation's `cardinality` list: {subject: Domain, min:1, max:1}
+#     (exactly one on Domain) and {subject: Term, min:0, max:1} (at most one on every OTHER term — restated
+#     here per the 13 term classes, not skos:Concept broadly, since Requirement records never carry this
+#     predicate at all and are out of scope regardless).
+
+itpra-o:BelongsToServiceDomainDomainShape
+    a sh:PropertyShape ;
+    sh:targetClass itpra:DOMAIN ;
+    sh:path itpra-o:belongsToServiceDomain ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:severity sh:Violation ;
+    sh:message "a Domain must carry exactly one belongs_to_service_domain edge (B-3-belongs-to-service-domain)" ;
+    itpra-o:ruleId "B-3-belongs-to-service-domain" .
+
+itpra-o:BelongsToServiceDomainTermMaxShape
+    a sh:PropertyShape ;
+    sh:targetClass itpra:CAPABILITY, itpra:FUNCTION, itpra:PERSONA, itpra:JOURNEY, itpra:WORKFLOW,
+        itpra:JOURNEY_GROUP, itpra:DOMAIN, itpra:PLANE, itpra:SERVICE_DOMAIN, itpra:QUALITY_ATTRIBUTE,
+        itpra:CONCEPT, itpra-o:EntityType, itpra-o:RelationshipType ;
+    sh:path itpra-o:belongsToServiceDomain ;
+    sh:maxCount 1 ;
+    sh:severity sh:Violation ;
+    sh:message "a term must carry at most one belongs_to_service_domain edge (B-3-belongs-to-service-domain)" ;
+    itpra-o:ruleId "B-3-belongs-to-service-domain" .
+
+# =========================================================================================================
+# 5b. B-2-supports (Table B; same reasoning as 5a, named in the family of B-2). From the supports
+#     itpra_verb annotation's `cardinality`: {subject: Function, min:1, max: null} — a itpra:FUNCTION must
+#     carry at least one supports edge. NOTE: this rule is causally coupled to B-18 (itpra-o:inDomain is
+#     entirely derived from supports — rules/30-function-in-domain.rq) — a Function with zero supports
+#     edges ALWAYS has zero inDomain edges too, so no single mutation can fire this rule without also
+#     firing B-18 on the very same focus; no count-1 fixture is shipped for this id (see
+#     fixtures/structural/B-2-supports.yaml). The shape itself is still correct and still passes on clean
+#     data.
+
+itpra-o:SupportsMinCountShape
+    a sh:PropertyShape ;
+    sh:targetClass itpra:FUNCTION ;
+    sh:path itpra-o:supports ;
+    sh:minCount 1 ;
+    sh:severity sh:Violation ;
+    sh:message "a Function must carry at least one supports edge (B-2-supports)" ;
+    itpra-o:ruleId "B-2-supports" .
+
+# =========================================================================================================
+# 6. B-5 / B-6 / B-7 (Table B; minimums the data satisfies but nothing declares — built as sh:Warning,
+#    advisory: ADR 0042 D3).
+
+itpra-o:ConsumedByMinCountShape
+    a sh:PropertyShape ;
+    sh:targetClass itpra:CAPABILITY, itpra:JOURNEY ;
+    sh:path itpra-o:consumedBy ;
+    sh:minCount 1 ;
+    sh:severity sh:Warning ;
+    sh:message "a Capability/Journey has no consumed_by edge (B-5, advisory — ADR 0042 D3)" ;
+    itpra-o:ruleId "B-5" .
+
+itpra-o:RealizedInExactlyOneShape
+    a sh:PropertyShape ;
+    sh:targetClass itpra:WORKFLOW ;
+    sh:path itpra-o:realizedIn ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:severity sh:Warning ;
+    sh:message "a Workflow does not carry exactly one realized_in edge (B-6, advisory — ADR 0042 D3)" ;
+    itpra-o:ruleId "B-6" .
+
+itpra-o:DependsOnMinCountShape
+    a sh:PropertyShape ;
+    sh:targetClass itpra:JOURNEY ;
+    sh:path itpra-o:dependsOn ;
+    sh:minCount 1 ;
+    sh:severity sh:Warning ;
+    sh:message "a Journey has no depends_on edge (B-7, advisory — ADR 0042 D3)" ;
+    itpra-o:ruleId "B-7" .
+
+# =========================================================================================================
+# 7. B-12 (Table B; ADR 0043 D3) — exactly one itpra-o:authoringFile on every skos:Concept in t1 and req/*
+#    (the cardinality half; the file-exists-on-disk half stays python/test-only — SHACL cannot stat the
+#    filesystem). Targeting skos:Concept broadly is correct and deliberate here (unlike target-unresolved
+#    above): every term AND every requirement record is explicitly typed skos:Concept by the emitter
+#    (term_triples / requirement_triples both `yield subject, RDF_TYPE, SKOS_CONCEPT`), and authoringFile
+#    is the SAME obligation for both (shapes/REGISTER.md's own note on this row).
+
+itpra-o:AuthoringFileShape
+    a sh:PropertyShape ;
+    sh:targetClass skos:Concept ;
+    sh:path itpra-o:authoringFile ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:severity sh:Violation ;
+    sh:message "a record must carry exactly one authoringFile (B-12)" ;
+    itpra-o:ruleId "B-12" .
+
+# =========================================================================================================
+# 8. B-18 / B-19 (Table B; CQ2/CQ3) — defence in depth on the `inferred` graph's derived roll-up edges
+#    (rules/30-function-in-domain.rq, rules/10-capability-in-plane.rq,
+#    rules/20-capability-in-service-domain.rq). A missing derived edge here means the RULES ENGINE
+#    regressed, not that a record is mis-authored (Table C: "a shape catches a rules-engine regression, not
+#    just a content defect").
+
+itpra-o:InDomainMinCountShape
+    a sh:PropertyShape ;
+    sh:targetClass itpra:FUNCTION ;
+    sh:path itpra-o:inDomain ;
+    sh:minCount 1 ;
+    sh:severity sh:Violation ;
+    sh:message "a Function has no derived inDomain edge (B-18 — rules-engine defence in depth)" ;
+    itpra-o:ruleId "B-18" .
+
+itpra-o:InPlaneExactlyOneShape
+    a sh:PropertyShape ;
+    sh:targetClass itpra:CAPABILITY ;
+    sh:path itpra-o:inPlane ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:severity sh:Violation ;
+    sh:message "a Capability does not have exactly one derived inPlane edge (B-19 — rules-engine defence in depth)" ;
+    itpra-o:ruleId "B-19" .
+
+itpra-o:InServiceDomainExactlyOneShape
+    a sh:PropertyShape ;
+    sh:targetClass itpra:CAPABILITY ;
+    sh:path itpra-o:inServiceDomain ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:severity sh:Violation ;
+    sh:message "a Capability does not have exactly one derived inServiceDomain edge (B-19 — rules-engine defence in depth)" ;
+    itpra-o:ruleId "B-19" .

@@ -1,0 +1,14 @@
+# Positive control for cq-06: total itpra-o:metBy edges across every req/<X> graph.
+#
+# Guards cq-06 (expected EMPTY: no metBy target mistyped) against a silently-vacuous predicate: if
+# itpra-o:metBy were ever misspelled or renamed, both this query AND cq-06 would return zero rows,
+# masking the bug rather than surfacing it. test_competency.py asserts this count equals the number of
+# met_by entries across every requirements registry, computed straight from the YAML.
+
+SELECT (COUNT(*) AS ?n)
+WHERE {
+  GRAPH ?g {
+    ?req itpra-o:metBy ?target .
+  }
+  FILTER(STRSTARTS(STR(?g), CONCAT(STR(itpra-g:), "req/")))
+}

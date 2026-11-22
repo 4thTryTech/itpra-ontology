@@ -1,0 +1,20 @@
+# B-13 (shapes/crossfield.ttl, itpra-o:DecidedInAdrNodeShape) is DEFENCE IN DEPTH against an emitter
+# regression. No authoring mutation can make the emitter produce a malformed decidedIn/amendedBy/extendedBy
+# node: a well-formed `source` ("ADR 12") is zero-padded to ADR-0012, so B-13 stays silent under that
+# mutation (the sibling clean-case fixture, `B-13.yaml`, count: 0, proves exactly this), and a malformed one
+# is refused at emit time before any graph exists. THIS fixture (renamed from `B-13.yaml` -- its own `rule`
+# was always the synthetic `emit-error`, not `B-13`, so it never belonged under the bare rule-id filename)
+# proves that FIRST line of defence: a hyphenated ADR reference fails the strict `source` grammar
+# (ADR 0005) and surfaces as the synthetic `emit-error` finding on the mutated record. B-13 itself
+# firing is proven in tests/test_shapes_crossfield.py by injecting bad quads straight into an emitted
+# dataset (no authoring-YAML mutation can produce the defect at all). `emit_error:
+# SourceGrammarError` requires the source-grammar guard itself to be what fired.
+rule: emit-error
+expect:
+  severity: Violation
+  focus: CAP-FND-1
+  count: 1
+  emit_error: SourceGrammarError
+mutate:
+  id: CAP-FND-1
+  set: {source: "ADR-12"}

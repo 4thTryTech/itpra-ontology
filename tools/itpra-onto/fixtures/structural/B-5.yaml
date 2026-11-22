@@ -1,0 +1,13 @@
+# Proves itpra-o:ConsumedByMinCountShape (structural.ttl item 6; Table B B-5, Warning — advisory per
+# ADR 0042 D3): a Capability (CAP-FND-1) with zero consumed_by edges raises exactly one
+# Warning of B-5. grouped_by is kept intact (still exactly one, target FND), so B-2/B-3/B-19 are unaffected.
+rule: B-5
+expect:
+  severity: Warning
+  focus: CAP-FND-1
+  count: 1
+mutate:
+  id: CAP-FND-1
+  set:
+    relates_to:
+      - {rel: grouped_by, target: FND}

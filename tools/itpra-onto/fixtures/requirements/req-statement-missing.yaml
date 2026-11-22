@@ -1,0 +1,11 @@
+# A real, currently-clean FR with its `statement` deleted must raise exactly one req-statement-missing
+# Violation, on itself. Deleting `statement` does not crash emission (the triple is simply omitted) -- only
+# the shape catches it.
+rule: req-statement-missing
+expect:
+  severity: Violation
+  focus: FR-FND-1
+  count: 1
+mutate:
+  id: FR-FND-1
+  delete: [statement]

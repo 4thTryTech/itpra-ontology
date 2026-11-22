@@ -39,7 +39,19 @@ python tools/adr-lint.py --strict          # the decision records
 python tools/check-version-bump.py --base origin/master   # a vocabulary change bumps ontology_version
 python tools/check-links.py                # relative links resolve
 python tools/publication-scan.py           # nothing refers to a private repository
+python tools/publication-scan.py --root tools/itpra-onto   # nor does the pipeline's own tree
 python -m unittest discover -s tests -v    # the tools' own tests
 ```
 
-CI runs the same six steps on every push and pull request (`.github/workflows/checks.yml`).
+CI runs the same steps on every push and pull request (`.github/workflows/checks.yml`), and a second job runs the
+pipeline under `tools/itpra-onto/` — generated fragments up to date, its tests, a reproducible build, SHACL clean:
+
+```
+uv sync --locked --project tools/itpra-onto
+uv run --project tools/itpra-onto itpra-onto gen-enums --check
+uv run --project tools/itpra-onto itpra-onto gen-prefixes --check
+uv run --project tools/itpra-onto itpra-onto gen-verb-shapes --check
+uv run --project tools/itpra-onto pytest -q tools/itpra-onto/tests
+uv run --project tools/itpra-onto itpra-onto build --no-store && uv run --project tools/itpra-onto itpra-onto build --check
+uv run --project tools/itpra-onto itpra-onto validate --json
+```

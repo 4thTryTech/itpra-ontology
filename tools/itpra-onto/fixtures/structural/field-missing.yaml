@@ -1,0 +1,12 @@
+# Proves itpra-o:FieldMissingPrefLabelShape (structural.ttl item 1): deleting `term` (-> skos:prefLabel)
+# from a real, currently-clean Capability record must raise exactly one Violation of field-missing, on
+# that same record. `definition`/`id` are untouched, so this fixture proves only the prefLabel arm — the
+# definition/identifier arms are the same shape pattern, proven correct by "clean data conforms".
+rule: field-missing
+expect:
+  severity: Violation
+  focus: CAP-FND-1
+  count: 1
+mutate:
+  id: CAP-FND-1
+  delete: [term]
