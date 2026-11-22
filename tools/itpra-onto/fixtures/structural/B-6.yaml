@@ -1,0 +1,20 @@
+# Proves itpra-o:RealizedInExactlyOneShape (structural.ttl item 6; Table B B-6, Warning — advisory per
+# ADR 0042 D3): a brand-new Workflow record carrying TWO realized_in edges
+# (to two real, distinct Journeys) raises exactly one Warning of B-6 (the maxCount arm; both targets
+# resolve fine, so target-unresolved is not also triggered). Workflow does not participate in
+# grouped_by/B-2/B-3/B-18/B-19 at all, so this is fully isolated.
+rule: B-6
+expect:
+  severity: Warning
+  focus: WF-FIXTURE-B6
+  count: 1
+add:
+  file: terms
+  record:
+    id: WF-FIXTURE-B6
+    type: Workflow
+    term: Fixture Workflow With Two Realized In
+    definition: A synthetic record that exists only to prove the B-6 shape fires on a second realized_in edge.
+    relates_to:
+      - {rel: realized_in, target: JRN-adm-onboard-developer}
+      - {rel: realized_in, target: JRN-itsm-onboard-provider}

@@ -27,5 +27,44 @@ jobs:
         run: python tools/check-links.py
       - name: Publication guard
         run: python tools/publication-scan.py
+      - name: Publication guard over the pipeline's own documents and fixtures
+        run: python tools/publication-scan.py --root tools/itpra-onto
       - name: Tool tests
         run: python -m unittest discover -s tests -v
+
+  pipeline:
+    name: ontology-as-code pipeline (tools/itpra-onto)
+    # The core build on the vocabulary alone (ADR 0043 D1): generated fragments fresh, the package's own
+    # tests, a reproducible build, SHACL clean. `parity` runs only with a consumer overlay and is not run here.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10.2.0
+        with:
+          enable-cache: true
+          python-version: "3.12"
+      - name: Install the pipeline's pinned dependencies (the lockfile must be current)
+        run: uv sync --locked --project tools/itpra-onto
+      - name: Generated fragments are up to date; generate the schema artefacts
+        run: |
+          uv run --project tools/itpra-onto itpra-onto gen-enums --check
+          uv run --project tools/itpra-onto itpra-onto gen-prefixes --check
+          uv run --project tools/itpra-onto itpra-onto gen-verb-shapes --check
+          uv run --project tools/itpra-onto itpra-onto gen-artifacts
+      - name: The pipeline's own tests (overlay tests are skipped without an [overlay])
+        run: uv run --project tools/itpra-onto pytest -q tools/itpra-onto/tests
+      - name: Build the canonical RDF output (no store)
+        run: uv run --project tools/itpra-onto itpra-onto build --no-store
+      - name: A second build reproduces the first byte for byte
+        run: uv run --project tools/itpra-onto itpra-onto build --check
+      - name: SHACL-validate the emitted graphs (any sh:Violation fails; a sh:Warning is advisory)
+        run: uv run --project tools/itpra-onto itpra-onto validate --json
+      - name: Upload the build artefacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: itpra-onto-dist
+          path: |
+            dist/rdf/
+            dist/schema/
+          retention-days: 14

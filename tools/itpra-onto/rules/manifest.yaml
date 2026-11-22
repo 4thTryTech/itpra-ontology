@@ -1,0 +1,65 @@
+# Ordered manifest of the materialisation rules (ADR 0041 D4).
+#
+# Rules run in this list's order, each a SPARQL 1.1 CONSTRUCT whose WHERE reads named graphs by name
+# (never the union of all graphs — ADR 0041 D3: queries name graphs, none reads the union). A rule may
+# read triples an earlier rule already placed into `<graph_ns>inferred`, so order matters even though
+# none of the rules below currently depend on one another. `itpra_onto.rules.load_manifest` reads this
+# file; `itpra_onto.rules.apply_rules` runs each entry's `file` in this order and writes every
+# constructed triple into `<graph_ns>inferred` (never into an asserted graph). `reads` and `produces`
+# are documentation for a reviewer, not consumed by the runner to decide anything.
+#
+# `reads` names asserted graphs by local name (`t1`, or `req/*` for "every req/<X> graph, matched by
+# name prefix, not enumerated"). `produces` names the derived predicate's or class's local name under
+# `itpra-o:`, or `none` for the empty inverse slot.
+
+- id: capability-in-plane
+  file: 10-capability-in-plane.rq
+  description: >-
+    Every Capability's Plane, flattened from grouped_by Capability->Domain->Plane (two hops, both 1:1).
+  reads: [t1]
+  produces: inPlane
+
+- id: capability-in-service-domain
+  file: 20-capability-in-service-domain.rq
+  description: >-
+    Every Capability's ServiceDomain, flattened from grouped_by Capability->Domain then
+    belongs_to_service_domain Domain->ServiceDomain.
+  reads: [t1]
+  produces: inServiceDomain
+
+- id: function-in-domain
+  file: 30-function-in-domain.rq
+  description: >-
+    Every Function's Domain(s), via supports Function->Capability then grouped_by Capability->Domain.
+    A function supporting capabilities in several domains gets one triple per distinct domain.
+  reads: [t1]
+  produces: inDomain
+
+- id: requirement-meets
+  file: 40-requirement-meets.rq
+  overlay: true   # reads req/*: runs only when the consumer configures an [overlay] (ADR 0043 D1)
+  description: >-
+    The inverse of the authored metBy (Requirement->Capability), read forward from the capability as
+    meets. The ONE materialised reverse link ADR 0041 D4 allows, kept for a consumer's traceability
+    check over its `Meets:` lines (ADR 0042 D7) — not a general inverse.
+  reads: [req/*]
+  produces: meets
+
+- id: boundary-governed-function
+  file: 50-boundary-governed-function.rq
+  description: >-
+    The functions AUTON-BOUNDARY governs directly (the concept id is fixed by ADR 0028), typed
+    itpra-o:BoundaryGovernedFunction. Reproduces exactly the set the consumer's linter's
+    `_boundary_governed_functions` helper computes from the YAML (direct governs targets whose id
+    starts with FUNC-; `?func a itpra:FUNCTION` is the graph-native equivalent of that id test).
+  reads: [t1]
+  produces: BoundaryGovernedFunction
+
+- id: inverses
+  file: 90-inverses.rq
+  description: >-
+    The deliberately empty slot (ADR 0041 D4): no named inverse property is minted for any verb.
+    SPARQL inverse paths are used instead. Contains no CONSTRUCT; the runner skips it and reports zero
+    triples. Exists so a demonstrated future consumer need has an ordered place to land.
+  reads: []
+  produces: none

@@ -1,0 +1,22 @@
+# B-8-pref-label-unique (shapes/crossfield.ttl, itpra-o:PrefLabelUniqueShape; SKOS S14: at most one
+# preferred label per language tag per subject) is DEFENCE IN DEPTH: no authoring-YAML mutation can produce
+# a second skos:prefLabel on one subject at all, because `term` is a scalar field in the authoring schema
+# (emit.term_triples reads `rec["term"]` once, via `normalise_text`/`_en`, and yields exactly one
+# skos:prefLabel triple, or none if `term` is absent -- there is no list form). The genuine duplicate-label
+# defect can only be produced by injecting a second skos:prefLabel quad directly into an emitted dataset,
+# bypassing the emitter entirely -- proven in tests/test_shapes_crossfield.py's
+# test_pref_label_unique_fires_per_surplus_label_in_one_language.
+#
+# This `count: 0` clean-case fixture (fixtures.py's grammar) documents that boundary from the authoring
+# side: editing CAP-FND-1's `term` field to a new value is the closest an authoring mutation can get to
+# "changing the preferred label", and it still yields exactly one skos:prefLabel (the new text), never two
+# -- B-8-pref-label-unique stays silent.
+rule: B-8-pref-label-unique
+expect:
+  severity: Violation
+  focus: CAP-FND-1
+  count: 0
+mutate:
+  id: CAP-FND-1
+  set:
+    term: "Platform Configuration Source of Truth (renamed, B-8-pref-label-unique clean-case fixture)"

@@ -1,0 +1,28 @@
+# Proves itpra-o:AuthoringFileShape (structural.ttl item 7; Table B B-12): adding a SECOND, synthetic term
+# record that shares CAP-FND-1's real id and is otherwise byte-identical (same type/term/definition/
+# relates_to/source) makes the subject itpra:CAP-FND-1 carry TWO distinct authoringFile literals — the
+# real file path and fixtures.SYNTHETIC_FILE — raising exactly one Violation (pySHACL reports one result
+# per exceeded maxCount, not one per excess value) of B-12. Every OTHER predicate on the two records is
+# identical, so it produces exactly one distinct RDF value each (duplicate triples collapse) and nothing
+# else fires: this is the graph-level analogue of an id-duplicate collision (Table A: "once two colliding
+# YAML records are emitted they skolemise onto the SAME IRI"), used here deliberately since it is the only
+# way the fixture grammar can vary a record's `file` (authoringFile is synthesised from the TermRecord's
+# `.file`, which `mutate` cannot touch — only `add` sets it, always to SYNTHETIC_FILE).
+rule: B-12
+expect:
+  severity: Violation
+  focus: CAP-FND-1
+  count: 1
+add:
+  file: terms
+  record:
+    id: CAP-FND-1
+    term: Platform Configuration Source of Truth
+    type: Capability
+    definition: >
+      A single, versioned, declarative source of truth for all platform configuration and definitions, with
+      full history, review, and rollback — the authoritative desired state the platform reconciles toward.
+    relates_to:
+      - {rel: grouped_by, target: FND}
+      - {rel: consumed_by, target: PERSONA-platform-team}
+    source: ADR 0001

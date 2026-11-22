@@ -1,0 +1,15 @@
+# CQ5 (part 2) — registry violations: a `verifiedBy` target that is NOT typed JOURNEY in t1.
+#
+# Reads every req/<X> graph (matched by name prefix). Expected to be EMPTY; test_competency.py
+# asserts that.
+
+SELECT ?req ?target
+WHERE {
+  GRAPH ?g {
+    ?req itpra-o:verifiedBy ?target .
+  }
+  FILTER(STRSTARTS(STR(?g), CONCAT(STR(itpra-g:), "req/")))
+  FILTER NOT EXISTS {
+    GRAPH itpra-g:t1 { ?target a itpra:JOURNEY }
+  }
+}

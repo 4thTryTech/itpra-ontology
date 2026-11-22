@@ -1,0 +1,19 @@
+# Proves emit.py's _verb_edges guard (shapes/REGISTER.md's `relates-to-malformed` row, pre-A -- enforced at
+# emit time, mechanism `python`, not a shape). `set: {relates_to: ["oops"]}` replaces CAP-FND-1's whole
+# relates_to list with one bare string, which is not a mapping: emit._verb_edges raises EmitError naming the
+# record id and the offending entry (rather than an uncaught TypeError). fixtures.run_fixture() catches the EmitError
+# and turns it into the same synthetic `rule_id="emit-error"` finding every other emit-time guard's fixture
+# uses (e.g. crossfield/B-13-emit-guard.yaml), so this fixture uses the exact same assert_fixture() call as
+# one proving a SHACL shape -- confirming, in passing, that the fixture grammar's `set` can carry a list
+# value, not just scalars/mappings. `emit_error: EmitError` (the base class, raised by
+# _verb_edges) — a SourceGrammarError on the same record would not satisfy this fixture.
+rule: emit-error
+expect:
+  severity: Violation
+  focus: CAP-FND-1
+  count: 1
+  emit_error: EmitError
+mutate:
+  id: CAP-FND-1
+  set:
+    relates_to: ["oops"]

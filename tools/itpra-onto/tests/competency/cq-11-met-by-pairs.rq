@@ -1,0 +1,13 @@
+# CQ7 (part 2) — every (requirement, capability) pair the authored itpra-o:metBy edge holds, across
+# every req/<X> graph (matched by name prefix).
+#
+# test_competency.py compares this set, reversed to (capability, requirement), against cq-10's
+# rule-derived meets pairs: they must be exactly equal.
+
+SELECT ?req ?cap
+WHERE {
+  GRAPH ?g {
+    ?req itpra-o:metBy ?cap .
+  }
+  FILTER(STRSTARTS(STR(?g), CONCAT(STR(itpra-g:), "req/")))
+}

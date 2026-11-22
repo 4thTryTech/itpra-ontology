@@ -1,0 +1,11 @@
+# Positive control for cq-08: total itpra-o:categorizedAs (the registry `qa` field) edges
+# across every req/<X> graph. test_competency.py asserts this equals the number of `qa` entries across
+# every registry (NFR records only carry it).
+
+SELECT (COUNT(*) AS ?n)
+WHERE {
+  GRAPH ?g {
+    ?req itpra-o:categorizedAs ?target .
+  }
+  FILTER(STRSTARTS(STR(?g), CONCAT(STR(itpra-g:), "req/")))
+}

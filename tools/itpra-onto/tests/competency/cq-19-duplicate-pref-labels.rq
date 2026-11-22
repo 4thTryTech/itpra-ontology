@@ -1,0 +1,16 @@
+# CQ10 (part 1) — any subject in t1 carrying more than one distinct skos:prefLabel (the `term` slot)?
+#
+# Expected to be EMPTY. `skos:` is a stable W3C vocabulary IRI, not the configured base IRI, so it is
+# declared directly here (as emit.py's own SKOS module constant is) rather than through the
+# itpra:/itpra-o:/itpra-g: prefix block the test harness prepends at run time.
+
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+
+SELECT ?s (COUNT(DISTINCT ?label) AS ?n)
+WHERE {
+  GRAPH itpra-g:t1 {
+    ?s skos:prefLabel ?label .
+  }
+}
+GROUP BY ?s
+HAVING (COUNT(DISTINCT ?label) > 1)

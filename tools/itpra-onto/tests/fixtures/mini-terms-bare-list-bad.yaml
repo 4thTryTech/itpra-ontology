@@ -1,0 +1,7 @@
+# Same shape as mini-terms-bare-list.yaml but with an invalid id, to check
+# whether --target-class Term against a bare list actually validates each
+# element or silently no-ops.
+- id: "1-BAD-ID"
+  term: Invalid Id Fixture
+  type: Capability
+  definition: A fixture record whose id violates the Term.id pattern.

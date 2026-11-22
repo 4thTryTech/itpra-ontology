@@ -49,6 +49,15 @@ class Links(unittest.TestCase):
             problems = links.broken_links(root)
             self.assertEqual(len(problems), 1); self.assertIn("c.md", problems[0])
 
+    def test_hidden_directories_and_dist_are_not_scanned(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            for folder in (".venv/lib/pkg/docs", "dist/schema", "tools/.cache"):
+                (root / folder).mkdir(parents=True); (root / folder / "x.md").write_text("[bad](nowhere.md)\n")
+            (root / "tools").mkdir(exist_ok=True); (root / "tools" / "y.md").write_text("[bad](nowhere.md)\n")
+            problems = links.broken_links(root)
+            self.assertEqual(len(problems), 1); self.assertIn("tools/y.md", problems[0])
+
 
 class Scan(unittest.TestCase):
     def test_private_references_are_found_and_urls_exempt(self):

@@ -1,0 +1,11 @@
+# CQ11 — every distinct ADR node any subject (in any graph) cites via itpra-o:decidedIn.
+#
+# test_competency.py checks each local name matches ADR-NNNN (four digits) and reports the count of
+# distinct ADR nodes referenced.
+
+SELECT DISTINCT ?adr
+WHERE {
+  GRAPH ?g {
+    ?s itpra-o:decidedIn ?adr .
+  }
+}

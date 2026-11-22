@@ -1,0 +1,28 @@
+# itpra-o:SupportsMinCountShape (structural.ttl item 5b; Table B B-2-supports) has NO count:1 fixture,
+# and cannot: it shares its sh:targetClass (itpra:FUNCTION) with itpra-o:InDomainMinCountShape (B-18), and
+# itpra-o:inDomain is entirely DERIVED from itpra-o:supports (rules/30-function-in-domain.rq). Zeroing a
+# Function's own supports edges therefore fires B-2-supports AND B-18 on the exact same focus, in the same
+# mutation -- unlike the B-2/B-19 pair (grouped_by / inPlane-inServiceDomain), where mutating the CAUSE on
+# a Capability (see B-18.yaml's own header) lets the effect land on a DIFFERENT subject than the Function
+# under test, keeping each fixture single-rule. There is no equivalent trick here: both shapes target the
+# SAME class over the SAME edge's absence, on the SAME node. assert_fixture()'s no-cascade check would
+# reject any mutation that actually fires B-2-supports, so no positive fixture is shippable for this id
+# (see also test_shapes_structural.py's own `not_isolatable` note).
+#
+# This is therefore a `count: 0` clean-case fixture instead (fixtures.py's grammar): it proves the shape
+# does NOT misfire on a Function that keeps at least one supports edge. FUNC-adm-api-contract-design
+# supports two Capabilities (CAP-ADM-ENG-1, CAP-ADM-ENG-3); dropping one and keeping the other leaves
+# supports at count 1, well above the shape's minCount 1, so B-2-supports (and B-18, derived from the same
+# edge) both stay silent. The genuine B-2-supports firing is exercised only implicitly, never in isolation,
+# whenever a real record's supports list is fully emptied (which always co-fires B-18 on the same focus, as
+# this header explains) -- there is no separate fixture proving the isolated Violation.
+rule: B-2-supports
+expect:
+  severity: Violation
+  focus: FUNC-adm-api-contract-design
+  count: 0
+mutate:
+  id: FUNC-adm-api-contract-design
+  set:
+    relates_to:
+      - {rel: supports, target: CAP-ADM-ENG-1}

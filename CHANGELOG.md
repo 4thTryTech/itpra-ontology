@@ -2,6 +2,15 @@
 
 Changes to the vocabulary, newest first. Versions follow [ADR 0003](decisions/0003-versioning-releases-and-pinning.md).
 
+## Unreleased
+
+No vocabulary change. The ontology-as-code pipeline joins the repository as `tools/itpra-onto/`
+([ADR 0041](decisions/0041-the-rdf-projection-roles-modelling-and-derivation.md),
+[ADR 0042](decisions/0042-validation-parity-register-shapes-fixtures-and-the-parity-check.md),
+[ADR 0043](decisions/0043-builds-artefacts-and-the-consumer-overlay.md)): the vocabulary projected to RDF in named
+graphs, SPARQL derivation rules, SHACL shapes with a fixture per rule, a reproducible build and a second CI job that
+runs them. Its generated artefacts are not yet released assets.
+
 ## 4.0.0 — 2026-11-21
 
 First public release of the ITPRA ontology as its own repository. The content equals `3.16.3`; what changes is the

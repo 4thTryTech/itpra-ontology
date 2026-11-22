@@ -1,0 +1,14 @@
+# CQ12 — every subject in t1 or req/<X>, with a count of its distinct itpra-o:authoringFile values
+# and one sample value.
+#
+# test_competency.py asserts every count is exactly 1 (ADR 0043 D3) and that the sampled file exists
+# relative to the repository root.
+
+SELECT ?s (COUNT(DISTINCT ?file) AS ?n) (SAMPLE(?file) AS ?sample)
+WHERE {
+  GRAPH ?g {
+    ?s itpra-o:authoringFile ?file .
+  }
+  FILTER(?g = itpra-g:t1 || STRSTARTS(STR(?g), CONCAT(STR(itpra-g:), "req/")))
+}
+GROUP BY ?s

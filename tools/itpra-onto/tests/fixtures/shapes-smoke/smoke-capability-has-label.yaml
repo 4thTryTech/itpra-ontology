@@ -1,0 +1,11 @@
+# Proves shacl.py + fixtures.py's plumbing end to end, against smoke.ttl's Core shape (a): deleting
+# `term` (-> skos:prefLabel) from a real, currently-clean Capability record must raise exactly one Violation
+# of smoke-capability-has-label, on that same record.
+rule: smoke-capability-has-label
+expect:
+  severity: Violation
+  focus: CAP-FND-1
+  count: 1
+mutate:
+  id: CAP-FND-1
+  delete: [term]

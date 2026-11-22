@@ -1,0 +1,15 @@
+# Proves itpra-o:DependsOnMinCountShape (structural.ttl item 6; Table B B-7, Warning — advisory per
+# ADR 0042 D3): a Journey (JRN-adm-onboard-developer) with zero depends_on edges raises
+# exactly one Warning of B-7. grouped_by and consumed_by are kept intact (each still exactly one), so
+# B-2/B-3/B-5 are unaffected.
+rule: B-7
+expect:
+  severity: Warning
+  focus: JRN-adm-onboard-developer
+  count: 1
+mutate:
+  id: JRN-adm-onboard-developer
+  set:
+    relates_to:
+      - {rel: grouped_by, target: JG-ONBOARDING}
+      - {rel: consumed_by, target: PERSONA-adm-app-team}

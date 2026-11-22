@@ -1,0 +1,16 @@
+# Proves itpra-o:BelongsToServiceDomainDomainShape (structural.ttl item 5a; Table B
+# B-3-belongs-to-service-domain): a Domain (FND) with zero belongs_to_service_domain edges raises
+# exactly one Violation. `set` keeps grouped_by intact at count 1, so B-2/B-3 are unaffected; dropping
+# belongs_to_service_domain does zero out the derived inServiceDomain for every Capability grouped under
+# FND, but — same reasoning as B-2.yaml/B-3.yaml — that lands on THEIR foci, not on "FND" (B-19 does not
+# target itpra:DOMAIN at all).
+rule: B-3-belongs-to-service-domain
+expect:
+  severity: Violation
+  focus: FND
+  count: 1
+mutate:
+  id: FND
+  set:
+    relates_to:
+      - {rel: grouped_by, target: PLANE-FOUNDATION}

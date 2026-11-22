@@ -1,0 +1,11 @@
+# NFR-AVAILABILITY-1's id says AVAILABILITY; repointing its qa at RESILIENCE (a real, different
+# QualityAttribute -- so req-qa-unresolved must NOT also fire) must raise exactly one B-1 Violation, on
+# itself: the id no longer embeds the qa it's categorized as.
+rule: B-1
+expect:
+  severity: Violation
+  focus: NFR-AVAILABILITY-1
+  count: 1
+mutate:
+  id: NFR-AVAILABILITY-1
+  set: {qa: RESILIENCE}

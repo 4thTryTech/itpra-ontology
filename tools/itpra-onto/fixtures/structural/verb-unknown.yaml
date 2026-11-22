@@ -1,0 +1,17 @@
+# Proves the emit-time enforcement of shapes/REGISTER.md Table A's `verb-unknown` row (mechanism
+# `generated`; emit._verb_edges raises EmitError "relates_to verb ... is not a slot in the verbs subset").
+# No other fixture proves this guard in isolation. The mutation targets a TERM
+# record (CAP-FND-1, a Capability), not an EntityType record: the emitter never projects an EntityType
+# record's relates_to (meta-edges), so an unknown verb there is linter-only by construction
+# (parity.META_EDGE_RULE_IDS). The appended edge's target (FND) resolves and is otherwise well-formed, so
+# the only defect is the verb: the linter reports verb-unknown on CAP-FND-1, the emitter raises exactly this
+# guard's EmitError on CAP-FND-1 (verdict: both).
+rule: emit-error
+expect:
+  severity: Violation
+  focus: CAP-FND-1
+  count: 1
+  emit_error: EmitError
+mutate:
+  id: CAP-FND-1
+  append_relates_to: {rel: frobnicates, target: FND}

@@ -1,0 +1,37 @@
+id: https://example.test/ns/itpra/test-schema
+name: itpra-onto-mini-test-schema
+description: >-
+  Minimal LinkML schema for itpra-onto's smoke tests only. NOT the real ITPRA
+  ontology schema (schema/itpra.linkml.yaml). Mirrors the shape of a
+  terms/*.yaml record (id, term, type, definition) closely enough to test the
+  tree_root container pattern the real schema also uses.
+prefixes:
+  linkml: https://w3id.org/linkml/
+default_prefix: itpra-test
+default_range: string
+imports:
+  - linkml:types
+
+classes:
+  Term:
+    description: One controlled-vocabulary record.
+    attributes:
+      id:
+        identifier: true
+        pattern: "^[A-Za-z][A-Za-z0-9_-]*$"
+      term:
+        required: true
+      type:
+        required: true
+      definition:
+        required: true
+  TermFile:
+    description: >-
+      Thin in-memory wrapper for one terms/*.yaml list (LinkML's documented
+      answer to a bare top-level list: a tree_root container class).
+    tree_root: true
+    attributes:
+      terms:
+        range: Term
+        multivalued: true
+        inlined_as_list: true

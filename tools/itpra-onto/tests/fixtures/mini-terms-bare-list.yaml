@@ -1,0 +1,12 @@
+# A bare top-level list, shaped like the real terms/*.yaml files (no wrapping
+# `terms:` key) -- used only to check that `linkml-validate --target-class Term`
+# accepts this shape directly. See
+# tests/test_smoke.py::test_linkml_bare_list_target_class_spike.
+- id: CAP-TEST-1
+  term: Test Capability One
+  type: Capability
+  definition: A fixture record for itpra-onto's smoke tests only.
+- id: FUNC-TEST-1
+  term: Test Function One
+  type: Function
+  definition: A second fixture record for itpra-onto's smoke tests only.

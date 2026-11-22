@@ -1,0 +1,17 @@
+# CQ1 — how many subjects of each authored type exist in the t1 graph?
+#
+# One row per distinct class the t1 graph types a subject with (every EntityType subclass pinned in
+# schema.yaml `types:`, plus skos:Concept, which every term also carries). The competency
+# test filters to the 13 term classes and compares each count to a YAML-computed total
+# (never a literal — test_competency.py's own rule, matching test_rules.py's convention).
+#
+# The itpra:/itpra-o:/itpra-g: PREFIX block is prepended at run time from itpra-onto.toml [iri]
+# (ADR 0004); this file names no base IRI and declares no PREFIX for those three itself.
+
+SELECT ?class (COUNT(DISTINCT ?s) AS ?n)
+WHERE {
+  GRAPH itpra-g:t1 {
+    ?s a ?class .
+  }
+}
+GROUP BY ?class

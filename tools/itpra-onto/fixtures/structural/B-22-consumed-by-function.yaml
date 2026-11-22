@@ -1,0 +1,16 @@
+# Proves the generated B-22 shape for consumed_by (shapes/generated/verb-pairs.ttl,
+# itpra-o:VerbPairsConsumedByShape): CAP-FND-1 gains a consumed_by edge
+# to FUNC-version-control (a real, resolved Function). consumed_by's itpra_verb pairs are (Capability,
+# Persona) and (Journey, Persona); (Capability, Function) is one Violation.
+#
+# A clean single-rule proof: the target resolves (target-unresolved silent); consumed_by has no declared
+# cardinality, and B-5 (consumed_by >= 1, advisory) is satisfied; no rule derives anything from consumed_by.
+# The linter has no domain/range check (verdict: shacl-only).
+rule: B-22
+expect:
+  severity: Violation
+  focus: CAP-FND-1
+  count: 1
+mutate:
+  id: CAP-FND-1
+  append_relates_to: {rel: consumed_by, target: FUNC-version-control}

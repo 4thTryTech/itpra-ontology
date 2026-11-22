@@ -1,0 +1,15 @@
+# Proves itpra-o:IdPatternShape (structural.ttl item 2): rewriting CAP-FND-1's own `id` to a value that
+# starts with a digit ("1-bad") fails ^[A-Za-z][A-Za-z0-9_.-]*$. The emitted subject's IRI local name
+# changes with it (emit.term_triples always re-reads rec["id"]), so `expect.focus` is the NEW id, not the
+# original "CAP-FND-1" used to locate the record via `mutate.id`. Other records that still point at the
+# string "CAP-FND-1" (e.g. a Journey's depends_on) become dangling as a side effect, but that lands on
+# THEIR OWN focus, not on "1-bad" — assert_fixture's cascade check is scoped to the same focus, so this
+# stays a clean, single-rule proof.
+rule: id-pattern
+expect:
+  severity: Violation
+  focus: "1-bad"
+  count: 1
+mutate:
+  id: CAP-FND-1
+  set: {id: "1-bad"}

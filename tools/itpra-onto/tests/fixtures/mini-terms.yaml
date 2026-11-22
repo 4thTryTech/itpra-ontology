@@ -1,0 +1,9 @@
+terms:
+  - id: CAP-TEST-1
+    term: Test Capability One
+    type: Capability
+    definition: A fixture record for itpra-onto's smoke tests only.
+  - id: FUNC-TEST-1
+    term: Test Function One
+    type: Function
+    definition: A second fixture record for itpra-onto's smoke tests only.

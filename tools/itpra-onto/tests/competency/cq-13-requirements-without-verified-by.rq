@@ -1,0 +1,14 @@
+# CQ8 (part 2) — requirements with no `verifiedBy` edge at all, across every req/<X> graph.
+#
+# Every requirement must be verified by at least one journey (the consumer's traceability rule, registry
+# side);
+# expected to be EMPTY, mirroring cq-12's metBy check.
+
+SELECT ?req
+WHERE {
+  GRAPH ?g {
+    ?req a itpra:REQUIREMENT .
+    FILTER NOT EXISTS { ?req itpra-o:verifiedBy ?journey }
+  }
+  FILTER(STRSTARTS(STR(?g), CONCAT(STR(itpra-g:), "req/")))
+}
