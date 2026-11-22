@@ -489,6 +489,7 @@ def test_cli_parity_json_on_the_real_tree_is_valid_json_and_the_only_stdout():
     assert len(lines) == 1, result.stdout
     payload = json.loads(lines[0])
     assert set(payload) == {
+        "mode",
         "comparable_rules",
         "linter",
         "shacl",
@@ -499,6 +500,7 @@ def test_cli_parity_json_on_the_real_tree_is_valid_json_and_the_only_stdout():
         "meta_edge_excluded",
         "emit_errors",
     }
+    assert payload["mode"] == "overlay"
     passed = not payload["linter_only"] and not payload["shacl_only"] and not payload["emit_errors"]
     assert result.returncode == (0 if passed else 1)
 
