@@ -88,7 +88,7 @@ def test_record_classes_are_the_emitters_class_table(vocab: emit.Vocabulary):
 def test_every_verb_gets_one_shape_with_rule_id_b22(config: Config, vocab: emit.Vocabulary):
     entries = gen_verb_shapes.read_verb_pairs(vocab.sv, config)
     assert [e.verb for e in entries] == vocab.verb_slots  # all 17, every evidence class
-    shapes = shacl.load_shapes(PROJECT_ROOT / "shapes", config=config)
+    shapes = shacl.load_shapes(shacl.SHAPES_DIR, config=config)
     rule_ids = shacl._shape_rule_ids(shapes, config)
     for entry in entries:
         shape = config.iri.onto_ns + gen_verb_shapes._shape_name(entry.verb)

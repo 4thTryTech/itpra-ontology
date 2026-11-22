@@ -30,11 +30,12 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from collections.abc import Sequence
 from pathlib import Path
 
-from itpra_onto.config import is_placeholder_base_iri, load_config
+from itpra_onto.config import CONFIG_PATH_ENV_VAR, is_placeholder_base_iri, load_config
 
 NOT_IMPLEMENTED_EXIT = 2
 REFUSAL_EXIT = 1
@@ -155,14 +156,17 @@ def _cmd_gen_artifacts(args: argparse.Namespace) -> int:
     return gen_artifacts.main(check_only=args.check)
 
 
+def _cmd_lint(args: argparse.Namespace) -> int:
+    from itpra_onto import lint
+
+    argv = ["--json"] if args.json else []
+    if args.root:
+        argv += ["--root", args.root]
+    return lint.main(argv)
+
+
 def _cmd_parity(args: argparse.Namespace) -> int:
     from itpra_onto import parity
-
-    try:
-        parity.require_overlay()
-    except parity.ParityError as exc:
-        print(f"parity: {exc}", file=sys.stderr)
-        return REFUSAL_EXIT
 
     if args.fixtures:
         verdicts = parity.run_fixtures()
@@ -204,6 +208,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="itpra-onto",
         description="itpra-onto: the ITPRA ontology-as-code pipeline (YAML -> LinkML -> RDF -> SHACL -> Oxigraph).",
+    )
+    parser.add_argument(
+        "--config",
+        metavar="PATH",
+        help="the itpra-onto.toml to use (default: $ITPRA_ONTO_CONFIG, else one in the working directory or its "
+        "parents, else the checkout's)",
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -269,10 +279,19 @@ def build_parser() -> argparse.ArgumentParser:
         "--check", action="store_true", help="exit 1 if dist/schema/ is stale or missing"
     )
     gen_artifacts.set_defaults(func=_cmd_gen_artifacts)
+    lint = subparsers.add_parser(
+        "lint",
+        help="lint the vocabulary with the ontology's own rules (itpra_onto.lint; the register's core-home rows); "
+        "exit 1 on any error",
+    )
+    lint.add_argument("--root", help="the vocabulary's directory (default: [paths] ontology_dir)")
+    lint.add_argument("--json", action="store_true", help="emit the findings as JSON and nothing else on stdout")
+    lint.set_defaults(func=_cmd_lint)
     parity = subparsers.add_parser(
         "parity",
-        help="compare the consumer's linter's --json findings ([overlay] linter_script) with pySHACL's over the "
-        "comparable (core/sparql) rule ids, over the real tree (default) or fixture by fixture (--fixtures)",
+        help="compare a linter's findings with pySHACL's over the comparable (core/sparql) rule ids: without an "
+        "[overlay] the ontology's own lint over the core rules; with one, the consumer's linter ([overlay] "
+        "linter_script) over every comparable rule — over the real tree (default) or fixture by fixture (--fixtures)",
     )
     parity.add_argument(
         "--fixtures",
@@ -303,6 +322,8 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
+    if args.config:
+        os.environ[CONFIG_PATH_ENV_VAR] = str(Path(args.config).resolve())
     return args.func(args)
 
 

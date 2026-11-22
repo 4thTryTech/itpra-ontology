@@ -22,7 +22,6 @@ from itpra_onto import emit, rules
 from itpra_onto.config import Config, load_config
 from itpra_onto.emit import Inputs
 
-REPO_ROOT = emit.REPO_ROOT
 EXPECTED_RULE_IDS = (
     "capability-in-plane",
     "capability-in-service-domain",

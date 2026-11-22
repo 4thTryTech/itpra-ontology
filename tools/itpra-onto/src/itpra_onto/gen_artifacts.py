@@ -83,7 +83,7 @@ from linkml_runtime.utils.schemaview import SchemaView
 from itpra_onto import canon, schema_loading
 from itpra_onto.config import Config, load_config
 
-PROJECT_DIR = Path(__file__).resolve().parents[2]  # the package root
+PACKAGE_DIR = Path(__file__).resolve().parent  # src/itpra_onto: the package's own code and data
 
 JSON_SCHEMA_FILENAME = "itpra.schema.json"
 PYDANTIC_FILENAME = "itpra_models.py"
@@ -115,7 +115,7 @@ _SOURCE_FILE_LINE = re.compile(r"^[ \t]*'source_file':\s*(['\"]).*?\1,[ \t]*\r?\
 
 def _relative(path: Path) -> str:
     try:
-        return path.resolve().relative_to(PROJECT_DIR).as_posix()
+        return path.resolve().relative_to(Path.cwd().resolve()).as_posix()
     except ValueError:
         return str(path)
 

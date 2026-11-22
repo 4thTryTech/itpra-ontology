@@ -43,8 +43,6 @@ from itpra_onto import schema_loading
 from itpra_onto.authoring import REQUIREMENT_BASE_CLASS, TERM_BASE_CLASS, discriminator_map
 from itpra_onto.config import Config, load_config
 
-PROJECT_DIR = Path(__file__).resolve().parents[2]  # the package root
-REPO_ROOT = PROJECT_DIR.parents[1]
 
 # ---- standard vocabularies (W3C/DCMI constants, not the base IRI; ADR 0004) ----------------------------
 RDF = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -100,7 +98,7 @@ PROVENANCE_PROPERTY_LABELS = {
     "sha256": "sha256",
     "inputHash": "input hash",
     "pipelineVersion": "pipeline version",
-    "uvLockHash": "uv lock hash",
+    "environmentHash": "environment hash",
     "rulesVersion": "rules version",
     "schemaHash": "schema hash",
     "codeHash": "code hash",  # identifies the pipeline code itself, not just its inputs
@@ -169,19 +167,21 @@ class SourceGrammarError(EmitError):
     """A ``source`` item naming ``ADR`` does not match the strict grammar ADR 0005 states."""
 
 
-def guard_input_path(path: Path, *, is_file: bool = True, excluded: Iterable[str] = ()) -> Path:
+def guard_input_path(path: Path, *, repo_root: Path, is_file: bool = True, excluded: Iterable[str] = ()) -> Path:
     """Return ``path`` resolved, or raise :class:`InputPathError` naming the path and the violated rule.
 
-    Rules (ADR 0043 D1): (a) under the repository root; (b) no component, relative to the root, beginning
+    Rules (ADR 0043 D1): (a) under ``repo_root`` (the consumer's repository root, ``Config.repo_root``); (b)
+    no component, relative to the root, beginning
     with ``.`` (``.git/``, ``.venv/``, ``.store/``, worktrees); (c) not under any directory named
     (case-insensitively) ``dist``, ``public`` or ``__pycache__``, nor one of ``excluded`` — the consumer's
     ``[overlay] excluded_dirs`` — at ANY depth; (d) a file must be ``.yaml``. Directories and glob patterns
     are checked against (a)–(c).
     """
     resolved = Path(os.path.abspath(path)) if _is_glob(path) else path.resolve()
-    if not resolved.is_relative_to(REPO_ROOT):
-        raise InputPathError(f"{resolved}: rule (a) - input lies outside the repository root {REPO_ROOT}")
-    parts = resolved.relative_to(REPO_ROOT).parts
+    repo_root = repo_root.resolve()
+    if not resolved.is_relative_to(repo_root):
+        raise InputPathError(f"{resolved}: rule (a) - input lies outside the repository root {repo_root}")
+    parts = resolved.relative_to(repo_root).parts
     dirs = parts[:-1] if is_file else parts
     hidden = [p for p in parts if p.startswith(".")]
     if hidden:
@@ -239,12 +239,14 @@ def _excluded(config: Config) -> tuple[str, ...]:
 
 
 def ontology_dir(config: Config) -> Path:
-    return guard_input_path(_config_relative(config, config.paths.ontology_dir), is_file=False, excluded=_excluded(config))
+    return guard_input_path(
+        _config_relative(config, config.paths.ontology_dir), repo_root=config.repo_root, is_file=False, excluded=_excluded(config)
+    )
 
 
 def schema_file(config: Config) -> Path:
     """``schema.yaml`` of the vocabulary, guarded."""
-    return guard_input_path(ontology_dir(config) / "schema.yaml", excluded=_excluded(config))
+    return guard_input_path(ontology_dir(config) / "schema.yaml", repo_root=config.repo_root, excluded=_excluded(config))
 
 
 def term_files(config: Config | None = None) -> list[Path]:
@@ -255,7 +257,7 @@ def term_files(config: Config | None = None) -> list[Path]:
     root = ontology_dir(config)
     top = sorted(p for p in root.glob("*.yaml") if p.name not in ("schema.yaml", "PIN.yaml"))
     terms = sorted((root / "terms").glob("*.yaml")) if (root / "terms").is_dir() else []
-    return [guard_input_path(p, excluded=_excluded(config)) for p in top + terms]
+    return [guard_input_path(p, repo_root=config.repo_root, excluded=_excluded(config)) for p in top + terms]
 
 
 def registry_files(config: Config | None = None) -> list[Path]:
@@ -266,8 +268,8 @@ def registry_files(config: Config | None = None) -> list[Path]:
         return []
     pattern = _config_relative(config, config.overlay.requirements_glob)
     excluded = _excluded(config)
-    guard_input_path(pattern, is_file=False, excluded=excluded)
-    return sorted(guard_input_path(Path(p), excluded=excluded) for p in glob.glob(str(pattern)))
+    guard_input_path(pattern, repo_root=config.repo_root, is_file=False, excluded=excluded)
+    return sorted(guard_input_path(Path(p), repo_root=config.repo_root, excluded=excluded) for p in glob.glob(str(pattern)))
 
 
 def registry_root(config: Config) -> Path | None:
@@ -296,17 +298,21 @@ def _load_yaml(path: Path) -> Any:
         return yaml.load(fh, Loader=_YAML_LOADER)  # noqa: S506 - a safe loader
 
 
-def _repo_relative(path: Path) -> str:
-    return path.relative_to(REPO_ROOT).as_posix()
+def _repo_relative(path: Path, repo_root: Path) -> str:
+    """``path`` as the posix label relative to ``repo_root`` (:attr:`Config.repo_root`)."""
+    return path.resolve().relative_to(repo_root.resolve()).as_posix()
 
 
-def _shown(path: Path) -> str:
+def _shown(path: Path, repo_root: Path | None) -> str:
     """``path`` repo-relative when it is inside the repository (every guarded input is), else as given."""
+    if repo_root is None:
+        return str(path)
     resolved = path.resolve()
-    return resolved.relative_to(REPO_ROOT).as_posix() if resolved.is_relative_to(REPO_ROOT) else str(path)
+    root = repo_root.resolve()
+    return resolved.relative_to(root).as_posix() if resolved.is_relative_to(root) else str(path)
 
 
-def _term_file_records(path: Path) -> list[dict[str, Any]]:
+def _term_file_records(path: Path, repo_root: Path | None = None) -> list[dict[str, Any]]:
     """The records of one term file: a file whose top level is not a list, or a list entry that is not a
     mapping, is an :class:`EmitError` naming the file (never a ``TypeError`` from iterating a mapping key
     by key)."""
@@ -314,14 +320,14 @@ def _term_file_records(path: Path) -> list[dict[str, Any]]:
     if data is None:
         return []
     if not isinstance(data, list):
-        raise EmitError(f"{_shown(path)}: a term file must be a top-level list of records, got {type(data).__name__}")
+        raise EmitError(f"{_shown(path, repo_root)}: a term file must be a top-level list of records, got {type(data).__name__}")
     for index, record in enumerate(data):
         if not isinstance(record, dict):
-            raise EmitError(f"{_shown(path)}: record [{index}] is not a mapping: {record!r}")
+            raise EmitError(f"{_shown(path, repo_root)}: record [{index}] is not a mapping: {record!r}")
     return data
 
 
-def _registry_file_records(path: Path) -> list[dict[str, Any]]:
+def _registry_file_records(path: Path, repo_root: Path | None = None) -> list[dict[str, Any]]:
     """The records of one registry file (the same input-shape guard as :func:`_term_file_records`
     — a top level that is not a mapping, a ``requirements`` value that is not a list, or an entry that is not
     a mapping is an :class:`EmitError` naming the file)."""
@@ -329,30 +335,31 @@ def _registry_file_records(path: Path) -> list[dict[str, Any]]:
     if data is None:
         return []
     if not isinstance(data, dict):
-        raise EmitError(f"{_shown(path)}: a registry must be a top-level mapping, got {type(data).__name__}")
+        raise EmitError(f"{_shown(path, repo_root)}: a registry must be a top-level mapping, got {type(data).__name__}")
     records = data.get("requirements")
     if records is None:
         return []
     if not isinstance(records, list):
-        raise EmitError(f"{_shown(path)}: `requirements` must be a list, got {type(records).__name__}")
+        raise EmitError(f"{_shown(path, repo_root)}: `requirements` must be a list, got {type(records).__name__}")
     for index, record in enumerate(records):
         if not isinstance(record, dict):
-            raise EmitError(f"{_shown(path)}: requirements[{index}] is not a mapping: {record!r}")
+            raise EmitError(f"{_shown(path, repo_root)}: requirements[{index}] is not a mapping: {record!r}")
     return records
 
 
 def load_inputs(config: Config | None = None) -> Inputs:
     """Read every term record and registry record, each tagged with its authoring file (and registry)."""
     config = config if config is not None else load_config()
+    root = config.repo_root
     terms = tuple(
-        TermRecord(record, _repo_relative(path))
+        TermRecord(record, _repo_relative(path, root))
         for path in term_files(config)
-        for record in _term_file_records(path)
+        for record in _term_file_records(path, root)
     )
     requirements = tuple(
-        RegistryRecord(record, _repo_relative(path), registry_of(path, config))
+        RegistryRecord(record, _repo_relative(path, root), registry_of(path, config))
         for path in registry_files(config)
-        for record in _registry_file_records(path)
+        for record in _registry_file_records(path, root)
     )
     version = str(_load_yaml(schema_file(config))["ontology_version"])
     return Inputs(terms=terms, requirements=requirements, ontology_version=version)
@@ -832,7 +839,7 @@ def _derived_declarations(vocab: Vocabulary) -> Iterator[Triple]:
 
 def _provenance_declarations(vocab: Vocabulary) -> Iterator[Triple]:
     """The datatype properties a built dataset's provenance record carries (ADR 0043 D3):
-    ``itpra-o:sha256``, ``inputHash``, ``pipelineVersion``, ``uvLockHash``,
+    ``itpra-o:sha256``, ``inputHash``, ``pipelineVersion``, ``environmentHash``,
     ``rulesVersion``, ``schemaHash``. Declared here, as ``owl:DatatypeProperty``, so they are
     discoverable from the schema graph like every other predicate this pipeline mints; asserted only by
     ``itpra_onto.build``, only into ``<graph_ns>provenance``, never here."""

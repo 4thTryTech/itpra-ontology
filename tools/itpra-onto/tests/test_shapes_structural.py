@@ -31,7 +31,7 @@ from itpra_onto.config import Config, load_config
 PROJECT_DIR = Path(__file__).resolve().parents[1]  # the package root
 SHAPES_DIR = shacl.SHAPES_DIR
 STRUCTURAL_SHAPE_FILE = SHAPES_DIR / "structural.ttl"
-FIXTURES_DIR = PROJECT_DIR / "fixtures" / "structural"
+FIXTURES_DIR = fixtures.FIXTURES_DIR / "structural"
 REGISTER_MD = SHAPES_DIR / "REGISTER.md"
 
 # Rule ids that ARE a shapes/REGISTER.md Table B row but that `_register_rule_ids()`'s regex below cannot

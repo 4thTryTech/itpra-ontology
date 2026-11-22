@@ -399,7 +399,7 @@ def test_fixture_cofires_must_really_cofire(tmp_path: Path):
 
 
 def _mutated_inputs(config: Config, inputs: emit.Inputs, fixture_name: str) -> emit.Inputs:
-    fixture = fixtures.load_fixture(PROJECT_ROOT / "fixtures" / fixture_name)
+    fixture = fixtures.load_fixture(fixtures.FIXTURES_DIR / fixture_name)
     return fixtures.apply_fixture(inputs, fixture)
 
 

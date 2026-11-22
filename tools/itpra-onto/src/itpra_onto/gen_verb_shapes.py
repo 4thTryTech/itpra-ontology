@@ -52,8 +52,8 @@ from itpra_onto import schema_loading
 from itpra_onto.authoring import REQUIREMENT_BASE_CLASS, TERM_BASE_CLASS
 from itpra_onto.config import Config, load_config
 
-PROJECT_DIR = Path(__file__).resolve().parents[2]  # the package root
-GENERATED_SHAPES_DIR = PROJECT_DIR / "shapes" / "generated"
+PACKAGE_DIR = Path(__file__).resolve().parent  # src/itpra_onto: the package's own code and data
+GENERATED_SHAPES_DIR = PACKAGE_DIR / "shapes" / "generated"
 VERB_PAIRS_PATH = GENERATED_SHAPES_DIR / "verb-pairs.ttl"
 
 RULE_ID = "B-22"
@@ -256,7 +256,7 @@ def check(path: Path = VERB_PAIRS_PATH, config: Config | None = None) -> bool:
 
 
 def main(check_only: bool = False) -> int:
-    rel = VERB_PAIRS_PATH.relative_to(PROJECT_DIR).as_posix()
+    rel = VERB_PAIRS_PATH.relative_to(PACKAGE_DIR).as_posix()
     if check_only:
         if check():
             print(f"gen-verb-shapes: {rel} is up to date")

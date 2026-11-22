@@ -81,6 +81,8 @@ from itpra_onto import emit, rules, shacl
 from itpra_onto.config import Config, load_config
 from itpra_onto.emit import Inputs, RegistryRecord, TermRecord
 
+PACKAGE_DIR = Path(__file__).resolve().parent  # src/itpra_onto: the package's own code and data
+FIXTURES_DIR = PACKAGE_DIR / "fixtures"  # the fixtures ship inside the package
 SYNTHETIC_FILE = "fixtures/<synthetic, no real file>"
 
 

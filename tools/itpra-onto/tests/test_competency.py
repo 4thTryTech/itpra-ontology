@@ -48,7 +48,7 @@ from test_rules import (  # test_rules.py's YAML-computed expectations and helpe
     _terms_of_type,
 )
 
-REPO_ROOT = emit.REPO_ROOT
+REPO_ROOT = load_config().repo_root
 COMPETENCY_DIR = Path(__file__).resolve().parent / "competency"
 EXPECTED_TYPES = 13
 EXPECTED_SUB_PROJECTS = 11

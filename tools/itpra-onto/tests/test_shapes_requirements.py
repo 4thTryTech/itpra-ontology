@@ -28,7 +28,7 @@ from itpra_onto.config import Config, load_config
 
 pytestmark = pytest.mark.overlay  # needs the consumer's registries
 
-GROUP_DIR = Path(__file__).resolve().parents[1] / "fixtures" / "requirements"
+GROUP_DIR = fixtures.FIXTURES_DIR / "requirements"
 SHAPE_FILE = shacl.SHAPES_DIR / "requirements.ttl"
 
 EXPECTED_RULE_IDS = {

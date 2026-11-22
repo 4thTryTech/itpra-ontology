@@ -34,8 +34,8 @@ import yaml
 
 from itpra_onto.config import Config, load_config
 
-PROJECT_DIR = Path(__file__).resolve().parents[2]  # the package root
-RULES_DIR = PROJECT_DIR / "rules"
+PACKAGE_DIR = Path(__file__).resolve().parent  # src/itpra_onto: the package's own code and data
+RULES_DIR = PACKAGE_DIR / "rules"
 MANIFEST_NAME = "manifest.yaml"
 INFERRED_GRAPH_LOCAL = "inferred"
 

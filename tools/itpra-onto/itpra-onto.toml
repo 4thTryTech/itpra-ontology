@@ -15,6 +15,7 @@ onto_path = "onto#"
 graph_path = "graph/"
 
 [paths]
+repo_root = "../.."
 ontology_dir = "../.."
 dist_dir = "../../dist"
 store_dir = ".store"

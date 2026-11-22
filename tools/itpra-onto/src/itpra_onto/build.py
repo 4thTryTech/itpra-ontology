@@ -12,7 +12,7 @@ rebuilt on every run, never committed, never migrated in place).
 **Provenance, without timestamps** (ADR 0043 D3): every build computes ``input_hash``
 (sha256 over every input file's bytes, each contribution prefixed by its repo-relative path so a rename
 alone changes the hash — see :func:`hash_contributions`), ``pipeline_version`` (this distribution's own
-version), ``uv_lock_hash`` (sha256 of ``uv.lock``), ``rules_version`` (:func:`itpra_onto.rules.rules_digest`),
+version), ``environment_hash`` (sha256 over the resolved dependency set, as installed), ``rules_version`` (:func:`itpra_onto.rules.rules_digest`),
 ``ontology_version`` (the vocabulary's ``schema.yaml``), ``schema_hash`` (sha256 of the hand-authored LinkML
 schema plus its two generated fragments) and ``code_hash`` (sha256 over every ``src/itpra_onto/**/*.py``
 file, sorted repo-relative path — the pipeline's own code, not just its inputs). No commit SHA
@@ -71,6 +71,7 @@ function returns — load-bearing for a caller (or test) that immediately reopen
 from __future__ import annotations
 
 import hashlib
+import re
 import importlib.metadata
 import json
 import shutil
@@ -87,8 +88,7 @@ import pyoxigraph as ox
 from itpra_onto import canon, emit, rules
 from itpra_onto.config import Config, load_config
 
-PROJECT_DIR = Path(__file__).resolve().parents[2]  # the package root
-REPO_ROOT = emit.REPO_ROOT
+PACKAGE_DIR = Path(__file__).resolve().parent  # src/itpra_onto: the package's own code and data
 
 DISTRIBUTION_NAME = "itpra-onto"  # pyproject.toml [project] name
 
@@ -110,8 +110,8 @@ DCTERMS_IDENTIFIER = ox.NamedNode(DCTERMS + "identifier")
 PROV_ENTITY = ox.NamedNode(emit.PROV + "Entity")
 PROV_WAS_DERIVED_FROM = ox.NamedNode(emit.PROV + "wasDerivedFrom")
 
-# schema/itpra.linkml.yaml plus its two generated fragments, hashed for the provenance record's
-# `schema_hash` (package-relative paths, not repo-relative -- these files live inside this package).
+# The authoring schema plus its two generated fragments, hashed for the provenance record's `schema_hash`
+# (package-relative paths: these files ship inside the package).
 SCHEMA_HASH_FILES = (
     Path("schema") / "itpra.linkml.yaml",
     Path("schema") / "generated" / "itpra-enums.linkml.yaml",
@@ -125,7 +125,7 @@ BUILD_JSON_KEYS = (
     "pipeline_version",
     "rules_version",
     "schema_hash",
-    "uv_lock_hash",
+    "environment_hash",
 )
 
 
@@ -149,8 +149,9 @@ def store_dir(config: Config | None = None) -> Path:
     return (config.config_path.parent / config.paths.store_dir).resolve()
 
 
-def _repo_relative(path: Path) -> str:
-    return path.resolve().relative_to(REPO_ROOT).as_posix()
+def _package_relative(path: Path) -> str:
+    """A file of this package, labelled ``itpra_onto/<path>`` wherever the package is installed."""
+    return "itpra_onto/" + path.resolve().relative_to(PACKAGE_DIR).as_posix()
 
 
 # =====================================================================================================
@@ -161,7 +162,7 @@ def _repo_relative(path: Path) -> str:
 class Provenance:
     input_hash: str
     pipeline_version: str
-    uv_lock_hash: str
+    environment_hash: str
     rules_version: str
     ontology_version: str
     schema_hash: str
@@ -176,7 +177,7 @@ def normalised_bytes(data: bytes) -> bytes:
     leaves whatever the working tree already had on disk, so input files can be CRLF in the working tree
     while the index — and therefore any checkout on a platform that does not rewrite line endings, e.g. a
     Linux CI runner — holds them LF, for the exact same commit. Hashing raw bytes would then make
-    ``input_hash``/``schema_hash``/``uv_lock_hash``/``code_hash`` depend on which machine and checkout mode
+    ``input_hash``/``schema_hash``/``environment_hash``/``code_hash`` depend on which machine and checkout mode
     produced the working tree, not on the content those hashes exist to fingerprint. Applied at the point
     each file's bytes are read for hashing, never to bytes this pipeline itself writes to disk (those are
     always emitted with explicit ``\\n``, see :func:`itpra_onto.canon.write_bytes`).
@@ -196,14 +197,14 @@ def hash_contributions(contributions: Iterable[tuple[str, bytes]]) -> str:
     return digest.hexdigest()
 
 
-def compute_input_hash(paths: Iterable[Path]) -> str:
-    """:func:`hash_contributions` over ``paths``, labelled by repo-relative posix path, in the given order,
-    over each file's line-ending-normalised bytes (:func:`normalised_bytes`).
+def compute_input_hash(paths: Iterable[Path], repo_root: Path) -> str:
+    """:func:`hash_contributions` over ``paths``, labelled by their posix path relative to ``repo_root``, in
+    the given order, over each file's line-ending-normalised bytes (:func:`normalised_bytes`).
 
     Callers pass an already-deterministically-ordered ``paths`` (:func:`input_files` sorts by that same
     label) so the digest does not depend on filesystem iteration order.
     """
-    return hash_contributions((_repo_relative(p), normalised_bytes(p.read_bytes())) for p in paths)
+    return hash_contributions((emit._repo_relative(p, repo_root), normalised_bytes(p.read_bytes())) for p in paths)
 
 
 def input_files(config: Config | None = None) -> list[Path]:
@@ -213,53 +214,83 @@ def input_files(config: Config | None = None) -> list[Path]:
     ``prov:wasDerivedFrom`` edges both rely on."""
     config = config if config is not None else load_config()
     paths = [*emit.term_files(config), *emit.registry_files(config), emit.schema_file(config)]
-    return sorted(paths, key=_repo_relative)
+    return sorted(paths, key=lambda p: emit._repo_relative(p, config.repo_root))
 
 
 def _pipeline_version() -> str:
     try:
         return importlib.metadata.version(DISTRIBUTION_NAME)
     except importlib.metadata.PackageNotFoundError:
-        # Not installed as a distribution (e.g. run straight from a checkout): fall back to the source of
-        # truth importlib.metadata would otherwise read.
-        data = tomllib.loads((PROJECT_DIR / "pyproject.toml").read_text(encoding="utf-8"))
-        return str(data["project"]["version"])
+        # Not installed as a distribution (run straight from the source tree): the package's own number.
+        from itpra_onto import __version__
+
+        return __version__
 
 
-def _uv_lock_hash() -> str:
-    return hashlib.sha256(normalised_bytes((PROJECT_DIR / "uv.lock").read_bytes())).hexdigest()
+_REQUIREMENT_NAME_RE = re.compile(r"^\s*([A-Za-z0-9][A-Za-z0-9._-]*)")
+
+
+def _dependency_versions(distribution: str = DISTRIBUTION_NAME) -> tuple[str, ...]:
+    """``name==version`` for every distribution ``distribution`` requires, transitively, as installed — the
+    resolved dependency set the lockfile pins, read from the environment so an installed package reports it
+    too. Requirements conditional on an extra are followed only through the extras actually named."""
+    seen: dict[str, str] = {}
+    pending = [distribution]
+    while pending:
+        name = pending.pop()
+        key = name.lower().replace("_", "-")
+        if key in seen:
+            continue
+        try:
+            seen[key] = importlib.metadata.version(name)
+        except importlib.metadata.PackageNotFoundError:
+            continue
+        for req in importlib.metadata.requires(name) or ():
+            if "extra ==" in req and key != distribution.lower():
+                continue
+            m = _REQUIREMENT_NAME_RE.match(req)
+            if m:
+                pending.append(m.group(1))
+    seen.pop(distribution.lower().replace("_", "-"), None)
+    return tuple(sorted(f"{k}=={v}" for k, v in seen.items()))
+
+
+def _environment_hash() -> str:
+    """sha256 over the resolved dependency set (:func:`_dependency_versions`), one ``name==version`` per line."""
+    return hashlib.sha256("\n".join(_dependency_versions()).encode("utf-8")).hexdigest()
 
 
 def _schema_hash() -> str:
     return hash_contributions(
-        (path.as_posix(), normalised_bytes((PROJECT_DIR / path).read_bytes())) for path in SCHEMA_HASH_FILES
+        (path.as_posix(), normalised_bytes((PACKAGE_DIR / path).read_bytes())) for path in SCHEMA_HASH_FILES
     )
 
 
 def _code_files() -> list[Path]:
-    """Every ``.py`` file of the pipeline itself, sorted by repo-relative posix path."""
-    return sorted((PROJECT_DIR / "src" / "itpra_onto").rglob("*.py"), key=_repo_relative)
+    """Every ``.py`` file of the pipeline itself, sorted by package-relative posix path."""
+    return sorted(PACKAGE_DIR.rglob("*.py"), key=_package_relative)
 
 
 def _code_hash() -> str:
     """sha256 over every pipeline ``.py`` file's line-ending-normalised bytes, path-prefixed exactly like
     :func:`compute_input_hash` — the provenance record's identity for the CODE that produced a build, not
     just the data it was run against (a bug fix with unchanged inputs must still change this)."""
-    return hash_contributions((_repo_relative(p), normalised_bytes(p.read_bytes())) for p in _code_files())
+    return hash_contributions((_package_relative(p), normalised_bytes(p.read_bytes())) for p in _code_files())
 
 
 def compute_provenance(config: Config, inputs: emit.Inputs) -> Provenance:
     paths = input_files(config)
     return Provenance(
-        input_hash=compute_input_hash(paths),
+        input_hash=compute_input_hash(paths, config.repo_root),
         pipeline_version=_pipeline_version(),
-        uv_lock_hash=_uv_lock_hash(),
+        environment_hash=_environment_hash(),
         rules_version=rules.rules_digest(config),
         ontology_version=inputs.ontology_version,
         schema_hash=_schema_hash(),
         code_hash=_code_hash(),
         input_files=tuple(
-            (_repo_relative(p), hashlib.sha256(normalised_bytes(p.read_bytes())).hexdigest()) for p in paths
+            (emit._repo_relative(p, config.repo_root), hashlib.sha256(normalised_bytes(p.read_bytes())).hexdigest())
+            for p in paths
         ),
     )
 
@@ -284,7 +315,7 @@ def _provenance_quads(config: Config, provenance: Provenance) -> list[ox.Quad]:
         (dataset_node, emit.RDF_TYPE, PROV_ENTITY),
         (dataset_node, onto("inputHash"), ox.Literal(provenance.input_hash)),
         (dataset_node, onto("pipelineVersion"), ox.Literal(provenance.pipeline_version)),
-        (dataset_node, onto("uvLockHash"), ox.Literal(provenance.uv_lock_hash)),
+        (dataset_node, onto("environmentHash"), ox.Literal(provenance.environment_hash)),
         (dataset_node, onto("rulesVersion"), ox.Literal(provenance.rules_version)),
         (dataset_node, emit.OWL_VERSION_INFO, ox.Literal(provenance.ontology_version)),
         (dataset_node, onto("schemaHash"), ox.Literal(provenance.schema_hash)),
@@ -307,7 +338,7 @@ def _build_record_bytes(provenance: Provenance) -> bytes:
         "pipeline_version": provenance.pipeline_version,
         "rules_version": provenance.rules_version,
         "schema_hash": provenance.schema_hash,
-        "uv_lock_hash": provenance.uv_lock_hash,
+        "environment_hash": provenance.environment_hash,
     }
     if set(record) != set(BUILD_JSON_KEYS):
         raise BuildError(f"build.json: keys {sorted(record)} do not match the documented set {sorted(BUILD_JSON_KEYS)}")
