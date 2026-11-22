@@ -10,16 +10,18 @@ Origin: Consolidates the build and publication decisions taken between 2026-09 a
 ## Context
 
 The vocabulary is published on its own (ADR 0001, ADR 0003), yet its first consumer projects eleven requirement
-registries and architecture documents beside it. The pipeline must build the public projection from the vocabulary
-alone, let a consumer layer its own graphs on a pinned release, and make every artefact identifiable.
+registries beside it. The pipeline must build the public projection from the vocabulary alone, let a consumer
+layer its own graphs on a pinned release, and keep every artefact identifiable.
 
 ## Decision
 
-1. Core and overlay: the **core** is built from `schema.yaml`, `entities.yaml`, `relationships.yaml` and `terms/`
-   — the `schema`, `t1` and `inferred` graphs, the structural, cross-field and verb-pair shapes, the generated
-   schema artefacts. What a consumer adds is an **overlay** it configures: its registries become `req/<X>` graphs,
-   its requirement rule and shapes load, its linter is what `parity` compares against. Without an overlay none of
-   that exists and `parity` refuses to run.
+1. Core and overlay: the **core** is what the vocabulary alone yields: `schema.yaml`, `entities.yaml`,
+   `relationships.yaml` and `terms/` projected to the `schema`, `t1` and `inferred` graphs, the structural,
+   cross-field and verb-pair shapes, the generated schema artefacts. An **overlay** is a consumer's own content,
+   named in its configuration: a glob for its requirement registries, each becoming a `req/<X>` graph (`X` its
+   directory), the linter `parity` compares against, and directories the input guard refuses. The requirement
+   rule, its shapes and `parity` run only with an overlay; the ontology's own configuration has none, so it
+   builds the core alone.
 2. A consumer layers its overlay on the released core artefact of the version it pins (ADR 0003) and never rebuilds
    the core. The public projection is the core; overlay graphs are the consumer's to publish or keep.
 3. Provenance without timestamps: every build records the `ontology_version`, a content hash of its inputs, the
