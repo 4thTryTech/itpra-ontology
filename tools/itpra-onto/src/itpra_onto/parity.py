@@ -107,7 +107,7 @@ from typing import Any
 
 import yaml
 
-from itpra_onto import emit, fixtures, rules, shacl
+from itpra_onto import emit, fixtures, lint, rules, shacl
 from itpra_onto.config import Config, load_config
 
 PROJECT_DIR = Path(__file__).resolve().parents[2]  # the package root
@@ -162,7 +162,8 @@ _TABLE_B_ID_RE = re.compile(r"^\|\s*(B-[0-9]+(?:-[a-z0-9-]+)?)\s*\|", re.MULTILI
 _ID_CELL_RE = re.compile(r"`([^`]+)`")
 # The exact header the A/C sub-table must carry (as written in the register), and the Counts line
 # stating its row count — both checked, so a register edit that reshapes the table fails loudly.
-TABLE_A_HEADER = "| id | sev | check | family | mechanism | target | notes |"
+TABLE_A_HEADER = "| id | home | sev | check | family | mechanism | target | notes |"
+HOMES = ("core", "consumer", "both")  # who implements the rule: itpra_onto.lint, the consumer's linter, or each for its own records
 _TABLE_A_ROWS_COUNT_RE = re.compile(r"\*\*Table A 'A/C' sub-table rows:\*\* (\d+)")
 
 # The consumer's linter checks `relates_to` on EntityType records too (their meta-edges), but the emitter
@@ -200,13 +201,19 @@ def shape_rule_ids(shapes_dir: Path = shacl.SHAPES_DIR, config: Config | None = 
     return frozenset(shacl._shape_rule_ids(shapes, config).values())
 
 
-def parse_table_a(
+@dataclass(frozen=True)
+class TableARow:
+    home: str  # one of HOMES
+    mechanism: str
+
+
+def parse_table_a_rows(
     register_path: Path = REGISTER_MD,
     *,
     shapes_dir: Path | None = shacl.SHAPES_DIR,
     config: Config | None = None,
-) -> dict[str, str]:
-    """``id -> mechanism`` for every row of Table A's "A/C" sub-table (module docstring), parsed from the
+) -> dict[str, TableARow]:
+    """``id -> (home, mechanism)`` for every row of Table A's "A/C" sub-table (module docstring), parsed from the
     register at run time so it stays the single source. Raises :class:`ParityError` — never a silent
     fallback to a hard-coded id list — if:
 
@@ -236,20 +243,24 @@ def parse_table_a(
         raise ParityError(f"{path}: Table A 'A/C' header row is {lines[0]!r}, expected exactly {TABLE_A_HEADER!r}")
     if not re.fullmatch(r"\|(?:-+\|)+", lines[1]):
         raise ParityError(f"{path}: Table A 'A/C' second row is not a '|---|' separator: {lines[1]!r}")
-    mechanisms: dict[str, str] = {}
+    rows: dict[str, TableARow] = {}
     for row in lines[2:]:  # skip the header row and the '|---|...' separator
         cells = [c.strip() for c in row.strip("|").split("|")]
-        if len(cells) < 5:
-            raise ParityError(f"{path}: malformed Table A row (expected >=5 columns): {row!r}")
+        if len(cells) < 6:
+            raise ParityError(f"{path}: malformed Table A row (expected >=6 columns): {row!r}")
         id_match = _ID_CELL_RE.search(cells[0])
-        mech_match = _ID_CELL_RE.search(cells[4])
-        if not id_match or not mech_match:
-            raise ParityError(f"{path}: could not extract id/mechanism from Table A row: {row!r}")
-        if id_match.group(1) in mechanisms:
+        home_match = _ID_CELL_RE.search(cells[1])
+        mech_match = _ID_CELL_RE.search(cells[5])
+        if not id_match or not home_match or not mech_match:
+            raise ParityError(f"{path}: could not extract id/home/mechanism from Table A row: {row!r}")
+        if home_match.group(1) not in HOMES:
+            raise ParityError(f"{path}: Table A row {id_match.group(1)!r} has home {home_match.group(1)!r}, expected one of {HOMES}")
+        if id_match.group(1) in rows:
             raise ParityError(f"{path}: Table A 'A/C' lists {id_match.group(1)!r} twice")
-        mechanisms[id_match.group(1)] = mech_match.group(1)
-    if not mechanisms:
+        rows[id_match.group(1)] = TableARow(home=home_match.group(1), mechanism=mech_match.group(1))
+    if not rows:
         raise ParityError(f"{path}: parsed zero Table A 'A/C' rows")
+    mechanisms = {rid: r.mechanism for rid, r in rows.items()}
 
     count_match = _TABLE_A_ROWS_COUNT_RE.search(text)
     if not count_match:
@@ -260,7 +271,10 @@ def parse_table_a(
 
     if shapes_dir is not None:
         in_shapes = shape_rule_ids(shapes_dir, config)
-        missing = sorted(set(comparable_rule_ids(mechanisms)) - in_shapes)
+        expected = set(comparable_rule_ids(mechanisms))
+        if (config if config is not None else load_config()).overlay is None:
+            expected &= core_rule_ids(rows)  # the consumer-home shapes are not loaded without an overlay
+        missing = sorted(expected - in_shapes)
         if missing:
             raise ParityError(
                 f"{path}: comparable Table A id(s) {missing} are no itpra-o:ruleId in the shapes under {shapes_dir}"
@@ -271,7 +285,22 @@ def parse_table_a(
                 f"{path}: itpra-o:ruleId value(s) {unregistered} in the shapes under {shapes_dir} appear in "
                 "neither Table A nor Table B"
             )
-    return mechanisms
+    return rows
+
+
+def parse_table_a(
+    register_path: Path = REGISTER_MD,
+    *,
+    shapes_dir: Path | None = shacl.SHAPES_DIR,
+    config: Config | None = None,
+) -> dict[str, str]:
+    """``id -> mechanism`` for every row of Table A's "A/C" sub-table (:func:`parse_table_a_rows`)."""
+    return {rid: row.mechanism for rid, row in parse_table_a_rows(register_path, shapes_dir=shapes_dir, config=config).items()}
+
+
+def core_rule_ids(rows: dict[str, TableARow]) -> frozenset[str]:
+    """The ids :mod:`itpra_onto.lint` implements: Table A rows whose home is ``core`` or ``both``."""
+    return frozenset(rid for rid, row in rows.items() if row.home in ("core", "both"))
 
 
 def comparable_rule_ids(mechanisms: dict[str, str]) -> tuple[str, ...]:
@@ -348,6 +377,15 @@ def run_linter(sub: str, config: Config | None = None) -> list[dict[str, Any]]:
     return _run_linter_json(linter_script(config), sub, cwd=REPO_ROOT)
 
 
+def core_lint_findings(config: Config | None = None, *, ontology_dir: Path | None = None) -> list[dict[str, Any]]:
+    """The ontology's own lint (:mod:`itpra_onto.lint`) over ``ontology_dir`` (default: the configured one) — the
+    linter side of a core-mode comparison, where no consumer overlay names a linter (ADR 0042 D5)."""
+    config = config if config is not None else load_config()
+    root = ontology_dir if ontology_dir is not None else emit.ontology_dir(config)
+    findings, _vocab = lint.lint_vocabulary(root, rel_to=REPO_ROOT)
+    return findings
+
+
 def _linter_findings_as_set(findings: list[dict[str, Any]], rule_ids: frozenset[str]) -> set[tuple[str, str, str]]:
     return {(f["rule"], f["subject"], f["severity"]) for f in findings if f.get("rule") in rule_ids}
 
@@ -371,6 +409,7 @@ class RealTreeComparison:
     # The emitter refused the inputs (an EmitError); the SHACL side never ran. Each entry is the
     # synthetic `emit-error` finding {rule, subject, severity, message}. Non-empty -> the comparison fails.
     emit_errors: tuple[dict[str, str], ...] = ()
+    mode: str = "overlay"  # "core": itpra_onto.lint over the core rules; "overlay": the consumer\'s linter
 
     @property
     def empty_symmetric_difference(self) -> bool:
@@ -415,16 +454,26 @@ def run_real_tree(
     (meta-edges never reach a graph — ``meta_edge_excluded``); an :class:`itpra_onto.emit.EmitError` becomes
     the synthetic ``emit-error`` finding (``emit_errors``) instead of a traceback, and fails the comparison."""
     config = config if config is not None else load_config()
-    mechanisms = parse_table_a(register_path, config=config)
-    comparable = frozenset(comparable_rule_ids(mechanisms))
+    rows = parse_table_a_rows(register_path, config=config)
+    mechanisms = {rid: r.mechanism for rid, r in rows.items()}
+    comparable_all = frozenset(comparable_rule_ids(mechanisms))
     outside = outside_scope_rule_ids(mechanisms)
+    core_mode = config.overlay is None
 
-    targets = tuple(subs) if subs else default_registries(config)
-    if not targets:
-        raise ParityError("run_real_tree: no registries to compare against (subs=() and none discovered)")
     linter_union: set[tuple[str, str, str]] = set()
-    for sub in targets:
-        linter_union |= _linter_findings_as_set(run_linter(sub), comparable)
+    if core_mode:
+        # No consumer linter to run: the ontology's own lint over the core-home comparable rules; the
+        # consumer-home comparable rules have nothing to compare against and are reported as outside scope.
+        comparable = comparable_all & core_rule_ids(rows)
+        outside = tuple(sorted(set(outside) | (comparable_all - comparable)))
+        linter_union = _linter_findings_as_set(core_lint_findings(config), comparable)
+    else:
+        comparable = comparable_all
+        targets = tuple(subs) if subs else default_registries(config)
+        if not targets:
+            raise ParityError("run_real_tree: no registries to compare against (subs=() and none discovered)")
+        for sub in targets:
+            linter_union |= _linter_findings_as_set(run_linter(sub), comparable)
 
     emit_errors: tuple[dict[str, str], ...] = ()
     all_shacl: set[tuple[str | None, str, str]] = set()
@@ -457,6 +506,7 @@ def run_real_tree(
         outside_scope=outside,
         meta_edge_excluded=tuple(sorted(excluded)),
         emit_errors=emit_errors,
+        mode="core" if core_mode else "overlay",
     )
 
 
@@ -467,6 +517,7 @@ def _finding_dict(finding: tuple[str, str, str]) -> dict[str, str]:
 
 def comparison_as_dict(comparison: RealTreeComparison) -> dict[str, Any]:
     return {
+        "mode": comparison.mode,
         "comparable_rules": list(comparison.comparable_rules),
         "linter": comparison.linter_count,
         "shacl": comparison.shacl_count,
@@ -480,7 +531,7 @@ def comparison_as_dict(comparison: RealTreeComparison) -> dict[str, Any]:
 
 
 def print_report(comparison: RealTreeComparison) -> None:
-    print(f"parity: {len(comparison.comparable_rules)} comparable rule id(s): {', '.join(comparison.comparable_rules)}")
+    print(f"parity ({comparison.mode} mode): {len(comparison.comparable_rules)} comparable rule id(s): {', '.join(comparison.comparable_rules)}")
     for e in comparison.emit_errors:
         print(f"parity: EMIT ERROR — the SHACL side did not run: {e['severity']}  {e['rule']}  {e['subject']}  {e['message']}")
     print(f"parity: linter {comparison.linter_count} finding(s), shacl {comparison.shacl_count} finding(s) (comparable set)")
@@ -688,10 +739,14 @@ def _run_one_fixture(
     with tempfile.TemporaryDirectory(prefix="itpra-parity-") as tmp:
         scratch_root = Path(tmp)
         _copy_ontology_dir(scratch_root, config)
-        _copy_linter_script(scratch_root, config)
-        sub_arg = materialize_fixture(fixture, scratch_root, real_inputs, config)
-        script = _scratch_path(scratch_root, linter_script(config))
-        linter_findings = _run_linter_json(script, sub_arg, cwd=scratch_root)
+        if config.overlay is None:  # core mode: the ontology's own lint over the mutated scratch copy
+            materialize_fixture(fixture, scratch_root, real_inputs, config)
+            linter_findings = core_lint_findings(config, ontology_dir=_scratch_path(scratch_root, emit.ontology_dir(config)))
+        else:
+            _copy_linter_script(scratch_root, config)
+            sub_arg = materialize_fixture(fixture, scratch_root, real_inputs, config)
+            script = _scratch_path(scratch_root, linter_script(config))
+            linter_findings = _run_linter_json(script, sub_arg, cwd=scratch_root)
 
     focus_findings = [f for f in linter_findings if f.get("subject") == fixture.focus]
     linter_rules_seen = tuple(sorted({f["rule"] for f in focus_findings}))
@@ -729,18 +784,33 @@ def run_fixtures(
     under ``fixtures/**/*.yaml`` (module docstring: a ``count: 0`` clean-case fixture has nothing for the
     linter side to independently confirm, so it is skipped here)."""
     config = config if config is not None else load_config()
-    mechanisms = parse_table_a(register_path, shapes_dir=shapes_dir, config=config)
+    rows = parse_table_a_rows(register_path, shapes_dir=shapes_dir, config=config)
+    mechanisms = {rid: r.mechanism for rid, r in rows.items()}
     comparable = frozenset(comparable_rule_ids(mechanisms))
     emit_mapped = frozenset(emit_time_mapped_rule_ids(mechanisms))
+    if config.overlay is None:  # core mode: only what itpra_onto.lint implements can be compared
+        comparable &= core_rule_ids(rows)
+        emit_mapped &= core_rule_ids(rows)
     real_inputs = emit.load_inputs(config)
+    term_ids = {t.record.get("id") for t in real_inputs.terms}
 
     verdicts: list[FixtureVerdict] = []
     for fixture_path in sorted(FIXTURES_DIR.glob("*/*.yaml")):
         fixture = fixtures.load_fixture(fixture_path)
         if fixture.count < 1:
             continue
+        if config.overlay is None and _needs_registry(fixture, term_ids):
+            continue  # a registry fixture: nothing to materialise without a consumer overlay
         verdicts.append(_run_one_fixture(fixture_path, shapes_dir, real_inputs, config, comparable, emit_mapped))
     return verdicts
+
+
+def _needs_registry(fixture: fixtures.Fixture, term_ids: set[str | None]) -> bool:
+    """A fixture that adds a registry record or mutates one (its id is no term's)."""
+    action = fixture.action
+    if isinstance(action, fixtures.AddAction):
+        return action.file != "terms"
+    return action.id not in term_ids
 
 
 FAILING_VERDICTS = ("neither", "linter-only")

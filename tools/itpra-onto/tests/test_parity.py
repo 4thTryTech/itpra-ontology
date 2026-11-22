@@ -41,9 +41,21 @@ def config() -> Config:
 # (a) parse_table_a() and the derived id sets
 
 
-def test_parse_table_a_finds_the_twenty_two_rows():
+def test_parse_table_a_finds_the_twenty_five_rows():
     mechanisms = parity.parse_table_a()
-    assert len(mechanisms) == 22, f"expected the 22-row 'A/C' sub-table, parsed {len(mechanisms)}: {sorted(mechanisms)}"
+    assert len(mechanisms) == 25, f"expected the 25-row 'A/C' sub-table, parsed {len(mechanisms)}: {sorted(mechanisms)}"
+
+
+def test_parse_table_a_rows_carry_a_home_and_the_core_ids_are_the_lints():
+    from itpra_onto import lint
+
+    rows = parity.parse_table_a_rows()
+    assert {r.home for r in rows.values()} == set(parity.HOMES)
+    assert parity.core_rule_ids(rows) == frozenset(lint.CORE_RULE_IDS)
+    assert {rid for rid, r in rows.items() if r.home == "consumer"} == {
+        "req-file-missing", "req-file-malformed", "req-id-format", "req-link-malformed", "req-type-invalid",
+        "req-qa-unresolved", "req-statement-missing", "req-target-unresolved", "doc-idlike-unresolved",
+    }
 
 
 def test_comparable_rule_ids_are_at_least_eight_and_exclude_relates_to_malformed():
@@ -77,7 +89,7 @@ def test_emit_time_mapped_rule_ids_are_the_generated_plus_emit_time_python_ids()
     }
 
 
-def test_outside_scope_rule_ids_are_the_remaining_nine_python_ac_ids():
+def test_outside_scope_rule_ids_are_the_remaining_twelve_python_ac_ids():
     mechanisms = parity.parse_table_a()
     comparable = set(parity.comparable_rule_ids(mechanisms))
     emit_mapped = set(parity.emit_time_mapped_rule_ids(mechanisms))
@@ -93,6 +105,9 @@ def test_outside_scope_rule_ids_are_the_remaining_nine_python_ac_ids():
         "req-file-malformed",
         "doc-idlike-unresolved",
         "field-unknown",
+        "source-grammar",
+        "source-adr-unresolved",
+        "version-format",
     }
 
 
@@ -113,14 +128,14 @@ def test_parse_table_a_accepts_an_unmodified_copy(tmp_path: Path):
 
 
 def test_parse_table_a_raises_on_a_changed_header_row(tmp_path: Path):
-    path = _register_copy(tmp_path, parity.TABLE_A_HEADER, "| rule | sev | check | family | mechanism | target | notes |")
+    path = _register_copy(tmp_path, parity.TABLE_A_HEADER, "| rule | home | sev | check | family | mechanism | target | notes |")
     with pytest.raises(parity.ParityError, match="header row"):
         parity.parse_table_a(path, shapes_dir=None)
 
 
 def test_parse_table_a_raises_when_the_row_count_disagrees_with_the_counts_line(tmp_path: Path):
-    path = _register_copy(tmp_path, "**Table A 'A/C' sub-table rows:** 22", "**Table A 'A/C' sub-table rows:** 21")
-    with pytest.raises(parity.ParityError, match="22 rows but the Counts section states 21"):
+    path = _register_copy(tmp_path, "**Table A 'A/C' sub-table rows:** 25", "**Table A 'A/C' sub-table rows:** 24")
+    with pytest.raises(parity.ParityError, match="25 rows but the Counts section states 24"):
         parity.parse_table_a(path, shapes_dir=None)
 
 
@@ -128,12 +143,12 @@ def test_parse_table_a_raises_when_a_row_is_dropped(tmp_path: Path):
     text = parity.REGISTER_MD.read_text(encoding="utf-8")
     row = next(line for line in text.splitlines() if line.startswith("| `id-duplicate` |"))
     path = _register_copy(tmp_path, row + "\n", "")
-    with pytest.raises(parity.ParityError, match="21 rows but the Counts section states 22"):
+    with pytest.raises(parity.ParityError, match="24 rows but the Counts section states 25"):
         parity.parse_table_a(path, shapes_dir=None)
 
 
 def test_parse_table_a_raises_without_a_counts_line(tmp_path: Path):
-    path = _register_copy(tmp_path, "**Table A 'A/C' sub-table rows:** 22", "Table A rows: 22")
+    path = _register_copy(tmp_path, "**Table A 'A/C' sub-table rows:** 25", "Table A rows: 25")
     with pytest.raises(parity.ParityError, match="states no"):
         parity.parse_table_a(path, shapes_dir=None)
 
