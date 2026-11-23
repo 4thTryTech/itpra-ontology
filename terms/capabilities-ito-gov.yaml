@@ -1,44 +1,44 @@
-# ITPRA ontology — GOV (Governance & Service Management) capabilities
-# type: Capability. ids CAP-GOV-<n>. Grouped under domain GOV (ADR 0017). Operating-model-NEUTRAL constructs
-# (request/approval/change/incident/record); ITIL/DevOps mapping happens at T2.
+# ITPRA ontology — ITO-GOV (Governance & Service Management) capabilities
+# type: Capability. ids CAP-ITO-GOV-<n>. Grouped under domain ITO-GOV (ADR 0017). Operating-model-NEUTRAL
+# constructs (request/approval/change/incident/record); ITIL/DevOps mapping happens at T2.
 
-- id: CAP-GOV-1
+- id: CAP-ITO-GOV-1
   term: Service Request Management
   type: Capability
   definition: >
     Records requests for platform services and tracks them through to fulfillment — the neutral
     request-and-fulfill construct, independent of any operating model.
   relates_to:
-    - {rel: grouped_by, target: GOV}
-    - {rel: consumed_by, target: PERSONA-platform-consumer}
-    - {rel: consumed_by, target: PERSONA-platform-team}
-  source: ADR 0017
+    - {rel: grouped_by, target: ITO-GOV}
+    - {rel: consumed_by, target: PERSONA-ito-platform-consumer}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: CAP-GOV-2
+- id: CAP-ITO-GOV-2
   term: Change Approval
   type: Capability
   definition: >
     Routes changes through a defined approval/decision point before they take effect — the neutral
     change-authorization construct.
   relates_to:
-    - {rel: grouped_by, target: GOV}
-    - {rel: consumed_by, target: PERSONA-security-compliance}
-    - {rel: consumed_by, target: PERSONA-platform-team}
-  source: ADR 0017
+    - {rel: grouped_by, target: ITO-GOV}
+    - {rel: consumed_by, target: PERSONA-ito-security-compliance}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: CAP-GOV-3
+- id: CAP-ITO-GOV-3
   term: Incident & Problem Coordination
   type: Capability
   definition: >
     Records and coordinates handling of incidents and problems — the neutral disruption-response
     construct, from detection through resolution and underlying-cause handling.
   relates_to:
-    - {rel: grouped_by, target: GOV}
-    - {rel: consumed_by, target: PERSONA-platform-team}
-    - {rel: consumed_by, target: PERSONA-platform-consumer}
-  source: ADR 0017
+    - {rel: grouped_by, target: ITO-GOV}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+    - {rel: consumed_by, target: PERSONA-ito-platform-consumer}
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: CAP-GOV-4
+- id: CAP-ITO-GOV-4
   term: System-of-Record
   type: Capability
   definition: >
@@ -47,38 +47,38 @@
     governing role (KNOWLEDGE-ROLE) for the estate; a representation derived from it is never authoritative
     over it, while discovered state is a peer source reconciled with it under precedence rules (ADR 0038).
   relates_to:
-    - {rel: grouped_by, target: GOV}
-    - {rel: depends_on, target: CAP-FND-5}
-    - {rel: consumed_by, target: PERSONA-platform-team}
-  source: ADR 0017
+    - {rel: grouped_by, target: ITO-GOV}
+    - {rel: depends_on, target: CAP-ITO-FND-5}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: CAP-GOV-5
+- id: CAP-ITO-GOV-5
   term: Multi-Tenancy Governance
   type: Capability
   definition: >
     Enforces tenant isolation and access boundaries across multi-tenant use, governing how tenants are
     bounded and kept from affecting one another.
   relates_to:
-    - {rel: grouped_by, target: GOV}
-    - {rel: depends_on, target: CAP-SEC-2}
-    - {rel: consumed_by, target: PERSONA-security-compliance}
-    - {rel: consumed_by, target: PERSONA-platform-team}
-  source: ADR 0017
+    - {rel: grouped_by, target: ITO-GOV}
+    - {rel: depends_on, target: CAP-ITO-SEC-2}
+    - {rel: consumed_by, target: PERSONA-ito-security-compliance}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: CAP-GOV-6
+- id: CAP-ITO-GOV-6
   term: Audit & Compliance Evidence
   type: Capability
   definition: >
     Retains audit and compliance evidence for platform activity, producing the verifiable record needed to
     demonstrate policy and regulatory compliance.
   relates_to:
-    - {rel: grouped_by, target: GOV}
-    - {rel: depends_on, target: CAP-OBS-1}
-    - {rel: consumed_by, target: PERSONA-security-compliance}
-    - {rel: consumed_by, target: PERSONA-platform-team}
-  source: ADR 0017
+    - {rel: grouped_by, target: ITO-GOV}
+    - {rel: depends_on, target: CAP-ITO-OBS-1}
+    - {rel: consumed_by, target: PERSONA-ito-security-compliance}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: CAP-GOV-7
+- id: CAP-ITO-GOV-7
   term: Platform Measurement & Insight
   type: Capability
   definition: >
@@ -88,60 +88,60 @@
     tenants' delivery.
   aliases: [platform analytics, adoption metrics, software-delivery performance metrics, delivery throughput and stability metrics, engineering intelligence]
   relates_to:
-    - {rel: grouped_by, target: GOV}
-    - {rel: depends_on, target: CAP-OBS-6}
-    - {rel: depends_on, target: CAP-COST-1}
-    - {rel: consumed_by, target: PERSONA-platform-team}
-  source: ADR 0017
+    - {rel: grouped_by, target: ITO-GOV}
+    - {rel: depends_on, target: CAP-ITO-OBS-6}
+    - {rel: depends_on, target: CAP-ITO-COST-1}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: CAP-GOV-8
+- id: CAP-ITO-GOV-8
   term: Service Lifecycle Management
   type: Capability
   definition: >
     Manages the lifecycle of services from onboarding through decommission, governing how offerings enter,
     evolve, and leave the platform.
   relates_to:
-    - {rel: grouped_by, target: GOV}
-    - {rel: depends_on, target: CAP-GOV-1}
-    - {rel: consumed_by, target: PERSONA-platform-team}
-  source: ADR 0017
+    - {rel: grouped_by, target: ITO-GOV}
+    - {rel: depends_on, target: CAP-ITO-GOV-1}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: CAP-GOV-9
+- id: CAP-ITO-GOV-9
   term: Operational Knowledge Management
   type: Capability
   definition: >
     Maintains operational knowledge discoverable and consumable by both human and digital (agentic)
     workers, so operations can act on current, trusted knowledge. The digital (agentic) worker it serves is
     AUTON-ACTOR (ADR 0030). This is SHARED, slowly changing, authored knowledge - distinct from the state an
-    actor accumulates by use, which is CAP-DATA-8 (ADR 0033).
+    actor accumulates by use, which is CAP-ITO-DATA-8 (ADR 0033).
   relates_to:
-    - {rel: grouped_by, target: GOV}
+    - {rel: grouped_by, target: ITO-GOV}
     - {rel: applies_to, target: AUTON-ACTOR}
-    - {rel: consumed_by, target: PERSONA-platform-team}
-    - {rel: consumed_by, target: PERSONA-platform-consumer}
-  source: ADR 0017
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+    - {rel: consumed_by, target: PERSONA-ito-platform-consumer}
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: CAP-GOV-10
+- id: CAP-ITO-GOV-10
   term: Defect & Nomination Capture
   type: Capability
   definition: >
     Captures defects and feature/product nominations raised against the platform itself by consumers and
     operators — the intake for platform-as-a-product feedback.
   relates_to:
-    - {rel: grouped_by, target: GOV}
-    - {rel: consumed_by, target: PERSONA-platform-consumer}
-    - {rel: consumed_by, target: PERSONA-platform-team}
-  source: ADR 0017
+    - {rel: grouped_by, target: ITO-GOV}
+    - {rel: consumed_by, target: PERSONA-ito-platform-consumer}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: CAP-GOV-11
+- id: CAP-ITO-GOV-11
   term: Product Backlog & Roadmap
   type: Capability
   definition: >
     Maintains a prioritized product backlog and tracks nominations and defects through triage to delivery,
     reporting status back to requesters — the platform-as-a-product management loop.
   relates_to:
-    - {rel: grouped_by, target: GOV}
-    - {rel: depends_on, target: CAP-GOV-10}
-    - {rel: consumed_by, target: PERSONA-platform-team}
-    - {rel: consumed_by, target: PERSONA-platform-consumer}
-  source: ADR 0017
+    - {rel: grouped_by, target: ITO-GOV}
+    - {rel: depends_on, target: CAP-ITO-GOV-10}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+    - {rel: consumed_by, target: PERSONA-ito-platform-consumer}
+  source: ADR 0017 (amended by ADR 0045)

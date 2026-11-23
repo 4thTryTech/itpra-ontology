@@ -1,6 +1,6 @@
 # ITPRA ontology — GRC-POL (Policy, Standards & Control Governance) capabilities
 # type: Capability. ids CAP-GRC-POL-<n>. Grouped under domain GRC-POL (ADR 0024). Enterprise policy/control
-# AUTHORSHIP — sets the guardrails the platform (ITO FND/SEC) codifies and enforces; GRC
+# AUTHORSHIP — sets the guardrails the platform (ITO-FND/ITO-SEC) codifies and enforces; GRC
 # authors/approves/reviews, enforcement is downstream and NOT duplicated here (ADR 0024).
 
 - id: CAP-GRC-POL-1

@@ -1,4 +1,6 @@
 # ITPRA ontology — neutral governance constructs
+# SHARED file: it belongs to no single service domain, so neither its name nor its ids carry a service-domain
+# code (ADR 0007, ADR 0045).
 # The canonical set of operating-model-NEUTRAL governance "moments" T1 uses to describe how the platform is
 # requested, decided, operated, recorded, and improved. Ratified by ADR 0015. This set is the stable JOIN KEY
 # between T1 and every T2 operating model: a T2 maps each construct it uses into one model's vocabulary (a

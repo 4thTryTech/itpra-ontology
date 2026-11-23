@@ -1,6 +1,6 @@
 # ITPRA ontology — EUC-IAM (Workforce Identity & Access) capabilities
 # type: Capability. ids CAP-EUC-IAM-<n>. End-user-facing identity/access; consumes the enterprise identity of
-# record — does not own the directory of record or workload identity (ITO SEC); see ADR 0018.
+# record — does not own the directory of record or workload identity (ITO-SEC); see ADR 0018.
 
 - id: CAP-EUC-IAM-1
   term: Workforce Access Onboarding

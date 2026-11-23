@@ -35,7 +35,7 @@
   definition: >
     Maintains and allocates the facility's physical capacity envelope — usable space, available power, and
     cooling headroom per area/rack — so footprint is assigned within physical limits and stranded or exhausted
-    capacity is avoided. The physical counterpart to the platform's logical capacity (ITO SUB).
+    capacity is avoided. The physical counterpart to the platform's logical capacity (ITO-SUB).
   relates_to:
     - {rel: grouped_by, target: DCF-SPC}
     - {rel: depends_on, target: CAP-DCF-SPC-2}

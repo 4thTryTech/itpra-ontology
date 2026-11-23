@@ -1,6 +1,6 @@
 # ITPRA ontology — BIA-SCI (Data Science & Advanced Analytics) capabilities
 # type: Capability. ids CAP-BIA-SCI-<n>. Grouped under domain BIA-SCI (ADR 0026). Business/analytical modeling;
-# distinct from operational AIOps (ITO OBS) — ADR 0026.
+# distinct from operational AIOps (ITO-OBS) — ADR 0026.
 
 - id: CAP-BIA-SCI-1
   term: Collaborative Analytics Workspace

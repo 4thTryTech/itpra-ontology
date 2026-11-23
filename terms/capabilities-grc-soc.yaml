@@ -1,6 +1,6 @@
 # ITPRA ontology — GRC-SOC (Security Operations & Threat Response) capabilities
 # type: Capability. ids CAP-GRC-SOC-<n>. Grouped under domain GRC-SOC (ADR 0024); environment expression per ADR
-# 0014. Enterprise SOC/CSIRT — consumes platform (ITO SEC) signals; does NOT duplicate platform detection (ADR
+# 0014. Enterprise SOC/CSIRT — consumes platform (ITO-SEC) signals; does NOT duplicate platform detection (ADR
 # 0024).
 
 - id: CAP-GRC-SOC-1

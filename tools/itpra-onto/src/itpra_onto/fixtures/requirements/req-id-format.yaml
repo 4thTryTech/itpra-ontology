@@ -12,5 +12,5 @@ add:
     type: FR
     statement: A synthetic record that exists only to prove the req-id-format shape fires on a malformed FR id.
     target: ~
-    met_by: [CAP-FND-1]
-    verified_by: [JRN-patch-platform]
+    met_by: [CAP-ITO-FND-1]
+    verified_by: [JRN-ito-patch-platform]

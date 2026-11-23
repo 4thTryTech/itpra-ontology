@@ -1,93 +1,93 @@
-# ITPRA ontology — AUT (Provisioning & Automation) capabilities
-# type: Capability. ids CAP-AUT-<n>. Grouped under domain AUT (ADR 0017).
+# ITPRA ontology — ITO-AUT (Provisioning & Automation) capabilities
+# type: Capability. ids CAP-ITO-AUT-<n>. Grouped under domain ITO-AUT (ADR 0017).
 
-- id: CAP-AUT-1
+- id: CAP-ITO-AUT-1
   term: Infrastructure-as-Code Provisioning
   type: Capability
   definition: >
     Realizes infrastructure from declarative, versioned definitions so the same definition produces the
     same result repeatably across environments.
   relates_to:
-    - {rel: grouped_by, target: AUT}
-    - {rel: depends_on, target: CAP-FND-1}
-    - {rel: consumed_by, target: PERSONA-platform-team}
-    - {rel: consumed_by, target: PERSONA-platform-consumer}
-  source: ADR 0017
+    - {rel: grouped_by, target: ITO-AUT}
+    - {rel: depends_on, target: CAP-ITO-FND-1}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+    - {rel: consumed_by, target: PERSONA-ito-platform-consumer}
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: CAP-AUT-2
+- id: CAP-ITO-AUT-2
   term: Desired-State Reconciliation
   type: Capability
   definition: >
     Continuously or on-change reconciles actual state toward declared desired state, correcting deviation
     and enabling self-healing without manual intervention.
   relates_to:
-    - {rel: grouped_by, target: AUT}
-    - {rel: depends_on, target: CAP-AUT-1}
-    - {rel: consumed_by, target: PERSONA-platform-team}
-  source: ADR 0017
+    - {rel: grouped_by, target: ITO-AUT}
+    - {rel: depends_on, target: CAP-ITO-AUT-1}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: CAP-AUT-3
+- id: CAP-ITO-AUT-3
   term: Drift Detection & Reporting
   type: Capability
   definition: >
     Detects and reports divergence between actual state and the declared desired state, surfacing what
     changed out of band.
   relates_to:
-    - {rel: grouped_by, target: AUT}
-    - {rel: depends_on, target: CAP-AUT-1}
-    - {rel: consumed_by, target: PERSONA-platform-team}
-    - {rel: consumed_by, target: PERSONA-security-compliance}
-  source: ADR 0017
+    - {rel: grouped_by, target: ITO-AUT}
+    - {rel: depends_on, target: CAP-ITO-AUT-1}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+    - {rel: consumed_by, target: PERSONA-ito-security-compliance}
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: CAP-AUT-4
+- id: CAP-ITO-AUT-4
   term: Configuration Management
   type: Capability
   definition: >
     Brings resources to and holds them at a defined configuration baseline, managing in-place
     configuration of provisioned resources.
   relates_to:
-    - {rel: grouped_by, target: AUT}
-    - {rel: depends_on, target: CAP-FND-1}
-    - {rel: consumed_by, target: PERSONA-platform-team}
-  source: ADR 0017
+    - {rel: grouped_by, target: ITO-AUT}
+    - {rel: depends_on, target: CAP-ITO-FND-1}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: CAP-AUT-5
+- id: CAP-ITO-AUT-5
   term: Provisioning Workflow Orchestration
   type: Capability
   definition: >
     Orchestrates multi-step provisioning workflows, honoring ordering and dependencies across the steps
     needed to stand up or change infrastructure.
   relates_to:
-    - {rel: grouped_by, target: AUT}
-    - {rel: depends_on, target: CAP-AUT-1}
-    - {rel: consumed_by, target: PERSONA-platform-team}
-    - {rel: consumed_by, target: PERSONA-platform-consumer}
-  source: ADR 0017
+    - {rel: grouped_by, target: ITO-AUT}
+    - {rel: depends_on, target: CAP-ITO-AUT-1}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+    - {rel: consumed_by, target: PERSONA-ito-platform-consumer}
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: CAP-AUT-6
+- id: CAP-ITO-AUT-6
   term: Operational Task Orchestration
   type: Capability
   definition: >
     Orchestrates operational task workflows on demand or triggered by events, honoring ordering and
     dependencies — the runbook automation for day-2 operations. Steps are PRE-AUTHORED and enumerable;
-    execution whose action set is selected at runtime by the acting principal is CAP-AUT-8 (ADR 0033).
+    execution whose action set is selected at runtime by the acting principal is CAP-ITO-AUT-8 (ADR 0033).
   relates_to:
-    - {rel: grouped_by, target: AUT}
-    - {rel: consumed_by, target: PERSONA-platform-team}
-  source: ADR 0017
+    - {rel: grouped_by, target: ITO-AUT}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: CAP-AUT-7
+- id: CAP-ITO-AUT-7
   term: Scheduled Job Execution
   type: Capability
   definition: >
     Schedules and runs recurring time-based jobs and reports their outcomes, providing the cron-like
     backbone for periodic platform work.
   relates_to:
-    - {rel: grouped_by, target: AUT}
-    - {rel: consumed_by, target: PERSONA-platform-team}
-  source: ADR 0017
+    - {rel: grouped_by, target: ITO-AUT}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: CAP-AUT-8
+- id: CAP-ITO-AUT-8
   term: Agent Execution & Tool Mediation
   type: Capability
   definition: >
@@ -95,20 +95,20 @@
     system call the actor selects at runtime, isolating each action's compute, enforcing the automation
     boundary (AUTON-BOUNDARY) at the point of action rather than only at authoring time, and exposing
     in-flight control (AUTON-INFLIGHT-CONTROL) to the accountable persona. Distinct from operational task
-    orchestration (CAP-AUT-6), which executes pre-authored, enumerable steps: here the action set is chosen
+    orchestration (CAP-ITO-AUT-6), which executes pre-authored, enumerable steps: here the action set is chosen
     during the run, so the boundary must govern the reachable action space rather than a fixed list of
     artifacts. Loop shape, tool-protocol binding, isolation technique, and multi-agent delegation topology
     are T2/T3 decisions.
   aliases: [agent runtime, agent execution, harness operation, tool calling]
   relates_to:
-    - {rel: grouped_by, target: AUT}
-    - {rel: depends_on, target: CAP-SEC-2}
-    - {rel: depends_on, target: CAP-SUB-8}
-    - {rel: depends_on, target: CAP-DATA-8}
+    - {rel: grouped_by, target: ITO-AUT}
+    - {rel: depends_on, target: CAP-ITO-SEC-2}
+    - {rel: depends_on, target: CAP-ITO-SUB-8}
+    - {rel: depends_on, target: CAP-ITO-DATA-8}
     - {rel: applies_to, target: AUTON-ACTOR}
-    - {rel: consumed_by, target: PERSONA-platform-team}
-  source: ADR 0033
-- id: CAP-AUT-9
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+  source: ADR 0033 (amended by ADR 0045)
+- id: CAP-ITO-AUT-9
   term: Resumable Execution Service
   type: Capability
   definition: >
@@ -116,15 +116,15 @@
     process executing it, so a run resumes after the last completed step when that process is lost rather
     than restarting from the beginning. The consumer connects its OWN workers: the service coordinates the
     run, holds the record of its progress, and does NOT execute the consumer's code. Distinct from
-    provisioning workflow orchestration (CAP-AUT-5) and operational task orchestration (CAP-AUT-6), which are
-    the platform automating ITSELF, and from agent execution (CAP-AUT-8), where the platform hosts a run
+    provisioning workflow orchestration (CAP-ITO-AUT-5) and operational task orchestration (CAP-ITO-AUT-6), which are
+    the platform automating ITSELF, and from agent execution (CAP-ITO-AUT-8), where the platform hosts a run
     whose action set is chosen during the run. Mechanism family, hosting shape, and retention of the
     execution record are scenario decisions (ADR 0039).
   aliases: [durable execution service, execution engine, long-running execution service, workflow service]
   relates_to:
-    - {rel: grouped_by, target: AUT}
-    - {rel: depends_on, target: CAP-SUB-3}
-    - {rel: depends_on, target: CAP-FND-2}
-    - {rel: consumed_by, target: PERSONA-platform-consumer}
-    - {rel: consumed_by, target: PERSONA-platform-team}
-  source: ADR 0039
+    - {rel: grouped_by, target: ITO-AUT}
+    - {rel: depends_on, target: CAP-ITO-SUB-3}
+    - {rel: depends_on, target: CAP-ITO-FND-2}
+    - {rel: consumed_by, target: PERSONA-ito-platform-consumer}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+  source: ADR 0039 (amended by ADR 0045)

@@ -4,7 +4,7 @@
 # (fixtures/requirements/README.md's own account) that `emit.emit()` never calls the authoring validator, so
 # an empty `met_by` list reaches the graph untouched -- `_as_list([])` yields no itpra-o:metBy triples at
 # all, which is exactly what this shape's sh:minCount 1 catches. `verified_by` is left intact
-# (FR-FND-1 still carries `verified_by: [JRN-patch-platform]`), so only the metBy arm fires -- the sibling
+# (FR-FND-1 still carries `verified_by: [JRN-ito-patch-platform]`), so only the metBy arm fires -- the sibling
 # itpra-o:ReqVerifiedByNonEmptyShape stays silent, and no cascade lands on the same focus.
 rule: B-4
 expect:

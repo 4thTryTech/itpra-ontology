@@ -1,146 +1,146 @@
-# ITPRA ontology — FUNCTION library, SOFTWARE DELIVERY (DEL) domain file
-# type: Function. ids FUNC-<slug> (slug-based, NO domain prefix — shared cross-domain). All T1 neutral (no tool
-# names; canary/blue-green kept as aliases). See ADR 0011.
+# ITPRA ontology — FUNCTION library, ITO-DEL (Software Delivery)
+# type: Function. ids FUNC-ito-<slug>. All T1 neutral (no tool names; canary/blue-green kept as aliases). See
+# ADR 0011.
 
-# Continuous integration pipeline (supports CAP-DEL-1)
-- id: FUNC-build-automation
+# Continuous integration pipeline (supports CAP-ITO-DEL-1)
+- id: FUNC-ito-build-automation
   term: Build Automation
   type: Function
   definition: Compiles and builds source changes into versioned outputs automatically on each change.
   aliases: [automated build, compilation]
   relates_to:
-    - {rel: supports, target: CAP-DEL-1}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-DEL-1}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-automated-testing
+- id: FUNC-ito-automated-testing
   term: Automated Testing
   type: Function
   definition: Runs automated test suites in the pipeline to verify changes before they progress.
   aliases: [test automation, pipeline testing]
   relates_to:
-    - {rel: supports, target: CAP-DEL-1}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-DEL-1}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-test-management
+- id: FUNC-ito-test-management
   term: Test Management
   type: Function
   definition: >
     Organizes, curates, versions, and tracks test cases, plans, and suites and their execution results across
     the delivery lifecycle — test planning, the test-case library, coverage and pass/fail tracking. The
-    management discipline around testing, distinct from in-pipeline test execution (FUNC-automated-testing).
+    management discipline around testing, distinct from in-pipeline test execution (FUNC-ito-automated-testing).
   aliases: [test case management, test orchestration, QA management, test planning]
   relates_to:
-    - {rel: supports, target: CAP-DEL-1}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-DEL-1}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-artifact-packaging
+- id: FUNC-ito-artifact-packaging
   term: Artifact Packaging
   type: Function
   definition: Packages built output into versioned, deployable units ready for release.
   aliases: [packaging, build packaging]
   relates_to:
-    - {rel: supports, target: CAP-DEL-1}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-DEL-1}
+  source: ADR 0011 (amended by ADR 0045)
 
-# Deployment & promotion (supports CAP-DEL-2)
-- id: FUNC-deployment-execution
+# Deployment & promotion (supports CAP-ITO-DEL-2)
+- id: FUNC-ito-deployment-execution
   term: Deployment Execution
   type: Function
   definition: Deploys a service version into a target environment.
   aliases: [deployment, release execution]
   relates_to:
-    - {rel: supports, target: CAP-DEL-2}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-DEL-2}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-environment-promotion
+- id: FUNC-ito-environment-promotion
   term: Environment Promotion
   type: Function
   definition: Promotes a version across staged environments through defined gates.
   aliases: [promotion, staged promotion]
   relates_to:
-    - {rel: supports, target: CAP-DEL-2}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-DEL-2}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-progressive-rollout
+- id: FUNC-ito-progressive-rollout
   term: Progressive Rollout
   type: Function
   definition: Progressively exposes a change to a growing audience to contain risk before full release.
   aliases: [canary release, blue-green deployment, staged rollout, deployment rings]
   relates_to:
-    - {rel: supports, target: CAP-DEL-2}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-DEL-2}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-feature-flagging
+- id: FUNC-ito-feature-flagging
   term: Feature Flagging
   type: Function
   definition: Toggles behavior at runtime so features can be enabled, disabled, or targeted without redeploying.
   aliases: [feature flags, feature toggles]
   relates_to:
-    - {rel: supports, target: CAP-DEL-2}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-DEL-2}
+  source: ADR 0011 (amended by ADR 0045)
 
-# Supply-chain integrity verification (supports CAP-DEL-3; verifies what FND-5 records)
-- id: FUNC-artifact-signing
+# Supply-chain integrity verification (supports CAP-ITO-DEL-3; verifies what CAP-ITO-FND-5 records)
+- id: FUNC-ito-artifact-signing
   term: Artifact Signing
   type: Function
   definition: Signs artifacts and produces attestations so their origin and integrity can be verified downstream.
   aliases: [signing, attestation generation]
   relates_to:
-    - {rel: supports, target: CAP-DEL-3}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-DEL-3}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-signature-verification
+- id: FUNC-ito-signature-verification
   term: Signature Verification
   type: Function
   definition: Verifies artifact signatures before release so only trusted, unaltered units are deployed.
   aliases: [signature checking]
   relates_to:
-    - {rel: supports, target: CAP-DEL-3}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-DEL-3}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-provenance-verification
+- id: FUNC-ito-provenance-verification
   term: Provenance Verification
   type: Function
   definition: Verifies build provenance and attestations against policy before an artifact is allowed to deploy.
   aliases: [attestation verification, provenance check]
   relates_to:
-    - {rel: supports, target: CAP-DEL-3}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-DEL-3}
+  source: ADR 0011 (amended by ADR 0045)
 
-# Release rollback & roll-forward (supports CAP-DEL-4)
-- id: FUNC-release-rollback
+# Release rollback & roll-forward (supports CAP-ITO-DEL-4)
+- id: FUNC-ito-release-rollback
   term: Release Rollback
   type: Function
   definition: Reverts a service to a prior known-good release after a bad change.
   aliases: [rollback, release revert]
   relates_to:
-    - {rel: supports, target: CAP-DEL-4}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-DEL-4}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-roll-forward
+- id: FUNC-ito-roll-forward
   term: Roll-Forward
   type: Function
   definition: Advances a service to a corrected newer version to recover from a bad change without reverting.
   aliases: [roll forward, fix-forward]
   relates_to:
-    - {rel: supports, target: CAP-DEL-4}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-DEL-4}
+  source: ADR 0011 (amended by ADR 0045)
 
-# Code quality analysis (supports CAP-DEL-5; distinct from SEC-9 application security testing)
-- id: FUNC-static-code-analysis
+# Code quality analysis (supports CAP-ITO-DEL-5; distinct from CAP-ITO-SEC-9 application security testing)
+- id: FUNC-ito-static-code-analysis
   term: Static Code Analysis
   type: Function
   definition: Analyzes source code for quality issues — bugs, code smells, complexity, duplication, and coverage.
   aliases: [linting, code smell detection, code quality analysis]
   relates_to:
-    - {rel: supports, target: CAP-DEL-5}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-DEL-5}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-quality-gating
+- id: FUNC-ito-quality-gating
   term: Quality Gating
   type: Function
   definition: Gates the pipeline on defined quality thresholds (coverage, complexity, standards), blocking changes that fail.
   aliases: [quality gate, threshold gating]
   relates_to:
-    - {rel: supports, target: CAP-DEL-5}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-DEL-5}
+  source: ADR 0011 (amended by ADR 0045)

@@ -1,102 +1,101 @@
-# ITPRA ontology — FUNCTION library, INFRASTRUCTURE SUBSTRATE (SUB) domain file
-# type: Function. ids FUNC-<slug> (slug-based, NO domain prefix — shared cross-domain). All T1 neutral (TLS/DNS
-# kept as aliases only). See ADR 0011.
+# ITPRA ontology — FUNCTION library, ITO-SUB (Infrastructure Substrate)
+# type: Function. ids FUNC-ito-<slug>. All T1 neutral (TLS/DNS kept as aliases only). See ADR 0011.
 
-# Compute provisioning (supports CAP-SUB-1)
-- id: FUNC-compute-allocation
+# Compute provisioning (supports CAP-ITO-SUB-1)
+- id: FUNC-ito-compute-allocation
   term: Compute Allocation
   type: Function
   definition: Allocates and sizes compute capacity on demand for container and VM workloads.
   aliases: [compute sizing, instance provisioning]
   relates_to:
-    - {rel: supports, target: CAP-SUB-1}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-SUB-1}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-autoscaling
+- id: FUNC-ito-autoscaling
   term: Autoscaling
   type: Function
   definition: Scales compute capacity up and down automatically to match observed or forecast demand.
   aliases: [auto-scaling, elastic scaling]
   relates_to:
-    - {rel: supports, target: CAP-SUB-1}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-SUB-1}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-workload-placement
+- id: FUNC-ito-workload-placement
   term: Workload Placement
   type: Function
   definition: Schedules and places workloads onto available compute, honoring constraints and packing efficiency.
   aliases: [scheduling, bin packing, workload scheduling]
   relates_to:
-    - {rel: supports, target: CAP-SUB-1}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-SUB-1}
+  source: ADR 0011 (amended by ADR 0045)
 
-# Network & connectivity (supports CAP-SUB-2)
-- id: FUNC-network-provisioning
+# Network & connectivity (supports CAP-ITO-SUB-2)
+- id: FUNC-ito-network-provisioning
   term: Network Provisioning
   type: Function
   definition: Provisions virtual networks, subnets, and connectivity for workloads.
   aliases: [network setup, virtual network provisioning]
   relates_to:
-    - {rel: supports, target: CAP-SUB-2}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-SUB-2}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-network-segmentation
+- id: FUNC-ito-network-segmentation
   term: Network Segmentation
   type: Function
   definition: Segments and isolates network traffic between workloads and tenants to contain blast radius.
   aliases: [microsegmentation, network isolation]
   relates_to:
-    - {rel: supports, target: CAP-SUB-2}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-SUB-2}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-name-resolution
+- id: FUNC-ito-name-resolution
   term: Name Resolution
   type: Function
   definition: Resolves service and host names to network addresses for workloads.
   aliases: [DNS, service discovery names]
   relates_to:
-    - {rel: supports, target: CAP-SUB-2}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-SUB-2}
+  source: ADR 0011 (amended by ADR 0045)
 
-# Persistent storage (supports CAP-SUB-3)
-- id: FUNC-volume-provisioning
+# Persistent storage (supports CAP-ITO-SUB-3)
+- id: FUNC-ito-volume-provisioning
   term: Volume Provisioning
   type: Function
   definition: Provisions persistent storage volumes of appropriate types and performance classes on demand.
   aliases: [storage provisioning, persistent volume provisioning]
   relates_to:
-    - {rel: supports, target: CAP-SUB-3}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-SUB-3}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-storage-attachment
+- id: FUNC-ito-storage-attachment
   term: Storage Attachment
   type: Function
   definition: Attaches, mounts, and detaches persistent storage to and from workloads independent of compute lifecycle.
   aliases: [volume attachment, mounting]
   relates_to:
-    - {rel: supports, target: CAP-SUB-3}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-SUB-3}
+  source: ADR 0011 (amended by ADR 0045)
 
-# Load balancing & ingress (supports CAP-SUB-4; health-checking shared with RES-4)
-- id: FUNC-load-balancing
+# Load balancing & ingress (supports CAP-ITO-SUB-4; health-checking shared with CAP-ITO-RES-4)
+- id: FUNC-ito-load-balancing
   term: Load Balancing
   type: Function
   definition: Distributes incoming traffic across multiple healthy backends to share load and improve availability.
   aliases: [traffic distribution]
   relates_to:
-    - {rel: supports, target: CAP-SUB-4}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-SUB-4}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-ingress-routing
+- id: FUNC-ito-ingress-routing
   term: Ingress Routing
   type: Function
   definition: Presents stable external entry points and routes inbound traffic to the right services.
   aliases: [ingress, north-south routing]
   relates_to:
-    - {rel: supports, target: CAP-SUB-4}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-SUB-4}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-health-checking
+- id: FUNC-ito-health-checking
   term: Health Checking
   type: Function
   definition: >
@@ -104,21 +103,21 @@
     balancing and high availability.
   aliases: [health probe, readiness check, liveness check]
   relates_to:
-    - {rel: supports, target: CAP-SUB-4}
-    - {rel: supports, target: CAP-RES-4}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-SUB-4}
+    - {rel: supports, target: CAP-ITO-RES-4}
+  source: ADR 0011 (amended by ADR 0045)
 
-# Substrate reclamation (supports CAP-SUB-5; orphan-detection shared with COST-3)
-- id: FUNC-resource-reclamation
+# Substrate reclamation (supports CAP-ITO-SUB-5; orphan-detection shared with CAP-ITO-COST-3)
+- id: FUNC-ito-resource-reclamation
   term: Resource Reclamation
   type: Function
   definition: Reclaims compute, storage, and network resources when workloads are decommissioned, returning capacity.
   aliases: [resource cleanup, deprovisioning]
   relates_to:
-    - {rel: supports, target: CAP-SUB-5}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-SUB-5}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-orphan-detection
+- id: FUNC-ito-orphan-detection
   term: Orphan Detection
   type: Function
   definition: >
@@ -126,90 +125,90 @@
     and cost optimization.
   aliases: [unused resource detection, idle resource detection]
   relates_to:
-    - {rel: supports, target: CAP-SUB-5}
-    - {rel: supports, target: CAP-COST-3}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-SUB-5}
+    - {rel: supports, target: CAP-ITO-COST-3}
+  source: ADR 0011 (amended by ADR 0045)
 
-# API gateway & management (supports CAP-SUB-6; edge authn/authz reuses SEC)
-- id: FUNC-api-routing
+# API gateway & management (supports CAP-ITO-SUB-6; edge authn/authz reuses ITO-SEC)
+- id: FUNC-ito-api-routing
   term: API Routing
   type: Function
   definition: Routes and proxies API requests to backend services by path, header, or version at the managed edge.
   aliases: [api proxying, edge routing]
   relates_to:
-    - {rel: supports, target: CAP-SUB-6}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-SUB-6}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-rate-limiting
+- id: FUNC-ito-rate-limiting
   term: Rate Limiting
   type: Function
   definition: Controls how many requests a client may make in a time window, throttling or rejecting excess.
   aliases: [throttling, quota enforcement]
   relates_to:
-    - {rel: supports, target: CAP-SUB-6}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-SUB-6}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-request-transformation
+- id: FUNC-ito-request-transformation
   term: Request Transformation
   type: Function
   definition: Transforms requests and responses at the edge — format conversion, header injection, mediation.
   aliases: [request mediation, response transformation]
   relates_to:
-    - {rel: supports, target: CAP-SUB-6}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-SUB-6}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-api-lifecycle-management
+- id: FUNC-ito-api-lifecycle-management
   term: API Lifecycle Management
   type: Function
   definition: Publishes, versions, and deprecates managed APIs across their lifecycle as products.
   aliases: [api versioning, api publishing]
   relates_to:
-    - {rel: supports, target: CAP-SUB-6}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-SUB-6}
+  source: ADR 0011 (amended by ADR 0045)
 
-# Service mesh & service connectivity (supports CAP-SUB-7; identity authz reuses SEC)
-- id: FUNC-traffic-policy-management
+# Service mesh & service connectivity (supports CAP-ITO-SUB-7; identity authz reuses ITO-SEC)
+- id: FUNC-ito-traffic-policy-management
   term: Traffic Policy Management
   type: Function
   definition: Manages east-west traffic policy between services — routing, retries, timeouts, and circuit breaking.
   aliases: [traffic management, circuit breaking, retries and timeouts]
   relates_to:
-    - {rel: supports, target: CAP-SUB-7}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-SUB-7}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-service-to-service-encryption
+- id: FUNC-ito-service-to-service-encryption
   term: Service-to-Service Encryption
   type: Function
   definition: Establishes mutually authenticated, encrypted connections between services at the connectivity layer.
   aliases: [mutual TLS, mTLS, in-transit encryption]
   relates_to:
-    - {rel: supports, target: CAP-SUB-7}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-SUB-7}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-model-provider-routing
+- id: FUNC-ito-model-provider-routing
   term: Model Provider Routing & Failover
   type: Function
   definition: Selects which model provider or served model a request is sent to and fails over between them on error, saturation, or policy change, without the calling workload re-integrating.
   aliases: [model routing, provider failover, inference routing]
   relates_to:
-    - {rel: supports, target: CAP-SUB-8}
-  source: ADR 0033
+    - {rel: supports, target: CAP-ITO-SUB-8}
+  source: ADR 0033 (amended by ADR 0045)
 
-- id: FUNC-token-usage-metering
+- id: FUNC-ito-token-usage-metering
   term: Token & Inference Usage Metering
   type: Function
   definition: Meters inference consumption per request - tokens or equivalent provider units, by model and by calling principal - and emits it for attribution.
   aliases: [token metering, inference metering, token accounting]
   relates_to:
-    - {rel: supports, target: CAP-SUB-8}
-    - {rel: supports, target: CAP-COST-1}
-  source: ADR 0033
+    - {rel: supports, target: CAP-ITO-SUB-8}
+    - {rel: supports, target: CAP-ITO-COST-1}
+  source: ADR 0033 (amended by ADR 0045)
 
-- id: FUNC-inference-response-caching
+- id: FUNC-ito-inference-response-caching
   term: Inference Response Caching
   type: Function
   definition: Caches repeated or overlapping inference requests and their reusable request context so equivalent calls are not re-billed and re-computed.
   aliases: [prompt caching, inference cache, context caching]
   relates_to:
-    - {rel: supports, target: CAP-SUB-8}
-  source: ADR 0033
+    - {rel: supports, target: CAP-ITO-SUB-8}
+  source: ADR 0033 (amended by ADR 0045)

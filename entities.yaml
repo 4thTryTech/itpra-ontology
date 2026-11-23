@@ -55,8 +55,9 @@
   type: EntityType
   definition: >
     A discrete unit of behavior finer-grained than a capability — the granular layer that T2 selects as
-    required features and T3 binds tools to (ADR 0011). One shared, cross-domain library (`FUNC-<slug>`): a
-    function `supports` one or more capabilities (many-to-many). Functions are flat — no tier annotation —
+    required features and T3 binds tools to (ADR 0011). One library (`FUNC-<code>-<slug>`, the code naming the
+    function's home service domain; ADR 0045): a function `supports` one or more capabilities (many-to-many),
+    its own domain's or, by a record, another's (ADR 0009). Functions are flat — no tier annotation —
     and may freely name a specific standard, protocol, or technique where that *is* the function (ADR 0011: no tier
     field, no function `derived_from`). Distinct from a child capability
     (`CAP-<DOMAIN>-<n>.<m>`), which is an outcome-level split.
@@ -185,7 +186,7 @@
   term: Functional Requirement
   type: EntityType
   definition: >
-    A one-line statement of something the platform must do. Ids FR-<SUB>-<n>. Met by capabilities and verified by
+    A one-line statement of something the platform must do. Ids FR-<CODE>-<n>. Met by capabilities and verified by
     journeys; the functional form of REQUIREMENT (ADR 0008).
   aliases: [functional requirement record]
   relates_to:

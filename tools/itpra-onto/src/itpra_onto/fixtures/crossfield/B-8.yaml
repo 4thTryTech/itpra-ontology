@@ -1,11 +1,11 @@
 # B-8 (shapes/crossfield.ttl, itpra-o:AltLabelSelfCollisionShape): an alias equal to its own term's label,
-# case-insensitively, is a Violation (ADR 0007). CAP-FND-1's prefLabel is "Platform Configuration Source
-# of Truth"; giving it a lower-cased copy as an alias must raise exactly one B-8 finding, on CAP-FND-1.
+# case-insensitively, is a Violation (ADR 0007). CAP-ITO-FND-1's prefLabel is "Platform Configuration Source
+# of Truth"; giving it a lower-cased copy as an alias must raise exactly one B-8 finding, on CAP-ITO-FND-1.
 rule: B-8
 expect:
   severity: Violation
-  focus: CAP-FND-1
+  focus: CAP-ITO-FND-1
   count: 1
 mutate:
-  id: CAP-FND-1
+  id: CAP-ITO-FND-1
   set: {aliases: ["platform configuration source of truth"]}

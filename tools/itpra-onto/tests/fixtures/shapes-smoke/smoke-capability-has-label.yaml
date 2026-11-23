@@ -4,8 +4,8 @@
 rule: smoke-capability-has-label
 expect:
   severity: Violation
-  focus: CAP-FND-1
+  focus: CAP-ITO-FND-1
   count: 1
 mutate:
-  id: CAP-FND-1
+  id: CAP-ITO-FND-1
   delete: [term]

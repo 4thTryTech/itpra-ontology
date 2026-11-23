@@ -1,6 +1,6 @@
 # ITPRA ontology — FUNCTION library, DXC-CHN (Channel Delivery & Experience Insight)
 # type: Function. ids FUNC-dxc-<slug>. All T1-neutral; a function MAY name a recognized technique where that IS
-# the function (ADR 0011). Boundary: technical end-user/page MONITORING is ITO OBS (CAP-OBS-9), not DXC (ADR
+# the function (ADR 0011). Boundary: technical end-user/page MONITORING is ITO-OBS (CAP-ITO-OBS-9), not DXC (ADR
 # 0027).
 
 # Multi-channel experience delivery (CAP-DXC-CHN-1)
@@ -74,7 +74,7 @@
 - id: FUNC-dxc-content-performance
   term: Content & Experience Performance Insight
   type: Function
-  definition: Shows which content and experiences perform, feeding optimization; not technical page monitoring (ITO OBS).
+  definition: Shows which content and experiences perform, feeding optimization; not technical page monitoring (ITO-OBS).
   aliases: [content performance, experience performance, outcome insight]
   relates_to:
     - {rel: supports, target: CAP-DXC-CHN-5}

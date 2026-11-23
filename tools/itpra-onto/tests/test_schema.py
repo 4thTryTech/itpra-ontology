@@ -231,13 +231,13 @@ def test_cli_validate_authoring_passes():
 
 @pytest.fixture(scope="module")
 def function_file() -> list[dict]:
-    path = next(p for p in default_term_files() if p.name == "functions-foundation.yaml")
+    path = next(p for p in default_term_files() if p.name == "functions-ito-fnd.yaml")
     return _load(path)
 
 
 @pytest.fixture(scope="module")
 def capability_file() -> list[dict]:
-    path = next(p for p in default_term_files() if p.name == "capabilities-foundation.yaml")
+    path = next(p for p in default_term_files() if p.name == "capabilities-ito-fnd.yaml")
     return _load(path)
 
 
@@ -264,21 +264,21 @@ def test_unknown_type_fails(checker, function_file):
 
 def test_unknown_verb_fails(checker, function_file):
     result = checker.validate_term_records(
-        _mutate(function_file, lambda r: r["relates_to"].append({"rel": "likes", "target": "CAP-FND-1"}))
+        _mutate(function_file, lambda r: r["relates_to"].append({"rel": "likes", "target": "CAP-ITO-FND-1"}))
     )
     assert not result.ok and "'likes' is not one of" in result.errors[0]
 
 
 def test_function_with_derived_from_fails(checker, function_file):
     result = checker.validate_term_records(
-        _mutate(function_file, lambda r: r["relates_to"].append({"rel": "derived_from", "target": "CAP-FND-1"}))
+        _mutate(function_file, lambda r: r["relates_to"].append({"rel": "derived_from", "target": "CAP-ITO-FND-1"}))
     )
     assert not result.ok and "derived_from" in result.errors[0]
 
 
 def test_derived_from_still_allowed_on_capability(checker, capability_file):
     result = checker.validate_term_records(
-        _mutate(capability_file, lambda r: r["relates_to"].append({"rel": "derived_from", "target": "CAP-FND-2"}))
+        _mutate(capability_file, lambda r: r["relates_to"].append({"rel": "derived_from", "target": "CAP-ITO-FND-2"}))
     )
     assert result.ok, result.errors
 

@@ -1,6 +1,6 @@
 # ITPRA ontology — EUC-DEX (Endpoint Observability & Digital Employee Experience) capabilities
 # type: Capability. ids CAP-EUC-DEX-<n>. Observes the end-user's device/apps/experience — distinct from
-# platform/workload observability (ITO OBS); see ADR 0018.
+# platform/workload observability (ITO-OBS); see ADR 0018.
 
 - id: CAP-EUC-DEX-1
   term: Endpoint Telemetry & Inventory

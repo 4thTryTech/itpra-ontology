@@ -4,7 +4,7 @@
 # and shapes/requirements.ttl's itpra-o:ReqTargetUnresolvedShape (untyped object, unprefixed local name),
 # which mirrors the linter exactly.
 #
-# Repointing met_by at FUNC-version-control instead would prove a typed check the linter never makes; that
+# Repointing met_by at FUNC-ito-version-control instead would prove a typed check the linter never makes; that
 # mutation proves B-22 (fixtures/structural/B-22-met-by-function.yaml). B-22 ignores a
 # dangling object (it is this rule's business), so nothing cascades; met_by stays non-empty (B-4 silent).
 rule: req-target-unresolved

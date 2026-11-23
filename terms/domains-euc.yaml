@@ -35,7 +35,7 @@
     The end-user-facing security posture of the endpoint — threat protection and response on the device,
     configuration hardening against baselines, endpoint patch/update assurance, and device compliance state
     and attestation. Applies enterprise policy to endpoints and supplies endpoint compliance evidence; distinct
-    from platform/workload security (ITO SEC) and enterprise policy authorship (Enterprise Security/GRC).
+    from platform/workload security (ITO-SEC) and enterprise policy authorship (Enterprise Security/GRC).
   relates_to:
     - {rel: grouped_by, target: PLANE-SECURITY}
     - {rel: belongs_to_service_domain, target: SD-END-USER}
@@ -72,7 +72,7 @@
   definition: >
     Delivery of a workspace decoupled from the physical device — virtual/hosted desktop provisioning,
     remote/published application delivery, and remote-session brokering and access. The hosting compute/
-    storage/network substrate is an infrastructure-platform concern (ITO SUB) this domain interfaces with.
+    storage/network substrate is an infrastructure-platform concern (ITO-SUB) this domain interfaces with.
   relates_to:
     - {rel: grouped_by, target: PLANE-DELIVERY}
     - {rel: belongs_to_service_domain, target: SD-END-USER}
@@ -98,7 +98,7 @@
     Understanding and improving the workforce's digital experience — endpoint telemetry and inventory,
     digital-experience scoring and analytics across device/application/connection performance, proactive
     experience remediation, and experience sentiment and feedback. Observes the end-user's device, apps, and
-    experience; distinct from platform/workload observability (ITO OBS).
+    experience; distinct from platform/workload observability (ITO-OBS).
   relates_to:
     - {rel: grouped_by, target: PLANE-OPERATIONS}
     - {rel: belongs_to_service_domain, target: SD-END-USER}

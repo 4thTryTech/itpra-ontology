@@ -101,4 +101,4 @@
     The subject term is owned by the target ServiceDomain — its single owning service domain. SINGLE-VALUED:
     a term names at most one owning service domain (ADR 0009, one-to-one cardinality). Used to attribute a
     term (e.g. a placement concept, a capability domain) to its owning service domain. Every Domain record
-    carries exactly one, the first service domain's included (ADR 0009).
+    carries exactly one (ADR 0009).

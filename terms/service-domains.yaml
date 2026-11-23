@@ -1,10 +1,14 @@
 # ITPRA ontology — service domains
+# SHARED file: it belongs to no single service domain, so neither its name nor its ids carry a service-domain
+# code (ADR 0007, ADR 0045).
 # The domains of IT services in the enterprise landscape (TBM-tower / SIAM-tower style). Eleven peer service
 # domains, each authored as its own architecture in this framework. Each service domain has its own capability
 # domains (distinct from a capability DOMAIN, which is the finer-grained grouping inside a service domain — e.g.
-# SD-IT-OPERATIONS groups FND/SUB/AUT/DEL/SEC/OBS/RES/COST/DATA/EXP/GOV). Service domains `interfaces_with` each
-# other across capability planes (a C4 system-context boundary). Web-grounded in the TBM Council Resource
-# Towers, the SIAM tower model, and the ITIL core IT functions. Ratified by ADR 0009. type: ServiceDomain.
+# SD-IT-OPERATIONS groups ITO-FND/ITO-SUB/ITO-AUT/ITO-DEL/ITO-SEC/ITO-OBS/ITO-RES/ITO-COST/ITO-DATA/ITO-EXP/
+# ITO-GOV). Every service domain has a code its terms and files carry (ITO, EUC, SVD, FLD, ADM, DCF, NET, GRC,
+# ITSM, BIA, DXC; ADR 0004, ADR 0045). Service domains `interfaces_with` each other across capability planes (a
+# C4 system-context boundary). Web-grounded in the TBM Council Resource Towers, the SIAM tower model, and the
+# ITIL core IT functions. Ratified by ADR 0009. type: ServiceDomain.
 
 - id: SD-IT-OPERATIONS
   term: IT Operations
@@ -14,7 +18,7 @@
     capabilities, functions, journeys, personas, and requirements. One of eleven peer IT service domains in
     the framework. Per Gartner, the people and processes that run IT services and infrastructure; per ITIL,
     one of the core IT functions alongside application management and the service desk.
-  aliases: [ITOps, infrastructure and operations, I&O, IT operations and infrastructure]
+  aliases: [ITO, ITOps, infrastructure and operations, I&O, IT operations and infrastructure]
   source: ADR 0009
 
 # --- Service domains -------------------------------------------------------------------------------------
@@ -88,7 +92,7 @@
   definition: >
     The enterprise network beyond the platform's own substrate networking — corporate WAN, internet edge,
     site-to-site and remote connectivity that links users, offices, and the platform. The platform consumes
-    this connectivity; the platform's in-cluster/in-fabric networking is its own SUB capability. TBM "Network".
+    this connectivity; the platform's in-cluster/in-fabric networking is its own ITO-SUB capability. TBM "Network".
   aliases: [enterprise network, WAN, connectivity, telecom]
   relates_to:
     - {rel: interfaces_with, target: PLANE-RESOURCE}
@@ -100,7 +104,7 @@
   definition: >
     The enterprise-wide security operations and governance/risk/compliance functions the platform operates
     under — security operations center, corporate identity authority, audit, and risk/compliance oversight.
-    The platform has its own SEC capabilities and produces evidence to these functions; they set the
+    The platform has its own ITO-SEC capabilities and produces evidence to these functions; they set the
     guardrails it runs within. TBM "Security" + "Risk & Compliance".
   aliases: [enterprise security, GRC, SOC, risk and compliance, corporate identity]
   relates_to:
@@ -130,8 +134,8 @@
     self-service analytics, data science, data quality, master/reference data, data governance, and
     product/user behavior analytics. It consumes the platform's data substrate and operational telemetry but
     owns business data governance and insight, distinct from the platform's operational Data & Analytics
-    (DATA) and Observability (OBS). Where product/user behavior analytics lives — distinct from security UEBA
-    (CAP-SEC-7) and AIOps (CAP-OBS-6). DAMA-DMBOK discipline; TBM business-analytics solution + Data tower.
+    (ITO-DATA) and Observability (ITO-OBS). Where product/user behavior analytics lives — distinct from security UEBA
+    (CAP-ITO-SEC-7) and AIOps (CAP-ITO-OBS-6). DAMA-DMBOK discipline; TBM business-analytics solution + Data tower.
   aliases: [BI, business intelligence, analytics, data analytics, product analytics]
   relates_to:
     - {rel: interfaces_with, target: PLANE-RESOURCE}
@@ -146,7 +150,7 @@
     of contextualized digital experiences across channels (content management, personalization, customer
     journey orchestration, customer data, experimentation, digital commerce). Its consumers are external
     customers; it runs ON the platform but the platform does not own its experience logic. Explicitly NOT
-    Digital Experience Monitoring (CAP-OBS-9), which observes end-user experience. Gartner DXP market.
+    Digital Experience Monitoring (CAP-ITO-OBS-9), which observes end-user experience. Gartner DXP market.
   aliases: [digital experience, DXP, digital experience platform, digital channels, customer experience, omnichannel]
   relates_to:
     - {rel: interfaces_with, target: PLANE-EXPERIENCE}
