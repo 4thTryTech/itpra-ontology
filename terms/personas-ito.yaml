@@ -1,11 +1,11 @@
-# ITPRA ontology — personas (RATIFIED, ADR 0012)
-# The ratified T1 persona set: three COARSE, tier-graduated role archetypes — a provider, a consumer, and an
-# assurance owner. T1 stays abstract enough to fit any org size or operating model; each persona REFINES into
-# granular roles at T2/T3 (the refinement map is not held as aliases). Personas are neutral role archetypes, not
-# job titles. type: Persona. Capabilities reference these via `consumed_by`; personas are defined minimally here
-# (relationships are expressed from the capability side).
+# ITPRA ontology — IT Operations (ITO) personas
+# type: Persona. ids PERSONA-ito-<slug>. Three COARSE, tier-graduated neutral role archetypes — a provider, a
+# consumer, and an assurance owner (the persona model, ADR 0012): abstract enough to fit any org size or
+# operating model; each REFINES into granular roles at T2/T3 (the refinement map is not held as aliases).
+# Neutral role archetypes, not job titles. Capabilities reference these via `consumed_by`; relationships are
+# expressed from the capability/journey side. Ratified by ADR 0012; the `ito` code by ADR 0045.
 
-- id: PERSONA-platform-team
+- id: PERSONA-ito-platform-team
   term: Platform Team
   type: Persona
   definition: >
@@ -15,9 +15,9 @@
     coaching, subsystem specialists, platform product owner/manager, business sponsor, cost/value owner,
     platform service owner, and service-management/governance roles).
   aliases: [platform group, platform provider, platform builders, platform product owner]
-  source: ADR 0012
+  source: ADR 0012 (amended by ADR 0045)
 
-- id: PERSONA-platform-consumer
+- id: PERSONA-ito-platform-consumer
   term: Platform Consumer
   type: Persona
   definition: >
@@ -26,9 +26,9 @@
     consumer types (e.g. application development team, data/ML team, the service/business owner of its
     workload, other tenant teams).
   aliases: [consumer team, tenant team, workload team, application team]
-  source: ADR 0012
+  source: ADR 0012 (amended by ADR 0045)
 
-- id: PERSONA-security-compliance
+- id: PERSONA-ito-security-compliance
   term: Security & Compliance
   type: Persona
   definition: >
@@ -36,4 +36,4 @@
     posture; consumes evidence and controls rather than building workloads. At T2/T3 this refines into
     granular roles (e.g. security engineer, compliance/audit, GRC).
   aliases: [security officer, infosec, compliance]
-  source: ADR 0012
+  source: ADR 0012 (amended by ADR 0045)

@@ -14,4 +14,4 @@ expect:
   cofires: [B-22]
 mutate:
   id: FUNC-adm-lifecycle-state-tracking
-  append_relates_to: {rel: derived_from, target: CAP-FND-1}
+  append_relates_to: {rel: derived_from, target: CAP-ITO-FND-1}

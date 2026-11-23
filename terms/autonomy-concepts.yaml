@@ -1,4 +1,6 @@
 # ITPRA ontology — neutral autonomy / automation-governance concepts
+# SHARED file: it belongs to no single service domain, so neither its name nor its ids carry a service-domain
+# code (ADR 0007, ADR 0045).
 # Cross-cutting Concept vocabulary for how the platform bounds autonomous action. Operating-model-neutral and
 # tool-neutral: no ITIL/DevOps process names, no products. These are NOT governance "moments" (those are the ADR
 # 0015 GC-* set in governance-constructs.yaml) — they are standing, governed artifacts the moments act on.
@@ -41,14 +43,14 @@
   relates_to:
     - {rel: depends_on, target: GC-APPROVAL}
     - {rel: applies_to, target: COVERAGE-AREA}
-    - {rel: depends_on, target: FUNC-policy-authoring}
-    - {rel: depends_on, target: FUNC-policy-evaluation}
-    - {rel: governs, target: FUNC-runbook-automation}
-    - {rel: governs, target: FUNC-event-triggered-execution}
-    - {rel: governs, target: FUNC-response-playbook-execution}
+    - {rel: depends_on, target: FUNC-ito-policy-authoring}
+    - {rel: depends_on, target: FUNC-ito-policy-evaluation}
+    - {rel: governs, target: FUNC-ito-runbook-automation}
+    - {rel: governs, target: FUNC-ito-event-triggered-execution}
+    - {rel: governs, target: FUNC-ito-response-playbook-execution}
     - {rel: governs, target: AUTON-ACTOR}
-    - {rel: governs, target: FUNC-tool-invocation-mediation}
-    - {rel: governs, target: FUNC-agent-execution-sandboxing}
+    - {rel: governs, target: FUNC-ito-tool-invocation-mediation}
+    - {rel: governs, target: FUNC-ito-agent-execution-sandboxing}
   source: ADR 0028 (amended by ADR 0030)
 
 - id: AUTON-ACTOR
@@ -65,7 +67,7 @@
   aliases: [agentic actor, digital worker, AI agent, software agent, non-human actor]
   relates_to:
     - {rel: depends_on, target: GC-OWNERSHIP}
-    - {rel: depends_on, target: FUNC-privileged-access-management}
+    - {rel: depends_on, target: FUNC-ito-privileged-access-management}
   source: ADR 0030
 
 - id: AUTON-HARNESS
@@ -86,8 +88,8 @@
   relates_to:
     - {rel: applies_to, target: AUTON-ACTOR}
     - {rel: depends_on, target: AUTON-BOUNDARY}
-    - {rel: depends_on, target: FUNC-policy-evaluation}
-    - {rel: depends_on, target: FUNC-audit-logging}
+    - {rel: depends_on, target: FUNC-ito-policy-evaluation}
+    - {rel: depends_on, target: FUNC-ito-audit-logging}
   source: ADR 0030
 
 - id: AUTON-INFLIGHT-CONTROL

@@ -1,4 +1,6 @@
 # ITPRA ontology — environment dimensions
+# SHARED file: it belongs to no single service domain, so neither its name nor its ids carry a service-domain
+# code (ADR 0007, ADR 0045).
 # The orthogonal axes a T1 capability is asserted to be invariant across (public/private/hybrid, container/VM).
 # Ratified by ADR 0014. A capability's `Environment applicability` field names which of these are variation
 # points whose binding is deferred to T2 (scenario) / T3 (runtime). type: Concept.

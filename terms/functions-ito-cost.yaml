@@ -1,52 +1,51 @@
-# ITPRA ontology — FUNCTION library, COST & CAPACITY (COST) domain file
-# type: Function. ids FUNC-<slug> (slug-based, NO domain prefix — shared cross-domain). All T1 neutral. COST-3
-# also reuses shared FUNC-orphan-detection (SUB) and FUNC-anomaly-detection (OBS) for cost anomalies. See ADR
-# 0011.
+# ITPRA ontology — FUNCTION library, ITO-COST (Cost & Capacity)
+# type: Function. ids FUNC-ito-<slug>. All T1 neutral. CAP-ITO-COST-3 also reuses shared
+# FUNC-ito-orphan-detection (ITO-SUB) and FUNC-ito-anomaly-detection (ITO-OBS) for cost anomalies. See ADR 0011.
 
-# Cost attribution & showback (supports CAP-COST-1)
-- id: FUNC-cost-attribution
+# Cost attribution & showback (supports CAP-ITO-COST-1)
+- id: FUNC-ito-cost-attribution
   term: Cost Attribution
   type: Function
   definition: Attributes resource consumption and cost to the tenants and services that incurred them.
   aliases: [cost allocation, tagging-based allocation]
   relates_to:
-    - {rel: supports, target: CAP-COST-1}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-COST-1}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-showback-reporting
+- id: FUNC-ito-showback-reporting
   term: Showback Reporting
   type: Function
   definition: Presents attributed spend transparently to those who incur it (showback; chargeback is the billing variant).
   aliases: [showback, chargeback reporting]
   relates_to:
-    - {rel: supports, target: CAP-COST-1}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-COST-1}
+  source: ADR 0011 (amended by ADR 0045)
 
-# Capacity planning (supports CAP-COST-2)
-- id: FUNC-capacity-forecasting
+# Capacity planning (supports CAP-ITO-COST-2)
+- id: FUNC-ito-capacity-forecasting
   term: Capacity Forecasting
   type: Function
   definition: Forecasts future capacity and demand from historical trends so the platform stays ahead of growth.
   aliases: [demand forecasting, capacity prediction]
   relates_to:
-    - {rel: supports, target: CAP-COST-2}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-COST-2}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-utilization-tracking
+- id: FUNC-ito-utilization-tracking
   term: Utilization Tracking
   type: Function
   definition: Tracks current resource utilization against provisioned capacity to inform planning and optimization.
   aliases: [utilization monitoring, usage tracking]
   relates_to:
-    - {rel: supports, target: CAP-COST-2}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-COST-2}
+  source: ADR 0011 (amended by ADR 0045)
 
-# Optimization recommendations (supports CAP-COST-3; reuses orphan-detection + anomaly-detection)
-- id: FUNC-rightsizing-recommendation
+# Optimization recommendations (supports CAP-ITO-COST-3; reuses orphan-detection + anomaly-detection)
+- id: FUNC-ito-rightsizing-recommendation
   term: Rightsizing Recommendation
   type: Function
   definition: Recommends right-sizing and waste-reduction actions, scored by savings and effort, for decision-makers to act on.
   aliases: [rightsizing, optimization recommendation]
   relates_to:
-    - {rel: supports, target: CAP-COST-3}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-COST-3}
+  source: ADR 0011 (amended by ADR 0045)

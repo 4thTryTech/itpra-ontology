@@ -1,4 +1,6 @@
 # ITPRA ontology — neutral coverage-partitioning concepts
+# SHARED file: it belongs to no single service domain, so neither its name nor its ids carry a service-domain
+# code (ADR 0007, ADR 0045).
 # Cross-cutting Concept vocabulary for the case where one function's coverage is PARTITIONED across the estate
 # and provided by DIFFERENT tools per partition, simultaneously — not one coverage whose internals vary (that is
 # the ENV-DIM-* idea, ADR 0014). Operating-model- and tool-neutral: no products, no ITIL/ DevOps process names,

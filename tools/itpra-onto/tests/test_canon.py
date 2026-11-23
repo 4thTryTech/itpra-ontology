@@ -29,7 +29,7 @@ def _dataset_order_a() -> ox.Dataset:
     """A dataset with one blank node, built with statements added in one order."""
     blank = ox.BlankNode()
     dataset = ox.Dataset()
-    dataset.add(_quad(EX + "id/CAP-1", EX + "onto#groupedBy", ox.NamedNode(EX + "id/FND")))
+    dataset.add(_quad(EX + "id/CAP-1", EX + "onto#groupedBy", ox.NamedNode(EX + "id/ITO-FND")))
     dataset.add(_quad(EX + "id/CAP-1", EX + "onto#hasNote", blank))
     dataset.add(ox.Quad(blank, ox.NamedNode(EX + "onto#text"), ox.Literal("hello", language="en"), ox.NamedNode(EX + "graph/t1")))
     return dataset
@@ -42,7 +42,7 @@ def _dataset_order_b() -> ox.Dataset:
     dataset = ox.Dataset()
     dataset.add(ox.Quad(blank, ox.NamedNode(EX + "onto#text"), ox.Literal("hello", language="en"), ox.NamedNode(EX + "graph/t1")))
     dataset.add(_quad(EX + "id/CAP-1", EX + "onto#hasNote", blank))
-    dataset.add(_quad(EX + "id/CAP-1", EX + "onto#groupedBy", ox.NamedNode(EX + "id/FND")))
+    dataset.add(_quad(EX + "id/CAP-1", EX + "onto#groupedBy", ox.NamedNode(EX + "id/ITO-FND")))
     return dataset
 
 
@@ -70,7 +70,7 @@ TTL_ORDER_A = f"""
 @prefix ex: <{EX}onto#> .
 @prefix id: <{EX}id/> .
 
-id:CAP-1 ex:groupedBy id:FND .
+id:CAP-1 ex:groupedBy id:ITO-FND .
 id:CAP-1 ex:hasNote [ ex:text "hello"@en ] .
 """
 
@@ -80,7 +80,7 @@ TTL_ORDER_B = f"""
 
 _:zzz ex:text "hello"@en .
 id:CAP-1 ex:hasNote _:zzz .
-id:CAP-1 ex:groupedBy id:FND .
+id:CAP-1 ex:groupedBy id:ITO-FND .
 """
 
 

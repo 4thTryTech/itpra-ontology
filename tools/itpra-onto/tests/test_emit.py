@@ -24,11 +24,11 @@ from itpra_onto.profile import compute_profile, load_records
 
 FIXTURE = Path(__file__).resolve().parent / "fixtures" / "cap-fnd-1.expected.nq"
 WORKED_EXAMPLE_SUBJECTS = (
-    "CAP-FND-1",
+    "CAP-ITO-FND-1",
     "FR-FND-1",
-    "FUNC-version-control",
-    "FUNC-change-review",
-    "FUNC-configuration-rollback",
+    "FUNC-ito-version-control",
+    "FUNC-ito-change-review",
+    "FUNC-ito-configuration-rollback",
 )
 EXPECTED_SUB_PROJECTS = 11
 EXPECTED_VERBS = 17
@@ -321,8 +321,8 @@ def test_parse_source_rejects_grammar_violations(text: str):
 
 
 def test_parse_source_error_names_the_record_id_and_the_item():
-    with pytest.raises(emit.SourceGrammarError, match=re.escape("CAP-FND-1") + ".*" + re.escape("ADR-0012")):
-        parse_source("ADR-0012", record_id="CAP-FND-1")
+    with pytest.raises(emit.SourceGrammarError, match=re.escape("CAP-ITO-FND-1") + ".*" + re.escape("ADR-0012")):
+        parse_source("ADR-0012", record_id="CAP-ITO-FND-1")
 
 
 def test_parse_source_still_accepts_every_previously_valid_case():
@@ -380,7 +380,7 @@ def test_parse_source_full_corpus_never_trips_the_grammar(config: Config):
 
 
 # ---------------------------------------------------------------------------------------------------
-# acceptance: the CAP-FND-1 worked example, byte for byte after canonicalisation
+# acceptance: the CAP-ITO-FND-1 worked example, byte for byte after canonicalisation
 
 
 @pytest.mark.overlay  # needs the consumer's registries
@@ -555,8 +555,8 @@ _GOOD_REQ = {
     "id": "FR-FIXTURE-1",
     "type": "FR",
     "statement": "A fixture.",
-    "met_by": ["CAP-FND-1"],
-    "verified_by": ["JRN-patch-platform"],
+    "met_by": ["CAP-ITO-FND-1"],
+    "verified_by": ["JRN-ito-patch-platform"],
 }
 
 
@@ -652,7 +652,7 @@ def test_relates_to_target_that_is_not_a_string_is_an_emit_error(vocab: emit.Voc
 
 
 def test_relates_to_verb_that_is_not_a_string_is_an_emit_error(vocab: emit.Vocabulary):
-    record = {**_GOOD_TERM, "relates_to": [{"rel": ["grouped_by"], "target": "FND"}]}
+    record = {**_GOOD_TERM, "relates_to": [{"rel": ["grouped_by"], "target": "ITO-FND"}]}
     with pytest.raises(emit.EmitError, match="is not a slot in the verbs subset"):
         list(emit.term_triples(_term(record), vocab))
 
@@ -668,7 +668,7 @@ def test_iri_safe_but_pattern_breaking_id_still_reaches_the_graph(vocab: emit.Vo
 @pytest.mark.parametrize("key", ["met_by", "verified_by"])
 def test_scalar_met_by_or_verified_by_is_an_emit_error(vocab: emit.Vocabulary, key: str):
     """A scalar is not silently read as a one-element list."""
-    record = {**_GOOD_REQ, key: "CAP-FND-1"}
+    record = {**_GOOD_REQ, key: "CAP-ITO-FND-1"}
     with pytest.raises(emit.EmitError, match=f"`{key}` must be a list") as info:
         list(emit.requirement_triples(_req(record), vocab))
     assert info.value.record_id == "FR-FIXTURE-1"
@@ -676,7 +676,7 @@ def test_scalar_met_by_or_verified_by_is_an_emit_error(vocab: emit.Vocabulary, k
 
 def test_requirement_reference_that_cannot_be_an_iri_is_an_emit_error(vocab: emit.Vocabulary):
     with pytest.raises(emit.EmitError, match="cannot be an IRI local name") as info:
-        list(emit.requirement_triples(_req({**_GOOD_REQ, "met_by": ["CAP FND 1"]}), vocab))
+        list(emit.requirement_triples(_req({**_GOOD_REQ, "met_by": ["CAP ITO-FND 1"]}), vocab))
     assert info.value.record_id == "FR-FIXTURE-1"
 
 

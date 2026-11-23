@@ -1,0 +1,117 @@
+# ITPRA ontology — ITO-SUB (Infrastructure Substrate) capabilities
+# type: Capability. ids CAP-ITO-SUB-<n>. Grouped under domain ITO-SUB (ADR 0017).
+
+- id: CAP-ITO-SUB-1
+  term: Compute Provisioning
+  type: Capability
+  definition: >
+    Provisions compute capacity on demand for both container and VM workloads, sizing and scaling it to
+    meet requested and observed demand.
+  relates_to:
+    - {rel: grouped_by, target: ITO-SUB}
+    - {rel: depends_on, target: CAP-ITO-SUB-2}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+    - {rel: consumed_by, target: PERSONA-ito-platform-consumer}
+  source: ADR 0017 (amended by ADR 0045)
+
+- id: CAP-ITO-SUB-2
+  term: Network & Connectivity
+  type: Capability
+  definition: >
+    Provides connectivity, segmentation, and name resolution for workloads — the addressable, isolated
+    network fabric over which platform and tenant traffic flows.
+  relates_to:
+    - {rel: grouped_by, target: ITO-SUB}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+    - {rel: consumed_by, target: PERSONA-ito-platform-consumer}
+  source: ADR 0017 (amended by ADR 0045)
+
+- id: CAP-ITO-SUB-3
+  term: Persistent Storage
+  type: Capability
+  definition: >
+    Provisions persistent storage of appropriate types and performance classes for workloads, decoupled
+    from the lifecycle of the compute that uses it.
+  relates_to:
+    - {rel: grouped_by, target: ITO-SUB}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+    - {rel: consumed_by, target: PERSONA-ito-platform-consumer}
+  source: ADR 0017 (amended by ADR 0045)
+
+- id: CAP-ITO-SUB-4
+  term: Load Balancing & Ingress
+  type: Capability
+  definition: >
+    Exposes workloads through managed load balancing and ingress, distributing traffic and presenting
+    stable entry points to consumers.
+  relates_to:
+    - {rel: grouped_by, target: ITO-SUB}
+    - {rel: depends_on, target: CAP-ITO-SUB-2}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+    - {rel: consumed_by, target: PERSONA-ito-platform-consumer}
+  source: ADR 0017 (amended by ADR 0045)
+
+- id: CAP-ITO-SUB-5
+  term: Substrate Reclamation
+  type: Capability
+  definition: >
+    Reclaims compute, storage, and network resources when workloads are decommissioned, returning capacity
+    and preventing orphaned resource sprawl.
+  relates_to:
+    - {rel: grouped_by, target: ITO-SUB}
+    - {rel: depends_on, target: CAP-ITO-SUB-1}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+  source: ADR 0017 (amended by ADR 0045)
+
+- id: CAP-ITO-SUB-6
+  term: API Gateway & Management
+  type: Capability
+  definition: >
+    Provides a managed, business-aware north-south API edge above ingress (CAP-ITO-SUB-4) — routing,
+    authentication/authorization, rate limiting, quotas, request/response transformation, and API
+    lifecycle/versioning — exposing tenant services' APIs as managed products. Distinct from ingress
+    (L4/L7 traffic, CAP-ITO-SUB-4) and from the platform's own programmatic interfaces (CAP-ITO-EXP-4).
+  aliases: [API gateway, API management, API edge]
+  relates_to:
+    - {rel: grouped_by, target: ITO-SUB}
+    - {rel: depends_on, target: CAP-ITO-SUB-4}
+    - {rel: depends_on, target: CAP-ITO-SEC-1}
+    - {rel: consumed_by, target: PERSONA-ito-platform-consumer}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+  source: ADR 0017 (amended by ADR 0045)
+
+- id: CAP-ITO-SUB-7
+  term: Service Mesh & Service Connectivity
+  type: Capability
+  definition: >
+    Manages east-west service-to-service communication at the infrastructure layer — mutual TLS,
+    identity-based authorization, and traffic policy (routing, retries, timeouts, circuit breaking) — with
+    no application logic. The east-west counterpart to the API gateway's north-south edge (CAP-ITO-SUB-6).
+  aliases: [service mesh, service connectivity, east-west traffic]
+  relates_to:
+    - {rel: grouped_by, target: ITO-SUB}
+    - {rel: depends_on, target: CAP-ITO-SUB-2}
+    - {rel: depends_on, target: CAP-ITO-SEC-3}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+    - {rel: consumed_by, target: PERSONA-ito-platform-consumer}
+  source: ADR 0017 (amended by ADR 0045)
+
+- id: CAP-ITO-SUB-8
+  term: Model Provider Gateway
+  type: Capability
+  definition: >
+    Provides a managed egress edge through which platform and tenant workloads reach model providers -
+    brokering provider selection, routing and failover across providers, enforcing quotas and rate limits,
+    metering token and inference consumption for attribution, and caching repeated inference requests. A
+    provisioned resource in the substrate alongside compute (CAP-ITO-SUB-1) and persistent storage (CAP-ITO-SUB-3).
+    Sibling to, not a case of, the API gateway (CAP-ITO-SUB-6): CAP-ITO-SUB-6 exposes tenant APIs OUTWARD as managed
+    products, whereas this brokers tenant workloads reaching OUT to providers. The developer-facing half of
+    model consumption stays with the experience capabilities (CAP-ITO-EXP-2/3/4, CAP-ITO-EXP-8). Which providers,
+    which routing policy, and self-hosted versus externally served inference are T2/T3 decisions.
+  aliases: [model gateway, inference gateway, model routing layer, model broker]
+  relates_to:
+    - {rel: grouped_by, target: ITO-SUB}
+    - {rel: depends_on, target: CAP-ITO-SUB-2}
+    - {rel: consumed_by, target: PERSONA-ito-platform-consumer}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+  source: ADR 0033 (amended by ADR 0045)

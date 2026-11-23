@@ -1,6 +1,6 @@
 # ITPRA ontology — DXC-CHN (Channel Delivery & Experience Insight) capabilities
 # type: Capability. ids CAP-DXC-CHN-<n>. Grouped under domain DXC-CHN (ADR 0027). NOTE the boundary: technical
-# end-user/page MONITORING is ITO OBS (CAP-OBS-9), not DXC; DXC owns the customer-EXPERIENCE-OUTCOME insight.
+# end-user/page MONITORING is ITO-OBS (CAP-ITO-OBS-9), not DXC; DXC owns the customer-EXPERIENCE-OUTCOME insight.
 # See ADR 0027.
 
 - id: CAP-DXC-CHN-1
@@ -60,7 +60,7 @@
   definition: >
     Provides the customer-outcome view of how delivered experiences perform — engagement, conversion, and
     friction across channels and content — so the experience team can see the business performance of the
-    experience. The technical monitoring of page/app performance and availability is ITO OBS (CAP-OBS-9),
+    experience. The technical monitoring of page/app performance and availability is ITO-OBS (CAP-ITO-OBS-9),
     which this interfaces with.
   relates_to:
     - {rel: grouped_by, target: DXC-CHN}

@@ -1,7 +1,7 @@
 # ITPRA ontology — ADM-REL (Application Release Coordination) capabilities
 # type: Capability. ids CAP-ADM-REL-<n>. Grouped under domain ADM-REL (ADR 0021). CONSUMER-side: plans &
-# coordinates what ships and when; the pipeline that EXECUTES build/deploy + supply-chain is the platform's (ITO
-# DEL), consumed not owned (ADR 0021).
+# coordinates what ships and when; the pipeline that EXECUTES build/deploy + supply-chain is the platform's
+# (ITO-DEL), consumed not owned (ADR 0021).
 
 - id: CAP-ADM-REL-1
   term: Release Planning & Scheduling

@@ -46,7 +46,7 @@
   definition: >
     Provides enhanced heat removal for high-density footprints that air alone cannot cool — close-coupled,
     direct-to-equipment, or immersion cooling — so dense equipment can be hosted within a safe envelope. The
-    physical cooling delivery; the dense workloads it serves are an ITO SUB concern this interfaces with.
+    physical cooling delivery; the dense workloads it serves are an ITO-SUB concern this interfaces with.
   relates_to:
     - {rel: grouped_by, target: DCF-COOL}
     - {rel: depends_on, target: CAP-DCF-COOL-1}

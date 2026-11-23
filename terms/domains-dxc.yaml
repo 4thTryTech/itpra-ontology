@@ -5,7 +5,7 @@
 # Owning service domain: SD-DIGITAL-EXPERIENCE (interfaces_with PLANE-EXPERIENCE and PLANE-DELIVERY; see ADR
 # 0009 + ADR 0027). DXC is the CUSTOMER-FACING digital experience discipline; its consumers are
 # EXTERNAL customers; it runs ON the platform but the platform does not own its experience logic. Explicitly NOT
-# Digital Experience MONITORING (ITO CAP-OBS-9).
+# Digital Experience MONITORING (CAP-ITO-OBS-9).
 
 - id: DXC-CNT
   term: Content Management & Composition
@@ -99,8 +99,8 @@
     performs — multi-channel experience delivery (create-once / publish-everywhere), delivery and front-end
     API services, edge delivery and experience performance, digital channel presence management, and the
     customer-outcome view of channel experience insight (engagement, conversion, friction). The technical
-    monitoring of end-user/page performance and availability is the platform's observability concern (ITO
-    OBS, CAP-OBS-9) this domain interfaces with — not DXC.
+    monitoring of end-user/page performance and availability is the platform's observability concern
+    (ITO-OBS, CAP-ITO-OBS-9) this domain interfaces with — not DXC.
   relates_to:
     - {rel: grouped_by, target: PLANE-DELIVERY}
     - {rel: belongs_to_service_domain, target: SD-DIGITAL-EXPERIENCE}

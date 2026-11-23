@@ -1,8 +1,10 @@
 # ITPRA ontology — T1 journey groups
+# SHARED file: it belongs to no single service domain, so neither its name nor its ids carry a service-domain
+# code (ADR 0007, ADR 0045).
 # The groups journeys are organized under. Ratified by ADR 0013. type: JourneyGroup; ids JG-<slug>. Grouping is
 # by lifecycle phase (design -> deploy -> operate) plus cross-cutting concerns, NOT by persona (a journey
 # crosses personas; primary persona is a field on the journey spec). The id is NOT encoded in journey ids
-# (journeys are JRN-<slug>; group membership is via `grouped_by`). Neutral — no ITIL/DevOps terms.
+# (journeys are JRN-<code>-<slug>; group membership is via `grouped_by`). Neutral — no ITIL/DevOps terms.
 
 - id: JG-ONBOARDING
   term: Onboarding

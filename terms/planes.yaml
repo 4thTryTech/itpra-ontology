@@ -1,4 +1,6 @@
 # ITPRA ontology — capability planes
+# SHARED file: it belongs to no single service domain, so neither its name nor its ids carry a service-domain
+# code (ADR 0007, ADR 0045).
 # The seven planes capability domains are grouped under (Capability -> Domain -> Plane -> Tier). Extends the
 # Internal Developer Platform (IDP) five-plane model for an infrastructure platform. Ratified by ADR 0010. type:
 # Plane. Member domains carry the `grouped_by` link (see the domains files).

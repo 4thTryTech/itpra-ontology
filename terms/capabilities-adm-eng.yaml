@@ -1,6 +1,6 @@
 # ITPRA ontology — ADM-ENG (Application Build & Engineering Practice) capabilities
 # type: Capability. ids CAP-ADM-ENG-<n>. Grouped under domain ADM-ENG (ADR 0021). CONSUMER-side: builds the
-# application; consumes the platform's software-delivery pipeline (ITO DEL), does not own it (ADR 0021).
+# application; consumes the platform's software-delivery pipeline (ITO-DEL), does not own it (ADR 0021).
 
 - id: CAP-ADM-ENG-1
   term: Application Design & Architecture
@@ -87,7 +87,7 @@
     component may see at inference time, and setting the application-side policy for which model a task is
     routed to. A member of ADM-ENG rather than a separate group: this is application engineering, in the
     same sense that evaluating it is application testing. Consumes the platform's model-provider gateway
-    (ITO CAP-SUB-8) rather than owning it. Coordination topologies, context budgets, and provider choice
+    (CAP-ITO-SUB-8) rather than owning it. Coordination topologies, context budgets, and provider choice
     bind at T2/T3.
   aliases: [AI engineering, GenAI application engineering, agentic application development, inference-time behaviour design]
   relates_to:
@@ -106,7 +106,7 @@
     the builder because a guardrail is part of the application's own behaviour, the same reasoning that
     keeps application testing in ADM-QAT rather than moving it to the enterprise control catalogue. Distinct
     from EVALUATING whether the guardrail works, which is offline and sampled (CAP-ADM-QAT-6), and from the
-    platform's runtime enforcement of the automation boundary (ITO CAP-AUT-8). The enterprise standard for
+    platform's runtime enforcement of the automation boundary (CAP-ITO-AUT-8). The enterprise standard for
     what guardrails must cover is authored elsewhere and consumed here. Governed semantic constraints - the
     governing semantic model's rules (CAP-BIA-GOV-7) - are one source of guardrail rules, so an actor's
     output can be checked against the meaning it claims to use before it is returned or acted on

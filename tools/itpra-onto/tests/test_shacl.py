@@ -146,13 +146,13 @@ def test_smoke_core_fixture_report_shape_directly():
     report, expected = fixtures.run_fixture(CORE_FIXTURE, SMOKE_DIR)
     assert expected.rule == "smoke-capability-has-label"
     assert expected.severity == "Violation"
-    assert expected.focus == "CAP-FND-1"
+    assert expected.focus == "CAP-ITO-FND-1"
     assert expected.count == 1
     matching = [f for f in report.findings if f.rule_id == "smoke-capability-has-label"]
     assert len(matching) == 1
     finding = matching[0]
     assert finding.severity == "Violation"
-    assert shacl.focus_local_name(finding.focus, load_config()) == "CAP-FND-1"
+    assert shacl.focus_local_name(finding.focus, load_config()) == "CAP-ITO-FND-1"
     assert finding.source_shape is not None and finding.source_shape.endswith("SmokeCapabilityHasLabelShape")
 
 
@@ -364,9 +364,9 @@ def test_cli_validate_json_with_smoke_shapes_matches_the_direct_call(config: Con
 def _write_fixture(tmp_path: Path, expect_extra: str) -> Path:
     path = tmp_path / "f.yaml"
     path.write_text(
-        "rule: emit-error\nexpect:\n  severity: Violation\n  focus: CAP-FND-1\n"
+        "rule: emit-error\nexpect:\n  severity: Violation\n  focus: CAP-ITO-FND-1\n"
         + expect_extra
-        + "mutate:\n  id: CAP-FND-1\n  set: {source: \"ADR-12\"}\n",
+        + "mutate:\n  id: CAP-ITO-FND-1\n  set: {source: \"ADR-12\"}\n",
         encoding="utf-8",
     )
     return path
@@ -390,8 +390,8 @@ def test_fixture_cofires_must_really_cofire(tmp_path: Path):
     """expect.cofires documents a fact; naming a rule that does not fire on the focus fails the fixture."""
     path = tmp_path / "g.yaml"
     path.write_text(
-        "rule: B-22\nexpect:\n  severity: Violation\n  focus: CAP-FND-1\n  cofires: [B-12]\n"
-        "mutate:\n  id: CAP-FND-1\n  append_relates_to: {rel: consumed_by, target: FUNC-version-control}\n",
+        "rule: B-22\nexpect:\n  severity: Violation\n  focus: CAP-ITO-FND-1\n  cofires: [B-12]\n"
+        "mutate:\n  id: CAP-ITO-FND-1\n  append_relates_to: {rel: consumed_by, target: FUNC-ito-version-control}\n",
         encoding="utf-8",
     )
     with pytest.raises(AssertionError, match=r"cofires names \['B-12'\]"):
@@ -406,8 +406,8 @@ def _mutated_inputs(config: Config, inputs: emit.Inputs, fixture_name: str) -> e
 @pytest.mark.parametrize(
     ("fixture_name", "subject", "error_class"),
     [
-        ("structural/relates-to-malformed.yaml", "CAP-FND-1", "EmitError"),
-        ("crossfield/B-13-emit-guard.yaml", "CAP-FND-1", "SourceGrammarError"),
+        ("structural/relates-to-malformed.yaml", "CAP-ITO-FND-1", "EmitError"),
+        ("crossfield/B-13-emit-guard.yaml", "CAP-ITO-FND-1", "SourceGrammarError"),
         pytest.param("structural/req-link-malformed.yaml", "FR-FND-1", "EmitError", marks=pytest.mark.overlay),
     ],
 )
@@ -442,7 +442,7 @@ def test_cli_validate_plain_reports_an_emit_error_as_a_finding(
     code = cli.main(["validate"])
     out = capsys.readouterr().out
     assert code == 1
-    assert "Violation  emit-error  CAP-FND-1  EmitError: " in out
+    assert "Violation  emit-error  CAP-ITO-FND-1  EmitError: " in out
     assert "1 finding(s) over no graph" in out
     assert "Traceback" not in out
 

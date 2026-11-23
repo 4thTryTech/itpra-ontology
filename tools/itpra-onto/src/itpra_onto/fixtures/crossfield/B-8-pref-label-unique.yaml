@@ -8,15 +8,15 @@
 # test_pref_label_unique_fires_per_surplus_label_in_one_language.
 #
 # This `count: 0` clean-case fixture (fixtures.py's grammar) documents that boundary from the authoring
-# side: editing CAP-FND-1's `term` field to a new value is the closest an authoring mutation can get to
+# side: editing CAP-ITO-FND-1's `term` field to a new value is the closest an authoring mutation can get to
 # "changing the preferred label", and it still yields exactly one skos:prefLabel (the new text), never two
 # -- B-8-pref-label-unique stays silent.
 rule: B-8-pref-label-unique
 expect:
   severity: Violation
-  focus: CAP-FND-1
+  focus: CAP-ITO-FND-1
   count: 0
 mutate:
-  id: CAP-FND-1
+  id: CAP-ITO-FND-1
   set:
     term: "Platform Configuration Source of Truth (renamed, B-8-pref-label-unique clean-case fixture)"

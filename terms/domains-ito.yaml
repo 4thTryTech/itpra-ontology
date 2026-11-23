@@ -1,9 +1,10 @@
-# ITPRA ontology — T1 capability domains
-# The domains capabilities are grouped under. Ratified by ADR 0017. The `id` IS the domain code used in
-# capability ids: CAP-<id>-<n> (child: CAP-<id>-<n>.<m>). Each domain is itself `grouped_by` a capability PLANE
-# (ADR 0010; see terms/planes.yaml).
+# ITPRA ontology — IT Operations (ITO) capability domains
+# type: Domain. The `id` IS the domain code used in capability ids: CAP-<id>-<n> (child: CAP-<id>-<n>.<m>). Each
+# domain is `grouped_by` an EXISTING capability PLANE (ADR 0010; terms/planes.yaml); the eleven span all seven
+# planes. Taxonomy ratified by ADR 0017; the `ITO` code on ids and files by ADR 0045. SCOPE: IT Operations owns
+# and operates the infrastructure platform. Owning service domain: SD-IT-OPERATIONS (ADR 0009 + ADR 0017).
 
-- id: FND
+- id: ITO-FND
   term: Platform Foundation
   type: Domain
   definition: >
@@ -12,9 +13,9 @@
   relates_to:
     - {rel: grouped_by, target: PLANE-FOUNDATION}
     - {rel: belongs_to_service_domain, target: SD-IT-OPERATIONS}
-  source: ADR 0017
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: SUB
+- id: ITO-SUB
   term: Infrastructure Substrate
   type: Domain
   definition: >
@@ -23,9 +24,9 @@
   relates_to:
     - {rel: grouped_by, target: PLANE-RESOURCE}
     - {rel: belongs_to_service_domain, target: SD-IT-OPERATIONS}
-  source: ADR 0017
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: AUT
+- id: ITO-AUT
   term: Provisioning & Automation
   type: Domain
   definition: >
@@ -34,9 +35,9 @@
   relates_to:
     - {rel: grouped_by, target: PLANE-DELIVERY}
     - {rel: belongs_to_service_domain, target: SD-IT-OPERATIONS}
-  source: ADR 0017
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: DEL
+- id: ITO-DEL
   term: Software Delivery
   type: Domain
   definition: >
@@ -45,9 +46,9 @@
   relates_to:
     - {rel: grouped_by, target: PLANE-DELIVERY}
     - {rel: belongs_to_service_domain, target: SD-IT-OPERATIONS}
-  source: ADR 0017
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: SEC
+- id: ITO-SEC
   term: Security & Identity
   type: Domain
   definition: >
@@ -56,9 +57,9 @@
   relates_to:
     - {rel: grouped_by, target: PLANE-SECURITY}
     - {rel: belongs_to_service_domain, target: SD-IT-OPERATIONS}
-  source: ADR 0017
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: OBS
+- id: ITO-OBS
   term: Observability & Operations
   type: Domain
   definition: >
@@ -67,9 +68,9 @@
   relates_to:
     - {rel: grouped_by, target: PLANE-OPERATIONS}
     - {rel: belongs_to_service_domain, target: SD-IT-OPERATIONS}
-  source: ADR 0017
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: RES
+- id: ITO-RES
   term: Resilience & Continuity
   type: Domain
   definition: >
@@ -77,9 +78,9 @@
   relates_to:
     - {rel: grouped_by, target: PLANE-OPERATIONS}
     - {rel: belongs_to_service_domain, target: SD-IT-OPERATIONS}
-  source: ADR 0017
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: COST
+- id: ITO-COST
   term: Cost & Capacity
   type: Domain
   definition: >
@@ -87,9 +88,9 @@
   relates_to:
     - {rel: grouped_by, target: PLANE-OPERATIONS}
     - {rel: belongs_to_service_domain, target: SD-IT-OPERATIONS}
-  source: ADR 0017
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: DATA
+- id: ITO-DATA
   term: Data & Analytics
   type: Domain
   definition: >
@@ -101,9 +102,9 @@
   relates_to:
     - {rel: grouped_by, target: PLANE-RESOURCE}
     - {rel: belongs_to_service_domain, target: SD-IT-OPERATIONS}
-  source: ADR 0017
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: EXP
+- id: ITO-EXP
   term: Consumer Experience
   type: Domain
   definition: >
@@ -112,9 +113,9 @@
   relates_to:
     - {rel: grouped_by, target: PLANE-EXPERIENCE}
     - {rel: belongs_to_service_domain, target: SD-IT-OPERATIONS}
-  source: ADR 0017
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: GOV
+- id: ITO-GOV
   term: Governance & Service Management
   type: Domain
   definition: >
@@ -125,4 +126,4 @@
   relates_to:
     - {rel: grouped_by, target: PLANE-GOVERNANCE}
     - {rel: belongs_to_service_domain, target: SD-IT-OPERATIONS}
-  source: ADR 0017
+  source: ADR 0017 (amended by ADR 0045)

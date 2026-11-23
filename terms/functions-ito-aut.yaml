@@ -1,56 +1,56 @@
-# ITPRA ontology — FUNCTION library, PROVISIONING & AUTOMATION (AUT) domain file
-# type: Function. ids FUNC-<slug> (slug-based, NO domain prefix — shared cross-domain). All T1 neutral. Neutral:
-# no operating-model term ("GitOps") and no tool names. See ADR 0011.
+# ITPRA ontology — FUNCTION library, ITO-AUT (Provisioning & Automation)
+# type: Function. ids FUNC-ito-<slug>. All T1 neutral: no operating-model term ("GitOps") and no tool names.
+# See ADR 0011.
 
-# Infrastructure-as-code provisioning (supports CAP-AUT-1)
-- id: FUNC-declarative-definition-management
+# Infrastructure-as-code provisioning (supports CAP-ITO-AUT-1)
+- id: FUNC-ito-declarative-definition-management
   term: Declarative Definition Management
   type: Function
   definition: Authors and versions the declarative definitions that describe desired infrastructure and platform state.
   aliases: [infrastructure definitions, declarative templates]
   relates_to:
-    - {rel: supports, target: CAP-AUT-1}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-AUT-1}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-provisioning-plan-preview
+- id: FUNC-ito-provisioning-plan-preview
   term: Provisioning Plan Preview
   type: Function
   definition: Computes and previews the change plan (additions, changes, deletions) from a definition before it is applied.
   aliases: [change plan, plan and diff, dry run]
   relates_to:
-    - {rel: supports, target: CAP-AUT-1}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-AUT-1}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-infrastructure-provisioning
+- id: FUNC-ito-infrastructure-provisioning
   term: Infrastructure Provisioning
   type: Function
   definition: Creates, updates, and tears down infrastructure resources from declarative definitions.
   aliases: [resource provisioning, infrastructure apply]
   relates_to:
-    - {rel: supports, target: CAP-AUT-1}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-AUT-1}
+  source: ADR 0011 (amended by ADR 0045)
 
-# Desired-state reconciliation (supports CAP-AUT-2)
-- id: FUNC-state-reconciliation
+# Desired-state reconciliation (supports CAP-ITO-AUT-2)
+- id: FUNC-ito-state-reconciliation
   term: State Reconciliation
   type: Function
   definition: Continuously compares actual state to declared desired state and converges actual toward it.
   aliases: [continuous reconciliation, convergence]
   relates_to:
-    - {rel: supports, target: CAP-AUT-2}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-AUT-2}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-drift-correction
+- id: FUNC-ito-drift-correction
   term: Drift Correction
   type: Function
   definition: Automatically remediates detected divergence by reapplying the declared desired state.
   aliases: [drift remediation, auto-remediation]
   relates_to:
-    - {rel: supports, target: CAP-AUT-2}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-AUT-2}
+  source: ADR 0011 (amended by ADR 0045)
 
-# Drift detection & reporting (supports CAP-AUT-3; detection shared with SEC-4 posture drift)
-- id: FUNC-drift-detection
+# Drift detection & reporting (supports CAP-ITO-AUT-3; detection shared with CAP-ITO-SEC-4 posture drift)
+- id: FUNC-ito-drift-detection
   term: Drift Detection
   type: Function
   definition: >
@@ -58,39 +58,40 @@
     reconciliation and the security posture-drift facet.
   aliases: [drift identification, configuration drift detection]
   relates_to:
-    - {rel: supports, target: CAP-AUT-3}
-    - {rel: supports, target: CAP-SEC-4}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-AUT-3}
+    - {rel: supports, target: CAP-ITO-SEC-4}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-drift-reporting
+- id: FUNC-ito-drift-reporting
   term: Drift Reporting
   type: Function
   definition: Reports detected drift — what diverged, where, and since when — for review and remediation.
   relates_to:
-    - {rel: supports, target: CAP-AUT-3}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-AUT-3}
+  source: ADR 0011 (amended by ADR 0045)
 
-# Configuration management (supports CAP-AUT-4)
-- id: FUNC-configuration-baseline-management
+# Configuration management (supports CAP-ITO-AUT-4)
+- id: FUNC-ito-configuration-baseline-management
   term: Configuration Baseline Management
   type: Function
   definition: Defines and maintains configuration baselines that target systems are expected to conform to.
   aliases: [baseline management, configuration baselines]
   relates_to:
-    - {rel: supports, target: CAP-AUT-4}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-AUT-4}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-configuration-application
+- id: FUNC-ito-configuration-application
   term: Configuration Application
   type: Function
   definition: Applies and maintains configuration on existing targets in place to match the baseline.
   aliases: [configuration enforcement, in-place configuration]
   relates_to:
-    - {rel: supports, target: CAP-AUT-4}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-AUT-4}
+  source: ADR 0011 (amended by ADR 0045)
 
-# Provisioning workflow orchestration (supports CAP-AUT-5; orchestration engine shared with AUT-6)
-- id: FUNC-workflow-orchestration
+# Provisioning workflow orchestration (supports CAP-ITO-AUT-5; orchestration engine shared with
+# CAP-ITO-AUT-6)
+- id: FUNC-ito-workflow-orchestration
   term: Workflow Orchestration
   type: Function
   definition: >
@@ -99,45 +100,46 @@
     Coordination state OUTLIVES the process holding it: a run resumes at the last completed step after the
     coordinator is lost, without re-executing completed steps. Retries recover a failed STEP; this recovers a
     failed COORDINATOR, and wording that covers only the first is satisfied by an orchestrator holding every
-    run in the memory of one process. Distinct from desired-state reconciliation (CAP-AUT-2), which converges
+    run in the memory of one process. Distinct from desired-state reconciliation (CAP-ITO-AUT-2), which converges
     state with no record of progress because its actions are idempotent by construction; here an ordered,
     side-effecting sequence resumes, where re-running a step is not free (ADR 0039).
   aliases: [workflow engine, task orchestration, DAG execution, durable execution]
   relates_to:
-    - {rel: supports, target: CAP-AUT-5}
-    - {rel: supports, target: CAP-AUT-6}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-AUT-5}
+    - {rel: supports, target: CAP-ITO-AUT-6}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-dependency-resolution
+- id: FUNC-ito-dependency-resolution
   term: Dependency Resolution
   type: Function
   definition: Resolves and orders inter-resource dependencies so multi-step provisioning runs in a valid sequence.
   aliases: [dependency ordering, ordering resolution]
   relates_to:
-    - {rel: supports, target: CAP-AUT-5}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-AUT-5}
+  source: ADR 0011 (amended by ADR 0045)
 
-# Operational task orchestration (supports CAP-AUT-6; SEC-8 SOAR builds on this)
-- id: FUNC-runbook-automation
+# Operational task orchestration (supports CAP-ITO-AUT-6; CAP-ITO-SEC-8 SOAR builds on this)
+- id: FUNC-ito-runbook-automation
   term: Runbook Automation
   type: Function
   definition: Executes operational runbooks on demand to perform recurring or remedial operational tasks consistently.
   aliases: [operational automation, automated runbooks]
   relates_to:
-    - {rel: supports, target: CAP-AUT-6}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-AUT-6}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-event-triggered-execution
+- id: FUNC-ito-event-triggered-execution
   term: Event-Triggered Execution
   type: Function
   definition: Triggers OR RESUMES workflows/tasks in response to events (signals, messages, state changes) rather than a fixed schedule. An event may start new work, or deliver a signal to an execution that is already waiting for it - which then continues at the awaiting step with the payload intact, rather than beginning again (ADR 0039).
   aliases: [event-driven automation, trigger-based execution, signal delivery, external event resumption]
   relates_to:
-    - {rel: supports, target: CAP-AUT-6}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-AUT-6}
+  source: ADR 0011 (amended by ADR 0045)
 
-# Scheduled job execution (supports CAP-AUT-7; scheduling family shared with OBS-5, RES-1 later)
-- id: FUNC-job-scheduling
+# Scheduled job execution (supports CAP-ITO-AUT-7; scheduling family shared with CAP-ITO-OBS-5,
+# CAP-ITO-RES-1 later)
+- id: FUNC-ito-job-scheduling
   term: Job Scheduling
   type: Function
   definition: >
@@ -147,27 +149,27 @@
     at the step that suspended, rather than being re-triggered from outside as a new run (ADR 0039).
   aliases: [cron scheduling, recurring scheduling, time-based scheduling, in-run timer, durable timer]
   relates_to:
-    - {rel: supports, target: CAP-AUT-7}
-    - {rel: supports, target: CAP-OBS-5}
-    - {rel: supports, target: CAP-RES-1}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-AUT-7}
+    - {rel: supports, target: CAP-ITO-OBS-5}
+    - {rel: supports, target: CAP-ITO-RES-1}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-job-execution-tracking
+- id: FUNC-ito-job-execution-tracking
   term: Job Execution Tracking
   type: Function
   definition: >
     Executes scheduled job runs and tracks their outcomes, durations, and failures for follow-up. Scope
     reaches a run's STEP-LEVEL record - inputs, outputs, attempts, timings, and the principal each step acted
     for - and that record is what recovery reads to resume a run rather than restart it. Distinct in
-    obligation from the telemetry trace of the same run (CAP-OBS-1) - the record is sufficient to RESUME, the
+    obligation from the telemetry trace of the same run (CAP-ITO-OBS-1) - the record is sufficient to RESUME, the
     trace is sufficient to EXPLAIN, and neither substitutes for the other (ADR 0039).
   aliases: [job run tracking, execution history, step record, run journal]
   relates_to:
-    - {rel: supports, target: CAP-AUT-7}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-AUT-7}
+  source: ADR 0011 (amended by ADR 0045)
 
-# Generic configuration lifecycle additions (ADR 0032 — one-function adds; also exercised by CAP-OBS-11)
-- id: FUNC-configuration-templating
+# Generic configuration lifecycle additions (ADR 0032 — one-function adds; also exercised by CAP-ITO-OBS-11)
+- id: FUNC-ito-configuration-templating
   term: Configuration Templating
   type: Function
   definition: >
@@ -176,12 +178,12 @@
     per target.
   aliases: [configuration composition, parameterized configuration]
   relates_to:
-    - {rel: supports, target: CAP-AUT-4}
-    - {rel: supports, target: CAP-FND-1}
-    - {rel: supports, target: CAP-OBS-11}
-  source: ADR 0032
+    - {rel: supports, target: CAP-ITO-AUT-4}
+    - {rel: supports, target: CAP-ITO-FND-1}
+    - {rel: supports, target: CAP-ITO-OBS-11}
+  source: ADR 0032 (amended by ADR 0045)
 
-- id: FUNC-configuration-validation
+- id: FUNC-ito-configuration-validation
   term: Configuration Validation
   type: Function
   definition: >
@@ -190,48 +192,48 @@
     target.
   aliases: [config dry run, pre-apply validation]
   relates_to:
-    - {rel: supports, target: CAP-AUT-4}
-    - {rel: supports, target: CAP-OBS-11}
-  source: ADR 0032
+    - {rel: supports, target: CAP-ITO-AUT-4}
+    - {rel: supports, target: CAP-ITO-OBS-11}
+  source: ADR 0032 (amended by ADR 0045)
 
-- id: FUNC-tool-invocation-mediation
+- id: FUNC-ito-tool-invocation-mediation
   term: Tool Invocation Mediation
   type: Function
   definition: Dispatches a call the executing actor selected at runtime to an external tool or capability, applies the automation boundary to that specific call, and returns the result into the actor's context.
   aliases: [tool calling, function calling, tool use, tool dispatch]
   relates_to:
-    - {rel: supports, target: CAP-AUT-8}
-  source: ADR 0033
+    - {rel: supports, target: CAP-ITO-AUT-8}
+  source: ADR 0033 (amended by ADR 0045)
 
-- id: FUNC-mcp-tool-interoperability
+- id: FUNC-ito-mcp-tool-interoperability
   term: Standardized Tool-Interoperability Protocol
   type: Function
   definition: Exposes and consumes tools, and the resources an actor can discover and read (descriptive and semantic content such as a published vocabulary), over a standardized, independently governed wire protocol so the same tool or resource is reachable across agent implementations without bespoke per-agent integration. Named-standard function (Model Context Protocol) minted under the ADR 0032 precedent - the standard is under independent foundation governance with a published specification and change process. A protocol change is a definition edit, not a re-mint.
   aliases: [MCP, Model Context Protocol, tool protocol, agent tool interoperability]
   relates_to:
-    - {rel: supports, target: CAP-AUT-8}
-  source: ADR 0033
+    - {rel: supports, target: CAP-ITO-AUT-8}
+  source: ADR 0033 (amended by ADR 0045)
 
-- id: FUNC-agent-execution-sandboxing
+- id: FUNC-ito-agent-execution-sandboxing
   term: Agent Execution Sandboxing
   type: Function
   definition: Provisions isolated, ephemeral compute for an actor-initiated action or session and tears it down afterwards, so a runtime-selected action cannot reach beyond its own execution boundary.
   aliases: [ephemeral sandbox, per-invocation isolation, agent sandbox]
   relates_to:
-    - {rel: supports, target: CAP-AUT-8}
-    - {rel: supports, target: CAP-SUB-1}
-  source: ADR 0033
+    - {rel: supports, target: CAP-ITO-AUT-8}
+    - {rel: supports, target: CAP-ITO-SUB-1}
+  source: ADR 0033 (amended by ADR 0045)
 
-- id: FUNC-inflight-run-control
+- id: FUNC-ito-inflight-run-control
   term: In-Flight Run Control
   type: Function
   definition: Exposes a control point on a running actor execution so it can be observed, paused, redirected, or terminated before it completes, without waiting for the run to finish.
   aliases: [pause and steer, run interruption, kill switch, intervention point]
   relates_to:
-    - {rel: supports, target: CAP-AUT-8}
-  source: ADR 0033
-# In-flight version compatibility (ADR 0039 - the package's only behavioural mint; supports CAP-DEL-4 too)
-- id: FUNC-execution-version-compatibility
+    - {rel: supports, target: CAP-ITO-AUT-8}
+  source: ADR 0033 (amended by ADR 0045)
+# In-flight version compatibility (ADR 0039 - the package's only behavioural mint; supports CAP-ITO-DEL-4 too)
+- id: FUNC-ito-execution-version-compatibility
   term: Execution Version Compatibility
   type: Function
   definition: >
@@ -243,8 +245,8 @@
     migrates - and how long a superseded version stays runnable - is a scenario decision (ADR 0039).
   aliases: [in-flight version compatibility, open-run compatibility, worker version compatibility, pin and drain]
   relates_to:
-    - {rel: supports, target: CAP-DEL-4}
-    - {rel: supports, target: CAP-AUT-5}
-    - {rel: supports, target: CAP-AUT-6}
-    - {rel: supports, target: CAP-AUT-9}
-  source: ADR 0039
+    - {rel: supports, target: CAP-ITO-DEL-4}
+    - {rel: supports, target: CAP-ITO-AUT-5}
+    - {rel: supports, target: CAP-ITO-AUT-6}
+    - {rel: supports, target: CAP-ITO-AUT-9}
+  source: ADR 0039 (amended by ADR 0045)

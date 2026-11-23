@@ -2,9 +2,9 @@
 # type: Domain. The `id` IS the domain code used in capability ids: CAP-<id>-<n> (child: CAP-<id>-<n>.<m>). Each
 # domain is `grouped_by` an EXISTING capability PLANE (terms/planes.yaml). SD-SECURITY-GRC interfaces_with
 # PLANE-SECURITY and PLANE-GOVERNANCE (ADR 0009); each group is placed under the fitting existing plane.
-# Taxonomy ratified by ADR 0024; scope/boundary vs ITO SEC + adjacent domains by ADR 0024. Owning service
+# Taxonomy ratified by ADR 0024; scope/boundary vs ITO-SEC + adjacent domains by ADR 0024. Owning service
 # domain: SD-SECURITY-GRC. GRC is the ENTERPRISE oversight/authority layer; the platform's own security controls
-# live in ITO SEC and are NOT duplicated here (ADR 0024).
+# live in ITO-SEC and are NOT duplicated here (ADR 0024).
 
 - id: GRC-SOC
   term: Security Operations & Threat Response
@@ -13,7 +13,7 @@
     The enterprise security operations centre and incident-response (CSIRT) function — enterprise security
     monitoring and event correlation across all estates, enterprise threat intelligence, threat hunting, and
     major/cross-domain security-incident coordination and response. Consumes security telemetry from the
-    platform (ITO SEC) and other estates and coordinates enterprise-wide response; distinct from the
+    platform (ITO-SEC) and other estates and coordinates enterprise-wide response; distinct from the
     platform's own detection/response on its estate.
   relates_to:
     - {rel: grouped_by, target: PLANE-SECURITY}
@@ -27,7 +27,7 @@
     The enterprise identity authority — the identity of record and authoritative sources, access governance
     and entitlement management, the joiner-mover-leaver access lifecycle, access certification, and
     privileged-access governance. Owns the enterprise directory of record and entitlement governance that the
-    platform (ITO SEC) and the workplace (EUC-IAM) consume; does not own workload identity or the end-user
+    platform (ITO-SEC) and the workplace (EUC-IAM) consume; does not own workload identity or the end-user
     sign-in experience.
   relates_to:
     - {rel: grouped_by, target: PLANE-SECURITY}
@@ -41,7 +41,7 @@
     The enterprise information-security risk function — risk assessment and treatment, the enterprise risk
     register and key-risk-indicator tracking, risk acceptance and exception governance, enterprise
     vulnerability/exposure oversight, and threat/risk-landscape analysis. Aggregates findings the platform
-    (ITO SEC) and other estates supply and decides treatment/acceptance by enterprise risk; does not run the
+    (ITO-SEC) and other estates supply and decides treatment/acceptance by enterprise risk; does not run the
     platform's own scanners.
   relates_to:
     - {rel: grouped_by, target: PLANE-GOVERNANCE}
@@ -55,7 +55,7 @@
     The enterprise compliance and audit function — the enterprise control framework and obligation mapping,
     internal audit and assurance, external audit/attestation/certification management, continuous control
     monitoring and evidence collection, and regulatory-change management. Owns the obligations and the
-    enterprise attestation; consumes control results and evidence the platform (ITO GOV) and other estates
+    enterprise attestation; consumes control results and evidence the platform (ITO-GOV) and other estates
     produce, rather than duplicating per-estate evidence production.
   relates_to:
     - {rel: grouped_by, target: PLANE-GOVERNANCE}
@@ -68,7 +68,7 @@
   definition: >
     The authorship and governance of enterprise security policy, standards and baselines, the enterprise
     control catalogue, and policy exceptions/waivers — the guardrails every estate runs within. The platform
-    (ITO FND/SEC) codifies and enforces these policies on its own estate; GRC authors, approves, communicates,
+    (ITO-FND/ITO-SEC) codifies and enforces these policies on its own estate; GRC authors, approves, communicates,
     reviews, and governs exceptions to them. Enforcement is downstream and not duplicated here.
   relates_to:
     - {rel: grouped_by, target: PLANE-GOVERNANCE}
@@ -95,8 +95,8 @@
     The enterprise security/risk reporting and analytics layer — consolidated posture reporting,
     control-health and KRI/KPI dashboards, and board/executive security and risk reporting. Aggregates the
     outputs of the other GRC groups plus evidence supplied by the platform and other estates into the
-    consolidated enterprise posture; distinct from the platform's own measurement (ITO GOV) and observability
-    (ITO OBS), which describe the platform rather than the enterprise security/risk posture.
+    consolidated enterprise posture; distinct from the platform's own measurement (ITO-GOV) and observability
+    (ITO-OBS), which describe the platform rather than the enterprise security/risk posture.
   relates_to:
     - {rel: grouped_by, target: PLANE-GOVERNANCE}
     - {rel: belongs_to_service_domain, target: SD-SECURITY-GRC}

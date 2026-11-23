@@ -1,6 +1,6 @@
 # ITPRA ontology — EUC-SEC (Endpoint Security & Compliance Posture) capabilities
 # type: Capability. ids CAP-EUC-SEC-<n>. End-user-facing endpoint posture — distinct from platform/workload
-# security (ITO SEC) and enterprise policy authorship (Enterprise Security/GRC); see ADR 0018.
+# security (ITO-SEC) and enterprise policy authorship (Enterprise Security/GRC); see ADR 0018.
 
 - id: CAP-EUC-SEC-1
   term: Endpoint Threat Protection & Response

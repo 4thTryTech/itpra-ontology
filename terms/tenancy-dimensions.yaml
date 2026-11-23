@@ -1,4 +1,6 @@
 # ITPRA ontology — tenancy isolation dimensions + strength
+# SHARED file: it belongs to no single service domain, so neither its name nor its ids carry a service-domain
+# code (ADR 0007, ADR 0045).
 # The neutral model for multi-tenancy at T1. Ratified by ADR 0014 (the tenancy twin of ADR 0014's environment
 # dimensions). A capability's `Multi-tenancy` field states the per-tenant boundary it upholds, names which of
 # these isolation DIMENSIONS it is responsible for, and treats isolation STRENGTH/mechanism as a variation point

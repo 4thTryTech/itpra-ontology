@@ -1,19 +1,19 @@
-# ITPRA ontology — FUNCTION library, CONSUMER EXPERIENCE (EXP) domain file
-# type: Function. ids FUNC-<slug> (slug-based, NO domain prefix — shared cross-domain). All T1 neutral. Reuses
-# shared FUNC-request-intake (EXP-1), FUNC-knowledge-retrieval (EXP-5), FUNC-notification-delivery (EXP-6). See
-# ADR 0011. FUNC-self-service-action-execution added 2026-06-04 (the portal-native self-service action layer).
+# ITPRA ontology — FUNCTION library, ITO-EXP (Consumer Experience)
+# type: Function. ids FUNC-ito-<slug>. All T1 neutral. Reuses shared FUNC-ito-request-intake (CAP-ITO-EXP-1),
+# FUNC-ito-knowledge-retrieval (CAP-ITO-EXP-5), FUNC-ito-notification-delivery (CAP-ITO-EXP-6). See ADR 0011.
+# FUNC-ito-self-service-action-execution added 2026-06-04 (the portal-native self-service action layer).
 
-# Self-service interface (supports CAP-EXP-1; submission via shared FUNC-request-intake)
-- id: FUNC-self-service-portal
+# Self-service interface (supports CAP-ITO-EXP-1; submission via shared FUNC-ito-request-intake)
+- id: FUNC-ito-self-service-portal
   term: Self-Service Portal
   type: Function
   definition: Presents a self-service interface where consumers discover capabilities and act on them without operator involvement.
   aliases: [self-service interface, developer portal]
   relates_to:
-    - {rel: supports, target: CAP-EXP-1}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-EXP-1}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-capability-discovery
+- id: FUNC-ito-capability-discovery
   term: Capability Discovery
   type: Function
   definition: >
@@ -21,134 +21,136 @@
     self-service interface and the service catalog.
   aliases: [service discovery, catalog search]
   relates_to:
-    - {rel: supports, target: CAP-EXP-1}
-    - {rel: supports, target: CAP-EXP-2}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-EXP-1}
+    - {rel: supports, target: CAP-ITO-EXP-2}
+  source: ADR 0011 (amended by ADR 0045)
 
-# Service catalog (supports CAP-EXP-2; browsing via shared FUNC-capability-discovery)
-- id: FUNC-catalog-publishing
+# Service catalog (supports CAP-ITO-EXP-2; browsing via shared FUNC-ito-capability-discovery)
+- id: FUNC-ito-catalog-publishing
   term: Catalog Publishing
   type: Function
   definition: Publishes available service offerings and their terms of use to the consumer-facing catalog.
   aliases: [catalog management, offering publishing]
   relates_to:
-    - {rel: supports, target: CAP-EXP-2}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-EXP-2}
+  source: ADR 0011 (amended by ADR 0045)
 
 # Self-service action layer (the interface ACTS on a catalog item — distinct from request capture
-# FUNC-request-intake and from template scaffolding FUNC-scaffolding; execution itself stays in AUT).
-- id: FUNC-self-service-action-execution
+# FUNC-ito-request-intake and from template scaffolding FUNC-ito-scaffolding; execution itself stays in
+# ITO-AUT).
+- id: FUNC-ito-self-service-action-execution
   term: Self-Service Action Execution
   type: Function
   definition: >
     Executes a consumer-initiated action from the catalog/portal by dispatching it to the platform's
     automation to fulfil the request — covering both provisioning and day-2 operations on an existing
     resource. The dispatch-from-the-experience-layer behavior; the work itself runs in the automation
-    layer (FUNC-workflow-orchestration / FUNC-runbook-automation / FUNC-infrastructure-provisioning).
-    Distinct from request capture (FUNC-request-intake) and from template scaffolding (FUNC-scaffolding).
+    layer (FUNC-ito-workflow-orchestration / FUNC-ito-runbook-automation / FUNC-ito-infrastructure-provisioning).
+    Distinct from request capture (FUNC-ito-request-intake) and from template scaffolding (FUNC-ito-scaffolding).
   aliases: [self-service action, action dispatch, request dispatch, portal action]
   relates_to:
-    - {rel: supports, target: CAP-EXP-1}
-    - {rel: supports, target: CAP-EXP-2}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-EXP-1}
+    - {rel: supports, target: CAP-ITO-EXP-2}
+  source: ADR 0011 (amended by ADR 0045)
 
-# Golden-path templates (supports CAP-EXP-3)
-- id: FUNC-template-cataloging
+# Golden-path templates (supports CAP-ITO-EXP-3)
+- id: FUNC-ito-template-cataloging
   term: Template Cataloging
   type: Function
   definition: Provides reusable golden-path templates that encode best-practice, paved-road defaults.
   aliases: [golden-path templates, template library]
   relates_to:
-    - {rel: supports, target: CAP-EXP-3}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-EXP-3}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-scaffolding
+- id: FUNC-ito-scaffolding
   term: Scaffolding
   type: Function
   definition: Generates a new service or project from a golden-path template, pre-wired to platform defaults.
   aliases: [project scaffolding, bootstrapping]
   relates_to:
-    - {rel: supports, target: CAP-EXP-3}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-EXP-3}
+  source: ADR 0011 (amended by ADR 0045)
 
-# Programmatic interfaces (supports CAP-EXP-4; the platform's own interfaces, not the tenant API edge SUB-6)
-- id: FUNC-programmatic-api-access
+# Programmatic interfaces (supports CAP-ITO-EXP-4; the platform's own interfaces, not the tenant API edge
+# CAP-ITO-SUB-6)
+- id: FUNC-ito-programmatic-api-access
   term: Programmatic API Access
   type: Function
   definition: Exposes the platform's capabilities through programmatic APIs equivalent to the self-service UI.
   aliases: [platform API, API-driven access]
   relates_to:
-    - {rel: supports, target: CAP-EXP-4}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-EXP-4}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-cli-access
+- id: FUNC-ito-cli-access
   term: CLI Access
   type: Function
   definition: Exposes the platform's capabilities through a command-line interface equivalent to the self-service UI.
   aliases: [command-line interface, CLI]
   relates_to:
-    - {rel: supports, target: CAP-EXP-4}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-EXP-4}
+  source: ADR 0011 (amended by ADR 0045)
 
-# Documentation & onboarding (supports CAP-EXP-5; search via shared FUNC-knowledge-retrieval)
-- id: FUNC-documentation-publishing
+# Documentation & onboarding (supports CAP-ITO-EXP-5; search via shared FUNC-ito-knowledge-retrieval)
+- id: FUNC-ito-documentation-publishing
   term: Documentation Publishing
   type: Function
   definition: Publishes and maintains consumer-facing documentation for platform capabilities and services.
   aliases: [docs publishing, documentation management]
   relates_to:
-    - {rel: supports, target: CAP-EXP-5}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-EXP-5}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-guided-onboarding
+- id: FUNC-ito-guided-onboarding
   term: Guided Onboarding
   type: Function
   definition: Guides new consumers to productivity through tutorials, walkthroughs, and onboarding flows.
   aliases: [onboarding flows, tutorials, getting-started guidance]
   relates_to:
-    - {rel: supports, target: CAP-EXP-5}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-EXP-5}
+  source: ADR 0011 (amended by ADR 0045)
 
-# Consumer notifications (supports CAP-EXP-6; delivery via shared FUNC-notification-delivery)
-- id: FUNC-notification-preferences
+# Consumer notifications (supports CAP-ITO-EXP-6; delivery via shared FUNC-ito-notification-delivery)
+- id: FUNC-ito-notification-preferences
   term: Notification Preferences
   type: Function
   definition: Lets consumers manage their notification subscriptions, channels, and preferences.
   aliases: [subscription management, notification settings]
   relates_to:
-    - {rel: supports, target: CAP-EXP-6}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-EXP-6}
+  source: ADR 0011 (amended by ADR 0045)
 
-# Developer environments (supports CAP-EXP-7)
-- id: FUNC-dev-environment-provisioning
+# Developer environments (supports CAP-ITO-EXP-7)
+- id: FUNC-ito-dev-environment-provisioning
   term: Developer Environment Provisioning
   type: Function
   definition: Provisions on-demand, pre-configured, often ephemeral cloud development environments for consumers.
   aliases: [cloud development environment, workspace provisioning, CDE]
   relates_to:
-    - {rel: supports, target: CAP-EXP-7}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-EXP-7}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-environment-templating
+- id: FUNC-ito-environment-templating
   term: Environment Templating
   type: Function
   definition: Defines reusable, standardized development-environment configurations consumers provision from.
   aliases: [workspace templates, environment definitions]
   relates_to:
-    - {rel: supports, target: CAP-EXP-7}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-EXP-7}
+  source: ADR 0011 (amended by ADR 0045)
 
-# Governed coding assistance (supports CAP-EXP-8)
-- id: FUNC-coding-assistance
+# Governed coding assistance (supports CAP-ITO-EXP-8)
+- id: FUNC-ito-coding-assistance
   term: Coding Assistance
   type: Function
   definition: Provides AI-assisted code completion, generation, and review to consumers from a platform-curated capability.
   aliases: [AI coding assistant, code completion, code generation]
   relates_to:
-    - {rel: supports, target: CAP-EXP-8}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-EXP-8}
+  source: ADR 0011 (amended by ADR 0045)
 
-- id: FUNC-assistance-guardrails
+- id: FUNC-ito-assistance-guardrails
   term: Assistance Guardrails
   type: Function
   definition: >
@@ -156,5 +158,5 @@
     assistance stays governed and compliant.
   aliases: [AI guardrails, assistance governance]
   relates_to:
-    - {rel: supports, target: CAP-EXP-8}
-  source: ADR 0011
+    - {rel: supports, target: CAP-ITO-EXP-8}
+  source: ADR 0011 (amended by ADR 0045)

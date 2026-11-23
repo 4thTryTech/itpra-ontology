@@ -1,5 +1,5 @@
 # ITPRA ontology — EUC-VRW (Virtual & Remote Workspace) capabilities
-# type: Capability. ids CAP-EUC-VRW-<n>. The hosting compute/storage/network substrate is ITO SUB (interfaced
+# type: Capability. ids CAP-EUC-VRW-<n>. The hosting compute/storage/network substrate is ITO-SUB (interfaced
 # with, not owned); see ADR 0018.
 
 - id: CAP-EUC-VRW-1
