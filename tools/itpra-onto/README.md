@@ -13,6 +13,14 @@ pipeline is decided in [ADR 0041](https://github.com/4thtrytech/itpra-ontology/b
 (validation parity) and [ADR 0043](https://github.com/4thtrytech/itpra-ontology/blob/master/decisions/0043-builds-artefacts-and-the-consumer-overlay.md)
 (builds, artefacts and the consumer overlay).
 
+## Layout
+
+Everything the pipeline needs ships inside the package, so an installed pin works like a checkout:
+`src/itpra_onto/rules/` (the SPARQL rules and their manifest), `src/itpra_onto/shapes/` (the SHACL shapes, the
+rule register and the generated verb-pair file), `src/itpra_onto/schema/` (the LinkML authoring schema and its
+generated fragments) and `src/itpra_onto/fixtures/` (one fixture per rule). `tests/` and `itpra-onto.toml` stay
+beside `pyproject.toml`.
+
 ## Configuration
 
 `itpra-onto.toml`, next to `pyproject.toml`, is read by `itpra_onto.config.load_config()`; paths are
@@ -44,6 +52,12 @@ LinkML artefacts. Everything a *consumer* layers on top is the **overlay**, an o
 | `linter_script` | The consumer's own linter, which `parity` compares the shapes against (ADR 0042 D5). |
 | `excluded_dirs` | Directory names the input-path guard refuses at any depth, case-insensitively, beyond the built-in `dist`, `public` and `__pycache__`. |
 
+`[paths] repo_root` (default `../..`, two levels above the configuration file) is the repository root every input
+must lie under and the root file labels are relative to; it is read from the configuration, never from where the
+package is installed. The file in effect is `$ITPRA_ONTO_CONFIG`, else `itpra-onto.toml` in the working directory
+or one of its parents (a consumer's overlay project), else the one beside a checkout's `pyproject.toml`;
+`itpra-onto --config PATH <command>` names it for one invocation.
+
 Without the table, `build` emits `schema` + `t1` + `inferred` only, `validate` loads no requirements
 shapes, `validate --authoring` checks the term files only, and `parity` compares the ontology's own lint
 rather than a consumer's linter. A configuration that still carries `requirements_glob` under `[paths]` is
@@ -60,7 +74,7 @@ read as an overlay with that one key.
 | `gen-verb-shapes [--check]` | Regenerates `shapes/generated/verb-pairs.ttl` (rule `B-22`: one SHACL-SPARQL shape per verb, allowing only the (subject class, object class) pairs its `itpra_verb` annotation declares) from `schema/itpra.linkml.yaml`. `shapes/generated/` is owned by this command; never edit it by hand. `--check` as above. |
 | `gen-artifacts [--check]` | Regenerates `<dist_dir>/schema/` (`itpra.schema.json`, `itpra_models.py`, `itpra.owl.nt`, `itpra.shacl.nt`, `doc/`) from the LinkML schema. Two runs are byte-identical. `--check` regenerates into a temporary directory and exits 1 on any difference. |
 | `lint [--root DIR] [--json]` | Lints the vocabulary with the ontology's own rules (`itpra_onto.lint`; the register's `core`-home rows: file shape, required and unknown fields, unique ids and the id pattern, known types and verbs, resolving targets, `derived_from` kept off Functions, the `source:` grammar and resolving decision citations, the two version numbers). Standard library plus PyYAML only, so a consumer's linter imports the same module and runs it first (ADR 0042 D1). Exit 1 on any error; `--json` prints the findings and nothing else. |
-| `validate --authoring [--quiet]` | LinkML-validates every term file (and, with an overlay, every registry) against `schema/itpra.linkml.yaml`, in-process, closed mode. One line per file and a total; exit 0 only if every file passes. `--quiet` prints failing files only. See [`schema/README.md`](schema/README.md). |
+| `validate --authoring [--quiet]` | LinkML-validates every term file (and, with an overlay, every registry) against `schema/itpra.linkml.yaml`, in-process, closed mode. One line per file and a total; exit 0 only if every file passes. `--quiet` prints failing files only. See [`schema/README.md`](src/itpra_onto/schema/README.md). |
 | `validate [--shapes DIR] [--json]` | Emits, applies the rules and SHACL-validates the result against `shapes/` (or `DIR`). One line per finding, sorted, then a summary. Exit 0 only when no `sh:Violation` fired; a `sh:Warning` is advisory. `--json` prints a JSON list of `rule`/`subject`/`severity`/`message` and nothing else on stdout. An input the emitter refuses is reported as an `emit-error` finding (exit 1), never a traceback. |
 | `build [--out DIR] [--no-store] [--check]` | Emits, applies the rules, adds the `provenance` graph, canonicalises and writes `<dist_dir>/rdf/` (or `DIR`), then loads the embedded store unless `--no-store`. `--check` builds into a temporary directory, never touches the store, and exits 1 if `base/` would differ from what is on disk or is missing. |
 | `parity [--json] [--fixtures] [--sub X ...]` | Compares a linter with the shapes over the comparable rule ids. Without an `[overlay]`: the ontology's own lint over the `core`-home rows (core mode). With one: the consumer's linter (`[overlay] linter_script`) over every comparable row. The real tree by default (`--sub X`, repeatable, restricts the consumer's linter to those registries), or fixture by fixture with `--fixtures` (`--sub` ignored; registry fixtures are skipped in core mode). `--json` prints one object and nothing else. |
@@ -133,7 +147,7 @@ under `<dist_dir>/rdf/`:
 
 **Provenance carries no timestamp and no commit SHA** (ADR 0043 D3): seven scalars — `input_hash` (every
 input file's bytes, each contribution prefixed by its repository-relative path, so a rename alone changes
-it), `pipeline_version` (this distribution's version), `uv_lock_hash`, `rules_version`,
+it), `pipeline_version` (this distribution's version), `environment_hash` (sha256 over the resolved dependency set as installed, transitively — what the lockfile pins, readable without the lockfile), `rules_version`,
 `ontology_version` (from `schema.yaml`), `schema_hash` (the hand-authored LinkML schema plus its two
 generated fragments) and `code_hash` (every `src/itpra_onto/**/*.py`). All are hashed over
 line-ending-normalised bytes (CRLF collapsed to LF), so they depend on content, never on the checkout. The
@@ -168,13 +182,13 @@ full reference. The load-bearing points:
 - **Severity:** `sh:Violation` for a rule the linter reports as an error, `sh:Warning` for a warning and
   for a declared-but-unstated minimum (ADR 0042 D3). Exit 0 only when no Violation fired.
 
-[`shapes/REGISTER.md`](shapes/REGISTER.md) is the contract (ADR 0042 D1): Table A maps every linter rule
+[`shapes/REGISTER.md`](src/itpra_onto/shapes/REGISTER.md) is the contract (ADR 0042 D1): Table A maps every linter rule
 id to exactly one mechanism — `generated` (closed before emission by the authoring schema), `core` (SHACL
 Core over the emitted graph), `sparql` (`sh:SPARQLConstraint`) or `python` (stays in code, with a reason);
 Table B lists every rule the shapes add beyond the linter (`B-n`), each marked stricter than the linter;
 Table C is the severity mapping. The shape files have disjoint ownership (ADR 0042 D2): `structural.ttl`
 (Core; `t1`, `inferred`), `crossfield.ttl` (SPARQL; `t1`, `req/*`), `requirements.ttl` (`req/*`) and the
-generated `verb-pairs.ttl` — see [`shapes/README.md`](shapes/README.md).
+generated `verb-pairs.ttl` — see [`shapes/README.md`](src/itpra_onto/shapes/README.md).
 
 **Fixtures** (ADR 0042 D4): one YAML file per rule id, `fixtures/<group>/<rule-id>.yaml`, describes one
 deliberately broken record — a `mutate` of a real record (`set`, `append_relates_to` or `delete`) or an

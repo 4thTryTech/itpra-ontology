@@ -35,8 +35,8 @@ import yaml
 
 from itpra_onto.config import Config, load_config
 
-PROJECT_DIR = Path(__file__).resolve().parents[2]  # the package root
-SCHEMA_DIR = PROJECT_DIR / "schema"
+PACKAGE_DIR = Path(__file__).resolve().parent  # src/itpra_onto: the package's own code and data
+SCHEMA_DIR = PACKAGE_DIR / "schema"
 GENERATED_PREFIXES_PATH = SCHEMA_DIR / "generated" / "itpra-prefixes.linkml.yaml"
 
 MODULE_NAME = "itpra-prefixes"
@@ -89,14 +89,14 @@ def check(path: Path = GENERATED_PREFIXES_PATH, config: Config | None = None) ->
 def main(check_only: bool = False) -> int:
     if check_only:
         if check():
-            print(f"gen-prefixes: {GENERATED_PREFIXES_PATH.relative_to(PROJECT_DIR).as_posix()} is up to date")
+            print(f"gen-prefixes: {GENERATED_PREFIXES_PATH.relative_to(PACKAGE_DIR).as_posix()} is up to date")
             return 0
         print(
-            f"gen-prefixes: {GENERATED_PREFIXES_PATH.relative_to(PROJECT_DIR).as_posix()} is STALE or missing - "
+            f"gen-prefixes: {GENERATED_PREFIXES_PATH.relative_to(PACKAGE_DIR).as_posix()} is STALE or missing - "
             "run `itpra-onto gen-prefixes`",
             file=sys.stderr,
         )
         return 1
     write(render())
-    print(f"gen-prefixes: wrote {GENERATED_PREFIXES_PATH.relative_to(PROJECT_DIR).as_posix()}")
+    print(f"gen-prefixes: wrote {GENERATED_PREFIXES_PATH.relative_to(PACKAGE_DIR).as_posix()}")
     return 0

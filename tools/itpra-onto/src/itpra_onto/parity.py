@@ -110,10 +110,9 @@ import yaml
 from itpra_onto import emit, fixtures, lint, rules, shacl
 from itpra_onto.config import Config, load_config
 
-PROJECT_DIR = Path(__file__).resolve().parents[2]  # the package root
-REPO_ROOT = PROJECT_DIR.parents[1]
-REGISTER_MD = PROJECT_DIR / "shapes" / "REGISTER.md"
-FIXTURES_DIR = PROJECT_DIR / "fixtures"
+PACKAGE_DIR = Path(__file__).resolve().parent  # src/itpra_onto: the package's own code and data
+REGISTER_MD = PACKAGE_DIR / "shapes" / "REGISTER.md"
+FIXTURES_DIR = fixtures.FIXTURES_DIR
 
 
 def linter_script(config: Config | None = None) -> Path:
@@ -374,7 +373,8 @@ def _run_linter_json(script: Path, sub_arg: str, *, cwd: Path) -> list[dict[str,
 
 def run_linter(sub: str, config: Config | None = None) -> list[dict[str, Any]]:
     """Run the REAL, committed consumer linter against the real repository tree for one registry."""
-    return _run_linter_json(linter_script(config), sub, cwd=REPO_ROOT)
+    config = config if config is not None else load_config()
+    return _run_linter_json(linter_script(config), sub, cwd=config.repo_root)
 
 
 def core_lint_findings(config: Config | None = None, *, ontology_dir: Path | None = None) -> list[dict[str, Any]]:
@@ -382,7 +382,7 @@ def core_lint_findings(config: Config | None = None, *, ontology_dir: Path | Non
     linter side of a core-mode comparison, where no consumer overlay names a linter (ADR 0042 D5)."""
     config = config if config is not None else load_config()
     root = ontology_dir if ontology_dir is not None else emit.ontology_dir(config)
-    findings, _vocab = lint.lint_vocabulary(root, rel_to=REPO_ROOT)
+    findings, _vocab = lint.lint_vocabulary(root, rel_to=config.repo_root)
     return findings
 
 
@@ -571,22 +571,24 @@ def _dump_yaml_file(path: Path, data: Any) -> None:
         yaml.safe_dump(data, fh, sort_keys=False, allow_unicode=True, default_flow_style=False)
 
 
-def _scratch_path(scratch_root: Path, real: Path) -> Path:
+def _scratch_path(scratch_root: Path, real: Path, repo_root: Path) -> Path:
     """Where ``real`` lives in the scratch tree: the same path relative to the repository root, so the
     consumer's linter finds everything where its own layout puts it."""
     resolved = real.resolve()
-    if not resolved.is_relative_to(REPO_ROOT):
-        raise ParityError(f"{real}: outside the repository root {REPO_ROOT}; cannot mirror it into a scratch tree")
-    return scratch_root / resolved.relative_to(REPO_ROOT)
+    root = repo_root.resolve()
+    if not resolved.is_relative_to(root):
+        raise ParityError(f"{real}: outside the repository root {root}; cannot mirror it into a scratch tree")
+    return scratch_root / resolved.relative_to(root)
 
 
 def _copy_ontology_dir(scratch_root: Path, config: Config | None = None) -> None:
     config = config if config is not None else load_config()
-    shutil.copytree(emit.ontology_dir(config), _scratch_path(scratch_root, emit.ontology_dir(config)), dirs_exist_ok=True)
+    shutil.copytree(emit.ontology_dir(config), _scratch_path(scratch_root, emit.ontology_dir(config), config.repo_root), dirs_exist_ok=True)
 
 
 def _copy_linter_script(scratch_root: Path, config: Config | None = None) -> None:
-    dest = _scratch_path(scratch_root, linter_script(config))
+    config = config if config is not None else load_config()
+    dest = _scratch_path(scratch_root, linter_script(config), config.repo_root)
     dest.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(linter_script(config), dest)
 
@@ -601,7 +603,7 @@ def _copy_registry_dir(scratch_root: Path, registry: str, config: Config | None 
     if not files:
         raise ParityError(f"no registry file of {registry!r} matches the overlay's requirements_glob")
     for src in files:
-        dest = _scratch_path(scratch_root, src)
+        dest = _scratch_path(scratch_root, src, config.repo_root)
         dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(src, dest)
 
@@ -636,7 +638,7 @@ def _materialize_mutate_registry(scratch_root: Path, record_file: str, record_id
 
 
 def _materialize_add_term(scratch_root: Path, record: dict[str, Any], config: Config) -> None:
-    path = _scratch_path(scratch_root, emit.ontology_dir(config)) / "_fixture-scratch.yaml"
+    path = _scratch_path(scratch_root, emit.ontology_dir(config), config.repo_root) / "_fixture-scratch.yaml"
     existing = _load_yaml_file(path) if path.exists() else []
     existing = existing or []
     existing.append(copy.deepcopy(record))
@@ -648,7 +650,7 @@ def _materialize_add_registry(scratch_root: Path, registry: str, kind: str, reco
     matches = [p for p in _registry_files_of(registry, config) if p.stem == kind]
     if len(matches) != 1:
         raise ParityError(f"registry {registry!r} has {len(matches)} file(s) named {kind}.yaml; add.file needs exactly one")
-    path = _scratch_path(scratch_root, matches[0])
+    path = _scratch_path(scratch_root, matches[0], config.repo_root)
     data = _load_yaml_file(path) or {}
     reqs = data.setdefault("requirements", [])
     reqs.append(copy.deepcopy(record))
@@ -741,11 +743,11 @@ def _run_one_fixture(
         _copy_ontology_dir(scratch_root, config)
         if config.overlay is None:  # core mode: the ontology's own lint over the mutated scratch copy
             materialize_fixture(fixture, scratch_root, real_inputs, config)
-            linter_findings = core_lint_findings(config, ontology_dir=_scratch_path(scratch_root, emit.ontology_dir(config)))
+            linter_findings = core_lint_findings(config, ontology_dir=_scratch_path(scratch_root, emit.ontology_dir(config), config.repo_root))
         else:
             _copy_linter_script(scratch_root, config)
             sub_arg = materialize_fixture(fixture, scratch_root, real_inputs, config)
-            script = _scratch_path(scratch_root, linter_script(config))
+            script = _scratch_path(scratch_root, linter_script(config), config.repo_root)
             linter_findings = _run_linter_json(script, sub_arg, cwd=scratch_root)
 
     focus_findings = [f for f in linter_findings if f.get("subject") == fixture.focus]

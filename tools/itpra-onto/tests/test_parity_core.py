@@ -75,7 +75,7 @@ def test_core_lint_findings_run_over_a_scratch_copy_label_files_from_the_reposit
     scratch = tmp_path / "scratch"
     parity._copy_ontology_dir(scratch, core_config)
     real = parity.core_lint_findings(core_config)
-    scratch_findings = parity.core_lint_findings(core_config, ontology_dir=parity._scratch_path(scratch, emit.ontology_dir(core_config)))
+    scratch_findings = parity.core_lint_findings(core_config, ontology_dir=parity._scratch_path(scratch, emit.ontology_dir(core_config), core_config.repo_root))
     assert lint.errors(real) == [] and lint.errors(scratch_findings) == []
 
 
@@ -84,6 +84,7 @@ def test_cli_parity_core_mode(tmp_path: Path):
     text = DEFAULT_CONFIG_PATH.read_text(encoding="utf-8")
     text = re.sub(r"\n\[overlay\].*?(?=\n\[|\Z)", "\n", text, flags=re.S)
     shipped = load_config()
+    text = re.sub(r'^repo_root = "[^"]*"', f'repo_root = "{shipped.repo_root.as_posix()}"', text, count=1, flags=re.M)
     text = re.sub(r'^ontology_dir = "[^"]*"', f'ontology_dir = "{(shipped.config_path.parent / shipped.paths.ontology_dir).resolve().as_posix()}"', text, count=1, flags=re.M)
     text = re.sub(r'^dist_dir = "[^"]*"', f'dist_dir = "{(tmp_path / "dist").as_posix()}"', text, count=1, flags=re.M)
     text = re.sub(r'^store_dir = "[^"]*"', f'store_dir = "{(tmp_path / "store").as_posix()}"', text, count=1, flags=re.M)

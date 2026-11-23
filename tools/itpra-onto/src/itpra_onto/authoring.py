@@ -38,7 +38,6 @@ from linkml_runtime.utils.schemaview import SchemaView
 from itpra_onto import schema_loading
 from itpra_onto.config import load_config
 
-PROJECT_DIR = Path(__file__).resolve().parents[2]  # the package root
 SCHEMA_PATH = schema_loading.SCHEMA_PATH
 
 TERM_BASE_CLASS = "Term"
@@ -188,7 +187,7 @@ def _display(path: Path, repo_root: Path) -> str:
 def run(quiet: bool = False) -> int:
     """Validate every term file and every registry; print a per-file summary; 0 only if all pass."""
     started = time.perf_counter()
-    repo_root = PROJECT_DIR.parents[1]
+    repo_root = load_config().repo_root
     checker = AuthoringValidator()
     results: list[FileResult] = []
     for path in default_term_files():

@@ -4,7 +4,7 @@
 mechanism, and every rule the shapes add beyond the linter, grouped into the shape files below. How a shape
 file is loaded, the convention a rule-bearing shape follows, the fixture format and `itpra-onto validate`
 are `../src/itpra_onto/shacl.py` and `../src/itpra_onto/fixtures.py`; `shacl.py`'s module docstring is the
-full convention and [`../README.md`](../README.md)'s "Validation" section the shorter tour. Read both before
+full convention and [`../README.md`](../../../README.md)'s "Validation" section the shorter tour. Read both before
 adding a shape file here.
 
 ## Layout

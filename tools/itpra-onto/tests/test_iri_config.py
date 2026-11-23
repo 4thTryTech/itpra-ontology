@@ -41,8 +41,8 @@ PLACEHOLDER = "placeholder" ".invalid"  # split so this test file does not itsel
 # literal outside the config file). ALLOWED_GENERATED_FILES is kept empty on purpose.
 ALLOWED_GENERATED_FILES: set[Path] = set()
 GENERATED_FROM_CONFIG = {
-    PROJECT_ROOT / "schema" / "generated" / "itpra-enums.linkml.yaml",
-    PROJECT_ROOT / "schema" / "generated" / "itpra-prefixes.linkml.yaml",
+    PROJECT_ROOT / "src" / "itpra_onto" / "schema" / "generated" / "itpra-enums.linkml.yaml",
+    PROJECT_ROOT / "src" / "itpra_onto" / "schema" / "generated" / "itpra-prefixes.linkml.yaml",
 }
 SCANNED_SUFFIXES = {".py", ".yaml", ".rq", ".nq", ".ttl", ".json", ".md", ".toml"}
 # dist/ (and public/, listed in the repository root .gitignore alongside it) is DERIVED, gitignored and

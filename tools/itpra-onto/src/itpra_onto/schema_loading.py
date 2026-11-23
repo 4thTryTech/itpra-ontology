@@ -32,8 +32,8 @@ from linkml_runtime.utils.schemaview import SchemaView
 
 from itpra_onto.config import Config, load_config
 
-PROJECT_DIR = Path(__file__).resolve().parents[2]  # the package root
-SCHEMA_PATH = PROJECT_DIR / "schema" / "itpra.linkml.yaml"
+PACKAGE_DIR = Path(__file__).resolve().parent  # src/itpra_onto: the package's own code and data
+SCHEMA_PATH = PACKAGE_DIR / "schema" / "itpra.linkml.yaml"
 
 # Marks the `id:` field in schema/itpra.linkml.yaml. Never IRI-shaped, so a scan for the base IRI
 # literal never matches it, and a schema loaded any other way than

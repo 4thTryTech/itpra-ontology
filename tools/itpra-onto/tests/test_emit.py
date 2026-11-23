@@ -105,6 +105,7 @@ def replace_overlay(config: Config, **overlay: str) -> Config:
 def _write_config(tmp_path: Path, **paths: str) -> Path:
     """A temp copy of the shipped itpra-onto.toml with the named [paths] keys replaced."""
     text = DEFAULT_CONFIG_PATH.read_text(encoding="utf-8")
+    paths.setdefault("repo_root", load_config().repo_root.as_posix())  # the copy lives under tmp_path; the root stays real
     for key, value in paths.items():
         text, count = re.subn(rf'^{key} = "[^"]*"', f'{key} = "{value}"', text, count=1, flags=re.M)
         assert count == 1, key
@@ -132,7 +133,7 @@ def test_shipped_config_passes_the_guard(config: Config):
     assert inputs.terms and (inputs.requirements or config.overlay is None)  # registries only with an overlay
     assert inputs.ontology_version
     for path in [*emit.term_files(config), *emit.registry_files(config)]:
-        assert emit.guard_input_path(path) == path
+        assert emit.guard_input_path(path, repo_root=config.repo_root) == path
 
 
 def test_guard_refuses_a_worktree_ontology_dir_given_relatively(tmp_path: Path):
@@ -142,8 +143,8 @@ def test_guard_refuses_a_worktree_ontology_dir_given_relatively(tmp_path: Path):
         emit.load_inputs(config)
 
 
-def test_guard_refuses_a_worktree_ontology_dir_inside_the_repository(tmp_path: Path):
-    target = (emit.REPO_ROOT / ".cache" / "worktrees" / "x").as_posix()
+def test_guard_refuses_a_worktree_ontology_dir_inside_the_repository(tmp_path: Path, config: Config):
+    target = (config.repo_root / ".cache" / "worktrees" / "x").as_posix()
     config = load_config(_write_config(tmp_path, ontology_dir=target))
     with pytest.raises(InputPathError, match=r"rule \(b\).*\.cache"):
         emit.load_inputs(config)
@@ -153,7 +154,7 @@ def test_guard_refuses_a_worktree_ontology_dir_inside_the_repository(tmp_path: P
 def test_guard_refuses_a_requirements_glob_under_an_excluded_dir(tmp_path: Path, config: Config):
     assert config.overlay is not None and config.overlay.excluded_dirs
     excluded = config.overlay.excluded_dirs[0]
-    pattern = (emit.REPO_ROOT / excluded / "*" / "requirements" / "*.yaml").as_posix()
+    pattern = (config.repo_root / excluded / "*" / "requirements" / "*.yaml").as_posix()
     ontology = emit.ontology_dir(config).as_posix()  # valid, so the registry glob is what is refused
     bad = load_config(_write_config(tmp_path, ontology_dir=ontology, requirements_glob=pattern))
     with pytest.raises(InputPathError, match=rf"rule \(c\).*{re.escape(excluded)}"):
@@ -178,22 +179,31 @@ def test_guard_refuses_a_requirements_glob_under_an_excluded_dir(tmp_path: Path,
         ("terms/DIST/leak.yaml", "c"),
     ],
 )
-def test_guard_rules(relative: str, rule: str):
+def test_guard_rules(relative: str, rule: str, config: Config):
     with pytest.raises(InputPathError, match=rf"rule \({rule}\)"):
-        emit.guard_input_path(emit.REPO_ROOT / relative)
+        emit.guard_input_path(config.repo_root / relative, repo_root=config.repo_root)
 
 
-def test_guard_refuses_configured_exclusions_at_any_depth_only_when_configured():
+def test_guard_rule_a_is_the_configured_repository_root(tmp_path: Path, config: Config):
+    """``repo_root`` comes from the configuration ([paths] repo_root), not from where the package is installed."""
+    other = tmp_path / "elsewhere" / "terms" / "x.yaml"
+    with pytest.raises(InputPathError, match=r"rule \(a\)"):
+        emit.guard_input_path(other, repo_root=config.repo_root)
+    assert emit.guard_input_path(other, repo_root=tmp_path) == other
+
+
+def test_guard_refuses_configured_exclusions_at_any_depth_only_when_configured(config: Config):
     """A consumer's ``[overlay] excluded_dirs`` are refused at any depth, case-insensitively — and are not a
     rule of the core: the same path passes when nothing is excluded. No path here exists on disk;
     :func:`emit.guard_input_path` checks shape, never existence."""
-    nested = emit.REPO_ROOT / "some" / "Recon" / "x.yaml"
+    root = config.repo_root
+    nested = root / "some" / "Recon" / "x.yaml"
     with pytest.raises(InputPathError, match=r"rule \(c\).*Recon"):
-        emit.guard_input_path(nested, excluded=("recon",))
-    assert emit.guard_input_path(nested) == nested
-    top = emit.REPO_ROOT / "scenarios" / "acme" / "x.yaml"
+        emit.guard_input_path(nested, repo_root=root, excluded=("recon",))
+    assert emit.guard_input_path(nested, repo_root=root) == nested
+    top = root / "scenarios" / "acme" / "x.yaml"
     with pytest.raises(InputPathError, match=r"rule \(c\).*scenarios"):
-        emit.guard_input_path(top, excluded=("scenarios",))
+        emit.guard_input_path(top, repo_root=root, excluded=("scenarios",))
 
 
 @pytest.mark.overlay  # needs the consumer's registries
@@ -207,7 +217,7 @@ def test_registry_graphs_name_the_registry(config: Config):
 def test_registry_of_names_the_first_component_below_the_glob_prefix(tmp_path: Path):
     """``req/<X>``: X is the first path component below the glob's fixed prefix, or the stem of a file that
     sits directly there."""
-    root = emit.REPO_ROOT / "registries"
+    root = load_config().repo_root / "registries"
     cfg = load_config(_write_config(tmp_path, ontology_dir=emit.ontology_dir(load_config()).as_posix()))
     nested = replace_overlay(cfg, requirements_glob=(root / "*" / "docs" / "*.yaml").as_posix())
     assert emit.registry_root(nested) == root
@@ -215,7 +225,7 @@ def test_registry_of_names_the_first_component_below_the_glob_prefix(tmp_path: P
     flat = replace_overlay(cfg, requirements_glob=(root / "*.yaml").as_posix())
     assert emit.registry_of(root / "platform.yaml", flat) == "platform"
     with pytest.raises(emit.EmitError, match="outside"):
-        emit.registry_of(emit.REPO_ROOT / "elsewhere" / "x.yaml", nested)
+        emit.registry_of(load_config().repo_root / "elsewhere" / "x.yaml", nested)
 
 
 # ---------------------------------------------------------------------------------------------------

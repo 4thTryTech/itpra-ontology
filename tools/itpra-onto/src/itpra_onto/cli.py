@@ -30,11 +30,12 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from collections.abc import Sequence
 from pathlib import Path
 
-from itpra_onto.config import is_placeholder_base_iri, load_config
+from itpra_onto.config import CONFIG_PATH_ENV_VAR, is_placeholder_base_iri, load_config
 
 NOT_IMPLEMENTED_EXIT = 2
 REFUSAL_EXIT = 1
@@ -208,6 +209,12 @@ def build_parser() -> argparse.ArgumentParser:
         prog="itpra-onto",
         description="itpra-onto: the ITPRA ontology-as-code pipeline (YAML -> LinkML -> RDF -> SHACL -> Oxigraph).",
     )
+    parser.add_argument(
+        "--config",
+        metavar="PATH",
+        help="the itpra-onto.toml to use (default: $ITPRA_ONTO_CONFIG, else one in the working directory or its "
+        "parents, else the checkout's)",
+    )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     build = subparsers.add_parser(
@@ -315,6 +322,8 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
+    if args.config:
+        os.environ[CONFIG_PATH_ENV_VAR] = str(Path(args.config).resolve())
     return args.func(args)
 
 

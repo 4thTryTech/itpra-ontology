@@ -25,8 +25,8 @@ import yaml
 
 from itpra_onto.config import Config, load_config
 
-PROJECT_DIR = Path(__file__).resolve().parents[2]  # the package root
-SCHEMA_DIR = PROJECT_DIR / "schema"
+PACKAGE_DIR = Path(__file__).resolve().parent  # src/itpra_onto: the package's own code and data
+SCHEMA_DIR = PACKAGE_DIR / "schema"
 GENERATED_ENUMS_PATH = SCHEMA_DIR / "generated" / "itpra-enums.linkml.yaml"
 
 ENTITY_TYPE_ENUM = "EntityTypeEnum"
@@ -124,14 +124,14 @@ def check(path: Path = GENERATED_ENUMS_PATH, config: Config | None = None) -> bo
 def main(check_only: bool = False) -> int:
     if check_only:
         if check():
-            print(f"gen-enums: {GENERATED_ENUMS_PATH.relative_to(PROJECT_DIR).as_posix()} is up to date")
+            print(f"gen-enums: {GENERATED_ENUMS_PATH.relative_to(PACKAGE_DIR).as_posix()} is up to date")
             return 0
         print(
-            f"gen-enums: {GENERATED_ENUMS_PATH.relative_to(PROJECT_DIR).as_posix()} is STALE or missing - "
+            f"gen-enums: {GENERATED_ENUMS_PATH.relative_to(PACKAGE_DIR).as_posix()} is STALE or missing - "
             "run `itpra-onto gen-enums`",
             file=sys.stderr,
         )
         return 1
     write(generate())
-    print(f"gen-enums: wrote {GENERATED_ENUMS_PATH.relative_to(PROJECT_DIR).as_posix()}")
+    print(f"gen-enums: wrote {GENERATED_ENUMS_PATH.relative_to(PACKAGE_DIR).as_posix()}")
     return 0

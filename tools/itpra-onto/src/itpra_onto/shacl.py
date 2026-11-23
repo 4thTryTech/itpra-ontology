@@ -130,8 +130,8 @@ from itpra_onto import emit
 from itpra_onto.build import hash_contributions, normalised_bytes
 from itpra_onto.config import Config, load_config
 
-PROJECT_DIR = Path(__file__).resolve().parents[2]  # the package root
-SHAPES_DIR = PROJECT_DIR / "shapes"
+PACKAGE_DIR = Path(__file__).resolve().parent  # src/itpra_onto: the package's own code and data
+SHAPES_DIR = PACKAGE_DIR / "shapes"
 
 SHAPES_GRAPH_LOCAL = "shapes"
 RULE_ID_LOCAL = "ruleId"  # itpra-o:ruleId — declared as an owl:AnnotationProperty in emit.py's schema graph

@@ -26,14 +26,14 @@ from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import urlsplit
 
-# itpra-onto.toml at the package root, i.e. two levels up from this file
-# (src/itpra_onto/config.py -> src/itpra_onto -> src -> the package root).
-DEFAULT_CONFIG_PATH = Path(__file__).resolve().parents[2] / "itpra-onto.toml"
+CONFIG_FILENAME = "itpra-onto.toml"
 
-# Overrides DEFAULT_CONFIG_PATH when set (tests and CI only; never required for
-# normal use). Kept as an environment variable, not a CLI flag, so every
-# existing `itpra-onto <command>` invocation is unaffected unless a caller
-# deliberately opts in.
+# The file shipped beside a checkout's pyproject.toml (src/itpra_onto/config.py -> src/itpra_onto -> src ->
+# the project). An installed package has no such file: a consumer keeps its own itpra-onto.toml in its
+# overlay project and runs from there, or names it (see find_config_path).
+DEFAULT_CONFIG_PATH = Path(__file__).resolve().parents[2] / CONFIG_FILENAME
+
+# Names the configuration file explicitly; `itpra-onto --config PATH` sets it for one invocation.
 CONFIG_PATH_ENV_VAR = "ITPRA_ONTO_CONFIG"
 
 
@@ -99,6 +99,7 @@ class PathsConfig:
     ontology_dir: str
     dist_dir: str
     store_dir: str
+    repo_root: str = "../.."  # the consumer's repository root: every input lies under it, labels are relative to it
 
 
 @dataclass(frozen=True)
@@ -131,15 +132,37 @@ class Config:
     def has_overlay(self) -> bool:
         return self.overlay is not None
 
+    @property
+    def repo_root(self) -> Path:
+        """The repository root (``[paths] repo_root``, default two levels above the configuration file):
+        the root every input must lie under (ADR 0043 D1) and the one file labels are made relative to."""
+        return (self.config_path.parent / self.paths.repo_root).resolve()
+
+
+def find_config_path() -> Path:
+    """The configuration file in effect: ``ITPRA_ONTO_CONFIG`` when set; else ``itpra-onto.toml`` in the
+    working directory or one of its parents (a consumer's overlay project); else the file shipped beside a
+    checkout's ``pyproject.toml``. :class:`ConfigError` when none exists."""
+    override = os.environ.get(CONFIG_PATH_ENV_VAR)
+    if override:
+        return Path(override)
+    cwd = Path.cwd().resolve()
+    for folder in (cwd, *cwd.parents):
+        candidate = folder / CONFIG_FILENAME
+        if candidate.is_file():
+            return candidate
+    if DEFAULT_CONFIG_PATH.is_file():
+        return DEFAULT_CONFIG_PATH
+    raise ConfigError(
+        f"no {CONFIG_FILENAME} found: set {CONFIG_PATH_ENV_VAR}, pass --config, or run from a directory that holds one"
+    )
+
 
 def load_config(path: Path | str | None = None) -> Config:
     """Load ``itpra-onto.toml``.
 
-    Defaults to :data:`DEFAULT_CONFIG_PATH` (the file shipped alongside this
-    project's ``pyproject.toml``), unless the ``ITPRA_ONTO_CONFIG`` environment
-    variable is set (tests and CI only). A caller may also pass an explicit
-    ``path`` to load a different config file, which takes precedence over
-    both.
+    Without ``path`` the file is found by :func:`find_config_path` (the environment variable, the working
+    directory and its parents, then the checkout's shipped file).
 
     Every ``[iri]`` key is required — there is no code-level default for the
     base IRI or the paths it is built from (ADR 0004); a missing key raises
@@ -147,11 +170,7 @@ def load_config(path: Path | str | None = None) -> Config:
     ``[python]`` have code defaults; ``[overlay]`` is optional and ``None``
     when absent.
     """
-    if path is not None:
-        config_path = Path(path)
-    else:
-        override = os.environ.get(CONFIG_PATH_ENV_VAR)
-        config_path = Path(override) if override else DEFAULT_CONFIG_PATH
+    config_path = Path(path) if path is not None else find_config_path()
     with config_path.open("rb") as fh:
         raw = tomllib.load(fh)
 
@@ -183,6 +202,7 @@ def load_config(path: Path | str | None = None) -> Config:
             ontology_dir=paths_raw.get("ontology_dir", "../.."),
             dist_dir=paths_raw.get("dist_dir", "../../dist"),
             store_dir=paths_raw.get("store_dir", ".store"),
+            repo_root=paths_raw.get("repo_root", "../.."),
         ),
         overlay=overlay,
         python=PythonConfig(pinned=python_raw.get("pinned", "3.12")),

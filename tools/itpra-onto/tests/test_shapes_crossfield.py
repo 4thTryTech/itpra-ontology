@@ -33,7 +33,7 @@ from itpra_onto.config import Config, load_config
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SHAPES_DIR = shacl.SHAPES_DIR
 CROSSFIELD_TTL = SHAPES_DIR / "crossfield.ttl"
-FIXTURES_DIR = PROJECT_ROOT / "fixtures" / "crossfield"
+FIXTURES_DIR = fixtures.FIXTURES_DIR / "crossfield"
 FIXTURE_FILES = fixtures.fixture_files(FIXTURES_DIR)
 
 RULE_IDS = {"B-8", "B-8-pref-label-unique", "B-13"}

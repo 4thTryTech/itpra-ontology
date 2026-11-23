@@ -46,6 +46,7 @@ def _write_config(tmp_path: Path, **paths: str) -> Path:
     helper, reused here so ontology_dir/requirements_glob can be pinned to the real inputs while
     store_dir/dist_dir are isolated under tmp_path)."""
     text = DEFAULT_CONFIG_PATH.read_text(encoding="utf-8")
+    paths.setdefault("repo_root", load_config().repo_root.as_posix())  # the copy lives under tmp_path; the root stays real
     for key, value in paths.items():
         text, count = re.subn(rf'^{key} = "[^"]*"', f'{key} = "{value}"', text, count=1, flags=re.M)
         assert count == 1, key
@@ -213,7 +214,7 @@ def test_build_json_is_sorted_keys_indent_2_lf(tmp_path: Path, config: Config):
 def test_input_hash_matches_a_fresh_recomputation_from_the_same_real_files(config: Config):
     inputs = emit.load_inputs(config)
     provenance = build_module.compute_provenance(config, inputs)
-    recomputed = build_module.compute_input_hash(build_module.input_files(config))
+    recomputed = build_module.compute_input_hash(build_module.input_files(config), config.repo_root)
     assert provenance.input_hash == recomputed
 
 
@@ -256,29 +257,35 @@ def test_crlf_and_lf_variants_of_the_same_content_hash_equal():
     assert lf == crlf
 
 
-def test_uv_lock_hash_and_schema_hash_normalise_line_endings(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
-    """:func:`build_module._uv_lock_hash` and :func:`build_module._schema_hash` must hash the SAME digest
-    whether their source files are LF or CRLF on disk."""
-    project_lf = tmp_path / "lf"
-    project_crlf = tmp_path / "crlf"
-    for project in (project_lf, project_crlf):
-        (project / "schema" / "generated").mkdir(parents=True)
-    newline = b"\n"
+def test_schema_hash_normalises_line_endings(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    """:func:`build_module._schema_hash` must hash the SAME digest whether its files are LF or CRLF on disk."""
+    package_lf = tmp_path / "lf"
+    package_crlf = tmp_path / "crlf"
+    for package in (package_lf, package_crlf):
+        (package / "schema" / "generated").mkdir(parents=True)
     content = b"a: 1\nname: x\n"
-    (project_lf / "uv.lock").write_bytes(content)
-    (project_crlf / "uv.lock").write_bytes(content.replace(b"\n", b"\r\n"))
     for path in build_module.SCHEMA_HASH_FILES:
-        (project_lf / path).write_bytes(content)
-        (project_crlf / path).write_bytes(content.replace(b"\n", b"\r\n"))
-    del newline
+        (package_lf / path).write_bytes(content)
+        (package_crlf / path).write_bytes(content.replace(b"\n", b"\r\n"))
 
-    monkeypatch.setattr(build_module, "PROJECT_DIR", project_lf)
-    lf_uv, lf_schema = build_module._uv_lock_hash(), build_module._schema_hash()
-    monkeypatch.setattr(build_module, "PROJECT_DIR", project_crlf)
-    crlf_uv, crlf_schema = build_module._uv_lock_hash(), build_module._schema_hash()
-
-    assert lf_uv == crlf_uv
+    monkeypatch.setattr(build_module, "PACKAGE_DIR", package_lf)
+    lf_schema = build_module._schema_hash()
+    monkeypatch.setattr(build_module, "PACKAGE_DIR", package_crlf)
+    crlf_schema = build_module._schema_hash()
     assert lf_schema == crlf_schema
+
+
+def test_environment_hash_is_the_resolved_dependency_set(monkeypatch: pytest.MonkeyPatch):
+    """The provenance's ``environment_hash`` covers the pinned dependencies as installed (transitively), is
+    stable across calls, and changes when any version changes — readable from an installed package, with no
+    lockfile on disk."""
+    versions = build_module._dependency_versions()
+    names = {v.split("==")[0] for v in versions}
+    assert {"pyyaml", "rdflib", "pyoxigraph", "pyshacl", "linkml", "linkml-runtime"} <= names
+    assert "itpra-onto" not in names
+    assert build_module._environment_hash() == build_module._environment_hash()
+    monkeypatch.setattr(build_module, "_dependency_versions", lambda: tuple(v.replace("==", "==0.0.0+") for v in versions))
+    assert build_module._environment_hash() != build_module._dependency_versions and build_module._environment_hash() != build_module._schema_hash()
 
 
 # ---------------------------------------------------------------------------------------------------
@@ -294,11 +301,10 @@ def test_code_hash_is_stable_and_covers_the_package(config: Config):
 
 
 def test_code_hash_changes_when_pipeline_source_changes(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
-    src_root = tmp_path / "src" / "itpra_onto"
+    src_root = tmp_path / "itpra_onto"
     src_root.mkdir(parents=True)
     (src_root / "a.py").write_text("x = 1\n", encoding="utf-8")
-    monkeypatch.setattr(build_module, "PROJECT_DIR", tmp_path)
-    monkeypatch.setattr(build_module, "REPO_ROOT", tmp_path)  # _repo_relative() labels against REPO_ROOT
+    monkeypatch.setattr(build_module, "PACKAGE_DIR", src_root)  # the code is hashed where the package is installed
     before = build_module._code_hash()
 
     (src_root / "a.py").write_text("x = 2\n", encoding="utf-8")
@@ -435,7 +441,7 @@ def test_dataset_node_carries_the_seven_scalars(tmp_path: Path, config: Config):
     assert literal_for("rulesVersion") == report.rules_version
     assert literal_for("schemaHash") is not None
     assert literal_for("pipelineVersion") is not None
-    assert literal_for("uvLockHash") is not None
+    assert literal_for("environmentHash") is not None
     assert literal_for("codeHash") is not None
     version_info = [
         q.object.value for q in quads if q.subject == dataset_node and q.predicate == emit.OWL_VERSION_INFO
