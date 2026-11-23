@@ -6,9 +6,10 @@
 # ontology_version = the CONTENT version of the vocabulary (Semantic Versioning; ADR 0003). MAJOR = an id removed
 # or renamed, a verb's meaning changed, a type/value dropped, a parser-breaking schema change, a base-IRI or
 # licence change; MINOR = additive terms/types/verbs/fields and a term retirement; PATCH = editorial wording,
-# comments, metadata. Every change bumps ontology_version in the same change (ADR 0003); consumers pin a release.
+# comments, metadata, and a release that carries only tooling or records (ADR 0044). Every vocabulary change bumps
+# ontology_version in the same change (ADR 0003); consumers pin a release.
 schema_version: 2
-ontology_version: 4.0.0
+ontology_version: 4.0.1
 
 # ---- id rules -------------------------------------------------------------
 id:

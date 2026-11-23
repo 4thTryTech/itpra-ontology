@@ -5,8 +5,8 @@ domains, capabilities, functions, personas, journeys, workflows, dimensions, gov
 and cross-cutting concepts an enterprise IT platform is described with. Tool-agnostic, neutral to any operating model,
 and machine-readable so that architecture documents can be checked against it ([ADR 0001](decisions/0001-purpose-scope-and-tier-neutrality.md)).
 
-**Status:** current release `4.0.0` (2026-11-21), the first public release. Its content is the vocabulary at `3.16.3`;
-what is new is the consumption contract. Releases from `4.0.0` on are listed in [CHANGELOG.md](CHANGELOG.md) and on the
+**Status:** current release `4.0.1` (2026-11-23): no term changes since `4.0.0`, the first public release; it adds the
+pipeline package under `tools/itpra-onto/`. Releases from `4.0.0` on are listed in [CHANGELOG.md](CHANGELOG.md) and on the
 repository's Releases page, each with its source archive and `sha256`.
 
 ## What is here
@@ -34,10 +34,11 @@ repository's Releases page, each with its source archive and `sha256`.
 ## Using and pinning it
 
 `schema.yaml` carries two numbers: `schema_version`, the shape of a record, and `ontology_version`, the content, under
-Semantic Versioning. A MAJOR change can break a consumer's checks; MINOR adds; PATCH is editorial
-([ADR 0003](decisions/0003-versioning-releases-and-pinning.md)). Consume a **release**: vendor the release archive and
-record its version, tag, commit and hash; pin a package dependency to the tag; or name the version IRI. Do not track
-`master`.
+Semantic Versioning. A MAJOR change can break a consumer's checks; MINOR adds; PATCH is editorial, or a release that
+carries only tooling ([ADR 0003](decisions/0003-versioning-releases-and-pinning.md),
+[ADR 0044](decisions/0044-one-release-for-the-vocabulary-and-its-tooling.md)). Consume a **release**: vendor the release
+archive and record its version, tag, commit and hash; pin a package dependency to the same tag; or name the version IRI.
+Do not track `master`.
 
 Describe a scenario or an implementation with this vocabulary, and keep your own terms, requirements and
 operating-model mappings in your own repository. Cite a record here by its URL.
@@ -73,3 +74,4 @@ repository at `4.0.0`. The decision records consolidate what was decided in that
 | 3.16.0 | 2026-09-24 | Schema formalisation: verbs declared with domain, range and cardinality; `CONCEPT` and `FR` entity types; id and `source` conventions |
 | 3.16.1 – 3.16.3 | 2026-11-21 | Preparation for publication: the base IRI; citations re-pointed to these records; comments scrubbed; three engineering definitions complete the durable-execution obligations |
 | 4.0.0 | 2026-11-21 | First public release: a new location, the licences, minted IRIs and the pinning contract; no term changes |
+| 4.0.1 | 2026-11-23 | The pipeline package joins the release; one release for the vocabulary and its tooling; no term changes |

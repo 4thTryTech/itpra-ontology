@@ -11,7 +11,9 @@ How this vocabulary is maintained, as decided in [ADR 0006](decisions/0006-gover
   journey groups, governance constructs, dimension values and the service-domain set change only with a record and a
   maintainer's review, because consumers' checks depend on them.
 - **Releases.** A release is a tag `vX.Y.Z` on `master` with an immutable release; every content change bumps
-  `ontology_version` ([ADR 0003](decisions/0003-versioning-releases-and-pinning.md)). Pre-releases are `vX.Y.Z-rc.N`.
+  `ontology_version` ([ADR 0003](decisions/0003-versioning-releases-and-pinning.md)). One tag covers the vocabulary,
+  the records and the pipeline package; a release with only tooling or record changes is a PATCH
+  ([ADR 0044](decisions/0044-one-release-for-the-vocabulary-and-its-tooling.md)). Pre-releases are `vX.Y.Z-rc.N`.
   A maintainer cuts a release by running the `release` workflow on `master` with the version (it creates the tag) or
   by pushing the tag; the workflow checks the tag against `ontology_version` and the changelog, builds the source
   archive with its `sha256` from the tag, and publishes the release.
