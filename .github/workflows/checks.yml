@@ -15,7 +15,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install pyyaml
-      - name: Vocabulary lint (schema, terms, verbs, sources resolve in decisions/)
+      - name: Vocabulary lint (the pipeline's core rules — itpra_onto.lint — over the repository root)
         run: python tools/ontology-lint.py
       - name: Decision records
         run: python tools/adr-lint.py --strict
@@ -35,7 +35,7 @@ jobs:
   pipeline:
     name: ontology-as-code pipeline (tools/itpra-onto)
     # The core build on the vocabulary alone (ADR 0043 D1): generated fragments fresh, the package's own
-    # tests, a reproducible build, SHACL clean. `parity` runs only with a consumer overlay and is not run here.
+    # tests, a reproducible build, SHACL clean, and lint/shapes parity over the core rules (ADR 0042 D5).
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -60,6 +60,10 @@ jobs:
         run: uv run --project tools/itpra-onto itpra-onto build --check
       - name: SHACL-validate the emitted graphs (any sh:Violation fails; a sh:Warning is advisory)
         run: uv run --project tools/itpra-onto itpra-onto validate --json
+      - name: Lint and shapes agree (the ontology's own lint against the shapes, real tree and fixture by fixture)
+        run: |
+          uv run --project tools/itpra-onto itpra-onto parity
+          uv run --project tools/itpra-onto itpra-onto parity --fixtures
       - name: Upload the build artefacts
         uses: actions/upload-artifact@v7
         with:

@@ -34,7 +34,7 @@ Thank you for helping keep this vocabulary precise. Everything below follows the
 ## Running the checks
 
 ```
-python tools/ontology-lint.py              # schema, terms, verbs; every source: cites a record in decisions/
+python tools/ontology-lint.py              # the vocabulary, with the pipeline's core rules (tools/itpra-onto, itpra_onto.lint)
 python tools/adr-lint.py --strict          # the decision records
 python tools/check-version-bump.py --base origin/master   # a vocabulary change bumps ontology_version
 python tools/check-links.py                # relative links resolve
@@ -54,4 +54,5 @@ uv run --project tools/itpra-onto itpra-onto gen-verb-shapes --check
 uv run --project tools/itpra-onto pytest -q tools/itpra-onto/tests
 uv run --project tools/itpra-onto itpra-onto build --no-store && uv run --project tools/itpra-onto itpra-onto build --check
 uv run --project tools/itpra-onto itpra-onto validate --json
+uv run --project tools/itpra-onto itpra-onto parity && uv run --project tools/itpra-onto itpra-onto parity --fixtures
 ```
