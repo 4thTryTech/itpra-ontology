@@ -62,5 +62,5 @@ cites the record that minted or changed it as `ADR NNNN`. From outside this repo
 | 0040 | [Agentic execution explainability](0040-agentic-execution-explainability.md) | Accepted | 2026-11-21 |
 | 0041 | [The RDF projection: the YAML stays authoritative; emitted graphs are derived](0041-the-rdf-projection-roles-modelling-and-derivation.md) | Accepted | 2026-11-22 |
 | 0042 | [Validation parity: one rule register, shapes beside the linter, fixtures, the parity check](0042-validation-parity-register-shapes-fixtures-and-the-parity-check.md) | Accepted | 2026-11-22 |
-| 0043 | [Builds, artefacts and the consumer overlay: the core from the vocabulary alone](0043-builds-artefacts-and-the-consumer-overlay.md) | Accepted | 2026-11-22 |
+| 0043 | [Builds, artefacts and layers: the build reads the vocabulary alone](0043-builds-artefacts-and-layers.md) | Accepted | 2026-11-22 |
 | 0044 | [One release for the vocabulary and its tooling](0044-one-release-for-the-vocabulary-and-its-tooling.md) | Accepted | 2026-11-23 |

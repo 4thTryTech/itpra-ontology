@@ -1,13 +1,9 @@
 # Rule 50 — boundary-governed-function (ADR 0028: the automation boundary).
 #
 # The automation boundary concept id, `AUTON-BOUNDARY`, is fixed by ADR 0028 (its per-coverage-area
-# partition by ADR 0029) — it is not a configuration value, so it is named directly here, the same way
-# the consumer's linter's `_boundary_governed_functions` helper (`[overlay] linter_script`) reads it off
-# `terms["AUTON-BOUNDARY"]`. That helper's actual test is "the target id starts with FUNC-";
-# `?func a itpra:FUNCTION` is the graph-native equivalent (FUNC-<slug> is, by the id convention in
-# schema.yaml, always type Function) — so this rule reproduces the same set the linter reports, one hop,
-# directly, with no reasoner. `AUTON-BOUNDARY` also governs the delegated-actor concept `AUTON-ACTOR`,
-# which is excluded here because it is not a Function.
+# partition by ADR 0029) — it is not a configuration value, so it is named directly here. The rule types
+# its direct `governs` targets that are functions, one hop, with no reasoner. `AUTON-BOUNDARY` also
+# governs the delegated-actor concept `AUTON-ACTOR`, which is excluded here because it is not a Function.
 #
 # The PREFIX block (itpra:, itpra-o:, itpra-g:) is prepended at run time from `itpra-onto.toml`
 # `[iri]` (ADR 0004) — this file names no base IRI and declares no PREFIX itself.

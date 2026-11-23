@@ -63,8 +63,7 @@ def clean_dataset(config: Config, inputs: emit.Inputs) -> ox.Dataset:
 @pytest.fixture(scope="module")
 def structural_shapes(config: Config) -> ox.Dataset:
     """Only ``structural.ttl`` — never the whole ``shapes/`` directory, so this module's own assertions
-    about "structural.ttl's rule ids" are not polluted by the `crossfield`/`requirements` files that share
-    the directory."""
+    about "structural.ttl's rule ids" are not polluted by the other shape files that share the directory."""
     return shacl.load_shapes(SHAPES_DIR, config=config) if _only_structural(SHAPES_DIR) else _load_only_structural(config)
 
 
@@ -74,7 +73,7 @@ def _only_structural(shapes_dir: Path) -> bool:
 
 def _load_only_structural(config: Config) -> ox.Dataset:
     """Copies just `structural.ttl` into an isolated temp dir so `shacl.load_shapes` globs it alone
-    (`crossfield.ttl`/`requirements.ttl` share shapes/ with it)."""
+    (`crossfield.ttl` shares shapes/ with it)."""
     import shutil
     import tempfile
 
@@ -91,13 +90,8 @@ def _load_only_structural(config: Config) -> ox.Dataset:
 FIXTURE_FILES = fixtures.fixture_files(FIXTURES_DIR)
 
 
-OVERLAY_FIXTURES = frozenset({"B-22-met-by-function", "req-link-malformed"})  # mutate a requirement record: need the registries
-
-
 @pytest.mark.parametrize("fixture_path", FIXTURE_FILES, ids=[p.stem for p in FIXTURE_FILES])
 def test_structural_fixture(fixture_path: Path):
-    if fixture_path.stem in OVERLAY_FIXTURES and load_config().overlay is None:
-        pytest.skip("core-only run: this fixture mutates a requirement record")
     assert FIXTURE_FILES, "fixtures/structural/ must not be empty"
     fixtures.assert_fixture(fixture_path, SHAPES_DIR)
 

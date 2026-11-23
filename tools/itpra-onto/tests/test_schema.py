@@ -1,15 +1,15 @@
 """Tests for the LinkML authoring schema, the generated enums, and ``validate --authoring`` (ADR 0008).
 
-Every test reads the REAL input files (the vocabulary and, with an overlay, the consumer's requirement
-registries) — nothing is ever written to them; mutation tests work on in-memory copies.
+Every test reads the real vocabulary files — nothing is ever written to them; mutation tests work on
+in-memory copies.
 """
 
 from __future__ import annotations
 
 import copy
-import warnings
 import subprocess
 import sys
+import warnings
 from pathlib import Path
 
 import pytest
@@ -17,18 +17,12 @@ import yaml
 from linkml_runtime.utils.schemaview import SchemaView
 
 from itpra_onto import gen_enums, schema_loading
-from itpra_onto.authoring import (
-    SCHEMA_PATH,
-    AuthoringValidator,
-    default_registry_files,
-    default_term_files,
-)
+from itpra_onto.authoring import AuthoringValidator, default_term_files
 from itpra_onto.config import load_config
 from itpra_onto.profile import compute_profile, load_records
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_TERM_FILES = 213
-EXPECTED_REGISTRY_FILES = 22
 
 
 # ---------------------------------------------------------------------------------------------------
@@ -85,7 +79,7 @@ def test_schema_loads_with_generated_import(sv: SchemaView):
     assert sv.schema.name == "itpra"
     assert "EntityTypeEnum" in sv.all_enums()
     assert "RelationshipVerbEnum" in sv.all_enums()
-    for cls in ("Term", "RelatesTo", "RequirementRegistry", "Requirement", "FR", "NFR"):
+    for cls in ("Term", "RelatesTo"):
         assert sv.get_class(cls) is not None, cls
 
 
@@ -107,7 +101,6 @@ def test_one_subclass_per_type_value(sv: SchemaView, checker: AuthoringValidator
     assert sorted(checker.type_to_class) == sorted(ontology_schema_yaml["types"])
     # the data convention: a `type` value IS the LinkML class name
     assert all(value == cls for value, cls in checker.type_to_class.items())
-    assert checker.requirement_type_to_class == {"FR": "FR", "NFR": "NFR"}
 
 
 def test_id_pattern_equals_ontology_schema_yaml(sv: SchemaView, ontology_schema_yaml: dict):
@@ -135,7 +128,7 @@ def test_function_forbids_derived_from_in_schema(sv: SchemaView):
 
 def test_entity_type_bridge_annotations(sv: SchemaView):
     entities = {r["id"] for r in _load(gen_enums.ontology_dir() / "entities.yaml")}
-    for cls_name in [*sv.class_descendants("Term", reflexive=False), "Requirement", "FR", "NFR"]:
+    for cls_name in sv.class_descendants("Term", reflexive=False):
         ann = sv.get_class(cls_name).annotations["entity_type_id"].value
         assert ann == "none" or ann in entities, (cls_name, ann)
 
@@ -195,19 +188,11 @@ def test_gen_enums_follows_source_lists(tmp_path: Path):
 
 def test_file_counts():
     assert len(default_term_files()) == EXPECTED_TERM_FILES
-    assert len(default_registry_files()) == (EXPECTED_REGISTRY_FILES if load_config().overlay is not None else 0)
 
 
 @pytest.mark.parametrize("path", default_term_files(), ids=lambda p: p.name)
 def test_every_term_file_validates(checker: AuthoringValidator, path: Path):
     result = checker.validate_term_file(path)
-    assert result.records > 0
-    assert result.ok, "\n".join(result.errors)
-
-
-@pytest.mark.parametrize("path", default_registry_files(), ids=lambda p: f"{p.parents[2].name}/{p.name}")
-def test_every_registry_validates(checker: AuthoringValidator, path: Path):
-    result = checker.validate_registry_file(path)
     assert result.records > 0
     assert result.ok, "\n".join(result.errors)
 
@@ -221,8 +206,7 @@ def test_cli_validate_authoring_passes():
         check=False,
     )
     assert result.returncode == 0, result.stdout + result.stderr
-    expected = EXPECTED_TERM_FILES + (EXPECTED_REGISTRY_FILES if load_config().overlay is not None else 0)
-    assert f"{expected}/{expected} files passed" in result.stdout
+    assert f"{EXPECTED_TERM_FILES}/{EXPECTED_TERM_FILES} files passed" in result.stdout
 
 
 # ---------------------------------------------------------------------------------------------------
@@ -296,28 +280,6 @@ def test_unknown_key_fails(checker, function_file):
     assert not result.ok and "colour" in result.errors[0]
 
 
-@pytest.mark.overlay  # needs the consumer's registries
-def test_registry_mutations_fail(checker):
-    nfr_path = next(p for p in default_registry_files() if p.name == "non-functional.yaml")
-    data = _load(nfr_path)
-    assert checker.validate_registry_data(copy.deepcopy(data)).ok
-
-    no_qa = copy.deepcopy(data)
-    del no_qa["requirements"][0]["qa"]
-    assert "'qa' is a required property" in checker.validate_registry_data(no_qa).errors[0]
-
-    empty_met_by = copy.deepcopy(data)
-    empty_met_by["requirements"][0]["met_by"] = []
-    assert "met_by" in checker.validate_registry_data(empty_met_by).errors[0]
-
-    bad_type = copy.deepcopy(data)
-    bad_type["requirements"][0]["type"] = "XR"
-    assert any("'XR' is not one of" in e for e in checker.validate_registry_data(bad_type).errors)
-
-    bare_list = copy.deepcopy(data["requirements"])
-    assert not checker.validate_registry_data(bare_list).ok
-
-
 # ---------------------------------------------------------------------------------------------------
 # verb annotations
 
@@ -328,13 +290,14 @@ def test_verb_annotations_cover_exactly_the_17_verbs(verb_annotations, ontology_
 
 
 def test_verb_annotation_grammar(sv: SchemaView, verb_annotations):
-    known = set(sv.all_classes()) | {"SERVICE", "ADR", "ITPRA_TIER", "OPERATING_MODEL", "TENANT"}
+    entity_type_ids = {r["id"] for r in _load(gen_enums.ontology_dir() / "entities.yaml")}
+    known = set(sv.all_classes()) | entity_type_ids
     keys = {"carried_by", "evidence", "domain", "range", "pairs", "cardinality", "observed", "meta_edges", "inverse_name"}
     for verb, ann in verb_annotations.items():
         assert set(ann) == keys, verb
         assert ann["inverse_name"] is None, verb  # no inverse is minted (ADR 0041 D4)
         assert ann["evidence"] in {"data", "meta-only", "definition"}, verb
-        assert ann["carried_by"] == "relates_to" or ann["carried_by"].startswith("slot:"), verb
+        assert ann["carried_by"] == "relates_to", verb
         assert ann["domain"] == sorted({p["subject"] for p in ann["pairs"]}), verb
         assert ann["range"] == sorted({p["object"] for p in ann["pairs"]}), verb
         for token in ann["domain"] + ann["range"] + [c["subject"] for c in ann["cardinality"]]:
@@ -344,7 +307,6 @@ def test_verb_annotation_grammar(sv: SchemaView, verb_annotations):
         assert slot.slot_uri == f"itpra-o:{camel}", verb  # verbs live in the onto# namespace (ADR 0004)
 
 
-@pytest.mark.overlay  # needs the consumer's registries
 def test_verb_annotations_match_the_data(verb_annotations):
     """Domain/range are read off the data: declared pairs == data pairs for every `evidence: data` verb,
     and no data exists for the others.
@@ -387,20 +349,13 @@ def test_verb_annotations_match_the_data(verb_annotations):
             assert ann["observed"] == [], (verb, "0-instance verb must declare observed: []")
 
 
-@pytest.mark.overlay  # needs the consumer's registries
 def test_declared_cardinalities_hold_in_the_data(verb_annotations):
-    terms, reqs = load_records()
-    records = terms + reqs
+    records = load_records()
     for verb, ann in verb_annotations.items():
-        carried = ann["carried_by"]
         for rule in ann["cardinality"]:
             subjects = [r for r in records if rule["subject"] in ("Term", r["type"]) and r["type"] != "EntityType"]
             assert subjects or rule["max"] == 0, (verb, rule)
             for rec in subjects:
-                if carried == "relates_to":
-                    n = sum(1 for e in rec.get("relates_to") or [] if e["rel"] == verb)
-                else:
-                    value = rec.get(carried.removeprefix("slot:"))
-                    n = len(value) if isinstance(value, list) else (1 if value else 0)
+                n = sum(1 for e in rec.get("relates_to") or [] if e["rel"] == verb)
                 assert n >= rule["min"], (verb, rule, rec["id"], n)
                 assert rule["max"] is None or n <= rule["max"], (verb, rule, rec["id"], n)

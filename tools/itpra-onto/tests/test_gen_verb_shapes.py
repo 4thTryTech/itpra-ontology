@@ -80,9 +80,8 @@ def test_record_classes_are_the_emitters_class_table(vocab: emit.Vocabulary):
     """Classes resolve through the schema's class table exactly as emit.Vocabulary pins records to them."""
     curies = gen_verb_shapes.record_classes(vocab.sv)
     expanded = {vocab.expand(curie) for curie in curies.values()}
-    assert expanded == set(vocab.term_class.values()) | set(vocab.requirement_class.values())
+    assert expanded == set(vocab.term_class.values())
     assert curies["EntityType"] == "itpra-o:EntityType"
-    assert curies["FR"] == "itpra:FR" and curies["NFR"] == "itpra:NFR"
 
 
 def test_every_verb_gets_one_shape_with_rule_id_b22(config: Config, vocab: emit.Vocabulary):

@@ -2,9 +2,8 @@
 
 For every relationship verb: the (subject type, object type) pairs with edge counts, the per-record
 edge-count range per subject type, and the ``entities.yaml`` meta-edges. Instance edges come from
-``relates_to`` on every non-EntityType record, plus the registry slots ``met_by`` / ``verified_by``
-(subject FR / NFR) and ``qa`` (the ``categorized_as`` verb, subject NFR). ``relates_to`` on EntityType
-records are meta-edges (schema statements), reported separately and never counted as instances.
+``relates_to`` on every non-EntityType record. ``relates_to`` on EntityType records are meta-edges (schema
+statements), reported separately and never counted as instances.
 
 The ``itpra_verb`` annotations in ``schema/itpra.linkml.yaml`` were written from this profile;
 ``tests/test_schema.py`` checks they stay consistent with it. Print it with
@@ -21,10 +20,9 @@ from typing import Any
 
 import yaml
 
-from itpra_onto.authoring import default_registry_files, default_term_files
+from itpra_onto.authoring import default_term_files
 
 META_SUBJECT_TYPE = "EntityType"
-REGISTRY_SLOT_VERBS = {"met_by": "met_by", "verified_by": "verified_by", "qa": "categorized_as"}
 
 
 @dataclass
@@ -40,18 +38,15 @@ def _load(path: Path) -> Any:
         return yaml.safe_load(fh)
 
 
-def load_records() -> tuple[list[dict], list[dict]]:
-    terms = [r for p in default_term_files() for r in (_load(p) or [])]
-    reqs = [r for p in default_registry_files() for r in (_load(p) or {}).get("requirements", [])]
-    return terms, reqs
+def load_records() -> list[dict]:
+    return [r for p in default_term_files() for r in (_load(p) or [])]
 
 
-def compute_profile(terms: list[dict] | None = None, reqs: list[dict] | None = None) -> dict[str, VerbProfile]:
-    if terms is None or reqs is None:
-        terms, reqs = load_records()
+def compute_profile(terms: list[dict] | None = None) -> dict[str, VerbProfile]:
+    if terms is None:
+        terms = load_records()
     type_of = {r["id"]: r["type"] for r in terms}
-    type_of.update({r["id"]: r["type"] for r in reqs})
-    records_of_type = Counter(r["type"] for r in terms) + Counter(r["type"] for r in reqs)
+    records_of_type = Counter(r["type"] for r in terms)
     profile: dict[str, VerbProfile] = defaultdict(VerbProfile)
 
     def record_edges(subject: dict, edges: list[tuple[str, str]]) -> None:
@@ -72,13 +67,6 @@ def compute_profile(terms: list[dict] | None = None, reqs: list[dict] | None = N
             for verb, target in edges:
                 profile[verb].meta_edges.add(f"{rec['id']} -> {target}")
             continue
-        record_edges(rec, edges)
-    for rec in reqs:
-        edges: list[tuple[str, str]] = []
-        for slot, verb in REGISTRY_SLOT_VERBS.items():
-            value = rec.get(slot)
-            for target in value if isinstance(value, list) else ([value] if value else []):
-                edges.append((verb, target))
         record_edges(rec, edges)
 
     # Records of a subject type that carry zero edges of a verb count as n = 0.

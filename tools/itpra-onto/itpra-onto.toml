@@ -1,4 +1,4 @@
-# itpra-onto configuration for the ITPRA ontology repository itself: the core build, no overlay (ADR 0043 D1).
+# itpra-onto configuration for the ITPRA ontology repository.
 #
 # Read by itpra_onto.config.load_config(); every command reads [iri] and [paths]. Paths are relative to this
 # file's directory (tools/itpra-onto/); the vocabulary is the repository root.
@@ -19,15 +19,6 @@ repo_root = "../.."
 ontology_dir = "../.."
 dist_dir = "../../dist"
 store_dir = ".store"
-
-# No [overlay] here: the build emits schema + t1 + inferred from the vocabulary alone, loads no requirements
-# shapes, skips the requirement-meets rule, and `parity` refuses to run. A consumer that layers its own
-# requirement registries on a pinned release adds, in its copy of this file:
-#
-#   [overlay]
-#   requirements_glob = "<path>/*/<path>/*.yaml"   # a registry is named by the first component below the fixed prefix -> graph req/<X>
-#   linter_script = "<its linter, compared by `parity`>"
-#   excluded_dirs = ["<directory names the input-path guard refuses at any depth>"]
 
 [python]
 pinned = "3.12"

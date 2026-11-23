@@ -11,25 +11,22 @@ shape can never drift from the annotation it enforces: it writes ``shapes/genera
 One ``sh:NodeShape`` per verb slot (every evidence class — ``data``, ``meta-only`` and ``definition`` alike:
 a verb with zero instances today still binds its declared pairs), each:
 
-* ``sh:targetSubjectsOf`` the predicate the emitter writes for that verb (the verb slot's ``slot_uri`` for a
-  ``carried_by: relates_to`` verb; the named slot's ``slot_uri`` for ``carried_by: slot:<name>``);
+* ``sh:targetSubjectsOf`` the predicate the emitter writes for that verb (the verb slot's ``slot_uri``);
 * a ``sh:sparql`` constraint selecting every ``($this, ?value)`` edge whose object is a resolved record
-  (typed with one of the record classes — a dangling object is ``target-unresolved``'s /
-  ``req-target-unresolved``'s business, never this rule's) and for which NO allowed pair ``(S, O)`` has
-  ``$this`` typed ``S`` and ``?value`` typed ``O``. The test is set membership over each node's types, not
-  equality with one class: every record is also typed ``skos:Concept`` (and a requirement also
-  ``itpra:REQUIREMENT``, a Function perhaps also the derived ``BoundaryGovernedFunction``), and only the
-  record classes are compared;
+  (typed with one of the record classes — a dangling object is ``target-unresolved``'s business, never
+  this rule's) and for which NO allowed pair ``(S, O)`` has ``$this`` typed ``S`` and ``?value`` typed
+  ``O``. The test is set membership over each node's types, not equality with one class: every record is
+  also typed ``skos:Concept`` (and a Function perhaps also the derived ``BoundaryGovernedFunction``), and
+  only the record classes are compared;
 * ``sh:severity sh:Violation``, ``itpra-o:ruleId "B-22"``, and a message naming the verb, the subject class
   and the object class.
 
 Class names in ``pairs`` resolve through the schema's class table — the classes :class:`itpra_onto.emit.
 Vocabulary` pins a ``type`` value to (the ``Term`` subclasses, ``EntityType`` -> ``itpra-o:EntityType``
-included) plus the ``Requirement`` subclasses (``FR`` -> ``itpra:FR``, ``NFR`` -> ``itpra:NFR``). A pair
-naming something that is not such a class (the annotation grammar allows an UPPER_SNAKE EntityType id
-"only where no `type` value (hence no class) exists": ``ADR``, ``SERVICE``) can match no record and is
-listed in the generated file's header as unresolvable; the verb's other pairs still bind, and a verb whose
-pairs are all unresolvable allows no edge at all.
+included). A pair naming something that is not such a class (the annotation grammar allows an UPPER_SNAKE
+EntityType id "only where no `type` value (hence no class) exists": ``ADR``, ``SERVICE``, ``FR``) can match
+no record and is listed in the generated file's header as unresolvable; the verb's other pairs still bind,
+and a verb whose pairs are all unresolvable allows no edge at all.
 
 The file carries no base IRI and no ``@prefix`` block (the loader prepends both, exactly as for the
 hand-written files — :mod:`itpra_onto.shacl`'s module docstring). Output is deterministic: verbs sorted by
@@ -49,7 +46,7 @@ from jsonasobj2 import JsonObj, as_dict
 from linkml_runtime.utils.schemaview import SchemaView
 
 from itpra_onto import schema_loading
-from itpra_onto.authoring import REQUIREMENT_BASE_CLASS, TERM_BASE_CLASS
+from itpra_onto.authoring import TERM_BASE_CLASS
 from itpra_onto.config import Config, load_config
 
 PACKAGE_DIR = Path(__file__).resolve().parent  # src/itpra_onto: the package's own code and data
@@ -60,7 +57,6 @@ RULE_ID = "B-22"
 VERBS_SUBSET = "verbs"
 ANNOTATION = "itpra_verb"
 CARRIED_BY_RELATES_TO = "relates_to"
-CARRIED_BY_SLOT_PREFIX = "slot:"
 
 _HEADER = """\
 # GENERATED FILE - DO NOT EDIT BY HAND.
@@ -72,8 +68,8 @@ _HEADER = """\
 #
 # Rule B-22 (shapes/REGISTER.md Table B): an edge whose object is a resolved record, and whose (subject
 # class, object class) is not among the verb's allowed pairs, is a Violation. Dangling objects are left to
-# target-unresolved / req-target-unresolved. No @prefix block and no base IRI: itpra_onto.shacl.load_shapes
-# prepends both at load time, as for the hand-written shapes/*.ttl files.
+# target-unresolved. No @prefix block and no base IRI: itpra_onto.shacl.load_shapes prepends both at load
+# time, as for the hand-written shapes/*.ttl files.
 """
 
 
@@ -98,11 +94,10 @@ def _plain(value: Any) -> Any:
 
 
 def record_classes(sv: SchemaView) -> dict[str, str]:
-    """``class name -> class_uri CURIE`` for every record class: the ``Term`` and ``Requirement`` subclasses
-    (the classes ``emit.Vocabulary``'s type -> class table pins a record to)."""
-    names = [*sv.class_descendants(TERM_BASE_CLASS, reflexive=False), *sv.class_descendants(REQUIREMENT_BASE_CLASS, reflexive=False)]
+    """``class name -> class_uri CURIE`` for every record class: the ``Term`` subclasses (the classes
+    ``emit.Vocabulary``'s type -> class table pins a record to)."""
     out: dict[str, str] = {}
-    for name in sorted(set(names)):
+    for name in sorted(sv.class_descendants(TERM_BASE_CLASS, reflexive=False)):
         cls = sv.get_class(name)
         if cls.abstract:
             continue
@@ -124,15 +119,11 @@ def _verb_annotation(sv: SchemaView, verb: str) -> dict[str, Any]:
 
 
 def _predicate_curie(sv: SchemaView, verb: str, carried_by: str) -> str:
-    if carried_by == CARRIED_BY_RELATES_TO:
-        slot_name = verb
-    elif isinstance(carried_by, str) and carried_by.startswith(CARRIED_BY_SLOT_PREFIX):
-        slot_name = carried_by.removeprefix(CARRIED_BY_SLOT_PREFIX)
-    else:
+    if carried_by != CARRIED_BY_RELATES_TO:
         raise VerbShapeError(f"verb slot {verb!r}: unrecognised carried_by {carried_by!r}")
-    slot_uri = sv.get_slot(slot_name).slot_uri if sv.get_slot(slot_name) else None
+    slot_uri = sv.get_slot(verb).slot_uri
     if not slot_uri:
-        raise VerbShapeError(f"verb slot {verb!r}: carried_by slot {slot_name!r} has no slot_uri")
+        raise VerbShapeError(f"verb slot {verb!r} has no slot_uri")
     return slot_uri
 
 
@@ -181,7 +172,8 @@ def _shape_name(verb: str) -> str:
     return "VerbPairs" + "".join(part.capitalize() for part in verb.split("_")) + "Shape"
 
 
-def _render_shape(entry: VerbPairs, class_curies: list[str]) -> str:
+def render_shape(entry: VerbPairs, class_curies: list[str]) -> str:
+    """The SHACL text of one verb's shape; ``class_curies`` are the classes that count as a resolved record."""
     known = ", ".join(class_curies)
     if entry.pairs:
         allowed = " ||\n                        ".join(f"(?s = {s} && ?o = {o})" for s, o in entry.pairs)
@@ -232,7 +224,7 @@ def _render_shape(entry: VerbPairs, class_curies: list[str]) -> str:
 
 def render(entries: list[VerbPairs], sv: SchemaView) -> str:
     class_curies = sorted(record_classes(sv).values())
-    body = "\n".join(_render_shape(entry, class_curies) for entry in entries)
+    body = "\n".join(render_shape(entry, class_curies) for entry in entries)
     return _HEADER + "\n" + body
 
 

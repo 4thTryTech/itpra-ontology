@@ -175,8 +175,7 @@ def _deterministic_shacl_ignored_properties():
     ``URIRef`` and hands ``list(that_set)`` straight to ``rdflib.collection.Collection`` — which encodes
     list membership *and order* as real ``rdf:first``/``rdf:rest`` triples. Python randomises ``str``
     hashing per process by default, so for any class with more than one ignored property (``skos:Concept``,
-    the class every one of this schema's 13 term subclasses shares, is one: it picks up ``qa`` from ``NFR``
-    among others) the list's element order — not just pyoxigraph's blank-node canonicalisation of it —
+    the class every one of this schema's 13 term subclasses shares, is one) the list's element order — not just pyoxigraph's blank-node canonicalisation of it —
     varies from run to run. Confirmed empirically: pinning ``PYTHONHASHSEED`` made the
     raw generator output stable; sorting here removes the dependency on that environment variable instead
     of relying on it.

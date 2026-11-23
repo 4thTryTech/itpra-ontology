@@ -3,7 +3,7 @@
 [`REGISTER.md`](REGISTER.md) is the contract (ADR 0042 D1): every linter rule id mapped to one enforcement
 mechanism, and every rule the shapes add beyond the linter, grouped into the shape files below. How a shape
 file is loaded, the convention a rule-bearing shape follows, the fixture format and `itpra-onto validate`
-are `../src/itpra_onto/shacl.py` and `../src/itpra_onto/fixtures.py`; `shacl.py`'s module docstring is the
+are `../shacl.py` and `../fixtures.py`; `shacl.py`'s module docstring is the
 full convention and [`../README.md`](../../../README.md)'s "Validation" section the shorter tour. Read both before
 adding a shape file here.
 
@@ -12,9 +12,8 @@ adding a shape file here.
 | Shape file | Fixture directory | Mechanism | Targets |
 |---|---|---|---|
 | `structural.ttl` | `../fixtures/structural/` | SHACL Core | `t1`, `inferred` |
-| `crossfield.ttl` | `../fixtures/crossfield/` | SHACL-SPARQL | `t1`, `req/*` |
-| `requirements.ttl` | `../fixtures/requirements/` | mixed Core/SPARQL; loaded only with an `[overlay]` | `req/*` |
-| `generated/verb-pairs.ttl` | `../fixtures/structural/B-22-*.yaml` | **generated** by `itpra-onto gen-verb-shapes` from the schema's `itpra_verb` annotations (rule `B-22`); never edit by hand — `gen-verb-shapes --check` detects drift | `t1`, `req/*` |
+| `crossfield.ttl` | `../fixtures/crossfield/` | SHACL-SPARQL | `t1` |
+| `generated/verb-pairs.ttl` | `../fixtures/structural/B-22-*.yaml` | **generated** by `itpra-onto gen-verb-shapes` from the schema's `itpra_verb` annotations (rule `B-22`); never edit by hand — `gen-verb-shapes --check` detects drift | `t1` |
 
 Ownership is disjoint (ADR 0042 D2): each rule id has a shape in exactly one file. `REGISTER.md`'s "Counts"
 section holds the per-file and per-mechanism arithmetic; `itpra-onto parity` parses that file at run time
@@ -29,16 +28,14 @@ positive, count-1 fixture proving the rule fires, plus a `count: 0` clean-case f
 mutation that deliberately does *not* trigger it (`fixtures.py`'s module docstring has the grammar; e.g.
 `crossfield/B-13.yaml` and `B-13-emit-guard.yaml` — one exercises the emitter's `source`-grammar guard, the
 other a legal-but-unpadded `source` that stays silent). A fixture for a rule enforced before emission
-(`type-unknown`, `verb-unknown`, `relates-to-malformed`, `req-link-malformed`, …) expects the synthetic
+(`type-unknown`, `verb-unknown`, `relates-to-malformed`) expects the synthetic
 `rule: emit-error` finding and names its guard with `expect.emit_error`; `itpra_onto.parity` recovers the
 real rule id from the fixture's filename, stripping a trailing `-emit-guard`.
 
 Only `REGISTER.md` rows marked mechanism `core` or `sparql` get a shape here. `generated` rows are closed
-before emission by the authoring schema; `python` rows stay in code — `relates-to-malformed` is an
-emit-time `EmitError` raised by `emit.py`'s `_verb_edges` and is proven by a fixture, not by a shape. One
-rule may be closed both ways: `B-4` (`met_by`/`verified_by` non-empty) fails `validate --authoring` *and*
-has a `sh:minCount 1` shape in `requirements.ttl`, so a record that bypasses the authoring check is still
-caught in the graph (see [`../fixtures/requirements/README.md`](../fixtures/requirements/README.md)).
+before emission by the authoring schema; `emit` rows are refused by the emitter — `relates-to-malformed` is
+an `EmitError` raised by `emit.py`'s `_verb_edges` and is proven by a fixture, not by a shape; `python` rows
+stay in code.
 
 ## Before adding a shape here
 

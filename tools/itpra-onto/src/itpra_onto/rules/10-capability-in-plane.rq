@@ -2,7 +2,7 @@
 #
 # Roll-up: every Capability is `groupedBy` a Domain, and every Domain is `groupedBy` a Plane
 # (grouped_by cardinalities: Capability -> Domain and Domain -> Plane are both 1:1). This rule flattens
-# the two-hop path onto a direct `itpra-o:inPlane` edge so a consumer does not have to know the
+# the two-hop path onto a direct `itpra-o:inPlane` edge so a query does not have to know the
 # intermediate Domain exists. Reads the asserted `t1` graph only. No reasoner: a plain property-path
 # join, run once, in this stated order (ADR 0041 D4).
 #

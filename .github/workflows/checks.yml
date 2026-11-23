@@ -52,7 +52,7 @@ jobs:
           uv run --project tools/itpra-onto itpra-onto gen-prefixes --check
           uv run --project tools/itpra-onto itpra-onto gen-verb-shapes --check
           uv run --project tools/itpra-onto itpra-onto gen-artifacts
-      - name: The pipeline's own tests (overlay tests are skipped without an [overlay])
+      - name: The pipeline's own tests
         run: uv run --project tools/itpra-onto pytest -q tools/itpra-onto/tests
       - name: Build the canonical RDF output (no store)
         run: uv run --project tools/itpra-onto itpra-onto build --no-store
@@ -60,7 +60,7 @@ jobs:
         run: uv run --project tools/itpra-onto itpra-onto build --check
       - name: SHACL-validate the emitted graphs (any sh:Violation fails; a sh:Warning is advisory)
         run: uv run --project tools/itpra-onto itpra-onto validate --json
-      - name: Lint and shapes agree (the ontology's own lint against the shapes, real tree and fixture by fixture)
+      - name: Linter and shapes agree (real tree and fixture by fixture)
         run: |
           uv run --project tools/itpra-onto itpra-onto parity
           uv run --project tools/itpra-onto itpra-onto parity --fixtures

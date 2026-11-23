@@ -18,7 +18,7 @@ repository's Releases page, each with its source archive and `sha256`.
 | `terms/` | The vocabulary, split by kind and service domain: `domains-*`, `capabilities-*`, `functions-*`, `personas-*`, `journeys-*`, `workflows-*` and the shared concept files ([ADR 0007](decisions/0007-term-records-files-and-aliases.md)) |
 | `decisions/` | The decision records that shape the vocabulary, numbered from 0001 in reading order ([index](decisions/README.md)) |
 | `tools/` · `tests/` | The checks that run in CI |
-| `tools/itpra-onto/` | The ontology-as-code pipeline: the vocabulary projected to RDF, validated with SHACL and built into canonical artefacts ([ADR 0041](decisions/0041-the-rdf-projection-roles-modelling-and-derivation.md), [ADR 0042](decisions/0042-validation-parity-register-shapes-fixtures-and-the-parity-check.md), [ADR 0043](decisions/0043-builds-artefacts-and-the-consumer-overlay.md); [its README](tools/itpra-onto/README.md)) |
+| `tools/itpra-onto/` | The ontology-as-code pipeline: the vocabulary projected to RDF, validated with SHACL and built into canonical artefacts ([ADR 0041](decisions/0041-the-rdf-projection-roles-modelling-and-derivation.md), [ADR 0042](decisions/0042-validation-parity-register-shapes-fixtures-and-the-parity-check.md), [ADR 0043](decisions/0043-builds-artefacts-and-layers.md); [its README](tools/itpra-onto/README.md)) |
 
 ## Reading the vocabulary
 

@@ -22,7 +22,7 @@ from itpra_onto.config import load_config
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 # The 13 Term subclasses (`schema.yaml` `types:`, schema/itpra.linkml.yaml) that must appear
-# as JSON Schema $defs, independent of the RequirementRegistry / requirement classes.
+# as JSON Schema $defs.
 TERM_SUBCLASSES = {
     "Capability",
     "Concept",
@@ -96,15 +96,14 @@ def generated_schema_dir(tmp_path_factory: pytest.TempPathFactory) -> Path:
 
 
 # ---------------------------------------------------------------------------------------------------
-# (b) JSON Schema contains the 13 Term subclasses and RequirementRegistry
+# (b) JSON Schema contains the 13 Term subclasses
 
 
-def test_json_schema_contains_term_subclasses_and_requirement_registry(generated_schema_dir: Path):
+def test_json_schema_contains_term_subclasses(generated_schema_dir: Path):
     data = json.loads((generated_schema_dir / gen_artifacts.JSON_SCHEMA_FILENAME).read_text(encoding="utf-8"))
     defs = data["$defs"]
     missing = TERM_SUBCLASSES - defs.keys()
     assert not missing, f"missing Term subclasses in $defs: {missing}"
-    assert "RequirementRegistry" in defs
 
 
 def test_json_schema_is_sorted_keys_with_lf(generated_schema_dir: Path):

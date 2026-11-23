@@ -57,7 +57,7 @@ def clean_dataset(config: Config) -> ox.Dataset:
 @pytest.fixture(scope="module")
 def crossfield_dir(tmp_path_factory: pytest.TempPathFactory) -> Path:
     """A shapes directory holding ONLY crossfield.ttl, so this file's findings are isolated from the
-    structural/requirements shape files that share shapes/."""
+    other shape files that share shapes/."""
     directory = tmp_path_factory.mktemp("crossfield-shapes")
     shutil.copy(CROSSFIELD_TTL, directory / CROSSFIELD_TTL.name)
     return directory
@@ -220,20 +220,6 @@ def test_pref_label_unique_allows_one_label_per_language(config: Config, clean_d
     assert report.findings == ()
 
 
-@pytest.mark.overlay  # needs the consumer's registries
-def test_b8_fires_on_a_requirement_subject_too(config: Config, clean_dataset: ox.Dataset, crossfield_shapes: ox.Dataset):
-    """B-8 targets skos:Concept, so FR/NFR subjects in req/* are covered as well as t1 terms."""
-    req_graph = next(q.graph_name for q in clean_dataset if isinstance(q.graph_name, ox.NamedNode) and q.graph_name.value.startswith(config.iri.graph_ns + "req/"))
-    subject = next(q.subject for q in clean_dataset if q.graph_name == req_graph and q.predicate == emit.RDF_TYPE and q.object == emit.SKOS_CONCEPT)
-    dataset = _copy(clean_dataset)
-    dataset.add(ox.Quad(subject, ox.NamedNode(emit.SKOS + "prefLabel"), ox.Literal("Injected Label", language="en"), req_graph))
-    dataset.add(ox.Quad(subject, ox.NamedNode(emit.SKOS + "altLabel"), ox.Literal("INJECTED label", language="en"), req_graph))
-    report = shacl.validate(dataset, crossfield_shapes, config=config)
-    found = _findings(report, "B-8")
-    assert [f.focus for f in found] == [subject.value]
-    assert "INJECTED label" in found[0].message
-
-
 # ---------------------------------------------------------------------------------------------------
 # shape-file conventions
 
@@ -275,7 +261,7 @@ def test_every_sparql_constraint_uses_the_injected_prefixes_and_names_the_value(
         assert "{?value}" in message and "{$this}" in message, message
         assert "$this" in select and "?value" in select
         assert "VALUES" not in select.upper().replace("?VALUE", "")  # SHACL-SPARQL forbids VALUES
-        assert "GRAPH" not in select.upper()  # validate() flattens t1 + req/* + inferred into one graph
+        assert "GRAPH" not in select.upper()  # validate() flattens the selected graphs into one
 
 
 def test_no_prefix_declarations_or_base_iri_in_the_shape_file(config: Config):

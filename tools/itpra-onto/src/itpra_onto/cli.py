@@ -15,15 +15,18 @@ Commands:
   is advisory, ADR 0042 D3).
 * ``build [--out DIR] [--no-store] [--check]`` — the canonical RDF output and the disposable Oxigraph store
   load (see ``itpra_onto.build``).
-* ``parity [--json] [--fixtures] [--sub SUB ...]`` — compares the consumer's linter's ``--json`` findings
-  with pySHACL's over the comparable (``core``/``sparql``) rule ids, either over the real tree (default) or
-  fixture by fixture (``--fixtures``); exit 0 only when the symmetric difference (real tree) or the failure
-  list (``--fixtures``) is empty (see ``itpra_onto.parity``; needs an ``[overlay]``).
+* ``parity [--json] [--fixtures]`` — compares the linter's findings (``itpra_onto.lint``) with pySHACL's
+  over the comparable (``core``/``sparql``) rule ids, either over the real tree (default) or fixture by
+  fixture (``--fixtures``); exit 0 only when the symmetric difference (real tree) or the failure list
+  (``--fixtures``) is empty (see ``itpra_onto.parity``).
 * ``release`` — not implemented yet: it refuses while ``itpra-onto.toml``'s ``[iri] base`` has a reserved
   ``.invalid`` host (exit 1) and otherwise exits 2.
 
 ``validate`` and ``parity`` report an input the emitter refuses as an ``emit-error`` finding (exit 1), never
 a traceback.
+
+:func:`main` takes ``layers`` (:mod:`itpra_onto.layers`): ``build`` and ``validate`` then include each
+layer's graphs, rules and shapes.
 """
 
 from __future__ import annotations
@@ -36,6 +39,7 @@ from collections.abc import Sequence
 from pathlib import Path
 
 from itpra_onto.config import CONFIG_PATH_ENV_VAR, is_placeholder_base_iri, load_config
+from itpra_onto.layers import Layer
 
 NOT_IMPLEMENTED_EXIT = 2
 REFUSAL_EXIT = 1
@@ -63,7 +67,7 @@ def _cmd_build(args: argparse.Namespace) -> int:
 
     out_dir = Path(args.out) if args.out else None
     if args.check:
-        diffs = build_module.check(out_dir=out_dir)
+        diffs = build_module.check(out_dir=out_dir, layers=args.layers)
         if diffs:
             print(
                 "build --check: dist/rdf/base is STALE or missing - run `itpra-onto build`",
@@ -75,7 +79,7 @@ def _cmd_build(args: argparse.Namespace) -> int:
         print("build --check: dist/rdf/base is up to date")
         return 0
 
-    report = build_module.build(out_dir=out_dir, load_store=not args.no_store)
+    report = build_module.build(out_dir=out_dir, load_store=not args.no_store, layers=args.layers)
     _print_build_report(report)
     return 0
 
@@ -88,23 +92,21 @@ def _cmd_validate(args: argparse.Namespace) -> int:
         return authoring.run(quiet=args.quiet)
 
     # Imported lazily: pyshacl/rdflib are slow to import and the other subcommands do not need them.
-    from itpra_onto import emit, rules, shacl
+    from itpra_onto import emit, layers as layers_module, shacl
 
     config = load_config()
     shapes_dir = Path(args.shapes) if args.shapes else shacl.SHAPES_DIR
 
     try:
-        inputs = emit.load_inputs(config)
-        asserted = emit.emit(inputs, config)
+        assembled = layers_module.assemble(config, args.layers)
     except emit.EmitError as exc:
         # An input the emitter refuses is a finding (rule `emit-error`, on the record the error names),
         # reported like any other and failing the run — never a traceback.
         finding = shacl.emit_error_finding(exc, config)
         report = shacl.ValidationReport(conforms=False, findings=(finding,), results_text=finding.message, graphs=())
     else:
-        dataset = rules.apply_rules(asserted, config).dataset
-        shapes = shacl.load_shapes(shapes_dir, config=config)
-        report = shacl.validate(dataset, shapes, config=config)
+        shapes = shacl.load_shapes(shapes_dir, config=config, extra_dirs=layers_module.shapes_dirs(args.layers))
+        report = shacl.validate(assembled.dataset, shapes, config=config)
 
     violations = sum(1 for f in report.findings if f.severity == "Violation")
 
@@ -182,7 +184,7 @@ def _cmd_parity(args: argparse.Namespace) -> int:
             parity.print_fixture_report(verdicts)
         return 0 if not failures else VALIDATE_FAILED_EXIT
 
-    comparison = parity.run_real_tree(subs=args.sub)
+    comparison = parity.run_real_tree()
     if args.json:
         print(json.dumps(parity.comparison_as_dict(comparison), ensure_ascii=False))
     else:
@@ -219,7 +221,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     build = subparsers.add_parser(
         "build",
-        help="emit RDF from the vocabulary and any configured registries, write dist/rdf/, load the disposable store",
+        help="emit RDF from the vocabulary, write dist/rdf/, load the disposable store",
     )
     build.add_argument("--out", metavar="DIR", help="write into DIR instead of dist/rdf/")
     build.add_argument("--no-store", action="store_true", help="skip loading the Oxigraph store")
@@ -237,8 +239,7 @@ def build_parser() -> argparse.ArgumentParser:
     validate.add_argument(
         "--authoring",
         action="store_true",
-        help="validate every term file of the vocabulary and every requirements registry against "
-        "schema/itpra.linkml.yaml",
+        help="validate every term file of the vocabulary against schema/itpra.linkml.yaml",
     )
     validate.add_argument("--quiet", action="store_true", help="with --authoring: print failing files only")
     validate.add_argument(
@@ -281,7 +282,7 @@ def build_parser() -> argparse.ArgumentParser:
     gen_artifacts.set_defaults(func=_cmd_gen_artifacts)
     lint = subparsers.add_parser(
         "lint",
-        help="lint the vocabulary with the ontology's own rules (itpra_onto.lint; the register's core-home rows); "
+        help="lint the vocabulary (itpra_onto.lint; the rule ids of the register's Table A); "
         "exit 1 on any error",
     )
     lint.add_argument("--root", help="the vocabulary's directory (default: [paths] ontology_dir)")
@@ -289,22 +290,13 @@ def build_parser() -> argparse.ArgumentParser:
     lint.set_defaults(func=_cmd_lint)
     parity = subparsers.add_parser(
         "parity",
-        help="compare a linter's findings with pySHACL's over the comparable (core/sparql) rule ids: without an "
-        "[overlay] the ontology's own lint over the core rules; with one, the consumer's linter ([overlay] "
-        "linter_script) over every comparable rule — over the real tree (default) or fixture by fixture (--fixtures)",
+        help="compare the linter's findings with pySHACL's over the comparable (core/sparql) rule ids — over the "
+        "real tree (default) or fixture by fixture (--fixtures)",
     )
     parity.add_argument(
         "--fixtures",
         action="store_true",
-        help="compare fixture by fixture (fixtures/**/*.yaml, expect.count >= 1) instead of the real tree; "
-        "--sub is ignored in this mode",
-    )
-    parity.add_argument(
-        "--sub",
-        action="append",
-        metavar="SUB",
-        help="restrict the real-tree comparison to this registry (repeatable); default: every registry the "
-        "overlay's requirements_glob matches (ignored with --fixtures)",
+        help="compare fixture by fixture (fixtures/**/*.yaml, expect.count >= 1) instead of the real tree",
     )
     parity.add_argument(
         "--json",
@@ -319,9 +311,10 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main(argv: Sequence[str] | None = None) -> int:
+def main(argv: Sequence[str] | None = None, *, layers: Sequence[Layer] = ()) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
+    args.layers = tuple(layers)
     if args.config:
         os.environ[CONFIG_PATH_ENV_VAR] = str(Path(args.config).resolve())
     return args.func(args)

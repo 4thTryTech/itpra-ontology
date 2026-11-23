@@ -1,0 +1,14 @@
+# Test layer rule — noted-term: the inverse of a note's `about` edge, for terms the vocabulary declares.
+# Reads the layer's own `notes` graph and the vocabulary's `t1` graph by name.
+
+CONSTRUCT {
+  ?term <https://example.org/layer#notedBy> ?note .
+}
+WHERE {
+  GRAPH itpra-g:notes {
+    ?note <https://example.org/layer#about> ?term .
+  }
+  GRAPH itpra-g:t1 {
+    ?term a ?type .
+  }
+}

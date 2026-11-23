@@ -1,0 +1,7 @@
+# Input of the test layer (tests/test_layers.py): one note per record, each about a term of the vocabulary.
+- id: NOTE-1
+  about: CAP-FND-1
+  text: A note about a capability.
+- id: NOTE-2
+  about: FUNC-version-control
+  text: A note about a function.

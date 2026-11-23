@@ -10,12 +10,10 @@ module returns — never by writing a literal IRI of its own. A config file
 missing any ``[iri]`` key fails loudly (:class:`ConfigError`) rather than
 silently falling back to a value baked into this module.
 
-``[paths]`` locates the vocabulary and the output directories; an optional
-``[overlay]`` names what a consumer layers on the vocabulary
-(:class:`OverlayConfig`, ADR 0043 D1). :func:`is_placeholder_base_iri` is the
-check ``itpra-onto release`` runs first: the shipped ``[iri] base`` is the
-real base IRI (ADR 0004), and ``release`` refuses a base whose host is a
-reserved ``.invalid`` name.
+``[paths]`` locates the vocabulary and the output directories.
+:func:`is_placeholder_base_iri` is the check ``itpra-onto release`` runs
+first: the shipped ``[iri] base`` is the real base IRI (ADR 0004), and
+``release`` refuses a base whose host is a reserved ``.invalid`` name.
 """
 
 from __future__ import annotations
@@ -29,8 +27,8 @@ from urllib.parse import urlsplit
 CONFIG_FILENAME = "itpra-onto.toml"
 
 # The file shipped beside a checkout's pyproject.toml (src/itpra_onto/config.py -> src/itpra_onto -> src ->
-# the project). An installed package has no such file: a consumer keeps its own itpra-onto.toml in its
-# overlay project and runs from there, or names it (see find_config_path).
+# the project). An installed package has no such file: the configuration is then found in the working
+# directory or named explicitly (see find_config_path).
 DEFAULT_CONFIG_PATH = Path(__file__).resolve().parents[2] / CONFIG_FILENAME
 
 # Names the configuration file explicitly; `itpra-onto --config PATH` sets it for one invocation.
@@ -71,7 +69,7 @@ class IriConfig:
 
     @property
     def id_ns(self) -> str:
-        """``<base><id_path>`` — one IRI per term/requirement record (ADR 0004)."""
+        """``<base><id_path>`` — one IRI per term record (ADR 0004)."""
         return self.base + self.id_path
 
     @property
@@ -99,20 +97,7 @@ class PathsConfig:
     ontology_dir: str
     dist_dir: str
     store_dir: str
-    repo_root: str = "../.."  # the consumer's repository root: every input lies under it, labels are relative to it
-
-
-@dataclass(frozen=True)
-class OverlayConfig:
-    """What a *consumer* layers on the vocabulary (ADR 0043 D1): the requirement registries that become
-    ``req/<X>`` graphs (``X`` is the first path component below the glob's fixed prefix), the consumer's own
-    linter that ``parity`` compares the shapes against, and directory names the input-path guard refuses
-    beyond the built-in ones. The core builds ``schema`` + ``t1`` + ``inferred`` from the vocabulary alone;
-    everything that needs an overlay runs only when one is configured."""
-
-    requirements_glob: str | None = None
-    linter_script: str | None = None
-    excluded_dirs: tuple[str, ...] = ()
+    repo_root: str = "../.."  # the repository root: every input lies under it, labels are relative to it
 
 
 @dataclass(frozen=True)
@@ -126,11 +111,6 @@ class Config:
     paths: PathsConfig
     python: PythonConfig
     config_path: Path
-    overlay: OverlayConfig | None = None
-
-    @property
-    def has_overlay(self) -> bool:
-        return self.overlay is not None
 
     @property
     def repo_root(self) -> Path:
@@ -141,8 +121,7 @@ class Config:
 
 def find_config_path() -> Path:
     """The configuration file in effect: ``ITPRA_ONTO_CONFIG`` when set; else ``itpra-onto.toml`` in the
-    working directory or one of its parents (a consumer's overlay project); else the file shipped beside a
-    checkout's ``pyproject.toml``. :class:`ConfigError` when none exists."""
+    working directory or one of its parents; else the file shipped beside a checkout's ``pyproject.toml``. :class:`ConfigError` when none exists."""
     override = os.environ.get(CONFIG_PATH_ENV_VAR)
     if override:
         return Path(override)
@@ -167,8 +146,7 @@ def load_config(path: Path | str | None = None) -> Config:
     Every ``[iri]`` key is required — there is no code-level default for the
     base IRI or the paths it is built from (ADR 0004); a missing key raises
     :class:`ConfigError` with the file and key named. ``[paths]`` and
-    ``[python]`` have code defaults; ``[overlay]`` is optional and ``None``
-    when absent.
+    ``[python]`` have code defaults.
     """
     config_path = Path(path) if path is not None else find_config_path()
     with config_path.open("rb") as fh:
@@ -177,19 +155,6 @@ def load_config(path: Path | str | None = None) -> Config:
     iri_raw = raw.get("iri", {})
     paths_raw = raw.get("paths", {})
     python_raw = raw.get("python", {})
-    overlay_raw = raw.get("overlay")
-    if overlay_raw is None and paths_raw.get("requirements_glob"):
-        # Pre-split layout: `requirements_glob` under [paths] is read as an overlay with that one key.
-        overlay_raw = {"requirements_glob": paths_raw["requirements_glob"]}
-    overlay = (
-        OverlayConfig(
-            requirements_glob=overlay_raw.get("requirements_glob"),
-            linter_script=overlay_raw.get("linter_script"),
-            excluded_dirs=tuple(str(name) for name in overlay_raw.get("excluded_dirs", ())),
-        )
-        if isinstance(overlay_raw, dict)
-        else None
-    )
 
     return Config(
         iri=IriConfig(
@@ -204,7 +169,6 @@ def load_config(path: Path | str | None = None) -> Config:
             store_dir=paths_raw.get("store_dir", ".store"),
             repo_root=paths_raw.get("repo_root", "../.."),
         ),
-        overlay=overlay,
         python=PythonConfig(pinned=python_raw.get("pinned", "3.12")),
         config_path=config_path,
     )

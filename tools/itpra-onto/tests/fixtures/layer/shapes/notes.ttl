@@ -1,0 +1,10 @@
+# Shapes of the test layer (tests/test_layers.py), in the layout of the pipeline's own shapes directory:
+# no @prefix block, one named node per rule carrying itpra-o:ruleId.
+
+<https://example.org/layer#NoteHasTextShape>
+    a sh:PropertyShape ;
+    sh:targetClass <https://example.org/layer#Note> ;
+    sh:path rdfs:comment ;
+    sh:minCount 1 ;
+    sh:severity sh:Violation ;
+    itpra-o:ruleId "note-text-missing" .

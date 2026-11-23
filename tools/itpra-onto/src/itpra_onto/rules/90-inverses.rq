@@ -3,13 +3,9 @@
 # No named inverse property is minted for any of the 17 relationship verbs (or for any other asserted
 # predicate). SPARQL inverse property paths (e.g. `^itpra-o:supports`) already traverse any edge
 # backwards without a materialised triple, and each minted inverse would be a permanent published IRI
-# that the pipeline would then owe forever — a cost not worth paying without a demonstrated consumer
-# need. `itpra-o:meets` (rule 40) is the ONE exception: it is not a general inverse of a verb, it is a
-# specific materialisation a consumer's traceability check needs (reading the `Meets:` lines of its
-# capability documents against the authored `metBy` edges — ADR 0042 D7) and ADR 0041 D4 names it
-# explicitly as the allowed one.
+# that the pipeline would then owe forever — a cost not worth paying without a demonstrated need.
 #
 # This file intentionally contains no CONSTRUCT query. The runner (`itpra_onto.rules.apply_rules`)
 # detects that and skips it, producing zero triples — the slot exists in the manifest, in order, so a
 # future rule can be dropped in here without renumbering anything, but it stays empty until a
-# demonstrated consumer need is written down.
+# demonstrated need is written down.

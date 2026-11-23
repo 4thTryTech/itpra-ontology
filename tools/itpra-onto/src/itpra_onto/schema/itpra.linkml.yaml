@@ -4,11 +4,9 @@
 #
 # What this file describes
 #   The YAML exactly as it is authored, validated unchanged:
-#     * every terms/*.yaml, entities.yaml and relationships.yaml in the ontology directory ([paths]
-#       ontology_dir) — a BARE top-level list of term records, validated record by record against the
-#       class named by the record's `type` (see "Validation" below);
-#     * every one of the consumer's requirement registries ([overlay] requirements_glob) — a mapping
-#       with one key, `requirements:`, validated against the tree_root `RequirementRegistry`.
+#     every terms/*.yaml, entities.yaml and relationships.yaml in the ontology directory ([paths]
+#     ontology_dir) — a BARE top-level list of term records, validated record by record against the
+#     class named by the record's `type` (see "Validation" below).
 #   It is NOT the published RDF shape. The emitter pivots each `relates_to` {rel, target} entry onto one
 #   predicate per verb (ADR 0041 D2); that is why the 17 verbs are also declared below as slots, carrying
 #   the per-verb metadata the emitter and the SHACL shapes read (ADR 0008).
@@ -17,7 +15,7 @@
 #   schema.yaml              : the `types:` and `relationships:` value lists, the id pattern.
 #   generated/itpra-enums.linkml.yaml : EntityTypeEnum + RelationshipVerbEnum, GENERATED from those two
 #                              lists by `itpra-onto gen-enums` — never edit by hand.
-#   THIS file                : record shape, per-type refinement (slot_usage), requirement classes,
+#   THIS file                : record shape, per-type refinement (slot_usage),
 #                              predicate mappings (slot_uri / class_uri), and per-verb
 #                              domain / range / cardinality / inverse (the `itpra_verb` annotations).
 #   A test asserts the `id` pattern below equals schema.yaml's `id.pattern`.
@@ -26,8 +24,8 @@
 #   Nothing below is a literal IRI under the base. itpra-onto.toml [iri] (base / id_path / onto_path /
 #   graph_path) is the single source; `itpra-onto release` refuses to run while the configured base is a
 #   placeholder (nothing may be published under one). Concretely:
-#     itpra:    <base>id/     one IRI per term / requirement record                — generated,
-#     itpra-o:  <base>onto#   the schema vocabulary: verb properties, bannedLabel, statement, …  see
+#     itpra:    <base>id/     one IRI per term record                               — generated,
+#     itpra-o:  <base>onto#   the schema vocabulary: verb properties, bannedLabel, …          see
 #     itpra-g:  <base>graph/  named graphs                                          — generated/itpra-prefixes.linkml.yaml
 #   This schema imports that generated fragment instead of declaring the three prefixes itself. Its own
 #   `id:` still has to be a literal LinkML requires directly on this file — schema/README.md and
@@ -35,7 +33,7 @@
 #   instead of being a fourth generated fragment.
 #
 # Language
-#   Every label and definition (`term`, `definition`, `aliases`, `deprecated`, `statement`) is English.
+#   Every label and definition (`term`, `definition`, `aliases`, `deprecated`) is English.
 #   The emitter tags them "@en". The YAML carries no language tag and gains none.
 #
 # Slot names `aliases` / `deprecated`
@@ -52,8 +50,7 @@
 #   slot_usage pins the value with `pattern: "^<value>$"` (e.g. `type: Function` -> Function); a record
 #   whose `type` names no subclass is validated against `Term`, which fails on the enum. The pin is a
 #   pattern, not `equals_string`, because gen-shacl 1.11.1 refuses equals_string on an enum-ranged
-#   slot (it emits sh:in for the enum plus sh:pattern for the pin instead). Registry records pin
-#   `type: FR|NFR` the same way.
+#   slot (it emits sh:in for the enum plus sh:pattern for the pin instead).
 #   `linkml-validate --target-class Term <file>` on its own checks the shared record shape only
 #   (JSON Schema validates the named class, not its descendants).
 #   Constraints that JSON Schema can check are declared natively (pattern, required, enum,
@@ -66,9 +63,8 @@
 #   annotations:
 #     itpra_verb:
 #       value:
-#         carried_by: relates_to | slot:<name>     # where the YAML authors the edge: a relates_to entry
-#                                                   # with this `rel`, or a named slot on a record
-#                                                   # (met_by / verified_by on requirements; qa on NFR)
+#         carried_by: relates_to                   # where the YAML authors the edge: a relates_to entry
+#                                                   # with this `rel`
 #         evidence:   data | meta-only | definition  # data = domain/range read off instance records;
 #                                                   # meta-only = zero instances, pairs taken from the
 #                                                   # entities.yaml meta-edges; definition = zero
@@ -91,7 +87,8 @@
 #         meta_edges: ["<ENTITY_TYPE> -> <ENTITY_TYPE>", …]  # entities.yaml relates_to, verbatim
 #         inverse_name: null                       # ADR 0041 D4: no named inverses minted
 #   <Class> is a LinkML class name of this schema, or — only where no `type` value (hence no class)
-#   exists — an UPPER_SNAKE EntityType id (SERVICE, ADR, ITPRA_TIER, OPERATING_MODEL, TENANT).
+#   exists — an UPPER_SNAKE EntityType id (SERVICE, ADR, ITPRA_TIER, OPERATING_MODEL, TENANT, FR, NFR,
+#   REQUIREMENT).
 #   Keys are never `on`/`yes`/`no` (YAML 1.1 booleans).
 #
 # ---- Annotation grammar: classes ---------------------------------------------------------------------
@@ -107,8 +104,7 @@ name: itpra
 title: ITPRA ontology — authoring schema
 description: >-
   LinkML description of the ITPRA ontology's authoring shape (the term records in the ontology
-  directory) and a consumer's requirement registries. The base IRI is a configuration item
-  (itpra-onto.toml [iri], ADR 0004).
+  directory). The base IRI is a configuration item (itpra-onto.toml [iri], ADR 0004).
 version: 0.1.0
 prefixes:
   linkml: https://w3id.org/linkml/
@@ -192,36 +188,6 @@ slots:
     range: Term
     slot_uri: itpra-o:target
     description: Id of another record (a reference, not an inlined record).
-
-  # ---- requirement registry fields ----
-  statement:
-    required: true
-    slot_uri: itpra-o:statement
-    broad_mappings:
-      - skos:definition
-    description: One-line requirement statement (English); itpra-o:statement ⊑ skos:definition.
-  requirement_target:
-    alias: target
-    slot_uri: itpra-o:target
-    description: >-
-      Measurable target. Null (`~`) at T1 on every record; omitted on emit when null. The YAML key is
-      `target` (this slot's alias); a distinct slot name avoids clashing with RelatesTo.target.
-  qa:
-    range: QualityAttribute
-    slot_uri: itpra-o:categorizedAs
-    description: The NFR's quality attribute id — the instance mechanism of the `categorized_as` verb.
-  requirements:
-    multivalued: true
-    range: Requirement
-    inlined: true
-    inlined_as_list: true
-    description: The registry's records (FR or NFR, dispatched on `type`).
-  requirement_type:
-    alias: type
-    required: true
-    range: RequirementTypeEnum
-    slot_uri: rdf:type
-    description: FR or NFR. The YAML key is `type` (this slot's alias).
 
   # ---- the 17 relationship verbs (published shape: one predicate each; split IRI) ----
   # Property IRI itpra-o:<camelCase>; the RelationshipType catalogue record stays itpra:<snake_case>.
@@ -388,19 +354,16 @@ slots:
     annotations:
       itpra_verb:
         value:
-          carried_by: slot:met_by
-          evidence: data
-          domain: [FR, NFR]
+          carried_by: relates_to
+          evidence: meta-only
+          domain: [FR, NFR, REQUIREMENT]
           range: [Capability]
           pairs:
-            - {subject: FR, object: Capability, count: 411}
-            - {subject: NFR, object: Capability, count: 372}
-          cardinality:
-            - {subject: FR, min: 1, max: null}
-            - {subject: NFR, min: 1, max: null}
-          observed:
-            - {subject: FR, records: 406, min: 1, max: 3}
-            - {subject: NFR, records: 166, min: 1, max: 7}
+            - {subject: FR, object: Capability, count: 0}
+            - {subject: NFR, object: Capability, count: 0}
+            - {subject: REQUIREMENT, object: Capability, count: 0}
+          cardinality: []
+          observed: []
           meta_edges:
             - "FR -> CAPABILITY"
             - "NFR -> CAPABILITY"
@@ -415,19 +378,16 @@ slots:
     annotations:
       itpra_verb:
         value:
-          carried_by: slot:verified_by
-          evidence: data
-          domain: [FR, NFR]
+          carried_by: relates_to
+          evidence: meta-only
+          domain: [FR, NFR, REQUIREMENT]
           range: [Journey]
           pairs:
-            - {subject: FR, object: Journey, count: 615}
-            - {subject: NFR, object: Journey, count: 277}
-          cardinality:
-            - {subject: FR, min: 1, max: null}
-            - {subject: NFR, min: 1, max: null}
-          observed:
-            - {subject: FR, records: 406, min: 1, max: 4}
-            - {subject: NFR, records: 166, min: 1, max: 3}
+            - {subject: FR, object: Journey, count: 0}
+            - {subject: NFR, object: Journey, count: 0}
+            - {subject: REQUIREMENT, object: Journey, count: 0}
+          cardinality: []
+          observed: []
           meta_edges:
             - "FR -> JOURNEY"
             - "NFR -> JOURNEY"
@@ -442,16 +402,14 @@ slots:
     annotations:
       itpra_verb:
         value:
-          carried_by: slot:qa
-          evidence: data
+          carried_by: relates_to
+          evidence: meta-only
           domain: [NFR]
           range: [QualityAttribute]
           pairs:
-            - {subject: NFR, object: QualityAttribute, count: 166}
-          cardinality:
-            - {subject: NFR, min: 1, max: 1}
-          observed:
-            - {subject: NFR, records: 166, min: 1, max: 1}
+            - {subject: NFR, object: QualityAttribute, count: 0}
+          cardinality: []
+          observed: []
           meta_edges:
             - "NFR -> QUALITY_ATTRIBUTE"
           inverse_name: null
@@ -779,63 +737,3 @@ classes:
       type: {pattern: "^RelationshipType$"}
       id:
         pattern: "^[a-z][a-z_]*$"      # lower_snake (schema.yaml id.conventions.RelationshipType); data holds
-
-  # ---- requirements registries ----
-  RequirementRegistry:
-    tree_root: true
-    description: >-
-      One registry file (functional.yaml or non-functional.yaml): a mapping with the single key
-      `requirements:` holding FR or NFR records.
-    slots: [requirements]
-  Requirement:
-    abstract: true
-    class_uri: itpra:REQUIREMENT
-    annotations: {entity_type_id: REQUIREMENT}
-    description: >-
-      A registry record {id, type, [qa,] statement, target, met_by, verified_by}. met_by and verified_by
-      are id references (to Capability and Journey records respectively, per the data).
-    slots: [id, requirement_type, statement, requirement_target, met_by, verified_by]
-    slot_usage:
-      met_by:
-        required: true
-        minimum_cardinality: 1
-        range: Capability
-        description: Capability ids that satisfy the requirement (closes against each capability's Meets).
-      verified_by:
-        required: true
-        minimum_cardinality: 1
-        range: Journey
-        description: Journey ids that demonstrate the requirement (closes against each journey's Verifies).
-  FR:
-    is_a: Requirement
-    class_uri: itpra:FR
-    annotations:
-      entity_type_id: FR
-      entity_type_note: >-
-        FR EntityType minted by ADR 0008 (3.16.0); REQUIREMENT is the generic kind.
-    slot_usage:
-      requirement_type: {pattern: "^FR$"}
-      id:
-        pattern: "^FR-[A-Z]+-[0-9]+$"   # FR-<DOMAIN>-<n>; all 405 records hold
-  NFR:
-    is_a: Requirement
-    class_uri: itpra:NFR
-    annotations: {entity_type_id: NFR}
-    slots: [qa]
-    slot_usage:
-      requirement_type: {pattern: "^NFR$"}
-      qa: {required: true}
-      id:
-        # NFR-<QA>-<n> or NFR-<X>_<QA>-<n> (<X> = a registry's own prefix); both canonical (ADR 0004).
-        # That the <QA> part equals `qa` spans two values — a SHACL-SPARQL / Python rule, not LinkML.
-        pattern: "^NFR-[A-Z][A-Z_]*-[0-9]+$"
-
-# -----------------------------------------------------------------------------------------------------
-enums:
-  RequirementTypeEnum:
-    description: >-
-      Registry record `type` values. Authored here (not generated): schema.yaml states them
-      only as rule text under external_registries.requirements.rules ("type is FR or NFR").
-    permissible_values:
-      FR: {}
-      NFR: {}

@@ -1,0 +1,11 @@
+# CQ5 (part 1) — capabilities with no `consumedBy` edge to any persona.
+#
+# Expected to be EMPTY: every Capability must be consumed by at least one Persona.
+
+SELECT ?cap
+WHERE {
+  GRAPH itpra-g:t1 {
+    ?cap a itpra:CAPABILITY .
+    FILTER NOT EXISTS { ?cap itpra-o:consumedBy ?persona }
+  }
+}

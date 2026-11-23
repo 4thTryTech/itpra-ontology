@@ -1,0 +1,12 @@
+# Positive control for cq-11: total skos:prefLabel triples in t1. Every term record has
+# exactly one (its `term` field); test_competency.py asserts this equals the total number of term
+# records, so a predicate typo cannot leave cq-11's "no duplicates" check vacuously true.
+
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+
+SELECT (COUNT(*) AS ?n)
+WHERE {
+  GRAPH itpra-g:t1 {
+    ?s skos:prefLabel ?label .
+  }
+}

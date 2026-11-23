@@ -4,11 +4,11 @@
 # for `itpra-onto parity`: `generated` rows get no shape or fixture on their own (shapes/README.md: only
 # REGISTER.md's rows marked mechanism core or sparql get a shape there) — but the --fixtures comparison needs
 # at least one emit-time-mapped fixture per shapes/REGISTER.md's "generated" family to exercise the parity
-# module's emit-error -> Table A id recovery (parity._nominal_rule_id), alongside relates-to-malformed.yaml.
+# module's emit-error -> Table A id recovery (parity.nominal_rule_id), alongside relates-to-malformed.yaml.
 # Rewriting
 # CAP-FND-1's own `type` to a value no Term subclass pins raises exactly one synthetic `emit-error` finding
 # on CAP-FND-1 (fixtures.run_fixture's own EmitError-catching convention, used by every other emit-time
-# guard's fixture in this directory); the consumer's linter, run against the same mutation, independently
+# guard's fixture in this directory); the linter, run against the same mutation, independently
 # reports its own `type-unknown` finding on CAP-FND-1 -- confirming both sides catch this defect, just under
 # different labels (the point of the parity check). `emit_error: EmitError` requires the finding to be
 # this guard's own EmitError (the base class; the message names the unpinned type).

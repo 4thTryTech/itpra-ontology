@@ -1,9 +1,9 @@
 """Tests for the canonical output and load (``itpra_onto.build``, ``itpra-onto build``; ADR 0041 D5, ADR 0043).
 
 Every test that needs real ontology content reads the REAL input files, exactly like
-``test_emit.py``/``test_rules.py``: nothing is ever written to the vocabulary or the registries. Alternative
-configs (store/dist isolation) are written to ``tmp_path`` only, always pointing ``ontology_dir``/
-``requirements_glob`` back at the real inputs so the emitted content itself is unaffected.
+``test_emit.py``/``test_rules.py``: nothing is ever written to the vocabulary. Alternative configs
+(store/dist isolation) are written to ``tmp_path`` only, always pointing ``ontology_dir`` back at the real
+inputs so the emitted content itself is unaffected.
 """
 
 from __future__ import annotations
@@ -24,7 +24,6 @@ from itpra_onto import emit, rules
 from itpra_onto.config import DEFAULT_CONFIG_PATH, Config, load_config
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-EXPECTED_SUB_PROJECTS = 11
 
 _DATE_RE = re.compile(r"20\d\d-\d\d-\d\d")
 _TIME_RE = re.compile(r"T\d\d:\d\d")
@@ -43,8 +42,8 @@ def config() -> Config:
 
 def _write_config(tmp_path: Path, **paths: str) -> Path:
     """A temp copy of the shipped itpra-onto.toml with the named [paths] keys replaced (test_emit.py's
-    helper, reused here so ontology_dir/requirements_glob can be pinned to the real inputs while
-    store_dir/dist_dir are isolated under tmp_path)."""
+    helper, reused here so ontology_dir can be pinned to the real inputs while store_dir/dist_dir are
+    isolated under tmp_path)."""
     text = DEFAULT_CONFIG_PATH.read_text(encoding="utf-8")
     paths.setdefault("repo_root", load_config().repo_root.as_posix())  # the copy lives under tmp_path; the root stays real
     for key, value in paths.items():
@@ -56,17 +55,13 @@ def _write_config(tmp_path: Path, **paths: str) -> Path:
 
 
 def _real_input_paths() -> dict[str, str]:
-    """The shipped config's inputs as absolute paths: ontology_dir always, requirements_glob only when the
-    shipped config has an overlay (so a temp config outside the package still reads the real content)."""
-    shipped = load_config()
-    paths = {"ontology_dir": emit.ontology_dir(shipped).as_posix()}
-    if shipped.overlay is not None and shipped.overlay.requirements_glob:
-        paths["requirements_glob"] = os.path.abspath(shipped.config_path.parent / shipped.overlay.requirements_glob)
-    return paths
+    """The shipped config's inputs as absolute paths (so a temp config outside the package still reads the
+    real content)."""
+    return {"ontology_dir": emit.ontology_dir(load_config()).as_posix()}
 
 
 def _isolated_config(tmp_path: Path) -> Config:
-    """A config whose ontology_dir/requirements_glob still resolve to the real inputs, but
+    """A config whose ontology_dir still resolves to the real inputs, but
     whose dist_dir/store_dir are absolute paths under tmp_path (pathlib: joining an absolute path onto
     any base replaces it, so these are fully isolated regardless of the config file's own location)."""
     config_path = _write_config(
@@ -121,23 +116,7 @@ def test_full_nquads_line_count_matches_report_and_graphs(tmp_path: Path, config
 
 
 # ---------------------------------------------------------------------------------------------------
-# (c) base/ contains exactly schema.ttl, t1.ttl and one req/*.ttl per registry; re-parsed triples == asserted count
-
-
-@pytest.mark.overlay  # needs the consumer's registries
-def test_base_files_are_exactly_schema_t1_and_eleven_req(tmp_path: Path, config: Config):
-    out = tmp_path / "out"
-    build_module.build(config=config, out_dir=out, load_store=False)
-    base_dir = out / build_module.BASE_DIRNAME
-
-    ttl_files = [p for p in base_dir.rglob("*.ttl")]
-    rel_names = sorted(p.relative_to(base_dir).as_posix() for p in ttl_files)
-    req_names = [n for n in rel_names if n.startswith("req/")]
-    assert "schema.ttl" in rel_names
-    assert "t1.ttl" in rel_names
-    assert len(req_names) == EXPECTED_SUB_PROJECTS
-    assert len(rel_names) == 2 + EXPECTED_SUB_PROJECTS
-    assert (base_dir / build_module.MANIFEST_FILENAME).exists()
+# (c) base/ contains exactly schema.ttl and t1.ttl; re-parsed triples == asserted count
 
 
 def test_base_turtle_triple_total_equals_asserted_quad_count(tmp_path: Path, config: Config):
@@ -406,7 +385,7 @@ def test_provenance_graph_has_one_derived_from_per_input_file(tmp_path: Path, co
         and q.predicate == build_module.PROV_WAS_DERIVED_FROM
         and q.subject == dataset_node
     ]
-    expected = len(emit.term_files(config)) + len(emit.registry_files(config)) + 1
+    expected = len(emit.term_files(config)) + 1
     assert len(derived_from) == expected
 
     # Every input entity is typed prov:Entity and carries dcterms:identifier + itpra-o:sha256.

@@ -22,11 +22,11 @@ checks. The projection must not become a second source of truth and must be rebu
    their `RelationshipType` records by `rdfs:seeAlso`. `grouped_by` is membership, not `skos:broader`; `deprecated`
    is a hidden-label sub-property; labels and definitions carry `@en`; `source:` is a justification link
    (⊑ `prov:wasInfluencedBy`) plus `dcterms:source`. No blank nodes; no domain, range, inverse or functional axioms.
-3. Identifiers and graphs follow ADR 0004: named graphs `schema`, `t1`, `inferred`, plus a consumer's overlay
-   graphs such as `req/<X>` (ADR 0043). Queries name graphs; none reads their union.
+3. Identifiers and graphs follow ADR 0004: named graphs `schema`, `t1` and `inferred`; a layer adds graphs of
+   its own (ADR 0043). Queries name graphs; none reads their union.
 4. Derivation: versioned SPARQL `CONSTRUCT` rules, in a stated order, write only into `inferred` — roll-ups to
-   plane and service domain, function to domain, the boundary-governed functions; a consumer's requirement rule
-   runs only with its overlay. No reasoner; no inverse property is minted.
+   plane and service domain, function to domain, the boundary-governed functions. No reasoner; no inverse
+   property is minted.
 5. Schema source: type and verb lists stay in `schema.yaml`, enumerations are generated from them, every other
    schema fact lives once in the authoring schema; generated files are canonicalised (RDFC-1.0, then a line sort);
    dependencies are pinned exactly. The store is embedded, in process, loaded from the build, never committed.
@@ -36,7 +36,7 @@ checks. The projection must not become a second source of truth and must be rebu
 ## Consequences
 
 - One build reproduces the graphs byte for byte; a graph that disagrees with the YAML is a pipeline defect.
-- A consumer queries by graph name and sees exactly the tiers it asked for.
+- A query names its graphs and reads exactly what it asked for.
 - Canonicalisation and exact pins make upgrades deliberate: the price of determinism.
 
 ## Alternatives

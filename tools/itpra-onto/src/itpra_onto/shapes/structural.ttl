@@ -1,8 +1,7 @@
 # structural.ttl — the `structural` shape file (SHACL Core; shapes/REGISTER.md "Shape files and their
-# fixtures"). Targets: t1, inferred (validated as the union with req/* the harness always assembles —
-# shacl.py module docstring point 1 — but every shape below is scoped, by sh:targetClass or
-# sh:targetSubjectsOf a term-only predicate, to never fire on a req/<X> subject; that scoping is spelled
-# out per shape below).
+# fixtures"). Targets: t1, inferred (validated as one union the harness assembles — shacl.py module
+# docstring point 1). Every shape below is scoped by sh:targetClass, or by sh:targetSubjectsOf a predicate
+# a term record carries; that scoping is spelled out per shape.
 #
 # No @prefix block here (itpra_onto.shacl.load_shapes prepends itpra:/itpra-o:/itpra-g: plus the W3C/DCMI
 # constants at load time — see that module's docstring). Every shape is a single, named (non-blank) node
@@ -12,9 +11,7 @@
 # The 13 term classes (schema.yaml `types:`; schema/itpra.linkml.yaml `classes:`), reused below wherever a
 # shape says "every term class": itpra:CAPABILITY, itpra:FUNCTION, itpra:PERSONA, itpra:JOURNEY,
 # itpra:WORKFLOW, itpra:JOURNEY_GROUP, itpra:DOMAIN, itpra:PLANE, itpra:SERVICE_DOMAIN,
-# itpra:QUALITY_ATTRIBUTE, itpra:CONCEPT, itpra-o:EntityType, itpra-o:RelationshipType. Requirement
-# records (FR/NFR ⊑ itpra:REQUIREMENT) are never one of these 13 — deliberately out of scope here
-# (shapes/REGISTER.md: requirement records are the `requirements` shape file's business).
+# itpra:QUALITY_ATTRIBUTE, itpra:CONCEPT, itpra-o:EntityType, itpra-o:RelationshipType.
 
 # =========================================================================================================
 # 1. field-missing (Table A A1) — every term has at least one skos:prefLabel, skos:definition and
@@ -22,8 +19,8 @@
 #    whitespace-only)", never "is it there twice", so a sh:maxCount here would report, under the linter's own
 #    comparable id, a defect the linter never reports (two records sharing one id merge onto one IRI with two
 #    definitions). A duplicated record on the graph side is B-12's business (exactly one authoringFile per
-#    subject); on the YAML side, id-duplicate's. Scoped by sh:targetClass to the 13 term classes only (never
-#    skos:Concept broadly, which would also catch Requirement records — out of scope here per the register).
+#    subject); on the YAML side, id-duplicate's. Scoped by sh:targetClass to the 13 term classes only, never
+#    skos:Concept broadly.
 #
 #    prefLabel upper bound: this shape keeps ONLY sh:minCount 1 on skos:prefLabel (the missing-label case,
 #    field-missing's own business). The upper bound — at most one prefLabel PER LANGUAGE TAG — is owned
@@ -87,19 +84,13 @@ itpra-o:IdPatternShape
 #    per verb — is exactly the same defect a dangling target already is; kept as one mechanism, not two
 #    shapes, matching the register's own text for that row).
 #
-#    Every object of a *term-carried* verb predicate (carried_by: relates_to in the itpra_verb annotation —
-#    14 of the 17: the 17 minus met_by/verified_by/categorized_as, all three `carried_by: slot:...` and
-#    domain-restricted to FR/NFR, so they never appear on a t1 subject at all) is an IRI that is itself a
-#    TERM with a type in the data — sh:class skos:Concept (every term AND requirement record is explicitly
-#    typed skos:Concept by the emitter, so this passes for any real record and fails for a dangling IRI with
-#    no rdf:type triple at all), plus section 3a below for a target that names a REQUIREMENT record.
-#    Whether a resolved term target has the RIGHT class for the verb is B-22's business
-#    (shapes/generated/verb-pairs.ttl), not this rule's. met_by/verified_by/categorized_as are deliberately
-#    excluded (shapes/REGISTER.md Table A: target-unresolved's own row scopes to `t1` only, not `req/*`;
-#    the register's separate `req-target-unresolved` (A13) and B-1 rows own met_by/verified_by/
-#    categorized_as, with a softer per-prefix fallback this shape must not shadow with a stricter Violation
-#    — sh:targetSubjectsOf, not sh:targetClass, is what keeps this shape off req/* subjects: only
-#    term_triples()'s `_verb_edges` ever emits these 14 predicates at all).
+#    Every object of a verb predicate a term record carries (14 of the 17: met_by, verified_by and
+#    categorized_as relate entity types that have no record in the vocabulary, so no term carries them) is
+#    an IRI that is itself a record with a type in the data — sh:class skos:Concept (every record is
+#    explicitly typed skos:Concept by the emitter, so this passes for any real record and fails for a
+#    dangling IRI with no rdf:type triple at all). Whether a resolved target has the RIGHT class for the
+#    verb is B-22's business (shapes/generated/verb-pairs.ttl), not this rule's. sh:targetSubjectsOf, not
+#    sh:targetClass, scopes each shape to the subjects of its own predicate.
 
 itpra-o:TargetUnresolvedGroupedByShape
     a sh:PropertyShape ;
@@ -228,40 +219,6 @@ itpra-o:TargetUnresolvedBelongsToServiceDomainShape
     itpra-o:ruleId "target-unresolved" .
 
 # =========================================================================================================
-# 3a. target-unresolved, requirement-target arm. The linter's target-unresolved looks a relates_to target
-#     up among TERM ids only, so a target naming a requirement record (FR/NFR) does not resolve there — but
-#     the requirement is typed skos:Concept, so the sh:class shapes above let it pass. This one shape
-#     reports it under the same rule id. SHACL-SPARQL rather than a Core `sh:not [ sh:class
-#     itpra:REQUIREMENT ]` on each shape above: measured with pySHACL 0.40.1 over the real corpus, the 14
-#     sh:not constraints took this file from seconds to over four minutes; one SPARQL constraint costs
-#     well under a second. Targets the subjects of the same 14 term-carried predicates.
-
-itpra-o:TargetUnresolvedRequirementShape
-    a sh:NodeShape ;
-    sh:targetSubjectsOf itpra-o:groupedBy, itpra-o:consumedBy, itpra-o:realizedIn, itpra-o:dependsOn,
-        itpra-o:decomposesInto, itpra-o:supports, itpra-o:derivedFrom, itpra-o:supersedes, itpra-o:owns,
-        itpra-o:governs, itpra-o:appliesTo, itpra-o:produces, itpra-o:interfacesWith,
-        itpra-o:belongsToServiceDomain ;
-    sh:severity sh:Violation ;
-    itpra-o:ruleId "target-unresolved" ;
-    sh:sparql [
-        a sh:SPARQLConstraint ;
-        sh:message "{?path} target {?value} is a requirement record, not a term (relates_to targets resolve among term ids only)" ;
-        sh:prefixes itpra-o:shapesPrefixes ;
-        sh:select """
-            SELECT DISTINCT $this ?path ?value
-            WHERE {
-                $this ?path ?value .
-                FILTER(?path IN (itpra-o:groupedBy, itpra-o:consumedBy, itpra-o:realizedIn, itpra-o:dependsOn,
-                    itpra-o:decomposesInto, itpra-o:supports, itpra-o:derivedFrom, itpra-o:supersedes,
-                    itpra-o:owns, itpra-o:governs, itpra-o:appliesTo, itpra-o:produces, itpra-o:interfacesWith,
-                    itpra-o:belongsToServiceDomain))
-                ?value rdf:type itpra:REQUIREMENT .
-            }
-        """ ;
-    ] .
-
-# =========================================================================================================
 # 4. function-derived-from (Table A A7; ADR 0011) — a itpra:FUNCTION carries no itpra-o:derivedFrom edge
 #    at all.
 
@@ -303,8 +260,7 @@ itpra-o:GroupedByMaxCountShape
 #     cardinality restated at the graph level" shape of an upper-bound-bearing verb). From the SAME
 #     belongs_to_service_domain itpra_verb annotation's `cardinality` list: {subject: Domain, min:1, max:1}
 #     (exactly one on Domain) and {subject: Term, min:0, max:1} (at most one on every OTHER term — restated
-#     here per the 13 term classes, not skos:Concept broadly, since Requirement records never carry this
-#     predicate at all and are out of scope regardless).
+#     here per the 13 term classes, not skos:Concept broadly).
 
 itpra-o:BelongsToServiceDomainDomainShape
     a sh:PropertyShape ;
@@ -379,12 +335,11 @@ itpra-o:DependsOnMinCountShape
     itpra-o:ruleId "B-7" .
 
 # =========================================================================================================
-# 7. B-12 (Table B; ADR 0043 D3) — exactly one itpra-o:authoringFile on every skos:Concept in t1 and req/*
-#    (the cardinality half; the file-exists-on-disk half stays python/test-only — SHACL cannot stat the
-#    filesystem). Targeting skos:Concept broadly is correct and deliberate here (unlike target-unresolved
-#    above): every term AND every requirement record is explicitly typed skos:Concept by the emitter
-#    (term_triples / requirement_triples both `yield subject, RDF_TYPE, SKOS_CONCEPT`), and authoringFile
-#    is the SAME obligation for both (shapes/REGISTER.md's own note on this row).
+# 7. B-12 (Table B; ADR 0043 D3) — exactly one itpra-o:authoringFile on every skos:Concept (the
+#    cardinality half; the file-exists-on-disk half stays python/test-only — SHACL cannot stat the
+#    filesystem). Targeting skos:Concept broadly is correct and deliberate here (unlike field-missing
+#    above): every record is explicitly typed skos:Concept by the emitter, and authoringFile is the same
+#    obligation for all of them.
 
 itpra-o:AuthoringFileShape
     a sh:PropertyShape ;
