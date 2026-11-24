@@ -50,10 +50,10 @@
   definition: >
     Plans and exercises continuity against the loss of the whole facility — protection of the site and,
     where required, failover of the hosting function to an independent secondary site — so a site-level loss
-    does not end the hosting service. The platform's workload-level DR (ITO) consumes this and runs on top.
+    does not end the hosting service. IT Operations' workload-level DR (ITO) consumes this and runs on top.
   relates_to:
     - {rel: grouped_by, target: DCF-RES}
     - {rel: depends_on, target: CAP-DCF-RES-1}
     - {rel: consumed_by, target: PERSONA-dcf-facility-compliance}
     - {rel: consumed_by, target: PERSONA-dcf-facility-tenant}
-  source: ADR 0022
+  source: ADR 0022 (amended by ADR 0047)

@@ -6,12 +6,12 @@
   type: Capability
   definition: >
     Offers a managed, governed analytical store (warehouse or lakehouse) as a paved road for business
-    analytics, with query performance and isolation handled as a service, consuming the platform's data
-    substrate rather than operating its own infrastructure.
+    analytics, with query performance and isolation handled as a service, consuming the infrastructure
+    platform's data substrate rather than operating its own infrastructure.
   relates_to:
     - {rel: grouped_by, target: BIA-WHS}
     - {rel: consumed_by, target: PERSONA-bia-analytics-team}
-  source: ADR 0026
+  source: ADR 0026 (amended by ADR 0047)
 
 - id: CAP-BIA-WHS-2
   term: Layered Data Refinement

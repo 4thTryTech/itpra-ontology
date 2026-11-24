@@ -60,7 +60,7 @@
     accountable for the application and to those affected by the outcome. Single-execution and
     accountability-facing, which distinguishes it from aggregate performance insight (CAP-ADM-VAL-1), from
     request tracing that locates latency and error, and from offline trajectory evaluation (CAP-ADM-QAT-6),
-    which scores paths against reference cases. Consumes the platform's telemetry (ITO-OBS) and the harness's
+    which scores paths against reference cases. Consumes IT Operations' telemetry (ITO-OBS) and the harness's
     action record (CAP-ITO-AUT-8) but owns the account.
   aliases: [agent decision audit, execution accounting, agentic explainability, decision trace]
   relates_to:
@@ -69,4 +69,4 @@
     - {rel: consumed_by, target: PERSONA-adm-ai-assurance}
     - {rel: consumed_by, target: PERSONA-adm-app-support}
     - {rel: depends_on, target: CAP-ADM-ENG-7}
-  source: ADR 0040
+  source: ADR 0040 (amended by ADR 0047)

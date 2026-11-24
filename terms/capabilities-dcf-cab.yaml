@@ -7,12 +7,12 @@
   definition: >
     Provides the passive physical cabling plant — structured copper and fiber media organized into the
     facility's distribution hierarchy and documented — as the physical medium over which the logical network
-    runs. The passive plant only; logical switching/routing is the adjacent Network domain's concern.
+    runs. The passive plant only; logical switching/routing is the Network & Connectivity domain's concern.
   relates_to:
     - {rel: grouped_by, target: DCF-CAB}
     - {rel: consumed_by, target: PERSONA-dcf-facility-tenant}
     - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
-  source: ADR 0022
+  source: ADR 0022 (amended by ADR 0047)
 
 - id: CAP-DCF-CAB-2
   term: Pathway & Space Management
@@ -33,10 +33,11 @@
   definition: >
     Provides the physical demarcation and cross-connect points where a tenant's equipment is physically
     interconnected to another tenant, a carrier, or the wider network — the meet-me/demarcation function — as
-    governed physical interconnections. The physical link only; logical peering is an adjacent-domain concern.
+    governed physical interconnections. The physical link only; logical peering is a Network & Connectivity
+    domain concern.
   relates_to:
     - {rel: grouped_by, target: DCF-CAB}
     - {rel: depends_on, target: CAP-DCF-CAB-1}
     - {rel: consumed_by, target: PERSONA-dcf-facility-tenant}
     - {rel: consumed_by, target: PERSONA-dcf-facilities-team}
-  source: ADR 0022
+  source: ADR 0022 (amended by ADR 0047)

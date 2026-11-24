@@ -7,11 +7,12 @@
   definition: >
     The provider: a stream-aligned team that builds, maintains, and operates a business application as a
     product — owning its design, implementation, integration, quality, release coordination, and maintenance
-    across the application's life. The primary owner of the ADM capabilities. Consumes the platform's paved
-    roads and runtime rather than owning them. At T2/T3 this refines into granular roles (application
-    developer/engineer, application architect, integration engineer, application data engineer, tech lead).
+    across the application's life. The primary owner of the ADM capabilities. Consumes the infrastructure
+    platform's paved roads and runtime rather than owning them. At T2/T3 this refines into granular roles
+    (application developer/engineer, application architect, integration engineer, application data engineer,
+    tech lead).
   aliases: [stream-aligned team, application team, product engineering team, dev team]
-  source: ADR 0021
+  source: ADR 0021 (amended by ADR 0047)
 
 - id: PERSONA-adm-business-owner
   term: Application Business Owner

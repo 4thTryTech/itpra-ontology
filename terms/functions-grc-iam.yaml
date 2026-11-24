@@ -92,12 +92,12 @@
 - id: FUNC-grc-delegated-authority-governance
   term: Delegated Authority Governance
   type: Function
-  definition: Governs what authority an accountable person may pass to a non-human principal acting on their behalf, and maintains the standing record binding each such principal to the person accountable for it. Transitive authority, bounded and revocable - distinct from a role grant, which gives a person access directly. Governs whether the delegation may exist; the credential that carries it is workload identity, owned by the platform.
+  definition: Governs what authority an accountable person may pass to a non-human principal acting on their behalf, and maintains the standing record binding each such principal to the person accountable for it. Transitive authority, bounded and revocable - distinct from a role grant, which gives a person access directly. Governs whether the delegation may exist; the credential that carries it is workload identity, owned by IT Operations.
   aliases: [on-behalf-of governance, agent delegation governance, non-human principal accountability, delegation register]
   relates_to:
     - {rel: supports, target: CAP-GRC-IAM-2}
     - {rel: supports, target: CAP-GRC-IAM-5}
-  source: ADR 0035
+  source: ADR 0035 (amended by ADR 0047)
 
 - id: FUNC-grc-delegated-authority-recertification
   term: Delegated Authority Recertification

@@ -10,11 +10,11 @@
     organization's business applications and their relationships to business capabilities, each application's
     lifecycle state and roadmap, portfolio rationalization decisions (invest / tolerate / migrate /
     eliminate), and application sunset/decommission. Frames every application from ideation to retirement;
-    distinct from the platform's service catalog of platform offerings (ITO).
+    distinct from the infrastructure platform's service catalog of platform offerings (ITO).
   relates_to:
     - {rel: grouped_by, target: PLANE-DELIVERY}
     - {rel: belongs_to_service_domain, target: SD-APP-DEV}
-  source: ADR 0021
+  source: ADR 0021 (amended by ADR 0047)
 
 - id: ADM-ENG
   term: Application Build & Engineering Practice
@@ -23,11 +23,12 @@
     The application-side engineering practice that turns intent into working software — application design &
     architecture, implementation & code management, integration & interface engineering, application
     packaging & configuration, and engineering of application data & schema. Builds the application that runs
-    on the platform; consumes the platform's software-delivery pipeline rather than owning it (ITO-DEL).
+    on the infrastructure platform; consumes the infrastructure platform's software-delivery pipeline rather
+    than owning it (ITO-DEL).
   relates_to:
     - {rel: grouped_by, target: PLANE-DELIVERY}
     - {rel: belongs_to_service_domain, target: SD-APP-DEV}
-  source: ADR 0021
+  source: ADR 0021 (amended by ADR 0047)
 
 - id: ADM-QAT
   term: Application Quality & Testing
@@ -36,12 +37,12 @@
     Assurance that an application is fit for purpose — an application quality bar against a product-quality
     model, functional test design & execution, non-functional (performance/security/reliability) testing at
     the application level, test-data & test-environment readiness, and continuous quality verification &
-    defect management. Verifies the application; the platform may provide test-execution surface this
-    consumes.
+    defect management. Verifies the application; the infrastructure platform may provide test-execution
+    surface this consumes.
   relates_to:
     - {rel: grouped_by, target: PLANE-DELIVERY}
     - {rel: belongs_to_service_domain, target: SD-APP-DEV}
-  source: ADR 0021
+  source: ADR 0021 (amended by ADR 0047)
 
 - id: ADM-REL
   term: Application Release Coordination
@@ -50,11 +51,12 @@
     Consumer-side coordination of getting application change into production — release planning & scheduling,
     cross-team and cross-application dependency coordination, release readiness & go/no-go decisioning, and
     progressive rollout & release verification of the application. Plans and coordinates what ships and when;
-    the pipeline that executes build/deploy and the supply-chain controls are the platform's (ITO-DEL).
+    the pipeline that executes build/deploy and the supply-chain controls are the infrastructure platform's
+    (ITO-DEL).
   relates_to:
     - {rel: grouped_by, target: PLANE-DELIVERY}
     - {rel: belongs_to_service_domain, target: SD-APP-DEV}
-  source: ADR 0021
+  source: ADR 0021 (amended by ADR 0047)
 
 - id: ADM-SUP
   term: Application Support & Maintenance Modes
@@ -75,15 +77,15 @@
   term: Developer Enablement & Experience
   type: Domain
   definition: >
-    The application team's consumer view of using the platform to build software — developer onboarding &
-    enablement onto the platform's paved roads, self-service environment & resource access consumed from the
-    platform, developer-portal/template/knowledge reuse, and developer-experience feedback. The experience of
-    consuming the platform as a customer; distinct from the platform's own developer-platform engineering
-    (ITO-EXP/ITO-DEL).
+    The application team's consumer view of using the infrastructure platform to build software — developer
+    onboarding & enablement onto the infrastructure platform's paved roads, self-service environment &
+    resource access consumed from the infrastructure platform, developer-portal/template/knowledge reuse, and
+    developer-experience feedback. The experience of consuming the infrastructure platform as a customer;
+    distinct from the infrastructure platform's own developer-platform engineering (ITO-EXP/ITO-DEL).
   relates_to:
     - {rel: grouped_by, target: PLANE-EXPERIENCE}
     - {rel: belongs_to_service_domain, target: SD-APP-DEV}
-  source: ADR 0021
+  source: ADR 0021 (amended by ADR 0047)
 
 - id: ADM-VAL
   term: Application Performance & Value Insight

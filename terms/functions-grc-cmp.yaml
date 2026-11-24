@@ -72,11 +72,11 @@
 - id: FUNC-grc-evidence-collection
   term: Evidence Collection & Reuse
   type: Function
-  definition: Gathers compliance evidence (including evidence supplied by estates such as the platform) once and reuses it across obligations.
+  definition: Gathers compliance evidence (including evidence supplied by estates such as the infrastructure platform) once and reuses it across obligations.
   aliases: [evidence automation, evidence repository, reusable evidence]
   relates_to:
     - {rel: supports, target: CAP-GRC-CMP-4}
-  source: ADR 0024
+  source: ADR 0024 (amended by ADR 0047)
 
 # Regulatory change & obligation management (CAP-GRC-CMP-5)
 - id: FUNC-grc-regulatory-change-tracking

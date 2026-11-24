@@ -35,26 +35,26 @@
   definition: >
     Manages external audits, attestations, and certifications end to end — coordinating auditors, marshalling
     evidence, and maintaining the enterprise's certifications and attestation reports. The enterprise-facing
-    counterpart that represents all estates (including the platform) to external assessors.
+    counterpart that represents all estates (including the infrastructure platform) to external assessors.
   relates_to:
     - {rel: grouped_by, target: GRC-CMP}
     - {rel: depends_on, target: CAP-GRC-CMP-4}
     - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
-  source: ADR 0024
+  source: ADR 0024 (amended by ADR 0047)
 
 - id: CAP-GRC-CMP-4
   term: Continuous Control Monitoring & Evidence Collection
   type: Capability
   definition: >
     Continuously monitors control effectiveness and collects compliance evidence across the enterprise —
-    aggregating control results and evidence the platform and other estates supply — so compliance status is
-    current and audit evidence is gathered once and reused. Consumes per-estate evidence rather than
-    re-producing it.
+    aggregating control results and evidence the infrastructure platform and other estates supply — so
+    compliance status is current and audit evidence is gathered once and reused. Consumes per-estate evidence
+    rather than re-producing it.
   relates_to:
     - {rel: grouped_by, target: GRC-CMP}
     - {rel: depends_on, target: CAP-GRC-CMP-1}
     - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
-  source: ADR 0024
+  source: ADR 0024 (amended by ADR 0047)
 
 - id: CAP-GRC-CMP-5
   term: Regulatory Change & Obligation Management

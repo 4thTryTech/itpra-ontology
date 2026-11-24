@@ -5,11 +5,11 @@
 - id: FUNC-adm-developer-onboarding
   term: Developer Onboarding
   type: Function
-  definition: Onboards a developer or team onto the platform's paved roads with the access and skills their role needs.
+  definition: Onboards a developer or team onto the infrastructure platform's paved roads with the access and skills their role needs.
   aliases: [team onboarding, enablement onboarding, paved-road onboarding]
   relates_to:
     - {rel: supports, target: CAP-ADM-DEX-1}
-  source: ADR 0021
+  source: ADR 0021 (amended by ADR 0047)
 
 - id: FUNC-adm-developer-access-provisioning
   term: Developer Access Provisioning
@@ -34,18 +34,18 @@
 - id: FUNC-adm-golden-path-adoption
   term: Golden-Path & Template Adoption
   type: Function
-  definition: Adopts the platform's golden paths, starter templates, and reusable building blocks for common needs.
+  definition: Adopts the infrastructure platform's golden paths, starter templates, and reusable building blocks for common needs.
   aliases: [paved-road adoption, scaffolding, starter template reuse]
   relates_to:
     - {rel: supports, target: CAP-ADM-DEX-3}
-  source: ADR 0021
+  source: ADR 0021 (amended by ADR 0047)
 
 # DevEx feedback & improvement (CAP-ADM-DEX-4)
 - id: FUNC-adm-devex-feedback
   term: Developer Experience Feedback
   type: Function
-  definition: Captures developer friction, gaps, and satisfaction and feeds it into the practice and the platform.
+  definition: Captures developer friction, gaps, and satisfaction and feeds it into the practice and the infrastructure platform.
   aliases: [DevEx survey, friction logging, experience feedback]
   relates_to:
     - {rel: supports, target: CAP-ADM-DEX-4}
-  source: ADR 0021
+  source: ADR 0021 (amended by ADR 0047)

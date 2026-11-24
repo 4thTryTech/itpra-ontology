@@ -23,8 +23,9 @@
   term: Establish a Cloud / SaaS On-Ramp
   type: Journey
   definition: >
-    Provide an optimized, governed network path from sites and the platform to a cloud provider or SaaS, so
-    cloud-bound traffic reaches its destination efficiently rather than backhauled through a central point.
+    Provide an optimized, governed network path from sites and the infrastructure platform to a cloud provider
+    or SaaS, so cloud-bound traffic reaches its destination efficiently rather than backhauled through a
+    central point.
   relates_to:
     - {rel: grouped_by, target: JG-ONBOARDING}
     - {rel: consumed_by, target: PERSONA-net-engineering-team}
@@ -32,7 +33,7 @@
     - {rel: depends_on, target: CAP-NET-CON-5}
     - {rel: depends_on, target: CAP-NET-CON-2}
     - {rel: depends_on, target: CAP-NET-QOS-3}
-  source: ADR 0023
+  source: ADR 0023 (amended by ADR 0047)
 
 - id: JRN-net-onboard-remote-worker
   term: Onboard a Remote Worker to Secure Access

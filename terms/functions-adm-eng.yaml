@@ -84,11 +84,11 @@
 - id: FUNC-adm-context-assembly-design
   term: Context Assembly Design
   type: Function
-  definition: Specifies at design time what a model-grounded component may see at inference time - which sources, in what precedence, under what scoping and redaction rules, within what budget. The DESIGN-TIME counterpart of the platform's runtime assembly of that context; deliberately a separate function, not the same one.
+  definition: Specifies at design time what a model-grounded component may see at inference time - which sources, in what precedence, under what scoping and redaction rules, within what budget. The DESIGN-TIME counterpart of the infrastructure platform's runtime assembly of that context; deliberately a separate function, not the same one.
   aliases: [context engineering, context governance, context design, prompt context design]
   relates_to:
     - {rel: supports, target: CAP-ADM-ENG-6}
-  source: ADR 0034
+  source: ADR 0034 (amended by ADR 0047)
 
 - id: FUNC-adm-model-grounded-component-design
   term: Model-Grounded Component Design

@@ -8,12 +8,13 @@
   definition: >
     Provisioning and operating the enterprise wide-area network and its edges — site/branch connectivity, the
     corporate WAN backbone and overlay with dynamic path selection, internet-edge transport, and cloud/SaaS
-    on-ramp — over any IP transport. Provides the enterprise connectivity the platform and its consumers reach
-    the wider world across; distinct from the platform's in-fabric networking (ITO-SUB).
+    on-ramp — over any IP transport. Provides the enterprise connectivity the infrastructure platform and its
+    consumers reach the wider world across; distinct from the infrastructure platform's in-fabric networking
+    (ITO-SUB).
   relates_to:
     - {rel: grouped_by, target: PLANE-RESOURCE}
     - {rel: belongs_to_service_domain, target: SD-NETWORK}
-  source: ADR 0023
+  source: ADR 0023 (amended by ADR 0047)
 
 - id: NET-SEG
   term: Network Security & Segmentation
@@ -49,11 +50,11 @@
     The enterprise-edge naming, addressing, and DNS foundation — authoritative DNS resolution and zones,
     dynamic address assignment, and IP address-space management (the authoritative address record/plan) kept
     consistent and conflict-free across hybrid sites. Owns the enterprise DDI service and record; per-workload
-    service discovery and in-fabric addressing inside the platform are ITO-SUB.
+    service discovery and in-fabric addressing inside the infrastructure platform are ITO-SUB.
   relates_to:
     - {rel: grouped_by, target: PLANE-RESOURCE}
     - {rel: belongs_to_service_domain, target: SD-NETWORK}
-  source: ADR 0023
+  source: ADR 0023 (amended by ADR 0047)
 
 - id: NET-QOS
   term: Network Performance & Quality of Service
@@ -62,11 +63,11 @@
     Predictable network service for the traffic that needs it — traffic classification and prioritization,
     traffic shaping and bandwidth management, application-aware path selection and optimization, and management
     of network performance against intended experience targets. Manages the network path's performance;
-    application-internal performance and the end-user device experience belong to adjacent domains.
+    application-internal performance and the end-user device experience belong to other service domains.
   relates_to:
     - {rel: grouped_by, target: PLANE-OPERATIONS}
     - {rel: belongs_to_service_domain, target: SD-NETWORK}
-  source: ADR 0023
+  source: ADR 0023 (amended by ADR 0047)
 
 - id: NET-OBS
   term: Network Observability & Assurance

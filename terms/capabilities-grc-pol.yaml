@@ -7,12 +7,12 @@
   definition: >
     Authors, approves, publishes, reviews on cadence, and retires enterprise security policies — the
     high-level rules every estate must observe — each with an owner, an approval authority, and a version
-    history. The source of the guardrails the platform and other estates enforce.
+    history. The source of the guardrails the infrastructure platform and other estates enforce.
   relates_to:
     - {rel: grouped_by, target: GRC-POL}
     - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
     - {rel: consumed_by, target: PERSONA-grc-security-leadership}
-  source: ADR 0024
+  source: ADR 0024 (amended by ADR 0047)
 
 - id: CAP-GRC-POL-2
   term: Security Standards & Baseline Management
@@ -20,12 +20,12 @@
   definition: >
     Defines and maintains the security standards and configuration baselines that operationalize policy —
     the specific, testable requirements estates implement — so policy intent becomes concrete, enforceable
-    expectations. Estates (the platform included) implement and test against these baselines.
+    expectations. Estates (the infrastructure platform included) implement and test against these baselines.
   relates_to:
     - {rel: grouped_by, target: GRC-POL}
     - {rel: depends_on, target: CAP-GRC-POL-1}
     - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
-  source: ADR 0024
+  source: ADR 0024 (amended by ADR 0047)
 
 - id: CAP-GRC-POL-3
   term: Control Catalogue Governance & Ownership

@@ -4,11 +4,11 @@
 - id: FUNC-bia-analytical-store-provisioning
   term: Analytical Store Provisioning
   type: Function
-  definition: Provisions and manages a governed analytical store (warehouse/lakehouse) as a self-service offering over the platform substrate.
+  definition: Provisions and manages a governed analytical store (warehouse/lakehouse) as a self-service offering over the infrastructure platform substrate.
   aliases: [warehouse provisioning, lakehouse provisioning]
   relates_to:
     - {rel: supports, target: CAP-BIA-WHS-1}
-  source: ADR 0026
+  source: ADR 0026 (amended by ADR 0047)
 
 - id: FUNC-bia-query-engine
   term: Analytical Query Serving

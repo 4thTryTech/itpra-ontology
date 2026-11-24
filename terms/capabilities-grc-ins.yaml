@@ -6,14 +6,14 @@
   type: Capability
   definition: >
     Aggregates the outputs of the GRC groups — detections, risk register, compliance status, vulnerability
-    exposure, human risk — plus evidence supplied by the platform and other estates into a single,
-    consolidated enterprise security and risk posture, trended over time. The one place enterprise posture is
-    assembled.
+    exposure, human risk — plus evidence supplied by the infrastructure platform and other estates into a
+    single, consolidated enterprise security and risk posture, trended over time. The one place enterprise
+    posture is assembled.
   relates_to:
     - {rel: grouped_by, target: GRC-INS}
     - {rel: consumed_by, target: PERSONA-grc-security-leadership}
     - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
-  source: ADR 0024
+  source: ADR 0024 (amended by ADR 0047)
 
 - id: CAP-GRC-INS-2
   term: Control-Health & KRI/KPI Dashboards

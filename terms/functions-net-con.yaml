@@ -70,8 +70,8 @@
 - id: FUNC-net-cloud-onramp
   term: Cloud / SaaS On-Ramp
   type: Function
-  definition: Provides an optimized network path from sites or the platform to cloud and SaaS endpoints.
+  definition: Provides an optimized network path from sites or the infrastructure platform to cloud and SaaS endpoints.
   aliases: [cloud interconnect, direct cloud connect, local breakout]
   relates_to:
     - {rel: supports, target: CAP-NET-CON-5}
-  source: ADR 0023
+  source: ADR 0023 (amended by ADR 0047)

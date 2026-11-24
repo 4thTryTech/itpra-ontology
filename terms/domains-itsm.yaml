@@ -10,11 +10,11 @@
     lifecycle — an end-to-end service catalog of requestable services with their fulfillment conditions, and a
     service portfolio spanning pipeline, live, and retired services across all providers. Coordinates each
     service's offer and ownership across providers; distinct from a single provider's own local offer surface
-    (e.g. the platform's own consumer experience/governance).
+    (e.g. the infrastructure platform's own consumer experience/governance).
   relates_to:
     - {rel: grouped_by, target: PLANE-GOVERNANCE}
     - {rel: belongs_to_service_domain, target: SD-SERVICE-MGMT}
-  source: ADR 0025
+  source: ADR 0025 (amended by ADR 0047)
 
 - id: ITSM-REQ
   term: Cross-Domain Request & Fulfillment Orchestration

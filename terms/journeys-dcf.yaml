@@ -26,8 +26,8 @@
   type: Journey
   definition: >
     Allocate a tenant a physical footprint — space, racks, a power budget, cooling, cabling, and physical
-    access — within the facility's capacity limits, so the platform or business can place equipment in a
-    ready, governed footprint.
+    access — within the facility's capacity limits, so the infrastructure platform or business can place
+    equipment in a ready, governed footprint.
   relates_to:
     - {rel: grouped_by, target: JG-ONBOARDING}
     - {rel: consumed_by, target: PERSONA-dcf-facility-tenant}
@@ -37,7 +37,7 @@
     - {rel: depends_on, target: CAP-DCF-PWR-4}
     - {rel: depends_on, target: CAP-DCF-CAB-1}
     - {rel: depends_on, target: CAP-DCF-SEC-2}
-  source: ADR 0022
+  source: ADR 0022 (amended by ADR 0047)
 
 - id: JRN-dcf-install-equipment
   term: Install Hosted Equipment

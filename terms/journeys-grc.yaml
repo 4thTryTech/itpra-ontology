@@ -167,8 +167,8 @@
   type: Journey
   definition: >
     An internal or external audit runs against the control framework — control health is monitored, evidence
-    is marshalled (including evidence supplied by the platform and other estates), findings are tracked to
-    remediation, and the attestation or certification is produced.
+    is marshalled (including evidence supplied by the infrastructure platform and other estates), findings are
+    tracked to remediation, and the attestation or certification is produced.
   relates_to:
     - {rel: grouped_by, target: JG-GOVERNANCE}
     - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
@@ -176,7 +176,7 @@
     - {rel: depends_on, target: CAP-GRC-CMP-3}
     - {rel: depends_on, target: CAP-GRC-CMP-4}
     - {rel: depends_on, target: CAP-GRC-CMP-1}
-  source: ADR 0024
+  source: ADR 0024 (amended by ADR 0047)
 
 # ---- JG-EVOLUTION ----
 - id: JRN-grc-report-and-evolve-posture

@@ -48,15 +48,16 @@
   term: Enterprise Vulnerability & Exposure Oversight
   type: Capability
   definition: >
-    Aggregates vulnerability and exposure findings the platform and other estates report, prioritizes them by
-    enterprise risk (not just technical severity), and tracks remediation against risk appetite across the
-    estate. The enterprise oversight above each estate's own scanning; it does not perform the scans.
+    Aggregates vulnerability and exposure findings the infrastructure platform and other estates report,
+    prioritizes them by enterprise risk (not just technical severity), and tracks remediation against risk
+    appetite across the estate. The enterprise oversight above each estate's own scanning; it does not perform
+    the scans.
   relates_to:
     - {rel: grouped_by, target: GRC-RISK}
     - {rel: depends_on, target: CAP-GRC-RISK-2}
     - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
     - {rel: consumed_by, target: PERSONA-grc-security-operations}
-  source: ADR 0024
+  source: ADR 0024 (amended by ADR 0047)
 
 - id: CAP-GRC-RISK-5
   term: Threat & Risk Landscape Analysis
