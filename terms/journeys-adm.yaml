@@ -235,4 +235,4 @@
     - {rel: depends_on, target: CAP-ADM-QAT-6}
     - {rel: depends_on, target: CAP-ADM-QAT-7}
     - {rel: depends_on, target: CAP-ADM-VAL-5}
-  source: ADR 0016 (extended by ADR 0040)
+  source: ADR 0034 (extended by ADR 0040)

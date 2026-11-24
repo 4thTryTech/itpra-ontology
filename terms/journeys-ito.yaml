@@ -358,4 +358,4 @@
     - {rel: depends_on, target: CAP-ITO-OBS-1}
     - {rel: depends_on, target: CAP-ITO-COST-1}
     - {rel: depends_on, target: CAP-ITO-GOV-9}
-  source: ADR 0016 (extended by ADR 0038); ADR 0045
+  source: ADR 0033 (extended by ADR 0038); ADR 0045
