@@ -1,4 +1,6 @@
 # ITPRA ontology — quality-attribute vocabulary (NFR categories)
+# SHARED file: it belongs to no single service domain, so neither its name nor its ids carry a service-domain
+# code (ADR 0007, ADR 0045).
 # Seeded controlled set for non-functional requirements. NFRs reference these by id via their `qa` field.
 # Starting set drawn from ISO/IEC 25010 and cloud well-architected frameworks; refine via ADR if changed.
 # Extended by ADR 0016 with SAFETY (ISO/IEC 25010:2023 2nd ed. added Safety as a full characteristic - the set

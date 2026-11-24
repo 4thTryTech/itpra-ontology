@@ -1,6 +1,6 @@
 # ITPRA ontology — DCF-MON (Facility Monitoring & Management) capabilities
 # type: Capability. ids CAP-DCF-MON-<n>. Grouped under domain DCF-MON (ADR 0022); the neutral DCIM concern.
-# Distinct from the platform's workload observability (ITO OBS).
+# Distinct from the platform's workload observability (ITO-OBS).
 
 - id: CAP-DCF-MON-1
   term: Physical Asset & Inventory Management

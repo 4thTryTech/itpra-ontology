@@ -13,7 +13,7 @@ data must pass every shape file unmodified.
     rule: field-missing          # the itpra-o:ruleId this fixture proves (Table A id or a Table-B "B-n" id)
     expect:
       severity: Violation        # Violation | Warning (sh:severity local name, Table C)
-      focus: CAP-FND-1           # the id (local name) the finding must land on
+      focus: CAP-ITO-FND-1           # the id (local name) the finding must land on
       count: 1                   # optional, default 1: how many findings of `rule` the mutation must raise
                                   # (a non-negative integer). `count: 0` is a CLEAN-CASE / defence-in-depth
                                   # fixture: the mutation below must NOT make `rule` fire at all, and the
@@ -38,7 +38,7 @@ data must pass every shape file unmodified.
     # then exactly ONE of the two blocks below:
 
     mutate:                      # start from an EXISTING record (by id) and break one thing about it
-      id: CAP-FND-1
+      id: CAP-ITO-FND-1
       set: {type: Persona}       # replace/add top-level fields (a dict merged into the record)
       # -- or --
       append_relates_to: {rel: grouped_by, target: DOM-FOUNDATION}   # append one relates_to edge

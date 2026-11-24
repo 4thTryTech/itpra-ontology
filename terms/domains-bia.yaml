@@ -4,7 +4,7 @@
 # PLANE-RESOURCE (it consumes the platform data substrate/streaming/storage) and PLANE-EXPERIENCE (it serves
 # insight to business consumers); every BIA group is placed under one of those two existing planes. Taxonomy
 # ratified by ADR 0026. Owning service domain: SD-BUSINESS-ANALYTICS (ADR 0009). Scope/boundary vs
-# ITO DATA/OBS/SEC: ADR 0026.
+# ITO-DATA/ITO-OBS/ITO-SEC: ADR 0026.
 
 - id: BIA-INT
   term: Data Integration & Ingestion
@@ -26,7 +26,7 @@
     The governed analytical data store and its business models — a managed warehouse/lakehouse, the layered
     refinement of data from landing through conformed to consumption-ready, dimensional/business data
     modeling, time-variant history, and analytics-ready data products. Consumes the platform's data substrate
-    (ITO DATA/SUB) rather than owning it.
+    (ITO-DATA/ITO-SUB) rather than owning it.
   relates_to:
     - {rel: grouped_by, target: PLANE-RESOURCE}
     - {rel: belongs_to_service_domain, target: SD-BUSINESS-ANALYTICS}
@@ -65,7 +65,7 @@
     The advanced-analytics lifecycle — a collaborative experimentation workspace, feature engineering and a
     feature store, model development/training/evaluation, model deployment and scoring as consumable insight,
     and ongoing model monitoring and lifecycle management. Produces predictive and prescriptive business
-    insight; distinct from the platform's operational AIOps (ITO OBS).
+    insight; distinct from the platform's operational AIOps (ITO-OBS).
   relates_to:
     - {rel: grouped_by, target: PLANE-EXPERIENCE}
     - {rel: belongs_to_service_domain, target: SD-BUSINESS-ANALYTICS}
@@ -78,7 +78,7 @@
     Measuring how people use products and digital services for business optimization — behavioral event
     collection and a governed event taxonomy, journey/funnel/conversion analysis, cohort/retention/engagement
     analysis, and experimentation and insight activation. Business product insight; distinct from security
-    UEBA (ITO SEC, CAP-SEC-7) and operational AIOps (ITO OBS, CAP-OBS-6).
+    UEBA (ITO-SEC, CAP-ITO-SEC-7) and operational AIOps (ITO-OBS, CAP-ITO-OBS-6).
   relates_to:
     - {rel: grouped_by, target: PLANE-EXPERIENCE}
     - {rel: belongs_to_service_domain, target: SD-BUSINESS-ANALYTICS}
@@ -92,7 +92,7 @@
     metadata, catalog, and lineage; data quality measurement and remediation; master data management (golden
     records); reference data management; and data privacy/policy compliance for analytics. Governs business
     data; applies the enterprise control catalog (Enterprise Security/GRC) and is distinct from the platform's
-    operational data governance (ITO DATA, CAP-DATA-4). The DAMA Wheel places this at the center.
+    operational data governance (ITO-DATA, CAP-ITO-DATA-4). The DAMA Wheel places this at the center.
   relates_to:
     - {rel: grouped_by, target: PLANE-RESOURCE}
     - {rel: belongs_to_service_domain, target: SD-BUSINESS-ANALYTICS}

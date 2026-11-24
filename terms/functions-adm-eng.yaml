@@ -1,7 +1,7 @@
 # ITPRA ontology — FUNCTION library, ADM-ENG (Application Build & Engineering Practice)
 # type: Function. ids FUNC-adm-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
-# the function (ADR 0011). Functions `support` ≥1 capability (many-to-many). CONSUMER-side build; consumes ITO
-# DEL. See ADR 0021.
+# the function (ADR 0011). Functions `support` ≥1 capability (many-to-many). CONSUMER-side build; consumes
+# ITO-DEL. See ADR 0021.
 
 # Design & architecture (CAP-ADM-ENG-1)
 - id: FUNC-adm-application-design

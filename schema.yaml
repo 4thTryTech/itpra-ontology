@@ -9,27 +9,33 @@
 # comments, metadata, and a release that carries only tooling or records (ADR 0044). Every vocabulary change bumps
 # ontology_version in the same change (ADR 0003); consumers pin a release.
 schema_version: 2
-ontology_version: 4.0.1
+ontology_version: 5.0.0
 
 # ---- id rules -------------------------------------------------------------
 id:
   # Globally unique across all ontology files. Letters/digits plus _. - (ADR 0004: no /, which would split a
   # slash-form IRI. stays for the child-capability form CAP-<DOMAIN>-<n>.<m>, legal inside an IRI path segment).
   # Enforced on ontology term records; a consumer's package-local ids are checked by its own linter.
+  # <CODE> below is a service domain's code - ITO, EUC, SVD, FLD, ADM, DCF, NET, GRC, ITSM, BIA, DXC - and <code>
+  # its lower-case form. Every term a service domain owns carries the code after the kind prefix; no domain is
+  # exempt (ADR 0004 as amended by ADR 0045).
   pattern: "^[A-Za-z][A-Za-z0-9_.-]*$"
   conventions:
     EntityType:        "UPPER_SNAKE (e.g. CAPABILITY, OPERATING_MODEL)"
     RelationshipType:  "lower_snake verb (e.g. grouped_by, met_by)"
     QualityAttribute:  "UPPER token (e.g. AVAILABILITY)"
-    capability_instance: "CAP-<DOMAIN>-<n>"
-    function_instance:   "FUNC-<slug>"   # granular behavior below capabilities; shared cross-domain (ADR 0011)
-    persona_instance:    "PERSONA-<slug>"
-    journey_instance:    "JRN-<slug>"
-    workflow_instance:   "WF-<slug>"
-    requirement_FR:      "FR-<CODE>-<n>"           # <CODE> = the owning service-domain or capability-domain code (FR-FND-1, FR-ADM-38)
-    requirement_NFR:     "NFR-<QA>-<n> | NFR-<CODE>_<QA>-<n>"  # the first service domain uses the first form; every other
-                         # domain joins its code to the QA with _ so the id stays one segment; a compound QA keeps
-                         # its own _ (NFR-ADM_COST_EFFICIENCY-1). Both forms are canonical (ADR 0004).
+    domain_instance:     "<CODE>-<GRP>"            # a capability domain's id is its code (ITO-FND, EUC-DEV; ADR 0010)
+    capability_instance: "CAP-<DOMAIN>-<n>"        # <DOMAIN> = the capability domain's id (CAP-ITO-FND-1, CAP-EUC-DEV-1)
+    function_instance:   "FUNC-<code>-<slug>"      # granular behavior below capabilities (ADR 0011); the code names its
+                         # home service domain, whichever capabilities it supports (FUNC-ito-version-control; ADR 0045)
+    persona_instance:    "PERSONA-<code>-<slug>"
+    journey_instance:    "JRN-<code>-<slug>"
+    workflow_instance:   "WF-<code>-<slug>"
+    requirement_FR:      "FR-<CODE>-<n>"           # <CODE> = the owning service domain's code (FR-ADM-38). A registry
+                         # older than 5.0.0 may carry a bare capability-group token instead (FR-FND-1); it still parses.
+    requirement_NFR:     "NFR-<CODE>_<QA>-<n> | NFR-<QA>-<n>"  # the code is joined to the QA with _ so the id stays one
+                         # segment; a compound QA keeps its own _ (NFR-ADM_COST_EFFICIENCY-1). The uncoded second form
+                         # is kept for registries older than 5.0.0; both are canonical (ADR 0004, ADR 0045).
     concept_instance:    "<UPPER-KEBAB> (e.g. AUTON-BOUNDARY, KNOWLEDGE-ROLE, GC-APPROVAL)"
     coverage_area:       "AREA-<slug>"       # AREA-baseline is the declared enterprise-standard area (ADR 0029)
     adr_instance:        "ADR-<NNNN>"

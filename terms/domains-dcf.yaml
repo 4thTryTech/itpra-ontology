@@ -2,7 +2,7 @@
 # type: Domain. The `id` IS the domain code used in capability ids: CAP-<id>-<n> (child: CAP-<id>-<n>.<m>). Each
 # domain is `grouped_by` an EXISTING capability PLANE (terms/planes.yaml). DCF capabilities are
 # physical-facility-focused (buildings, power, cooling, cabling, physical security, monitoring, resilience),
-# distinct from ITO's logical Infrastructure Substrate (SUB). Taxonomy ratified by ADR 0022. Owning service
+# distinct from ITO's logical Infrastructure Substrate (ITO-SUB). Taxonomy ratified by ADR 0022. Owning service
 # domain: SD-DATACENTER (interfaces_with PLANE-RESOURCE; see ADR 0009 + ADR 0022).
 
 - id: DCF-SPC
@@ -12,7 +12,7 @@
     The physical white-space and footprint the hosted equipment occupies — raised floor / hall space, racks
     and cabinets, the physical capacity (space, power, cooling headroom) that footprint represents, and the
     physical install/decommission of equipment into and out of the space. Owns the physical real estate the
-    equipment sits in; distinct from the logical compute/storage capacity ITO SUB provisions on top.
+    equipment sits in; distinct from the logical compute/storage capacity ITO-SUB provisions on top.
   relates_to:
     - {rel: grouped_by, target: PLANE-RESOURCE}
     - {rel: belongs_to_service_domain, target: SD-DATACENTER}
@@ -64,7 +64,7 @@
     The physical protection of the facility and its equipment — perimeter and site security, layered
     least-privilege physical access control from boundary to rack, visitor and escort management, surveillance
     and physical intrusion detection, and physical access logging and audit evidence. Controls who physically
-    reaches the equipment; distinct from logical/identity access to systems (ITO SEC and the enterprise
+    reaches the equipment; distinct from logical/identity access to systems (ITO-SEC and the enterprise
     security domain), to which it supplies physical-access evidence.
   relates_to:
     - {rel: grouped_by, target: PLANE-SECURITY}
@@ -78,7 +78,7 @@
     The operational observability and management of the physical facility (the neutral DCIM concern) —
     physical asset and inventory management, real-time environmental and power monitoring, facility capacity
     planning, energy and efficiency measurement, and facility maintenance management. Observes and manages the
-    physical plant; distinct from the platform's workload/service observability (ITO OBS).
+    physical plant; distinct from the platform's workload/service observability (ITO-OBS).
   relates_to:
     - {rel: grouped_by, target: PLANE-OPERATIONS}
     - {rel: belongs_to_service_domain, target: SD-DATACENTER}

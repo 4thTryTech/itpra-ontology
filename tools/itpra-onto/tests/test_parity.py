@@ -199,12 +199,12 @@ def test_real_tree_excludes_linter_meta_edge_findings_on_entity_type_records(mon
     never projects) is excluded from the comparison and reported, while the same id on a term still counts."""
     fake = [
         {"rule": "target-unresolved", "subject": "CAPABILITY", "severity": "error", "message": "meta-edge"},
-        {"rule": "target-unresolved", "subject": "CAP-FND-1", "severity": "error", "message": "real"},
+        {"rule": "target-unresolved", "subject": "CAP-ITO-FND-1", "severity": "error", "message": "real"},
     ]
     monkeypatch.setattr(parity, "lint_findings", lambda config=None, **kwargs: fake)
     comparison = parity.run_real_tree(config=config)
     assert comparison.meta_edge_excluded == (("target-unresolved", "CAPABILITY", "error"),)
-    assert comparison.linter_only == (("target-unresolved", "CAP-FND-1", "error"),)
+    assert comparison.linter_only == (("target-unresolved", "CAP-ITO-FND-1", "error"),)
     assert not comparison.passed
 
 
@@ -220,7 +220,7 @@ def test_real_tree_turns_an_emit_error_into_a_finding(monkeypatch: pytest.Monkey
     comparison = parity.run_real_tree(config=config)
     assert len(comparison.emit_errors) == 1
     error = comparison.emit_errors[0]
-    assert error["rule"] == "emit-error" and error["subject"] == "CAP-FND-1" and error["severity"] == "error"
+    assert error["rule"] == "emit-error" and error["subject"] == "CAP-ITO-FND-1" and error["severity"] == "error"
     assert error["message"].startswith("EmitError: ")
     assert not comparison.passed
     assert parity.comparison_as_dict(comparison)["emit_errors"] == [error]

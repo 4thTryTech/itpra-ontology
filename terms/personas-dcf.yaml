@@ -35,7 +35,7 @@
     The physical-protection owner: operates and assures the facility's physical security — perimeter and site
     security, layered physical access control to the rack, visitor and escort management, surveillance and
     physical intrusion detection, and physical access logging. Controls who physically reaches the equipment.
-    Distinct from logical/identity security (ITO SEC and the enterprise security domain), with which it
+    Distinct from logical/identity security (ITO-SEC and the enterprise security domain), with which it
     interfaces. At T2/T3 this refines into granular roles (security operations center officer, access-control
     administrator, guard-force lead).
   aliases: [physical security, site security officer, access-control administrator]

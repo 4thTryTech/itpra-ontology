@@ -127,9 +127,9 @@ def _with_quads(dataset: ox.Dataset, config: Config, *triples: tuple[str, str, s
 
 def test_b22_fires_on_a_wrong_pair_and_names_verb_and_classes(config: Config, clean_dataset: ox.Dataset, generated_only: ox.Dataset):
     idn, onto = config.iri.id_ns, config.iri.onto_ns
-    mutated = _with_quads(clean_dataset, config, (idn + "CAP-FND-1", onto + "consumedBy", idn + "FUNC-version-control"))
+    mutated = _with_quads(clean_dataset, config, (idn + "CAP-ITO-FND-1", onto + "consumedBy", idn + "FUNC-ito-version-control"))
     report = shacl.validate(mutated, generated_only, config=config)
-    assert [(f.rule_id, shacl.focus_local_name(f.focus, config)) for f in report.findings] == [("B-22", "CAP-FND-1")]
+    assert [(f.rule_id, shacl.focus_local_name(f.focus, config)) for f in report.findings] == [("B-22", "CAP-ITO-FND-1")]
     message = report.findings[0].message
     assert "consumed_by" in message and "CAPABILITY" in message and "FUNCTION" in message
 
@@ -137,7 +137,7 @@ def test_b22_fires_on_a_wrong_pair_and_names_verb_and_classes(config: Config, cl
 def test_b22_ignores_a_dangling_object(config: Config, clean_dataset: ox.Dataset, generated_only: ox.Dataset):
     """A dangling object is target-unresolved's business, not B-22's."""
     idn, onto = config.iri.id_ns, config.iri.onto_ns
-    mutated = _with_quads(clean_dataset, config, (idn + "CAP-FND-1", onto + "consumedBy", idn + "PERSONA-does-not-exist"))
+    mutated = _with_quads(clean_dataset, config, (idn + "CAP-ITO-FND-1", onto + "consumedBy", idn + "PERSONA-does-not-exist"))
     assert shacl.validate(mutated, generated_only, config=config).findings == ()
 
 
@@ -155,6 +155,6 @@ def test_b22_tests_membership_not_equality_for_a_multi_typed_subject(config: Con
 def test_b22_fires_for_a_verb_whose_pairs_are_all_unresolvable(config: Config, clean_dataset: ox.Dataset, generated_only: ox.Dataset):
     """supersedes allows only (ADR, ADR) — no record class — so any edge between two records fires."""
     idn, onto = config.iri.id_ns, config.iri.onto_ns
-    mutated = _with_quads(clean_dataset, config, (idn + "CAP-FND-1", onto + "supersedes", idn + "CAP-FND-2"))
+    mutated = _with_quads(clean_dataset, config, (idn + "CAP-ITO-FND-1", onto + "supersedes", idn + "CAP-ITO-FND-2"))
     report = shacl.validate(mutated, generated_only, config=config)
-    assert [(f.rule_id, shacl.focus_local_name(f.focus, config)) for f in report.findings] == [("B-22", "CAP-FND-1")]
+    assert [(f.rule_id, shacl.focus_local_name(f.focus, config)) for f in report.findings] == [("B-22", "CAP-ITO-FND-1")]

@@ -1,0 +1,189 @@
+# ITPRA ontology — FUNCTION library, ITO-DATA (Data & Analytics)
+# type: Function. ids FUNC-ito-<slug>. All T1 neutral (no tool names; ETL/ELT/pub-sub kept as aliases).
+# CAP-ITO-DATA-4 governance is covered by the shared FUNC-ito-sensitive-data-redaction. See ADR 0011.
+# FUNC-ito-service-binding added 2026-06-04 (broker/claim "bind/unbind" day-2 attach/detach of a backing service
+# to a workload).
+
+# Managed data stores (supports CAP-ITO-DATA-1)
+- id: FUNC-ito-database-provisioning
+  term: Database Provisioning
+  type: Function
+  definition: Provisions managed databases and data services on demand as a paved-road capability.
+  aliases: [data store provisioning, database as a service]
+  relates_to:
+    - {rel: supports, target: CAP-ITO-DATA-1}
+  source: ADR 0011 (amended by ADR 0045)
+
+- id: FUNC-ito-schema-management
+  term: Schema Management
+  type: Function
+  definition: Manages data schemas and their versioned migrations over the life of a data store.
+  aliases: [schema migration, migration management]
+  relates_to:
+    - {rel: supports, target: CAP-ITO-DATA-1}
+  source: ADR 0011 (amended by ADR 0045)
+
+# Data pipelines (supports CAP-ITO-DATA-2; distinct from CAP-ITO-OBS-8 telemetry pipeline)
+- id: FUNC-ito-data-ingestion
+  term: Data Ingestion
+  type: Function
+  definition: Collects and ingests data from sources into managed pipelines (batch or streaming).
+  aliases: [data collection, source ingestion]
+  relates_to:
+    - {rel: supports, target: CAP-ITO-DATA-2}
+  source: ADR 0011 (amended by ADR 0045)
+
+- id: FUNC-ito-data-transformation
+  term: Data Transformation
+  type: Function
+  definition: Shapes, cleans, and converts data as it moves between sources and stores.
+  aliases: [ETL, ELT, data processing]
+  relates_to:
+    - {rel: supports, target: CAP-ITO-DATA-2}
+  source: ADR 0011 (amended by ADR 0045)
+
+# Query & analytics (supports CAP-ITO-DATA-3)
+- id: FUNC-ito-data-query
+  term: Data Query
+  type: Function
+  definition: Provides query access over platform and IT-service data stores.
+  aliases: [query access, analytical query]
+  relates_to:
+    - {rel: supports, target: CAP-ITO-DATA-3}
+  source: ADR 0011 (amended by ADR 0045)
+
+- id: FUNC-ito-data-visualization
+  term: Data Visualization
+  type: Function
+  definition: Presents analytics and business-intelligence views over platform and IT-service data.
+  aliases: [BI visualization, analytics dashboards]
+  relates_to:
+    - {rel: supports, target: CAP-ITO-DATA-3}
+  source: ADR 0011 (amended by ADR 0045)
+
+# External data integration (supports CAP-ITO-DATA-5)
+- id: FUNC-ito-data-federation
+  term: Data Federation
+  type: Function
+  definition: Queries and integrates across external data sources through governed integration points.
+  aliases: [federated query, data virtualization]
+  relates_to:
+    - {rel: supports, target: CAP-ITO-DATA-5}
+  source: ADR 0011 (amended by ADR 0045)
+
+- id: FUNC-ito-data-export
+  term: Data Export
+  type: Function
+  definition: Exports data to external data lakes or business BI via defined, governed integration points.
+  aliases: [data sharing, governed export]
+  relates_to:
+    - {rel: supports, target: CAP-ITO-DATA-5}
+  source: ADR 0011 (amended by ADR 0045)
+
+# Messaging & event streaming (supports CAP-ITO-DATA-6)
+- id: FUNC-ito-message-queuing
+  term: Message Queuing
+  type: Function
+  definition: Provides managed queues for asynchronous point-to-point messaging between services.
+  aliases: [message broker, queueing]
+  relates_to:
+    - {rel: supports, target: CAP-ITO-DATA-6}
+  source: ADR 0011 (amended by ADR 0045)
+
+- id: FUNC-ito-event-streaming
+  term: Event Streaming
+  type: Function
+  definition: Provides managed event streams and topics for publish/subscribe event movement at scale.
+  aliases: [pub/sub, event bus, streaming topics]
+  relates_to:
+    - {rel: supports, target: CAP-ITO-DATA-6}
+  source: ADR 0011 (amended by ADR 0045)
+
+# Managed caching (supports CAP-ITO-DATA-7)
+- id: FUNC-ito-cache-management
+  term: Cache Management
+  type: Function
+  definition: Provisions and operates managed in-memory caches for low-latency data access and store offload.
+  aliases: [caching, in-memory cache]
+  relates_to:
+    - {rel: supports, target: CAP-ITO-DATA-7}
+  source: ADR 0011 (amended by ADR 0045)
+
+- id: FUNC-ito-cache-invalidation
+  term: Cache Invalidation
+  type: Function
+  definition: Invalidates and evicts cached entries to keep cached data consistent with the source of truth.
+  aliases: [cache eviction, invalidation]
+  relates_to:
+    - {rel: supports, target: CAP-ITO-DATA-7}
+  source: ADR 0011 (amended by ADR 0045)
+
+# Backing-service binding (cross-cutting across ITO-DATA backing services — data stores, messaging, caching).
+# The broker/claim "bind/unbind" verb: a day-2 attach/detach of a provisioned backing service to a
+# consuming workload. Distinct from FUNC-ito-storage-attachment (CAP-ITO-SUB-3, storage-specific) and from
+# secret issuance in ITO-FND (it delivers/revokes existing access coordinates, it does not mint the credential).
+- id: FUNC-ito-service-binding
+  term: Service Binding
+  type: Function
+  definition: >
+    Attaches a provisioned backing service to a consuming workload by delivering its access coordinates
+    (endpoint + credentials) and revokes them on unbind — independent of the workload and service
+    lifecycles.
+  aliases: [bind/unbind, service attachment, backing-service binding]
+  relates_to:
+    - {rel: supports, target: CAP-ITO-DATA-1}
+    - {rel: supports, target: CAP-ITO-DATA-6}
+    - {rel: supports, target: CAP-ITO-DATA-7}
+  source: ADR 0011 (amended by ADR 0045)
+
+- id: FUNC-ito-agent-state-persistence
+  term: Agent State Persistence
+  type: Function
+  definition: Writes, retrieves, and retires a delegated actor's accumulated session and task state scoped to the principal it acts for, so the state is durable, bounded, and separable per principal.
+  aliases: [agent memory write, session state persistence, memory store]
+  relates_to:
+    - {rel: supports, target: CAP-ITO-DATA-8}
+  source: ADR 0033 (amended by ADR 0045)
+
+- id: FUNC-ito-context-assembly
+  term: Context Assembly
+  type: Function
+  definition: Selects, compacts, and orders what an actor can see for a given turn - drawing from its persisted state, retrieved knowledge, and prior tool output - within a bounded interaction budget.
+  aliases: [context management, context window management, context engineering, compaction]
+  relates_to:
+    - {rel: supports, target: CAP-ITO-DATA-8}
+    - {rel: supports, target: CAP-ITO-AUT-8}
+  source: ADR 0033 (amended by ADR 0045)
+
+- id: FUNC-ito-erasure-propagation
+  term: Erasure Propagation
+  type: Function
+  definition: Propagates a deletion or retention decision from a source record to every artifact derived from it, so removal is effective wherever the source was copied, indexed, embedded, or cached rather than only at the original. May be discharged by re-deriving the derived representation from the corrected source as well as by in-place deletion. Re-derivation is NOT universally available - where the derived artifact's value is being the unreproducible account of what happened, such as an execution record or an audit trail, it cannot be rebuilt from a corrected source, and erasure there is discharged by retention expiry, targeted purge or deletion, or destruction of the key protecting the payload (ADR 0039). The read-time sibling obligation is FUNC-ito-access-policy-propagation (ADR 0038).
+  aliases: [deletion propagation, derived-artifact erasure, right-to-erasure enforcement]
+  relates_to:
+    - {rel: supports, target: CAP-ITO-DATA-4}
+    - {rel: supports, target: CAP-ITO-DATA-8}
+  source: ADR 0033 (amended by ADR 0045)
+
+- id: FUNC-ito-retrieval-provenance
+  term: Retrieval Provenance & Citation
+  type: Function
+  definition: Traces retrieved material back to the source it came from and carries that attribution through to the answer, so a consumer can verify what a response was grounded in. Where retrieval passes through a derived representation, the traced-to source is the authoritative record, not the index or graph entry, and the source prevails where the two disagree (KNOWLEDGE-ROLE; ADR 0038).
+  aliases: [citation, source attribution, grounding provenance]
+  relates_to:
+    - {rel: supports, target: CAP-ITO-GOV-9}
+    - {rel: supports, target: CAP-ITO-DATA-8}
+  source: ADR 0033 (amended by ADR 0045)
+
+- id: FUNC-ito-access-policy-propagation
+  term: Access-Policy Propagation
+  type: Function
+  definition: Enforces, at retrieval time, the access restriction of the source a derived retrieval representation was built from, against the principal a consumer or delegated actor is currently acting for, so an index, embedding set, graph, or cache never returns what that principal could not read at the source - including when entitlements have changed since the representation was built. The read-time, continuous sibling of FUNC-ito-erasure-propagation; the structured-data case at the semantic layer is FUNC-bia-semantic-access-policy. Whether the restriction is inherited at build time, re-checked at query time, or both is a scenario decision (ADR 0038).
+  aliases: [permission-aware retrieval, entitlement propagation, retrieval-time authorization, ACL inheritance]
+  relates_to:
+    - {rel: supports, target: CAP-ITO-DATA-4}
+    - {rel: supports, target: CAP-ITO-DATA-8}
+    - {rel: applies_to, target: AUTON-ACTOR}
+    - {rel: depends_on, target: FUNC-ito-authorization-decision}
+    - {rel: depends_on, target: FUNC-ito-delegated-authority-chain}
+  source: ADR 0038 (amended by ADR 0045)

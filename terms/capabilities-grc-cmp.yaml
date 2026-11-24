@@ -1,6 +1,6 @@
 # ITPRA ontology — GRC-CMP (Compliance, Audit & Evidence) capabilities
 # type: Capability. ids CAP-GRC-CMP-<n>. Grouped under domain GRC-CMP (ADR 0024). Enterprise compliance
-# AUTHORITY — owns obligations/attestation and consumes control results/evidence the platform (ITO GOV) and
+# AUTHORITY — owns obligations/attestation and consumes control results/evidence the platform (ITO-GOV) and
 # other estates produce; does NOT duplicate per-estate evidence production (ADR 0024).
 
 - id: CAP-GRC-CMP-1

@@ -2,9 +2,9 @@
 # type: Domain. The `id` IS the domain code used in capability ids: CAP-<id>-<n> (child: CAP-<id>-<n>.<m>). Each
 # domain is `grouped_by` an EXISTING capability PLANE (terms/planes.yaml). SD-APP-DEV interfaces_with
 # PLANE-DELIVERY and PLANE-EXPERIENCE; each group is placed under one of those two existing planes. Taxonomy
-# ratified by ADR 0021; scope/boundary (incl. ADM-vs-platform-DEL) by ADR 0021. SCOPE: ADM is the CONSUMER side
+# ratified by ADR 0021; scope/boundary (incl. ADM-vs-ITO-DEL) by ADR 0021. SCOPE: ADM is the CONSUMER side
 # — teams that build/maintain business apps that RUN ON the platform. It does NOT own the platform's
-# software-delivery (ITO DEL) pipeline/supply-chain; it consumes them. Owning service domain: SD-APP-DEV
+# software-delivery (ITO-DEL) pipeline/supply-chain; it consumes them. Owning service domain: SD-APP-DEV
 # (interfaces_with PLANE-DELIVERY + PLANE-EXPERIENCE; ADR 0009 + ADR 0021).
 
 - id: ADM-APM
@@ -28,7 +28,7 @@
     The application-side engineering practice that turns intent into working software — application design &
     architecture, implementation & code management, integration & interface engineering, application
     packaging & configuration, and engineering of application data & schema. Builds the application that runs
-    on the platform; consumes the platform's software-delivery pipeline rather than owning it (ITO DEL).
+    on the platform; consumes the platform's software-delivery pipeline rather than owning it (ITO-DEL).
   relates_to:
     - {rel: grouped_by, target: PLANE-DELIVERY}
     - {rel: belongs_to_service_domain, target: SD-APP-DEV}
@@ -55,7 +55,7 @@
     Consumer-side coordination of getting application change into production — release planning & scheduling,
     cross-team and cross-application dependency coordination, release readiness & go/no-go decisioning, and
     progressive rollout & release verification of the application. Plans and coordinates what ships and when;
-    the pipeline that executes build/deploy and the supply-chain controls are the platform's (ITO DEL).
+    the pipeline that executes build/deploy and the supply-chain controls are the platform's (ITO-DEL).
   relates_to:
     - {rel: grouped_by, target: PLANE-DELIVERY}
     - {rel: belongs_to_service_domain, target: SD-APP-DEV}
@@ -84,7 +84,7 @@
     enablement onto the platform's paved roads, self-service environment & resource access consumed from the
     platform, developer-portal/template/knowledge reuse, and developer-experience feedback. The experience of
     consuming the platform as a customer; distinct from the platform's own developer-platform engineering
-    (ITO EXP/DEL).
+    (ITO-EXP/ITO-DEL).
   relates_to:
     - {rel: grouped_by, target: PLANE-EXPERIENCE}
     - {rel: belongs_to_service_domain, target: SD-APP-DEV}
@@ -97,7 +97,7 @@
     Understanding how an application performs and the value it delivers — application performance & behavior
     insight (application-level), feature adoption & usage insight, business-value & outcome insight, and
     engineering-flow / delivery insight that feeds continuous improvement. Observes the application and its
-    value; distinct from platform/workload observability (ITO OBS), whose signals it may consume.
+    value; distinct from platform/workload observability (ITO-OBS), whose signals it may consume.
   relates_to:
     - {rel: grouped_by, target: PLANE-EXPERIENCE}
     - {rel: belongs_to_service_domain, target: SD-APP-DEV}

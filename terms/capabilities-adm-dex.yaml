@@ -1,7 +1,7 @@
 # ITPRA ontology — ADM-DEX (Developer Enablement & Experience) capabilities
 # type: Capability. ids CAP-ADM-DEX-<n>. Grouped under domain ADM-DEX (ADR 0021). CONSUMER view of using the
 # platform: adopts/consumes the platform's paved roads, self-service, and developer portal — does NOT build the
-# internal developer platform (that is ITO EXP/DEL) (ADR 0021).
+# internal developer platform (that is ITO-EXP/ITO-DEL) (ADR 0021).
 
 - id: CAP-ADM-DEX-1
   term: Developer Onboarding & Enablement

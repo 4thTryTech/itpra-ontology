@@ -252,8 +252,8 @@ def test_parse_source_rejects_grammar_violations(text: str):
 
 
 def test_parse_source_error_names_the_record_id_and_the_item():
-    with pytest.raises(emit.SourceGrammarError, match=re.escape("CAP-FND-1") + ".*" + re.escape("ADR-0012")):
-        parse_source("ADR-0012", record_id="CAP-FND-1")
+    with pytest.raises(emit.SourceGrammarError, match=re.escape("CAP-ITO-FND-1") + ".*" + re.escape("ADR-0012")):
+        parse_source("ADR-0012", record_id="CAP-ITO-FND-1")
 
 
 def test_parse_source_still_accepts_every_previously_valid_case():
@@ -311,7 +311,7 @@ def test_parse_source_full_corpus_never_trips_the_grammar(config: Config):
 
 
 # ---------------------------------------------------------------------------------------------------
-# acceptance: the CAP-FND-1 worked example, byte for byte after canonicalisation
+# acceptance: the CAP-ITO-FND-1 worked example, byte for byte after canonicalisation
 
 
 def test_emit_is_deterministic(config: Config):
@@ -512,7 +512,7 @@ def test_relates_to_target_that_is_not_a_string_is_an_emit_error(vocab: emit.Voc
 
 
 def test_relates_to_verb_that_is_not_a_string_is_an_emit_error(vocab: emit.Vocabulary):
-    record = {**_GOOD_TERM, "relates_to": [{"rel": ["grouped_by"], "target": "FND"}]}
+    record = {**_GOOD_TERM, "relates_to": [{"rel": ["grouped_by"], "target": "ITO-FND"}]}
     with pytest.raises(emit.EmitError, match="is not a slot in the verbs subset"):
         list(emit.term_triples(_term(record), vocab))
 

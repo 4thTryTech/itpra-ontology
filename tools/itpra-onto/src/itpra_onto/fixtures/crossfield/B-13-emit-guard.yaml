@@ -12,9 +12,9 @@
 rule: emit-error
 expect:
   severity: Violation
-  focus: CAP-FND-1
+  focus: CAP-ITO-FND-1
   count: 1
   emit_error: SourceGrammarError
 mutate:
-  id: CAP-FND-1
+  id: CAP-ITO-FND-1
   set: {source: "ADR-12"}

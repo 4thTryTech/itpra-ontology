@@ -1,6 +1,6 @@
 # ITPRA ontology — DCF-SEC (Physical Security & Access Control) capabilities
 # type: Capability. ids CAP-DCF-SEC-<n>. Grouped under domain DCF-SEC (ADR 0022). Physical security only —
-# distinct from logical/identity security (ITO SEC / enterprise GRC).
+# distinct from logical/identity security (ITO-SEC / enterprise GRC).
 
 - id: CAP-DCF-SEC-1
   term: Perimeter & Site Security

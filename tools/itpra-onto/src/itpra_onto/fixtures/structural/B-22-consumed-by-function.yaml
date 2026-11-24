@@ -1,6 +1,6 @@
 # Proves the generated B-22 shape for consumed_by (shapes/generated/verb-pairs.ttl,
-# itpra-o:VerbPairsConsumedByShape): CAP-FND-1 gains a consumed_by edge
-# to FUNC-version-control (a real, resolved Function). consumed_by's itpra_verb pairs are (Capability,
+# itpra-o:VerbPairsConsumedByShape): CAP-ITO-FND-1 gains a consumed_by edge
+# to FUNC-ito-version-control (a real, resolved Function). consumed_by's itpra_verb pairs are (Capability,
 # Persona) and (Journey, Persona); (Capability, Function) is one Violation.
 #
 # A clean single-rule proof: the target resolves (target-unresolved silent); consumed_by has no declared
@@ -9,8 +9,8 @@
 rule: B-22
 expect:
   severity: Violation
-  focus: CAP-FND-1
+  focus: CAP-ITO-FND-1
   count: 1
 mutate:
-  id: CAP-FND-1
-  append_relates_to: {rel: consumed_by, target: FUNC-version-control}
+  id: CAP-ITO-FND-1
+  append_relates_to: {rel: consumed_by, target: FUNC-ito-version-control}

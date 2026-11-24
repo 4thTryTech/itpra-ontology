@@ -2,7 +2,7 @@
 # type: Domain. The `id` IS the domain code used in capability ids: CAP-<id>-<n> (child: CAP-<id>-<n>.<m>). ITSM
 # is the ENTERPRISE CROSS-DOMAIN service-integration / coordination wrapper (a service integrator / retained
 # org; SIAM). Its capabilities are NEUTRAL coordination over the framework's neutral governance constructs
-# (GC-*) — distinct from any one provider's own internal governance (e.g. ITO GOV). Every domain is `grouped_by`
+# (GC-*) — distinct from any one provider's own internal governance (e.g. ITO-GOV). Every domain is `grouped_by`
 # the EXISTING governance plane (SD-SERVICE-MGMT interfaces_with PLANE-GOVERNANCE; ADR 0009). Taxonomy ratified
 # by ADR 0025; scope/boundary ADR 0025; T1-neutrality note ADR 0025. Owning service domain: SD-SERVICE-MGMT.
 

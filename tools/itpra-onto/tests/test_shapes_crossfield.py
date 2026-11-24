@@ -145,7 +145,7 @@ def test_b13_well_formed_unpadded_source_is_padded_by_the_emitter_and_passes(con
     assert fixture.count == 0
     inputs = emit.load_inputs(config)
     dataset = emit.emit(fixtures.apply_fixture(inputs, fixture), config)
-    focus = ox.NamedNode(config.iri.id_ns + "CAP-FND-1")
+    focus = ox.NamedNode(config.iri.id_ns + "CAP-ITO-FND-1")
     decided_in = ox.NamedNode(config.iri.onto_ns + emit.DECIDED_IN)
     objects = {q.object.value for q in dataset.quads_for_subject(focus) if q.predicate == decided_in}
     assert objects == {config.iri.id_ns + "ADR-0012"}
@@ -160,7 +160,7 @@ def test_b13_well_formed_unpadded_source_is_padded_by_the_emitter_and_passes(con
 
 def test_b13_fires_on_injected_malformed_adr_nodes(config: Config, clean_dataset: ox.Dataset, crossfield_shapes: ox.Dataset):
     t1 = ox.NamedNode(config.iri.graph_ns + "t1")
-    focus = ox.NamedNode(config.iri.id_ns + "CAP-FND-1")
+    focus = ox.NamedNode(config.iri.id_ns + "CAP-ITO-FND-1")
     decided_in = ox.NamedNode(config.iri.onto_ns + emit.DECIDED_IN)
     amended_by = ox.NamedNode(config.iri.onto_ns + emit.AMENDED_BY)
     extended_by = ox.NamedNode(config.iri.onto_ns + emit.EXTENDED_BY)
@@ -181,7 +181,7 @@ def test_b13_fires_on_injected_malformed_adr_nodes(config: Config, clean_dataset
     assert all(f.severity == "Violation" and f.focus == focus.value for f in found)
     for (predicate, obj), _why in bad.items():
         assert any(f.path == predicate.value and obj.value in f.message for f in found), (predicate, obj)
-    # nothing else fired: the clean ADR-0001 decidedIn edge CAP-FND-1 already carries still passes
+    # nothing else fired: the clean ADR-0001 decidedIn edge CAP-ITO-FND-1 already carries still passes
     assert {f.rule_id for f in report.findings} == {"B-13"}
 
 
@@ -199,7 +199,7 @@ def test_b13_amended_by_without_its_decided_in_twin_is_still_targeted(config: Co
 
 def test_pref_label_unique_fires_per_surplus_label_in_one_language(config: Config, clean_dataset: ox.Dataset, crossfield_shapes: ox.Dataset):
     t1 = ox.NamedNode(config.iri.graph_ns + "t1")
-    focus = ox.NamedNode(config.iri.id_ns + "CAP-FND-1")
+    focus = ox.NamedNode(config.iri.id_ns + "CAP-ITO-FND-1")
     pref = ox.NamedNode(emit.SKOS + "prefLabel")
     dataset = _copy(clean_dataset)
     dataset.add(ox.Quad(focus, pref, ox.Literal("Second preferred label", language="en"), t1))
@@ -213,7 +213,7 @@ def test_pref_label_unique_fires_per_surplus_label_in_one_language(config: Confi
 
 def test_pref_label_unique_allows_one_label_per_language(config: Config, clean_dataset: ox.Dataset, crossfield_shapes: ox.Dataset):
     t1 = ox.NamedNode(config.iri.graph_ns + "t1")
-    focus = ox.NamedNode(config.iri.id_ns + "CAP-FND-1")
+    focus = ox.NamedNode(config.iri.id_ns + "CAP-ITO-FND-1")
     dataset = _copy(clean_dataset)
     dataset.add(ox.Quad(focus, ox.NamedNode(emit.SKOS + "prefLabel"), ox.Literal("Source de vérité", language="fr"), t1))
     report = shacl.validate(dataset, crossfield_shapes, config=config)

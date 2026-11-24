@@ -9,6 +9,32 @@ take layers (`itpra_onto.layers`; ADR 0043). The `[overlay]` configuration table
 shapes and fixtures that went with it leave the package, so a configuration or caller that used them changes with
 the next release. ADR 0041, ADR 0042 and ADR 0043 are reworded to match; ADR 0043 has a new title and file name.
 
+## 5.0.0 — 2026-11-23
+
+**MAJOR: ids renamed.** IT Operations takes the code `ITO` on every id and file name, as the ten other service domains
+carry theirs (ADR 0045, amending ADR 0004, 0007, 0010, 0011, 0012 and 0017). No term is added or removed and no
+label, definition or relation changes meaning; 356 records change id and 26 files change name.
+
+| Kind | Before | From 5.0.0 |
+|---|---|---|
+| Capability domain (11) | `FND`, `SEC`, `OBS`, … | `ITO-FND`, `ITO-SEC`, `ITO-OBS`, … |
+| Capability (83) | `CAP-FND-1` | `CAP-ITO-FND-1` |
+| Function (224) | `FUNC-version-control` | `FUNC-ito-version-control` |
+| Persona (3) | `PERSONA-platform-team` | `PERSONA-ito-platform-team` |
+| Journey (18), workflow (17) | `JRN-onboard-consumer`, `WF-onboard-consumer` | `JRN-ito-onboard-consumer`, `WF-ito-onboard-consumer` |
+| Files | `domains.yaml`, `capabilities-foundation.yaml`, `functions-foundation.yaml`, `personas.yaml`, `journeys.yaml`, `workflows.yaml` | `domains-ito.yaml`, `capabilities-ito-fnd.yaml`, `functions-ito-fnd.yaml`, `personas-ito.yaml`, `journeys-ito.yaml`, `workflows-ito.yaml` |
+
+Migrating: `migrations/5.0.0.yaml` lists every old id and file with its successor. Rewrite each reference a registry,
+document or pin holds (`met_by`, `verified_by`, `derived_from`, required functions), then re-pin; an IRI
+`<base>id/<old>` becomes `<base>id/<new>`. Requirement ids are the consumer's own and need not change: the coded
+forms `FR-<CODE>-<n>` and `NFR-<CODE>_<QA>-<n>` are now the form for every domain, and the uncoded forms still parse.
+
+Also in this release: every renamed record's `source` adds `ADR 0045`; `SD-IT-OPERATIONS` gains the alias `ITO`;
+`schema.yaml` states the coded id forms and drops the first-domain exception; the `FUNCTION` and `FR` entity
+definitions and the `belongs_to_service_domain` definition lose their wording of that exception; references to the
+renamed ids in other domains' definitions and comments follow. The pipeline's fixtures and tests use the new ids.
+Decision records before 0045 keep their text: an id written there without the code reads as its coded successor.
+
 ## 4.0.1 — 2026-11-23
 
 No vocabulary change: every term, id and verb equals `4.0.0`. The first release that carries tooling (ADR 0044): one

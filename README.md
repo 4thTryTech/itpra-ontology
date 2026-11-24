@@ -5,9 +5,10 @@ domains, capabilities, functions, personas, journeys, workflows, dimensions, gov
 and cross-cutting concepts an enterprise IT platform is described with. Tool-agnostic, neutral to any operating model,
 and machine-readable so that architecture documents can be checked against it ([ADR 0001](decisions/0001-purpose-scope-and-tier-neutrality.md)).
 
-**Status:** current release `4.0.1` (2026-11-23): no term changes since `4.0.0`, the first public release; it adds the
-pipeline package under `tools/itpra-onto/`. Releases from `4.0.0` on are listed in [CHANGELOG.md](CHANGELOG.md) and on the
-repository's Releases page, each with its source archive and `sha256`.
+**Status:** current release `5.0.0` (2026-11-23): IT Operations' ids and files take the code `ITO`, so all eleven
+service domains follow one form — a MAJOR release that renames ids ([ADR 0045](decisions/0045-it-operations-carries-its-code.md);
+old → new in [migrations/5.0.0.yaml](migrations/5.0.0.yaml)). Releases from `4.0.0` on are listed in
+[CHANGELOG.md](CHANGELOG.md) and on the repository's Releases page, each with its source archive and `sha256`.
 
 ## What is here
 
@@ -15,7 +16,8 @@ repository's Releases page, each with its source archive and `sha256`.
 |---|---|
 | `schema.yaml` | The meta-schema: record fields, allowed `type` values, relationship verbs, id conventions and the two version numbers |
 | `entities.yaml` · `relationships.yaml` | The entity types and the relationship verbs, each a term of its own ([ADR 0008](decisions/0008-entity-types-and-relationship-verbs.md)) |
-| `terms/` | The vocabulary, split by kind and service domain: `domains-*`, `capabilities-*`, `functions-*`, `personas-*`, `journeys-*`, `workflows-*` and the shared concept files ([ADR 0007](decisions/0007-term-records-files-and-aliases.md)) |
+| `terms/` | The vocabulary, split by kind and service domain: `domains-<code>`, `capabilities-<code>-<grp>`, `functions-<code>-<grp>`, `personas-<code>`, `journeys-<code>`, `workflows-<code>`; a file without a service-domain code is shared by all eleven ([ADR 0007](decisions/0007-term-records-files-and-aliases.md), [ADR 0045](decisions/0045-it-operations-carries-its-code.md)) |
+| `migrations/` | The id and file renames of a MAJOR release, old → new (`5.0.0.yaml`: [ADR 0045](decisions/0045-it-operations-carries-its-code.md)) |
 | `decisions/` | The decision records that shape the vocabulary, numbered from 0001 in reading order ([index](decisions/README.md)) |
 | `tools/` · `tests/` | The checks that run in CI |
 | `tools/itpra-onto/` | The ontology-as-code pipeline: the vocabulary projected to RDF, validated with SHACL and built into canonical artefacts ([ADR 0041](decisions/0041-the-rdf-projection-roles-modelling-and-derivation.md), [ADR 0042](decisions/0042-validation-parity-register-shapes-fixtures-and-the-parity-check.md), [ADR 0043](decisions/0043-builds-artefacts-and-layers.md); [its README](tools/itpra-onto/README.md)) |
@@ -25,8 +27,10 @@ repository's Releases page, each with its source archive and `sha256`.
 - A term is one YAML record: `id`, `term`, `type` and `definition`, with optional `aliases`, `deprecated`, `relates_to` and
   `source`. Aliases are the words a reader may search for; the id never changes once released.
 - The prefix tells the kind: `CAP-` capability, `FUNC-` function, `PERSONA-`, `JRN-` journey, `WF-` workflow, `PLANE-`,
-  `SD-` service domain, `GC-` governance construct, `AUTON-` autonomy concept, and so on. Each of the ten later service
-  domains carries its code (`CAP-EUC-DEV-1`); the first domain's ids are bare (`CAP-FND-1`) ([ADR 0004](decisions/0004-identifiers-and-the-base-iri.md)).
+  `SD-` service domain, `GC-` governance construct, `AUTON-` autonomy concept, and so on. A term owned by a service
+  domain carries that domain's code after the prefix — ITO, EUC, SVD, FLD, ADM, DCF, NET, GRC, ITSM, BIA or DXC
+  (`CAP-ITO-FND-1`, `FUNC-euc-device-enrollment`); a term without a code is shared
+  ([ADR 0004](decisions/0004-identifiers-and-the-base-iri.md), [ADR 0045](decisions/0045-it-operations-carries-its-code.md)).
 - `source:` names the decision that minted or changed the record as `ADR NNNN`, always a record in `decisions/`
   ([ADR 0005](decisions/0005-decision-records-citations-and-the-writing-standard.md)).
 - A term resolves on the web at `https://itpra.4thtry.tech/id/<ID>`; the schema at `https://itpra.4thtry.tech/onto#`.
@@ -75,3 +79,4 @@ repository at `4.0.0`. The decision records consolidate what was decided in that
 | 3.16.1 – 3.16.3 | 2026-11-21 | Preparation for publication: the base IRI; citations re-pointed to these records; comments scrubbed; three engineering definitions complete the durable-execution obligations |
 | 4.0.0 | 2026-11-21 | First public release: a new location, the licences, minted IRIs and the pinning contract; no term changes |
 | 4.0.1 | 2026-11-23 | The pipeline package joins the release; one release for the vocabulary and its tooling; no term changes |
+| 5.0.0 | 2026-11-23 | IT Operations carries its code: 356 ids and 26 files renamed to the form of the other ten domains (MAJOR) |

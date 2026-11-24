@@ -217,7 +217,7 @@ def test_a_layers_graph_is_validated_and_its_shapes_are_loaded(config: Config, l
 
 
 def test_a_layers_shape_fires_on_the_layers_own_data(config: Config):
-    silent = [*_notes(), {"id": "NOTE-SILENT", "about": "CAP-FND-1"}]
+    silent = [*_notes(), {"id": "NOTE-SILENT", "about": "CAP-ITO-FND-1"}]
     layer = Layer(
         name="notes",
         emit=lambda dataset, cfg: _emit_notes(dataset, cfg, notes=silent),

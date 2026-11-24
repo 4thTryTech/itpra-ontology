@@ -1,8 +1,8 @@
-# ITPRA ontology — DATA (Data & Analytics) capabilities
-# type: Capability. ids CAP-DATA-<n>. Grouped under domain DATA (ADR 0017). Scope: data & analytics for the
-# platform and IT services (not business BI apps).
+# ITPRA ontology — ITO-DATA (Data & Analytics) capabilities
+# type: Capability. ids CAP-ITO-DATA-<n>. Grouped under domain ITO-DATA (ADR 0017). Scope: data & analytics for
+# the platform and IT services (not business BI apps).
 
-- id: CAP-DATA-1
+- id: CAP-ITO-DATA-1
   term: Managed Data Stores
   type: Capability
   definition: >
@@ -12,113 +12,113 @@
     a store type (ADR 0038); the graph data model is a T2/T3 choice. Whether a store plays the authoritative,
     governing, or derived role (KNOWLEDGE-ROLE) is a property of its deployment, never of its type.
   relates_to:
-    - {rel: grouped_by, target: DATA}
-    - {rel: consumed_by, target: PERSONA-platform-consumer}
-    - {rel: consumed_by, target: PERSONA-platform-team}
-  source: ADR 0017
+    - {rel: grouped_by, target: ITO-DATA}
+    - {rel: consumed_by, target: PERSONA-ito-platform-consumer}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: CAP-DATA-2
+- id: CAP-ITO-DATA-2
   term: Data Pipelines
   type: Capability
   definition: >
     Ingests and processes data through managed pipelines (batch and/or streaming), moving and transforming
     data between sources and stores.
   relates_to:
-    - {rel: grouped_by, target: DATA}
-    - {rel: depends_on, target: CAP-DATA-1}
-    - {rel: consumed_by, target: PERSONA-platform-consumer}
-    - {rel: consumed_by, target: PERSONA-platform-team}
-  source: ADR 0017
+    - {rel: grouped_by, target: ITO-DATA}
+    - {rel: depends_on, target: CAP-ITO-DATA-1}
+    - {rel: consumed_by, target: PERSONA-ito-platform-consumer}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: CAP-DATA-3
+- id: CAP-ITO-DATA-3
   term: Query & Analytics
   type: Capability
   definition: >
     Provides query and analytics access over platform and IT-service data, including BI/visualization for
     platform and IT insight (not business BI applications).
   relates_to:
-    - {rel: grouped_by, target: DATA}
-    - {rel: depends_on, target: CAP-DATA-1}
-    - {rel: consumed_by, target: PERSONA-platform-team}
-    - {rel: consumed_by, target: PERSONA-platform-consumer}
-  source: ADR 0017
+    - {rel: grouped_by, target: ITO-DATA}
+    - {rel: depends_on, target: CAP-ITO-DATA-1}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+    - {rel: consumed_by, target: PERSONA-ito-platform-consumer}
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: CAP-DATA-4
+- id: CAP-ITO-DATA-4
   term: Data Governance
   type: Capability
   definition: >
     Classifies, tracks lineage of, and applies retention to managed data, governing how platform and
     IT-service data is handled across its lifecycle. Retention and erasure decisions reach DERIVED
     artifacts - copies, indexes, embeddings, and cached results - not only the source record
-    (FUNC-erasure-propagation; ADR 0033). So do the source's access restrictions, enforced against the
-    principal a consumer or delegated actor acts for at retrieval time (FUNC-access-policy-propagation;
+    (FUNC-ito-erasure-propagation; ADR 0033). So do the source's access restrictions, enforced against the
+    principal a consumer or delegated actor acts for at retrieval time (FUNC-ito-access-policy-propagation;
     ADR 0038).
   relates_to:
-    - {rel: grouped_by, target: DATA}
-    - {rel: depends_on, target: CAP-DATA-1}
-    - {rel: consumed_by, target: PERSONA-security-compliance}
-    - {rel: consumed_by, target: PERSONA-platform-team}
-  source: ADR 0017
+    - {rel: grouped_by, target: ITO-DATA}
+    - {rel: depends_on, target: CAP-ITO-DATA-1}
+    - {rel: consumed_by, target: PERSONA-ito-security-compliance}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: CAP-DATA-5
+- id: CAP-ITO-DATA-5
   term: External Data Integration
   type: Capability
   definition: >
     Exposes defined integration points to external data lakes or business BI, treating enterprise-datalake
     and business-BI feeds as governed boundary integrations.
   relates_to:
-    - {rel: grouped_by, target: DATA}
-    - {rel: depends_on, target: CAP-DATA-3}
-    - {rel: consumed_by, target: PERSONA-platform-team}
-  source: ADR 0017
+    - {rel: grouped_by, target: ITO-DATA}
+    - {rel: depends_on, target: CAP-ITO-DATA-3}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: CAP-DATA-6
+- id: CAP-ITO-DATA-6
   term: Messaging & Event Streaming
   type: Capability
   definition: >
     Provides managed message brokers, queues, topics, and event streams as a backing service for
-    asynchronous inter-service communication and event movement. Complements data pipelines (CAP-DATA-2,
+    asynchronous inter-service communication and event movement. Complements data pipelines (CAP-ITO-DATA-2,
     which processes/moves data) by providing the messaging/eventing backbone services build on.
   aliases: [message queue, message broker, event streaming, pub/sub, event bus]
   relates_to:
-    - {rel: grouped_by, target: DATA}
-    - {rel: consumed_by, target: PERSONA-platform-consumer}
-    - {rel: consumed_by, target: PERSONA-platform-team}
-  source: ADR 0017
+    - {rel: grouped_by, target: ITO-DATA}
+    - {rel: consumed_by, target: PERSONA-ito-platform-consumer}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: CAP-DATA-7
+- id: CAP-ITO-DATA-7
   term: Managed Caching
   type: Capability
   definition: >
     Provisions managed in-memory caching services for low-latency data access and offload of backing
     stores, as a backing service for the platform and tenant workloads. A data-service sibling to managed
-    data stores (CAP-DATA-1). An actor's ephemeral working memory is a case of this, distinct from its
-    durable accumulated state (CAP-DATA-8; ADR 0033).
+    data stores (CAP-ITO-DATA-1). An actor's ephemeral working memory is a case of this, distinct from its
+    durable accumulated state (CAP-ITO-DATA-8; ADR 0033).
   aliases: [cache, in-memory cache, managed cache, working memory]
   relates_to:
-    - {rel: grouped_by, target: DATA}
-    - {rel: consumed_by, target: PERSONA-platform-consumer}
-    - {rel: consumed_by, target: PERSONA-platform-team}
-  source: ADR 0017
+    - {rel: grouped_by, target: ITO-DATA}
+    - {rel: consumed_by, target: PERSONA-ito-platform-consumer}
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+  source: ADR 0017 (amended by ADR 0045)
 
-- id: CAP-DATA-8
+- id: CAP-ITO-DATA-8
   term: Agent State & Memory
   type: Capability
   definition: >
     Provides governed, principal-scoped persistent state for a delegated actor (AUTON-ACTOR) - the session,
     task, and experience memory an actor accumulates across interactions - held with a lifecycle of its own:
     written on interaction, retained under policy, independently retrievable, and independently erasable per
-    principal. Distinct from operational knowledge (CAP-GOV-9), which is shared, slowly changing, and
+    principal. Distinct from operational knowledge (CAP-ITO-GOV-9), which is shared, slowly changing, and
     authored for consumption rather than accumulated by use; distinct from ephemeral working memory
-    (CAP-DATA-7) and from the store type that holds it (CAP-DATA-1), both of which are mechanisms this
+    (CAP-ITO-DATA-7) and from the store type that holds it (CAP-ITO-DATA-1), both of which are mechanisms this
     capability may sit on. Which memory kinds are retained, for how long, and in what store are T2/T3
     decisions.
   aliases: [delegated actor state, agentic memory, agent memory, session state, episodic memory, procedural memory]
   relates_to:
-    - {rel: grouped_by, target: DATA}
-    - {rel: depends_on, target: CAP-DATA-1}
-    - {rel: depends_on, target: CAP-DATA-4}
+    - {rel: grouped_by, target: ITO-DATA}
+    - {rel: depends_on, target: CAP-ITO-DATA-1}
+    - {rel: depends_on, target: CAP-ITO-DATA-4}
     - {rel: applies_to, target: AUTON-ACTOR}
-    - {rel: consumed_by, target: PERSONA-platform-team}
-    - {rel: consumed_by, target: PERSONA-platform-consumer}
-  source: ADR 0033
+    - {rel: consumed_by, target: PERSONA-ito-platform-team}
+    - {rel: consumed_by, target: PERSONA-ito-platform-consumer}
+  source: ADR 0033 (amended by ADR 0045)

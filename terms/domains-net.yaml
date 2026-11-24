@@ -4,7 +4,7 @@
 # group is placed under the fitting existing plane. Taxonomy ratified by ADR 0023. Owning service domain:
 # SD-NETWORK (interfaces_with PLANE-RESOURCE; see ADR 0009 + ADR 0023). SCOPE: the ENTERPRISE network BEYOND the
 # platform's own substrate networking — corporate WAN, internet/ cloud edge, site-to-site/remote connectivity.
-# The platform's in-cluster/in-fabric networking is ITO SUB.
+# The platform's in-cluster/in-fabric networking is ITO-SUB.
 
 - id: NET-CON
   term: Connectivity Provisioning & WAN
@@ -13,7 +13,7 @@
     Provisioning and operating the enterprise wide-area network and its edges — site/branch connectivity, the
     corporate WAN backbone and overlay with dynamic path selection, internet-edge transport, and cloud/SaaS
     on-ramp — over any IP transport. Provides the enterprise connectivity the platform and its consumers reach
-    the wider world across; distinct from the platform's in-fabric networking (ITO SUB).
+    the wider world across; distinct from the platform's in-fabric networking (ITO-SUB).
   relates_to:
     - {rel: grouped_by, target: PLANE-RESOURCE}
     - {rel: belongs_to_service_domain, target: SD-NETWORK}
@@ -27,7 +27,7 @@
     internet egress, network segmentation and micro-segmentation between sites/zones/application groups, and
     governance of access to cloud applications. Enforces enterprise security policy on the network path;
     applies (does not author) the enterprise control catalog and threat intelligence (Enterprise Security/GRC),
-    and is distinct from platform/workload security (ITO SEC).
+    and is distinct from platform/workload security (ITO-SEC).
   relates_to:
     - {rel: grouped_by, target: PLANE-SECURITY}
     - {rel: belongs_to_service_domain, target: SD-NETWORK}
@@ -53,7 +53,7 @@
     The enterprise-edge naming, addressing, and DNS foundation — authoritative DNS resolution and zones,
     dynamic address assignment, and IP address-space management (the authoritative address record/plan) kept
     consistent and conflict-free across hybrid sites. Owns the enterprise DDI service and record; per-workload
-    service discovery and in-fabric addressing inside the platform are ITO SUB.
+    service discovery and in-fabric addressing inside the platform are ITO-SUB.
   relates_to:
     - {rel: grouped_by, target: PLANE-RESOURCE}
     - {rel: belongs_to_service_domain, target: SD-NETWORK}
@@ -79,7 +79,7 @@
     Understanding and assuring the enterprise network — telemetry and flow collection, network performance and
     health monitoring, assurance that the network is meeting its intended service level, and visibility of
     topology, configuration, and change. Observes the enterprise network path and edges; platform/workload
-    observability is ITO OBS and the end-user digital-experience view is End-User Computing.
+    observability is ITO-OBS and the end-user digital-experience view is End-User Computing.
   relates_to:
     - {rel: grouped_by, target: PLANE-OPERATIONS}
     - {rel: belongs_to_service_domain, target: SD-NETWORK}

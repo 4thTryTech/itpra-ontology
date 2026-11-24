@@ -38,7 +38,7 @@ def test_pyoxigraph_store_add_and_sparql_count():
         ox.Quad(
             ox.NamedNode("https://example.test/ns/itpra/id/CAP-TEST-1"),
             ox.NamedNode("https://example.test/ns/itpra/onto#groupedBy"),
-            ox.NamedNode("https://example.test/ns/itpra/id/FND"),
+            ox.NamedNode("https://example.test/ns/itpra/id/ITO-FND"),
             graph,
         )
     )
@@ -80,7 +80,7 @@ def _build_blank_node_free_dataset() -> ox.Dataset:
         ox.Quad(
             ox.NamedNode("https://example.test/ns/itpra/id/CAP-TEST-1"),
             ox.NamedNode("https://example.test/ns/itpra/onto#groupedBy"),
-            ox.NamedNode("https://example.test/ns/itpra/id/FND"),
+            ox.NamedNode("https://example.test/ns/itpra/id/ITO-FND"),
             graph,
         )
     )
