@@ -6,6 +6,10 @@ terms/** differs, `ontology_version` must differ too and must be a higher Semant
 vocabulary change is allowed (a release bump) and reported. With no usable base (first commit, or an all-zero sha
 from a branch-creation push) the check passes after validating the version format.
 
+A version that is on the base but not released yet is still open: while the tag `v<version>` does not exist, a
+further vocabulary change joins that pending release and needs no second bump. The tags must be in the clone for
+this (CI fetches them); a clone with no `v*` tag at all cannot tell, and the check then asks for the bump.
+
 Usage:  python tools/check-version-bump.py [--base <git ref or sha>]   (default: BASE_SHA env, else HEAD~1)
 """
 from __future__ import annotations
@@ -33,7 +37,7 @@ def vocabulary_changed(paths: list[str]) -> bool:
     return any(p == v or (v.endswith("/") and p.startswith(v)) for p in paths for v in VOCAB)
 
 
-def verdict(base_schema: str | None, head_schema: str, changed: list[str]) -> tuple[bool, str]:
+def verdict(base_schema: str | None, head_schema: str, changed: list[str], base_released: bool = True) -> tuple[bool, str]:
     head = parse_version(head_schema)
     if head is None:
         return False, "schema.yaml: ontology_version missing or not X.Y.Z"
@@ -45,6 +49,8 @@ def verdict(base_schema: str | None, head_schema: str, changed: list[str]) -> tu
         return True, f"no vocabulary change; ontology_version {'.'.join(map(str, head))}{note}"
     if base is None:
         return True, f"vocabulary changed; base version unreadable; head {'.'.join(map(str, head))}"
+    if head == base and not base_released:
+        return True, f"vocabulary changed; ontology_version {'.'.join(map(str, head))} is not released yet (no tag), so the change joins it"
     if head == base:
         return False, f"vocabulary changed but ontology_version is still {'.'.join(map(str, head))} — bump it in this change (ADR 0003)"
     if head < base:
@@ -57,6 +63,16 @@ def git(*args: str, root: Path) -> str | None:
         return subprocess.run(["git", *args], cwd=root, check=True, capture_output=True, text=True).stdout
     except (subprocess.CalledProcessError, FileNotFoundError):
         return None
+
+
+def released(schema_text: str | None, root: Path) -> bool:
+    """True when the tag v<ontology_version> of this schema text exists, or when the clone holds no v* tag at all
+    (then nothing can be told, and the stricter answer is given)."""
+    version = parse_version(schema_text or "")
+    tags = git("tag", "--list", "v*", root=root)
+    if version is None or not tags or not tags.strip():
+        return True
+    return f"v{'.'.join(map(str, version))}" in tags.split()
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -76,7 +92,7 @@ def main(argv: list[str] | None = None) -> int:
             changed = [line.strip() for line in diff.splitlines() if line.strip()]
             status = git("status", "--porcelain", root=root) or ""
             changed += [line[3:].strip() for line in status.splitlines() if line.strip()]
-    ok, message = verdict(base_schema, head_schema, changed)
+    ok, message = verdict(base_schema, head_schema, changed, base_released=released(base_schema, root))
     print(f"check-version-bump: {'OK' if ok else 'FAILED'} — {message}")
     return 0 if ok else 1
 

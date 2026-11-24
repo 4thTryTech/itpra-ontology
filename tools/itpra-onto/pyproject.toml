@@ -1,6 +1,6 @@
 [project]
 name = "itpra-onto"
-version = "0.1.0"
+version = "5.0.0"
 description = "The ITPRA ontology-as-code pipeline: YAML -> LinkML authoring schema -> RDF in named graphs -> SPARQL rules -> SHACL -> Oxigraph -> canonical artefacts"
 readme = "README.md"
 requires-python = ">=3.12,<3.14"

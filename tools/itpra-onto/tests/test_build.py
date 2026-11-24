@@ -419,13 +419,29 @@ def test_dataset_node_carries_the_seven_scalars(tmp_path: Path, config: Config):
     assert literal_for("inputHash") == report.input_hash
     assert literal_for("rulesVersion") == report.rules_version
     assert literal_for("schemaHash") is not None
-    assert literal_for("pipelineVersion") is not None
+    assert literal_for("pipelineVersion") == report.ontology_version  # one release, one version (ADR 0044)
     assert literal_for("environmentHash") is not None
     assert literal_for("codeHash") is not None
     version_info = [
         q.object.value for q in quads if q.subject == dataset_node and q.predicate == emit.OWL_VERSION_INFO
     ]
     assert version_info == [report.ontology_version]
+
+
+def test_dataset_node_declares_the_licence(tmp_path: Path, config: Config):
+    """ADR 0002: the provenance graph's header — the dataset node — declares the vocabulary's licence; the
+    ``schema`` graph's ontology and scheme nodes carry it too, and nothing else does."""
+    out = tmp_path / "out"
+    build_module.build(config=config, out_dir=out, load_store=False)
+    quads = list(ox.parse(input=(out / build_module.FULL_DIRNAME / build_module.FULL_FILENAME).read_bytes(), format=ox.RdfFormat.N_QUADS))
+    licensed = {(q.subject.value, q.graph_name.value) for q in quads if q.predicate == emit.DCTERMS_LICENSE}
+    assert all(q.object == emit.LICENCE for q in quads if q.predicate == emit.DCTERMS_LICENSE)
+    schema_graph = config.iri.graph_ns + "schema"
+    assert licensed == {
+        (build_module._dataset_node(config).value, config.iri.graph_ns + build_module.PROVENANCE_GRAPH_LOCAL),  # noqa: SLF001
+        (config.iri.onto_ns.removesuffix("#"), schema_graph),
+        (config.iri.id_ns + emit.SCHEME_LOCAL, schema_graph),
+    }
 
 
 # ---------------------------------------------------------------------------------------------------

@@ -3,7 +3,7 @@
 Every question is a plain ``.rq`` file under ``tests/competency/`` (a ``SELECT`` or ``ASK``), run
 in-process against one ``pyoxigraph.Store`` loaded with the schema + t1 + inferred graphs — the default
 dataset a query reads (ADR 0041 D3). A query file never names the base IRI or declares
-a ``PREFIX`` for ``itpra:``/``itpra-o:``/``itpra-g:`` (``tests/test_iri_config.py``'s placeholder scan
+a ``PREFIX`` for ``itpra:``/``itpra-o:``/``itpra-g:`` (``tests/test_iri_config.py``'s base-IRI scan
 covers ``.rq`` files too, matching ``rules/*.rq``'s discipline); :func:`itpra_onto.rules.prefix_block`
 supplies that block at run time. A standard W3C vocabulary (``skos:``, ``rdf:``, ``rdfs:``) may be
 declared directly inside a query file, since it is not the configured base IRI.
@@ -125,7 +125,7 @@ def _count_consumed_by(inputs: Inputs, type_value: str) -> int:
 
 def test_type_counts_match_the_yaml_records(store: ox.Store, config: Config, inputs: Inputs):
     """For each of the 13 authored `type` values, the number of subjects of that class in t1 equals the
-    YAML record count of that type."""
+    YAML record count of that type — zero for a type the vocabulary holds no record of (Workflow; ADR 0046)."""
     from itpra_onto import schema_loading
 
     vocab = emit.Vocabulary(config, schema_loading.load_schema_view(config=config))
@@ -134,10 +134,9 @@ def test_type_counts_match_the_yaml_records(store: ox.Store, config: Config, inp
     rows = _rows(_query(store, config, "cq-01-type-counts.rq"))
     counted = {row["class"].value: int(row["n"].value) for row in rows}
     expected = Counter(t.record["type"] for t in inputs.terms)
-    assert set(expected) == set(vocab.term_class)
-    for type_value, n in expected.items():
-        cls_iri = vocab.term_class[type_value].value
-        assert counted.get(cls_iri) == n, type_value
+    assert set(expected) <= set(vocab.term_class)
+    for type_value, cls in vocab.term_class.items():
+        assert counted.get(cls.value, 0) == expected[type_value], type_value
 
 
 # =====================================================================================================
@@ -399,6 +398,18 @@ def test_no_blank_nodes_anywhere(store: ox.Store, config: Config, report: rules.
 
 
 # =====================================================================================================
+# CQ11 — the projection's header declares its licence (ADR 0002)
+
+
+def test_the_ontology_and_the_scheme_declare_the_licence(store: ox.Store, config: Config):
+    rows = _rows(_query(store, config, "cq-25-licence.rq"))
+    assert {(r["node"].value, r["licence"].value) for r in rows} == {
+        (config.iri.onto_ns.removesuffix("#"), emit.LICENCE.value),
+        (config.iri.id_ns + emit.SCHEME_LOCAL, emit.LICENCE.value),
+    }
+
+
+# =====================================================================================================
 # every .rq file parses and runs, even if no test above happens to use it
 
 
@@ -417,9 +428,9 @@ def test_every_competency_query_file_parses_and_runs(store: ox.Store, config: Co
 
 
 def test_at_least_one_query_file_per_numbered_competency_question():
-    """Sanity: the competency directory holds at least as many query files as the 10 numbered competency
+    """Sanity: the competency directory holds at least as many query files as the 11 numbered competency
     questions above (several questions are split into a few small, single-purpose queries)."""
-    assert len(ALL_QUERY_FILES) >= 10
+    assert len(ALL_QUERY_FILES) >= 11
 
 
 # =====================================================================================================

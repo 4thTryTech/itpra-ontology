@@ -377,7 +377,7 @@ wheels = [
 
 [[package]]
 name = "itpra-onto"
-version = "0.1.0"
+version = "5.0.0"
 source = { editable = "." }
 dependencies = [
     { name = "linkml" },

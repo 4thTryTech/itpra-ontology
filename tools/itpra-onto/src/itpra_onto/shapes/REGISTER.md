@@ -24,7 +24,7 @@ here is itself a shape, a fixture, or a schema change.
 
 ## Table A — the linter's rule ids
 
-Columns: **id** · **sev** (severity in the linter) · **check** (one line) · **family** (`A1`–`A15`, the
+Columns: **id** · **sev** (severity in the linter) · **check** (one line) · **family** (`A1`–`A16`, the
 linter's check families; "pre-A" = a parse or shape guard that precedes them) · **mechanism** · **target
 graph** · **notes**.
 
@@ -52,10 +52,14 @@ the emitter's `emit-error` finding, and reports the `python` rows as outside the
 | `source-grammar` | error | a `source:` item names a record but is not `ADR NNNN` with an optional amended/extended tail (ADR 0005) | A14 | `python` — the emitter raises `SourceGrammarError` for the same item before any graph exists (the `B-13-emit-guard` fixture proves that side); the lint reports it on the record | n/a | an item carrying a URL is external and exempt |
 | `source-adr-unresolved` | error | a cited `ADR NNNN` has no record under `decisions/` (ADR 0005) | A15 | `python` — decision records are files, not graph facts; B-13 checks only the citation node's shape | n/a | |
 | `version-format` | error | `ontology_version` is not X.Y.Z, or `schema_version` is not an integer (ADR 0003) | pre-A | `python` — a fact of `schema.yaml`, read before emission | n/a | |
+| `retired-format` | error | a `retired` value is not an X.Y.Z version (ADR 0048) | A16 | `core` — `sh:pattern` on `itpra-o:retiredIn` per subject of that predicate (`structural.ttl`'s `itpra-o:RetiredFormatShape`); the emitter projects the value verbatim | t1 | the `retired` slot of the authoring schema carries the same pattern |
+| `replaced-by-unresolved` | error | `replaced_by` is not the id of a record, or names its own record (ADR 0048) | A16 | `sparql` — `dcterms:isReplacedBy` object that is no `skos:Concept` or is the subject itself (`crossfield.ttl`'s `itpra-o:ReplacedByUnresolvedShape`); `sh:class` alone cannot see the self-reference | t1 | `fixtures/crossfield/replaced-by-unresolved.yaml` proves the dangling arm; `test_shapes_crossfield.py` the self-reference arm |
+| `replaced-by-without-retired` | error | `replaced_by` on a record that is not retired (ADR 0048) | A16 | `core` — `sh:hasValue true` on `owl:deprecated` per subject of `dcterms:isReplacedBy` (`structural.ttl`'s `itpra-o:ReplacedByWithoutRetiredShape`); the emitter marks a record `owl:deprecated` exactly when it carries `retired` | t1 | |
 
 **The banned-synonym scan has no rule id.** `schema.yaml` documents the `deprecated` field as not
 machine-enforced: the banned words occur legitimately in dozens of definitions, so no check — linter or
-shape — exists or is owed for it.
+shape — exists or is owed for it. `deprecated` lists banned synonyms and never marks retirement; that is
+`retired` (the three A16 rows above).
 
 ## Table B — rules the shapes add that the linter lacks
 
@@ -69,7 +73,7 @@ gaps.
 | B-2 | `grouped_by` ≥1 per `Capability`/`Domain`/`Journey` | `schema/itpra.linkml.yaml`'s `itpra_verb` `cardinality` for `grouped_by` (`{min:1,max:1}` on each); already enforced pre-emission by LinkML's `has_member` on the authoring schema | `core` — `sh:minCount 1` on `itpra-o:groupedBy` in `t1`, restating the same declared cardinality at the graph level (needed for `itpra-onto parity`, since the generated authoring SHACL doesn't validate the graph) | **stricter than the linter** — the linter has no "every Capability/Domain/Journey has a grouped_by" check at all |
 | B-3 | `grouped_by` ≤1 per `Capability`/`Domain`/`Journey` | Same `itpra_verb` annotation, `cardinality` field; the LinkML schema's own comment at `Capability.relates_to.has_member` says "at most one: itpra_verb annotation, enforced by the shapes" | `core` — `sh:maxCount 1` on `itpra-o:groupedBy` | **stricter than the linter AND than the current authoring schema** — neither checks the upper bound today |
 | B-5 | `consumed_by` ≥1 per `Capability`/`Journey` | ADR 0042 D3: a minimum the data satisfies but nothing declares (`consumed_by` ≥1 on Capability and Journey) | `core` — `sh:minCount 1` on `itpra-o:consumedBy` (`structural.ttl`'s `itpra-o:ConsumedByMinCountShape`) | **built as `sh:Warning`** (ADR 0042 D3: advisory) — the `itpra_verb` annotation's own `cardinality: []` is deliberately empty, so this stays advisory rather than a linter-parity `sh:Violation`; `fixtures/structural/B-5.yaml` proves it fires |
-| B-6 | `realized_in` exactly 1 per `Workflow` | Same ADR 0042 D3 case (a minimum nothing declares) | `core` — `sh:minCount 1`/`sh:maxCount 1` on `itpra-o:realizedIn` (`structural.ttl`'s `itpra-o:RealizedInExactlyOneShape`) | **built as `sh:Warning`** (ADR 0042 D3: advisory) — same reasoning as B-5; `cardinality: []` is empty; `fixtures/structural/B-6.yaml` proves it fires |
+| B-6 | `realized_in` exactly 1 per `Workflow` | Same ADR 0042 D3 case (a minimum nothing declares) | `core` — `sh:minCount 1`/`sh:maxCount 1` on `itpra-o:realizedIn` (`structural.ttl`'s `itpra-o:RealizedInExactlyOneShape`) | **built as `sh:Warning`** (ADR 0042 D3: advisory) — same reasoning as B-5; `cardinality: []` is empty. The vocabulary holds no Workflow record (ADR 0046): the shape applies to a consumer's own; `fixtures/structural/B-6.yaml` adds one to prove it fires |
 | B-7 | `depends_on` ≥1 per `Journey` | Same ADR 0042 D3 case | `core` — `sh:minCount 1` on `itpra-o:dependsOn` (`structural.ttl`'s `itpra-o:DependsOnMinCountShape`) | **built as `sh:Warning`** (ADR 0042 D3: advisory) — same reasoning; `fixtures/structural/B-7.yaml` proves it fires |
 | B-8 | No `skos:altLabel` equals its own subject's `skos:prefLabel`, case-insensitively | ADR 0007 (an alias never equals the term's own label, case-insensitively) | `sparql` — `FILTER(LCASE(?alt) = LCASE(?pref))` between two properties of the **same** subject; SHACL Core's `sh:disjoint` compares property values by exact RDF-term equality only, not case-folded | **new** — the linter has zero SKOS label-collision checks |
 | B-9 | A term's alias equals a **different** record's own `prefLabel` | (none — SKOS permits it) | — | **no rule, by design.** ADR 0007 forbids only a term's alias duplicating **its own** `prefLabel` (self-collision); a cross-term collision is ordinary controlled-vocabulary homonymy (a word legitimately reused as one term's alternate label and another's preferred one) and nothing in ADR 0007 or the linter forbids it. Not created here. If a future record wants a heuristic: `?a skos:altLabel ?l . ?b skos:prefLabel ?l . FILTER(?a != ?b)` at `warn` severity |
@@ -149,22 +153,24 @@ mechanism is `core` or `sparql` get a shape.
 
 ### `structural` (SHACL **Core**) — `shapes/structural.ttl`, `fixtures/structural/`
 
-Targets: `t1`, `inferred`. **14 distinct `itpra-o:ruleId` values:**
+Targets: `t1`, `inferred`. **16 distinct `itpra-o:ruleId` values:**
 
-`field-missing` · `id-pattern` · `target-unresolved` · `function-derived-from` · B-2 (`grouped_by` ≥1) · B-3
-(`grouped_by` ≤1) · B-12 (authoringFile cardinality) · B-18 (`inDomain` ≥1, `inferred`) · B-19
-(`inPlane`/`inServiceDomain` exactly 1, `inferred`) — 9 linter-parity and Table B ids — plus **B-5, B-6,
-B-7** (`sh:Warning`) plus **B-3-belongs-to-service-domain** (`belongs_to_service_domain` cardinality, named
-in the family of B-3) and **B-2-supports** (`supports` ≥1 per Function, named in the family of B-2; causally
-coupled to B-18) — 9 + 3 + 2 = 14. The emit-time ids (`type-unknown`, `verb-unknown`,
+`field-missing` · `id-pattern` · `target-unresolved` · `function-derived-from` · `retired-format` ·
+`replaced-by-without-retired` · B-2 (`grouped_by` ≥1) · B-3 (`grouped_by` ≤1) · B-12 (authoringFile
+cardinality) · B-18 (`inDomain` ≥1, `inferred`) · B-19 (`inPlane`/`inServiceDomain` exactly 1, `inferred`) —
+11 linter-parity and Table B ids — plus **B-5, B-6, B-7** (`sh:Warning`) plus **B-3-belongs-to-service-domain**
+(`belongs_to_service_domain` cardinality, named in the family of B-3) and **B-2-supports** (`supports` ≥1 per
+Function, named in the family of B-2; causally coupled to B-18) — 11 + 3 + 2 = 16. The emit-time ids (`type-unknown`, `verb-unknown`,
 `relates-to-malformed`) have fixtures here with `rule: emit-error`.
 
 ### `crossfield` (SHACL-**SPARQL**) — `shapes/crossfield.ttl`, `fixtures/crossfield/`
 
-Targets: `t1`. Graph-wide checks (label integrity, node shape of a projection-only construct). 3 ids:
+Targets: `t1`. Graph-wide checks (label integrity, node shape of a projection-only construct, a successor
+that is another record). 4 ids:
 
-B-8 (alt-label self-collision) · B-8-pref-label-unique (at most one `skos:prefLabel` per language tag per
-subject, SKOS S14) · B-13 (decidedIn node shape)
+`replaced-by-unresolved` (a retired record's `dcterms:isReplacedBy` names another record) · B-8 (alt-label
+self-collision) · B-8-pref-label-unique (at most one `skos:prefLabel` per language tag per subject, SKOS S14)
+· B-13 (decidedIn node shape)
 
 ### `shapes/generated/` — owned by the generator, not a hand-written file
 
@@ -177,16 +183,17 @@ id: **B-22** (17 shapes, one per verb). Its fixtures live in `fixtures/structura
 
 Recomputed from the files:
 
-- **Table A rows:** 16 (`itpra-onto parity` fails if the table's row count differs) — the ids
+- **Table A rows:** 19 (`itpra-onto parity` fails if the table's row count differs) — the ids
   `itpra_onto.lint` implements (`CORE_RULE_IDS`).
-- **Per mechanism:** `core` **4** (`field-missing`, `id-pattern`, `target-unresolved`,
-  `function-derived-from`) · `generated` **2** (`type-unknown`, `verb-unknown`) · `emit` **1**
+- **Per mechanism:** `core` **6** (`field-missing`, `id-pattern`, `target-unresolved`,
+  `function-derived-from`, `retired-format`, `replaced-by-without-retired`) · `sparql` **1**
+  (`replaced-by-unresolved`) · `generated` **2** (`type-unknown`, `verb-unknown`) · `emit` **1**
   (`relates-to-malformed`) · `python` **9** (`yaml-parse-error`, `termfile-not-list`, `record-not-mapping`,
   `field-unknown`, `id-duplicate`, `schema-types-missing`, `source-grammar`, `source-adr-unresolved`,
-  `version-format`). **4 + 2 + 1 + 9 = 16.** Comparable in `itpra-onto parity`: the 4 `core` ids. Emit-time
-  mapped: the 3 `generated`/`emit` ids. Outside the comparison: the 9 `python` ids.
+  `version-format`). **6 + 1 + 2 + 1 + 9 = 19.** Comparable in `itpra-onto parity`: the 7 `core`/`sparql`
+  ids. Emit-time mapped: the 3 `generated`/`emit` ids. Outside the comparison: the 9 `python` ids.
 - **Table B rows: 21** (see the Table B counts paragraph): 11 stricter, 3 warning, 2 no rule, 1 enforced
   elsewhere, 4 test-only.
-- **Distinct `itpra-o:ruleId` values in the loaded shapes: 18** — `structural` 14 · `crossfield` 3 ·
+- **Distinct `itpra-o:ruleId` values in the loaded shapes: 21** — `structural` 16 · `crossfield` 4 ·
   `generated` 1 (B-22). `itpra-onto parity` checks at run time that every comparable id is among them and
   that every one of them is a Table A or Table B id.

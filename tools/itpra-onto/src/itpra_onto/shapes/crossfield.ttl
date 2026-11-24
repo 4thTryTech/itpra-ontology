@@ -1,5 +1,5 @@
 # crossfield.ttl -- the `crossfield` shape file (SHACL-SPARQL). shapes/REGISTER.md is the contract:
-# Table B rows B-8 and B-13, severities per Table C. B-9 (an alias equal to a DIFFERENT record's prefLabel)
+# Table A row replaced-by-unresolved, Table B rows B-8 and B-13, severities per Table C. B-9 (an alias equal to a DIFFERENT record's prefLabel)
 # is "no rule, by design" in the register and is deliberately NOT built here.
 #
 # Conventions (itpra_onto.shacl module docstring):
@@ -104,6 +104,29 @@ itpra-o:DecidedInAdrNodeShape
                     !isIRI(?value)
                     || !REGEX(STRAFTER(STR(?value), STR(itpra:)), "^ADR-[0-9]{4}$")
                 )
+            }
+        """ ;
+    ] .
+
+# ---------------------------------------------------------------------------------------------------------
+# replaced-by-unresolved (Table A; ADR 0048) -- the successor a retired record names (dcterms:isReplacedBy)
+# is another record: a skos:Concept, never the subject itself. SHACL Core's sh:class catches the dangling
+# successor but not the self-reference, hence SPARQL.
+itpra-o:ReplacedByUnresolvedShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf dcterms:isReplacedBy ;
+    sh:severity sh:Violation ;
+    itpra-o:ruleId "replaced-by-unresolved" ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "{$this} is replaced by {?value}, which is not another record (ADR 0048)" ;
+        sh:prefixes itpra-o:shapesPrefixes ;
+        sh:select """
+            SELECT $this ?value ?path
+            WHERE {
+                $this dcterms:isReplacedBy ?value .
+                FILTER(?value = $this || NOT EXISTS { ?value a skos:Concept })
+                BIND(dcterms:isReplacedBy AS ?path)
             }
         """ ;
     ] .

@@ -43,7 +43,7 @@ itpra-o:VerbPairsAppliesToShape
         """ ;
     ] .
 
-# belongs_to_service_domain (evidence: data; predicate itpra-o:belongsToServiceDomain); allowed pairs: (Concept, ServiceDomain), (Domain, ServiceDomain)
+# belongs_to_service_domain (evidence: data; predicate itpra-o:belongsToServiceDomain); allowed pairs: (Domain, ServiceDomain)
 itpra-o:VerbPairsBelongsToServiceDomainShape
     a sh:NodeShape ;
     sh:targetSubjectsOf itpra-o:belongsToServiceDomain ;
@@ -51,7 +51,7 @@ itpra-o:VerbPairsBelongsToServiceDomainShape
     itpra-o:ruleId "B-22" ;
     sh:sparql [
         a sh:SPARQLConstraint ;
-        sh:message "B-22: belongs_to_service_domain edge {$this} -> {?value}: subject class {?subjectClass} with object class {?objectClass} is not an allowed pair for belongs_to_service_domain (itpra_verb pairs: (Concept, ServiceDomain), (Domain, ServiceDomain))" ;
+        sh:message "B-22: belongs_to_service_domain edge {$this} -> {?value}: subject class {?subjectClass} with object class {?objectClass} is not an allowed pair for belongs_to_service_domain (itpra_verb pairs: (Domain, ServiceDomain))" ;
         sh:prefixes itpra-o:shapesPrefixes ;
         sh:select """
             SELECT DISTINCT $this ?value ?subjectClass ?objectClass
@@ -65,7 +65,6 @@ itpra-o:VerbPairsBelongsToServiceDomainShape
                     $this rdf:type ?s .
                     ?value rdf:type ?o .
                     FILTER(
-                        (?s = itpra:CONCEPT && ?o = itpra:SERVICE_DOMAIN) ||
                         (?s = itpra:DOMAIN && ?o = itpra:SERVICE_DOMAIN)
                     )
                 }
@@ -284,7 +283,7 @@ itpra-o:VerbPairsGroupedByShape
         """ ;
     ] .
 
-# interfaces_with (evidence: data; predicate itpra-o:interfacesWith); allowed pairs: (ServiceDomain, Plane)
+# interfaces_with (evidence: meta-only; predicate itpra-o:interfacesWith); allowed pairs: (ServiceDomain, Plane)
 itpra-o:VerbPairsInterfacesWithShape
     a sh:NodeShape ;
     sh:targetSubjectsOf itpra-o:interfacesWith ;
@@ -400,7 +399,7 @@ itpra-o:VerbPairsProducesShape
         """ ;
     ] .
 
-# realized_in (evidence: data; predicate itpra-o:realizedIn); allowed pairs: (Workflow, Journey)
+# realized_in (evidence: meta-only; predicate itpra-o:realizedIn); allowed pairs: (Capability, Journey), (Workflow, Journey)
 itpra-o:VerbPairsRealizedInShape
     a sh:NodeShape ;
     sh:targetSubjectsOf itpra-o:realizedIn ;
@@ -408,7 +407,7 @@ itpra-o:VerbPairsRealizedInShape
     itpra-o:ruleId "B-22" ;
     sh:sparql [
         a sh:SPARQLConstraint ;
-        sh:message "B-22: realized_in edge {$this} -> {?value}: subject class {?subjectClass} with object class {?objectClass} is not an allowed pair for realized_in (itpra_verb pairs: (Workflow, Journey))" ;
+        sh:message "B-22: realized_in edge {$this} -> {?value}: subject class {?subjectClass} with object class {?objectClass} is not an allowed pair for realized_in (itpra_verb pairs: (Capability, Journey), (Workflow, Journey))" ;
         sh:prefixes itpra-o:shapesPrefixes ;
         sh:select """
             SELECT DISTINCT $this ?value ?subjectClass ?objectClass
@@ -422,6 +421,7 @@ itpra-o:VerbPairsRealizedInShape
                     $this rdf:type ?s .
                     ?value rdf:type ?o .
                     FILTER(
+                        (?s = itpra:CAPABILITY && ?o = itpra:JOURNEY) ||
                         (?s = itpra:WORKFLOW && ?o = itpra:JOURNEY)
                     )
                 }

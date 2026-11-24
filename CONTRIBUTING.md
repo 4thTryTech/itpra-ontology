@@ -18,7 +18,8 @@ Thank you for helping keep this vocabulary precise. Everything below follows the
    [ADR 0048](decisions/0048-retirement.md)), MAJOR for anything that removes or renames an id, changes a
    verb's meaning or drops a value. A change to tooling, records or documentation alone needs no bump; it ships with
    the next release, a PATCH when nothing else changed
-   ([ADR 0044](decisions/0044-one-release-for-the-vocabulary-and-its-tooling.md)).
+   ([ADR 0044](decisions/0044-one-release-for-the-vocabulary-and-its-tooling.md)). While a version is on `master`
+   but not yet tagged, a further vocabulary change joins it without a second bump; the check reads the tags to tell.
 4. **Backbone changes need a maintainer first**: a new verb, type, plane, quality attribute, journey group, governance
    construct, dimension value or service domain is discussed as a record before any diff.
 5. **Sign off every commit** under the [Developer Certificate of Origin](https://developercertificate.org/) with

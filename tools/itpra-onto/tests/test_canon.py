@@ -15,8 +15,8 @@ import pyoxigraph as ox
 
 from itpra_onto import canon
 
-# A fake host (never the shipped placeholder -- tests/test_iri_config.py's project-wide scan would flag
-# that literal in a .py file outside its explicit allow-list).
+# A fake host, never the configured base (tests/test_iri_config.py's project-wide scan flags that literal in
+# any file but the configuration and its generated fragments).
 EX = "https://example.test/ns/itpra-canon/"
 
 

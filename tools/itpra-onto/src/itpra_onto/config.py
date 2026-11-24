@@ -11,9 +11,6 @@ missing any ``[iri]`` key fails loudly (:class:`ConfigError`) rather than
 silently falling back to a value baked into this module.
 
 ``[paths]`` locates the vocabulary and the output directories.
-:func:`is_placeholder_base_iri` is the check ``itpra-onto release`` runs
-first: the shipped ``[iri] base`` is the real base IRI (ADR 0004), and
-``release`` refuses a base whose host is a reserved ``.invalid`` name.
 """
 
 from __future__ import annotations
@@ -22,7 +19,6 @@ import os
 import tomllib
 from dataclasses import dataclass
 from pathlib import Path
-from urllib.parse import urlsplit
 
 CONFIG_FILENAME = "itpra-onto.toml"
 
@@ -172,16 +168,3 @@ def load_config(path: Path | str | None = None) -> Config:
         python=PythonConfig(pinned=python_raw.get("pinned", "3.12")),
         config_path=config_path,
     )
-
-
-def is_placeholder_base_iri(base_iri: str) -> bool:
-    """True when ``base_iri``'s host ends with ``.invalid``.
-
-    ``.invalid`` is the RFC 2606 reserved TLD guaranteed to never resolve. The
-    shipped ``itpra-onto.toml`` carries the real base IRI (ADR 0004); a
-    ``.invalid`` host is a placeholder that is never published, and the
-    ``release`` CLI subcommand calls this to refuse running against one. The
-    tests exercise the refusal through a temporary config with such a host.
-    """
-    host = urlsplit(base_iri).hostname or ""
-    return host.endswith(".invalid")

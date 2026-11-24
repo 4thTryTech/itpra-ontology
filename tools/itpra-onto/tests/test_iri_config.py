@@ -3,21 +3,16 @@
 ``itpra-onto.toml`` ``[iri] base`` is the single source; neither the LinkML schema's own ``id:`` nor its
 ``itpra:``/``itpra-o:`` prefix declarations may carry an IRI literal. This module tests that this holds:
 
-(a) :func:`test_placeholder_literal_confined_to_the_allow_list` — a project-wide scan: the reserved-domain
-    placeholder literal appears in no ``.py``/``.yaml``/``.rq`` file in this package, and the configured
-    base appears only in ``itpra-onto.toml`` itself and the two schema fragments generated from it.
+(a) a project-wide scan: the configured base appears only in ``itpra-onto.toml`` itself and the two schema
+    fragments generated from it.
 (b) regenerating the prefixes fragment (and the in-memory main-schema id) from a config whose
     ``[iri] base`` has changed yields the new IRIs and is otherwise byte-identical / unchanged.
 (c) ``gen-prefixes --check`` (and the underlying :func:`itpra_onto.gen_prefixes.check`) fails once the
     config has moved on from what the committed fragment reflects.
-(d) ``itpra-onto release`` refuses on a placeholder base (test_smoke.py) and, given a real base, falls
-    through to its own "not implemented" exit (2) rather than refusing — i.e. the placeholder check, and
-    only that check, gates it (``release`` is not implemented yet).
 """
 
 from __future__ import annotations
 
-import os
 import re
 import subprocess
 import sys
@@ -29,17 +24,11 @@ from itpra_onto import gen_prefixes, schema_loading
 from itpra_onto.config import DEFAULT_CONFIG_PATH, ConfigError, load_config
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-PLACEHOLDER = "placeholder" ".invalid"  # split so this test file does not itself match its own scan
 
 # ---------------------------------------------------------------------------------------------------
-# (a) the placeholder literal appears NOWHERE; the configured base appears ONLY in the config and what it generates
+# (a) the configured base appears ONLY in the config and what it generates (ADR 0004: no IRI literal outside
+# the config file)
 
-# The shipped itpra-onto.toml carries the published base IRI (ADR 0004), so the reserved-domain placeholder
-# literal is permitted nowhere in the project tree -- tests that exercise the `release` refusal assemble it
-# by concatenation -- and the invariant ADR 0004 asks for is checked directly: the configured base IRI is
-# hand-authored in itpra-onto.toml alone and otherwise appears only in the generated fragments (no IRI
-# literal outside the config file). ALLOWED_GENERATED_FILES is kept empty on purpose.
-ALLOWED_GENERATED_FILES: set[Path] = set()
 GENERATED_FROM_CONFIG = {
     PROJECT_ROOT / "src" / "itpra_onto" / "schema" / "generated" / "itpra-enums.linkml.yaml",
     PROJECT_ROOT / "src" / "itpra_onto" / "schema" / "generated" / "itpra-prefixes.linkml.yaml",
@@ -63,23 +52,10 @@ def _scanned_files() -> list[Path]:
     return files
 
 
-def test_placeholder_literal_confined_to_the_allow_list():
-    offenders: dict[Path, list[str]] = {}
-    for path in _scanned_files():
-        text = path.read_text(encoding="utf-8")
-        if PLACEHOLDER in text and path not in ALLOWED_GENERATED_FILES:
-            offenders[path] = [line for line in text.splitlines() if PLACEHOLDER in line]
-    assert offenders == {}, offenders
-
-
 def test_shipped_config_carries_a_ruled_base():
-    """The shipped config carries the published base IRI (ADR 0004), not the placeholder, and the two
-    generated fragments were regenerated from it (what `gen-prefixes --check` / `gen-enums --check`
-    enforce in CI)."""
-    from itpra_onto.config import is_placeholder_base_iri
-
+    """The shipped config carries the published base IRI (ADR 0004), and the two generated fragments were
+    regenerated from it (what `gen-prefixes --check` / `gen-enums --check` enforce in CI)."""
     config = load_config()
-    assert not is_placeholder_base_iri(config.iri.base), config.iri.base
     assert config.iri.base.startswith("https://") and config.iri.base.endswith("/")
     for generated in GENERATED_FROM_CONFIG:
         assert config.iri.base in generated.read_text(encoding="utf-8"), generated
@@ -190,24 +166,6 @@ def test_gen_prefixes_check_cli_is_clean():
         check=False,
     )
     assert result.returncode == 0, result.stdout + result.stderr
-
-
-# ---------------------------------------------------------------------------------------------------
-# (d) `release`: the placeholder check is the only thing gating it
-
-
-def test_release_proceeds_past_the_placeholder_check_with_a_real_base(tmp_path: Path):
-    alt_path = _write_alt_config(tmp_path)
-    result = subprocess.run(
-        [sys.executable, "-m", "itpra_onto.cli", "release"],
-        cwd=PROJECT_ROOT,
-        env={**os.environ, "ITPRA_ONTO_CONFIG": str(alt_path)},
-        capture_output=True,
-        text=True,
-        check=False,
-    )
-    assert result.returncode == 2, (result.returncode, result.stdout, result.stderr)
-    assert "not implemented yet" in result.stdout
 
 
 # ---------------------------------------------------------------------------------------------------

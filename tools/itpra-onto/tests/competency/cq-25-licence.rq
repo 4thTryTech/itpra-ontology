@@ -1,0 +1,12 @@
+# CQ11 — the projection's header declares its licence (ADR 0002): every node in the schema graph that
+# carries dcterms:license, with the licence it names. test_competency.py expects exactly the ontology
+# node and the concept scheme, both naming CC BY 4.0.
+
+PREFIX dcterms: <http://purl.org/dc/terms/>
+
+SELECT ?node ?licence
+WHERE {
+  GRAPH itpra-g:schema {
+    ?node dcterms:license ?licence .
+  }
+}

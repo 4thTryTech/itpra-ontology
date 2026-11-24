@@ -185,6 +185,8 @@ def test_structural_rule_ids_are_a_subset_of_the_register_plus_the_two_new_ones(
         "B-12",
         "B-18",
         "B-19",
+        "retired-format",
+        "replaced-by-without-retired",
     }
     assert assigned <= file_ids, f"missing assigned rule id(s): {assigned - file_ids}"
 

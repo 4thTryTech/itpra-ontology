@@ -19,8 +19,6 @@ Commands:
   over the comparable (``core``/``sparql``) rule ids, either over the real tree (default) or fixture by
   fixture (``--fixtures``); exit 0 only when the symmetric difference (real tree) or the failure list
   (``--fixtures``) is empty (see ``itpra_onto.parity``).
-* ``release`` — not implemented yet: it refuses while ``itpra-onto.toml``'s ``[iri] base`` has a reserved
-  ``.invalid`` host (exit 1) and otherwise exits 2.
 
 ``validate`` and ``parity`` report an input the emitter refuses as an ``emit-error`` finding (exit 1), never
 a traceback.
@@ -38,11 +36,9 @@ import sys
 from collections.abc import Sequence
 from pathlib import Path
 
-from itpra_onto.config import CONFIG_PATH_ENV_VAR, is_placeholder_base_iri, load_config
+from itpra_onto.config import CONFIG_PATH_ENV_VAR, load_config
 from itpra_onto.layers import Layer
 
-NOT_IMPLEMENTED_EXIT = 2
-REFUSAL_EXIT = 1
 CHECK_FAILED_EXIT = 1
 VALIDATE_FAILED_EXIT = 1
 
@@ -192,20 +188,6 @@ def _cmd_parity(args: argparse.Namespace) -> int:
     return 0 if comparison.passed else VALIDATE_FAILED_EXIT
 
 
-def _cmd_release(args: argparse.Namespace) -> int:
-    config = load_config()
-    if is_placeholder_base_iri(config.iri.base):
-        print(
-            "release: refusing to run - itpra-onto.toml's [iri] base has a reserved .invalid host "
-            f"({config.iri.base!r}), a placeholder that is never published. Set [iri] base in "
-            f"{config.config_path} to the real base IRI (ADR 0004) before running release.",
-            file=sys.stderr,
-        )
-        return REFUSAL_EXIT
-    print("release: not implemented yet")
-    return NOT_IMPLEMENTED_EXIT
-
-
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="itpra-onto",
@@ -304,9 +286,6 @@ def build_parser() -> argparse.ArgumentParser:
         help="print the comparison as one JSON object and nothing else on stdout",
     )
     parity.set_defaults(func=_cmd_parity)
-    subparsers.add_parser(
-        "release", help="Publish the canonical RDF artefacts (not implemented yet; refuses a reserved .invalid host)"
-    ).set_defaults(func=_cmd_release)
 
     return parser
 

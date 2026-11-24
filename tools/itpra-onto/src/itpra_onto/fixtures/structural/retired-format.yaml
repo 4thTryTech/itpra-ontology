@@ -1,0 +1,11 @@
+# Proves itpra-o:RetiredFormatShape (structural.ttl item 9; ADR 0048): retiring a real Capability with a
+# `retired` value that is not an X.Y.Z version raises exactly one Violation of retired-format, on that
+# Capability. The record keeps every other field and edge, so nothing else changes on the focus.
+rule: retired-format
+expect:
+  severity: Violation
+  focus: CAP-ITO-FND-2
+  count: 1
+mutate:
+  id: CAP-ITO-FND-2
+  set: {retired: "5.1"}

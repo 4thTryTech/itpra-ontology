@@ -12,7 +12,7 @@ rebuilt on every run, never committed, never migrated in place).
 **Provenance, without timestamps** (ADR 0043 D3): every build computes ``input_hash``
 (sha256 over every input file's bytes, each contribution prefixed by its repo-relative path so a rename
 alone changes the hash — see :func:`hash_contributions`), ``pipeline_version`` (this distribution's own
-version), ``environment_hash`` (sha256 over the resolved dependency set, as installed), ``rules_version`` (:func:`itpra_onto.rules.rules_digest`),
+version, which is the release's: equal to ``ontology_version``, ADR 0044), ``environment_hash`` (sha256 over the resolved dependency set, as installed), ``rules_version`` (:func:`itpra_onto.rules.rules_digest`),
 ``ontology_version`` (the vocabulary's ``schema.yaml``), ``schema_hash`` (sha256 of the hand-authored LinkML
 schema plus its two generated fragments) and ``code_hash`` (sha256 over every ``src/itpra_onto/**/*.py``
 file, sorted repo-relative path — the pipeline's own code, not just its inputs). No commit SHA
@@ -25,7 +25,8 @@ with a CI runner on ``input_hash`` alone. The record is written
 twice, once machine-readable (``<out>/build.json``) and once as RDF: the dataset's own node
 (``<base>dataset`` — a plain resource directly under the base IRI, distinct from any record id
 under ``<base>id/``, any schema vocabulary term under ``<base>onto#`` and any named graph under
-``<base>graph/``) carries the seven scalars as literals plus one ``prov:wasDerivedFrom`` per input file, each
+``<base>graph/``) carries the seven scalars as literals, the vocabulary's licence (``dcterms:license``,
+ADR 0002) and one ``prov:wasDerivedFrom`` per input file, each
 input a ``prov:Entity`` of its own carrying ``dcterms:identifier`` (its repo-relative path) and
 ``itpra-o:sha256`` (that one file's own, line-ending-normalised hash). ``prov:wasDerivedFrom`` is the right
 predicate for dataset-to-input provenance (``itpra-o:decidedIn`` is reserved for a term's link to its
@@ -109,8 +110,7 @@ INPUT_NODE_LOCAL_PREFIX = "input/"  # <graph_ns>input/<repo-relative path>
 
 # Standard vocabulary this module needs beyond what itpra_onto.emit already exposes as constants
 # (only the base IRI is a configuration item, ADR 0004; W3C/DCMI vocabularies are literal constants).
-DCTERMS = "http://purl.org/dc/terms/"
-DCTERMS_IDENTIFIER = ox.NamedNode(DCTERMS + "identifier")
+DCTERMS_IDENTIFIER = ox.NamedNode(emit.DCTERMS + "identifier")
 PROV_ENTITY = ox.NamedNode(emit.PROV + "Entity")
 PROV_WAS_DERIVED_FROM = ox.NamedNode(emit.PROV + "wasDerivedFrom")
 
@@ -319,6 +319,7 @@ def _provenance_quads(config: Config, provenance: Provenance) -> list[ox.Quad]:
 
     triples: list[tuple[ox.NamedNode, ox.NamedNode, ox.NamedNode | ox.Literal]] = [
         (dataset_node, emit.RDF_TYPE, PROV_ENTITY),
+        (dataset_node, emit.DCTERMS_LICENSE, emit.LICENCE),
         (dataset_node, onto("inputHash"), ox.Literal(provenance.input_hash)),
         (dataset_node, onto("pipelineVersion"), ox.Literal(provenance.pipeline_version)),
         (dataset_node, onto("environmentHash"), ox.Literal(provenance.environment_hash)),
@@ -364,7 +365,7 @@ def _turtle_prefixes(config: Config) -> dict[str, str]:
         "rdfs": emit.RDFS,
         "owl": emit.OWL,
         "skos": emit.SKOS,
-        "dcterms": DCTERMS,
+        "dcterms": emit.DCTERMS,
         "prov": emit.PROV,
     }
 

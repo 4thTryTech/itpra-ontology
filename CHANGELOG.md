@@ -4,9 +4,11 @@ Changes to the vocabulary, newest first. Versions follow [ADR 0003](decisions/00
 
 ## 5.0.0 — 2026-11-24
 
-**MAJOR: ids renamed.** IT Operations takes the code `ITO` on every id and file name, as the ten other service domains
-carry theirs (ADR 0045, amending ADR 0004, 0007, 0010, 0011, 0012 and 0017). No term is added or removed and no
-label, definition or relation changes meaning; 356 records change id and 26 files change name.
+**MAJOR: ids renamed, records removed.** The first release prepared for use outside the project that wrote it. Three
+changes can break a consumer; `migrations/5.0.0.yaml` lists every id and file they touch.
+
+**1. IT Operations takes the code `ITO`** on every id and file name, as the ten other service domains carry theirs
+(ADR 0045). 339 records change id and 25 files change name; labels and relations are as they were.
 
 | Kind | Before | From 5.0.0 |
 |---|---|---|
@@ -14,25 +16,53 @@ label, definition or relation changes meaning; 356 records change id and 26 file
 | Capability (83) | `CAP-FND-1` | `CAP-ITO-FND-1` |
 | Function (224) | `FUNC-version-control` | `FUNC-ito-version-control` |
 | Persona (3) | `PERSONA-platform-team` | `PERSONA-ito-platform-team` |
-| Journey (18), workflow (17) | `JRN-onboard-consumer`, `WF-onboard-consumer` | `JRN-ito-onboard-consumer`, `WF-ito-onboard-consumer` |
-| Files | `domains.yaml`, `capabilities-foundation.yaml`, `functions-foundation.yaml`, `personas.yaml`, `journeys.yaml`, `workflows.yaml` | `domains-ito.yaml`, `capabilities-ito-fnd.yaml`, `functions-ito-fnd.yaml`, `personas-ito.yaml`, `journeys-ito.yaml`, `workflows-ito.yaml` |
+| Journey (18) | `JRN-onboard-consumer` | `JRN-ito-onboard-consumer` |
+| Files | `domains.yaml`, `capabilities-foundation.yaml`, `functions-foundation.yaml`, `personas.yaml`, `journeys.yaml` | `domains-ito.yaml`, `capabilities-ito-fnd.yaml`, `functions-ito-fnd.yaml`, `personas-ito.yaml`, `journeys-ito.yaml` |
 
-Migrating: `migrations/5.0.0.yaml` lists every old id and file with its successor. Rewrite each reference a registry,
-document or pin holds (`met_by`, `verified_by`, `derived_from`, required functions), then re-pin; an IRI
-`<base>id/<old>` becomes `<base>id/<new>`. Requirement ids are the consumer's own and need not change: the coded
-forms `FR-<CODE>-<n>` and `NFR-<CODE>_<QA>-<n>` are now the form for every domain, and the uncoded forms still parse.
+**2. Records without content leave** (ADR 0046). The 30 `Workflow` records catalogued diagrams the vocabulary does not
+hold, and the 4 placements (`SDP-…`) stood in for capability domains that now exist: all 34 are removed, with
+`terms/workflows.yaml`, `terms/workflows-itsm.yaml` and `terms/service-domain-placements.yaml`, and have no successor.
+The vocabulary holds 1,560 records. The `WORKFLOW` entity type, the `Workflow` type, the id form `WF-<code>-<slug>` and
+the verb `realized_in` stay for a consumer's own diagrams. The placements' market words are now aliases: unified
+endpoint management (UEM, MDM, EMM) on `EUC-DEV`, product analytics on `BIA-PRD`, digital experience management (DXM)
+on `SD-DIGITAL-EXPERIENCE`; robotic process automation has no record. `SVC-` is no longer a reserved prefix, and the
+reserved requirement-id forms are `FR-<CODE>-<n>` and `NFR-<CODE>_<QA>-<n>` only.
 
-Also in this release: every renamed record's `source` adds `ADR 0045`; `SD-IT-OPERATIONS` gains the alias `ITO`;
-`schema.yaml` states the coded id forms and drops the first-domain exception; the `FUNCTION` and `FR` entity
-definitions and the `belongs_to_service_domain` definition lose their wording of that exception; references to the
-renamed ids in other domains' definitions and comments follow. The pipeline's fixtures and tests use the new ids.
-Decision records before 0045 keep their text: an id written there without the code reads as its coded successor.
+**3. Service domains read as peers** (ADR 0047). The 16 `interfaces_with` edges from a service domain to a plane are
+removed; the verb and its declared pair stay, with no instance in the vocabulary. The eleven service-domain
+definitions state what each domain is and owns in its own right, and the planes, quality attributes, governance
+constructs, journey groups, entity types and verbs are worded to hold for all eleven; "the infrastructure platform"
+names what IT Operations owns. No id, label or other relation changes, and each reworded record's `source` names
+ADR 0047.
 
-Tooling: `tools/itpra-onto/` now builds, validates and compares the vocabulary alone, and a build can take layers
-(`itpra_onto.layers`; ADR 0043). The `[overlay]` configuration table and the requirement classes, rule, shapes and
-fixtures that went with it leave the package, so a configuration or caller that used them changes with this release.
-The built `schema` graph no longer declares `FR` and `NFR` under `REQUIREMENT`, nor the `statement`, `target` and
-`meets` properties. ADR 0041, ADR 0042 and ADR 0043 are reworded to match; ADR 0043 has a new title and file name.
+Migrating: rewrite each reference a registry, document or pin holds (`met_by`, `verified_by`, `derived_from`, required
+functions) with the `ids` map, drop references to the ids under `removed`, then re-pin; an IRI `<base>id/<old>` becomes
+`<base>id/<new>`. Requirement ids are the consumer's own.
+
+Also in this release:
+
+- **Retirement** (ADR 0048): a record can carry `retired`, the version that retired it, and `replaced_by`, its
+  successor's id; `schema_version` is 3. The projection marks a retired record `owl:deprecated` with
+  `dcterms:isReplacedBy`. No record is retired in this release.
+- **Records** (ADR 0049): a decision record states its rules as they stand. Records 0001–0045 cite current ids, and a
+  rule a later record amends is restated in place and names that record.
+- **Term files** open with what they hold, their type, id form and deciding record; working notes leave the comments.
+  `JRN-ito-run-delegated-actor` and `JRN-adm-build-model-grounded-behaviour` cite the records that decided them
+  (ADR 0033, ADR 0034). Every renamed record's `source` adds `ADR 0045`; `SD-IT-OPERATIONS` gains the alias `ITO`.
+
+Tooling (`tools/itpra-onto/`), which changes output and a consumer's configuration:
+
+- The package builds, validates and compares the vocabulary alone, and a build can take layers (`itpra_onto.layers`;
+  ADR 0043). The `[overlay]` configuration table and the requirement classes, rule, shapes and fixtures that went with
+  it leave the package. The built `schema` graph no longer declares `FR` and `NFR` under `REQUIREMENT`, nor the
+  `statement`, `target` and `meets` properties.
+- The built graphs state their licence (`dcterms:license`, CC BY 4.0; ADR 0002) and project the retirement fields.
+- The package's version is the release's: `5.0.0`, and `pipeline_version` in a build's provenance with it.
+- The `itpra-onto release` command, which did nothing, is removed.
+- The version-bump check lets a vocabulary change join a version that is on `master` but not tagged yet, and asks
+  for a bump once the tag exists.
+- The release carries the RDF projection built from the tag, `itpra-ontology-5.0.0-rdf.tar.gz`, with its `sha256`,
+  beside the source archive (ADR 0043).
 
 ## 4.0.1 — 2026-11-23
 

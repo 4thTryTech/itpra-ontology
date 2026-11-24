@@ -386,3 +386,28 @@ itpra-o:InServiceDomainExactlyOneShape
     sh:severity sh:Violation ;
     sh:message "a Capability does not have exactly one derived inServiceDomain edge (B-19 — rules-engine defence in depth)" ;
     itpra-o:ruleId "B-19" .
+
+# =========================================================================================================
+# 9. retired-format / replaced-by-without-retired (Table A; ADR 0048). A retired record carries
+#    owl:deprecated true and itpra-o:retiredIn, the version that retired it; replaced_by is
+#    dcterms:isReplacedBy. retiredIn must be an X.Y.Z version (the `retired` slot's pattern), and a record
+#    carrying isReplacedBy must be retired. Whether the successor resolves is crossfield.ttl's
+#    replaced-by-unresolved.
+
+itpra-o:RetiredFormatShape
+    a sh:PropertyShape ;
+    sh:targetSubjectsOf itpra-o:retiredIn ;
+    sh:path itpra-o:retiredIn ;
+    sh:pattern "^[0-9]+\\.[0-9]+\\.[0-9]+$" ;
+    sh:severity sh:Violation ;
+    sh:message "a retired record's retiredIn must be an X.Y.Z version (ADR 0048)" ;
+    itpra-o:ruleId "retired-format" .
+
+itpra-o:ReplacedByWithoutRetiredShape
+    a sh:PropertyShape ;
+    sh:targetSubjectsOf dcterms:isReplacedBy ;
+    sh:path owl:deprecated ;
+    sh:hasValue true ;
+    sh:severity sh:Violation ;
+    sh:message "a record with a successor (dcterms:isReplacedBy) must be retired (owl:deprecated true; ADR 0048)" ;
+    itpra-o:ruleId "replaced-by-without-retired" .
