@@ -18,7 +18,8 @@ How this vocabulary is maintained, as decided in [ADR 0006](decisions/0006-gover
   ([ADR 0044](decisions/0044-one-release-for-the-vocabulary-and-its-tooling.md)). Pre-releases are `vX.Y.Z-rc.N`.
   A maintainer cuts a release by running the `release` workflow on `master` with the version (it creates the tag) or
   by pushing the tag; the workflow checks the tag against `ontology_version`, the package version and the changelog,
-  builds the source archive and the RDF projection from the tag, each with its `sha256`, and publishes the release.
+  builds the source archive and the RDF projection from the release commit, each with its `sha256`, and publishes
+  the release. On a manual run the tag is created only after both have built, because a tag is never moved.
 - **Contributions** are accepted under the repository's licences with a Developer Certificate of Origin sign-off; there
   is no contributor licence agreement ([ADR 0002](decisions/0002-licence-and-attribution.md)).
 - **Disagreement** about a change is settled in the record's pull request; the maintainers decide and the record states

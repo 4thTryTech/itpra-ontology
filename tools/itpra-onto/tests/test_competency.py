@@ -337,7 +337,7 @@ def test_every_decided_in_object_is_a_four_digit_adr_node(store: ox.Store, confi
 
 def test_every_subject_has_exactly_one_existing_authoring_file(store: ox.Store, config: Config, inputs: Inputs):
     """Every subject in t1 has exactly one itpra-o:authoringFile, and that file exists relative to the
-    repository root.
+    vocabulary's directory (the label is the same wherever the vocabulary is checked out or vendored).
 
     The row count itself is a positive control — one row per DISTINCT subject carrying
     authoringFile, which must equal the total number of term records (every record gets exactly one),
@@ -349,7 +349,7 @@ def test_every_subject_has_exactly_one_existing_authoring_file(store: ox.Store, 
     for r in rows:
         assert int(r["n"].value) == 1, r["s"].value
         file_value = r["sample"].value
-        if not (REPO_ROOT / file_value).exists():
+        if not (emit.ontology_dir(config) / file_value).exists():
             missing.append(file_value)
     assert missing == []
 

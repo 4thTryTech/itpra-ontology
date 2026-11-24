@@ -60,11 +60,15 @@ Tooling (`tools/itpra-onto/`), which changes output and a consumer's configurati
 - The built graphs state their licence (`dcterms:license`, CC BY 4.0; ADR 0002) and project the retirement fields.
 - The package's version is the release's: `5.0.0`, and with it `pipeline_version` in a build's provenance and the
   authoring schema's `version`, which the generated JSON Schema, Pydantic module and OWL file carry.
+- A build no longer depends on where the vocabulary lives: a record's `authoringFile` and the provenance inputs
+  are labelled by the path relative to the vocabulary's directory, so a vendored copy builds the same `base/` files
+  and the same `input_hash` as the release.
 - The `itpra-onto release` command, which did nothing, is removed.
 - The version-bump check lets a vocabulary change join a version that is on `master` but not tagged yet, and asks
   for a bump once the tag exists.
-- The release carries the RDF projection built from the tag, `itpra-ontology-5.0.0-rdf.tar.gz`, with its `sha256`,
-  beside the source archive (ADR 0043).
+- The release carries the RDF projection built from the release commit, `itpra-ontology-5.0.0-rdf.tar.gz`, with
+  its `sha256`, beside the source archive (ADR 0043). On a manual run the release workflow creates the tag only
+  after both archives have built and the projection has validated.
 
 ## 4.0.1 — 2026-11-23
 

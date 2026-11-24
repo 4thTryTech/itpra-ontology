@@ -204,7 +204,9 @@ def _is_glob(path: Path) -> bool:
 
 @dataclass(frozen=True)
 class TermRecord:
-    """One record of a term file of the vocabulary, tagged with its repo-relative authoring file."""
+    """One record of a term file of the vocabulary, tagged with its authoring file: the file's path relative
+    to the vocabulary's directory (:func:`vocabulary_label`), the same wherever the vocabulary is checked out
+    or vendored."""
 
     record: dict[str, Any]
     file: str
@@ -252,6 +254,14 @@ def _repo_relative(path: Path, repo_root: Path) -> str:
     return path.resolve().relative_to(repo_root.resolve()).as_posix()
 
 
+def vocabulary_label(path: Path, config: Config) -> str:
+    """``path`` — a file of the vocabulary — as its posix path relative to the vocabulary's directory
+    (``terms/planes.yaml``, ``schema.yaml``). This is the label a record's ``authoringFile`` and the build's
+    provenance carry: it does not depend on where a consumer keeps its copy, so a build of a vendored copy
+    reproduces the published one (ADR 0043 D3-D4)."""
+    return path.resolve().relative_to(ontology_dir(config).resolve()).as_posix()
+
+
 def _shown(path: Path, repo_root: Path | None) -> str:
     """``path`` repo-relative when it is inside the repository (every guarded input is), else as given."""
     if repo_root is None:
@@ -281,7 +291,7 @@ def load_inputs(config: Config | None = None) -> Inputs:
     config = config if config is not None else load_config()
     root = config.repo_root
     terms = tuple(
-        TermRecord(record, _repo_relative(path, root))
+        TermRecord(record, vocabulary_label(path, config))
         for path in term_files(config)
         for record in _term_file_records(path, root)
     )

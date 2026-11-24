@@ -31,7 +31,7 @@ directory or one of its parents, else the one beside a checkout's `pyproject.tom
 | Table | Keys | Meaning |
 |---|---|---|
 | `[iri]` | `base`, `id_path`, `onto_path`, `graph_path` | The base IRI and the three namespaces built from it: `itpra:` = `<base><id_path>` (one IRI per record), `itpra-o:` = `<base><onto_path>` (verbs, classes and annotation properties), `itpra-g:` = `<base><graph_path>` (named graphs). Every key is required; a missing one raises `ConfigError` — no default is baked into the code (ADR 0004). |
-| `[paths]` | `repo_root`, `ontology_dir`, `dist_dir`, `store_dir` | The repository root every input must lie under and file labels are relative to (default `../..`; read from the configuration, never from where the package is installed), the vocabulary's directory (`schema.yaml`, `entities.yaml`, `relationships.yaml`, `terms/*.yaml`), the output root (`<dist_dir>/rdf/`, `<dist_dir>/schema/`) and the embedded store's directory. |
+| `[paths]` | `repo_root`, `ontology_dir`, `dist_dir`, `store_dir` | The repository root every input must lie under and that findings name files relative to (default `../..`; read from the configuration, never from where the package is installed), the vocabulary's directory (`schema.yaml`, `entities.yaml`, `relationships.yaml`, `terms/*.yaml`), the output root (`<dist_dir>/rdf/`, `<dist_dir>/schema/`) and the embedded store's directory. |
 | `[python]` | `pinned` | The interpreter version the package is pinned to (`3.12`). |
 
 The base IRI is written once, in `[iri] base`: the LinkML prefixes are generated from it (`gen-prefixes`),
@@ -136,7 +136,7 @@ under `<dist_dir>/rdf/`:
 - `build.json` — the provenance record: sorted keys, indent 2, LF.
 
 **Provenance carries no timestamp and no commit SHA** (ADR 0043 D3): seven scalars — `input_hash` (every
-input file's bytes, each contribution prefixed by its repository-relative path, so a rename alone changes
+input file's bytes, each contribution prefixed by its label, so a rename alone changes
 it), `pipeline_version` (this distribution's version, equal to
 `ontology_version`: one tag covers the vocabulary and the package, ADR 0044, and a test fails when
 `pyproject.toml` and `schema.yaml` differ), `environment_hash` (sha256 over the resolved dependency set as installed, transitively — what the lockfile pins, readable without the lockfile), `rules_version`,
@@ -144,9 +144,18 @@ it), `pipeline_version` (this distribution's version, equal to
 generated fragments) and `code_hash` (every `src/itpra_onto/**/*.py`). All are hashed over
 line-ending-normalised bytes (CRLF collapsed to LF), so they depend on content, never on the checkout. The
 same record is written as RDF: the dataset node `<base>dataset` carries the seven as literals, the licence
-(`dcterms:license`, CC BY 4.0; ADR 0002) and one `prov:wasDerivedFrom` per input file, each a `prov:Entity` with `dcterms:identifier` (its path) and
+(`dcterms:license`, CC BY 4.0; ADR 0002) and one `prov:wasDerivedFrom` per input file, each a `prov:Entity` with `dcterms:identifier` (its label) and
 `itpra-o:sha256`. `prov:wasDerivedFrom` is reserved for this dataset-to-input sense; a term's link to its
 decision record is `itpra-o:decidedIn`.
+
+**Labels do not depend on where the vocabulary lives.** A file of the vocabulary is labelled by its path
+relative to the vocabulary's directory (`terms/planes.yaml`, `schema.yaml`) — in a record's
+`itpra-o:authoringFile`, in `input_hash` and in the provenance graph — and a file a layer reads by its path
+relative to the repository root; two inputs under one label are refused. A build of a vendored copy
+therefore writes the same `base/` files, the same `base/manifest.json` and the same `input_hash` as the
+release's own. `full/itpra.nq` and `build.json` match too when the dependencies are installed from the
+lockfile: `environment_hash` records the dependency set as installed, so an install that resolved other
+versions says so there.
 
 **The store is disposable** (ADR 0041 D5): `[paths] store_dir` is removed and rebuilt with
 `Store.bulk_load` from `full/itpra.nq` on every build unless `--no-store` is given, and its quad count is

@@ -193,8 +193,55 @@ def test_build_json_is_sorted_keys_indent_2_lf(tmp_path: Path, config: Config):
 def test_input_hash_matches_a_fresh_recomputation_from_the_same_real_files(config: Config):
     inputs = emit.load_inputs(config)
     provenance = build_module.compute_provenance(config, inputs)
-    recomputed = build_module.compute_input_hash(build_module.input_files(config), config.repo_root)
+    recomputed = build_module.compute_input_hash(build_module.labelled_inputs(config))
     assert provenance.input_hash == recomputed
+
+
+def _vendored_config(tmp_path: Path) -> Config:
+    """The vocabulary copied to ``<tmp_path>/vendor/itpra`` in a repository rooted at ``tmp_path`` — the layout
+    of a consumer that vendors a release."""
+    import shutil
+
+    real = emit.ontology_dir(load_config())
+    vendored = tmp_path / "vendor" / "itpra"
+    (vendored / "terms").mkdir(parents=True)
+    for path in (*emit.term_files(load_config()), emit.schema_file(load_config())):
+        shutil.copyfile(path, vendored / path.relative_to(real))
+    config_path = _write_config(
+        tmp_path,
+        repo_root=tmp_path.as_posix(),
+        ontology_dir=vendored.as_posix(),
+        dist_dir=(tmp_path / "dist").as_posix(),
+        store_dir=(tmp_path / "store").as_posix(),
+    )
+    return load_config(config_path)
+
+
+def test_a_vendored_copy_carries_the_same_labels_and_input_hash(tmp_path: Path, config: Config):
+    """ADR 0043 D3-D4: a consumer's build of a vendored copy reproduces the published one, so no label may
+    depend on where the copy lives — neither a record's authoring file nor a provenance input."""
+    vendored = _vendored_config(tmp_path)
+    real_inputs, vendored_inputs = emit.load_inputs(config), emit.load_inputs(vendored)
+    assert [t.file for t in vendored_inputs.terms] == [t.file for t in real_inputs.terms]
+    assert all(not t.file.startswith("vendor/") for t in vendored_inputs.terms)
+    real, copy = build_module.compute_provenance(config, real_inputs), build_module.compute_provenance(vendored, vendored_inputs)
+    assert copy.input_files == real.input_files
+    assert copy.input_hash == real.input_hash
+    assert "schema.yaml" in dict(copy.input_files)
+
+
+def test_a_layer_file_under_a_vocabulary_label_is_refused(tmp_path: Path):
+    """A layer's file is labelled by its repository-relative path; one that lands on a vocabulary file's
+    label would make the provenance record name two inputs alike."""
+    from itpra_onto.layers import Layer
+
+    vendored = _vendored_config(tmp_path)
+    clash = tmp_path / "terms" / "planes.yaml"
+    clash.parent.mkdir()
+    clash.write_text("[]\n", encoding="utf-8")
+    layer = Layer(name="clash", input_files=lambda config: [clash])
+    with pytest.raises(build_module.BuildError, match="share the label 'terms/planes.yaml'"):
+        build_module.labelled_inputs(vendored, [layer])
 
 
 def test_hash_contributions_changes_when_bytes_change():
