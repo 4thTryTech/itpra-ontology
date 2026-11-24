@@ -17,7 +17,8 @@ domain but one carried `interfaces_with` edges to planes. The planes group every
 1. A service domain's definition states what the domain is, does and owns in its own right. It places the
    domain neither outside, beside nor under another.
 2. A boundary between two service domains is stated as a boundary between peers and names the other domain or
-   its capability domain.
+   its capability domain (amends the boundary rules of ADR 0017, ADR 0019, ADR 0020, ADR 0021, ADR 0022,
+   ADR 0023, ADR 0024 and ADR 0027).
 3. A shared record — plane, quality attribute, governance construct, journey group, dimension, entity type or
    verb — is worded to hold for all eleven domains. "The infrastructure platform" names what
    `SD-IT-OPERATIONS` owns and operates and is used only where a record is about it.

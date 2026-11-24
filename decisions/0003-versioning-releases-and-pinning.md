@@ -9,31 +9,31 @@ Origin: Consolidates decisions taken between 2026-05 and 2026-11, before publica
 
 ## Context
 
-Consumers check documents against the vocabulary and generate artefacts from it, so a change can break them silently.
-They need to know what kind of change a release carries and to hold a known version until they choose to move.
+Consumers check documents against the vocabulary and generate artefacts from it; a change can break them silently.
+They need to know what a release changes and to hold a version until they choose to move.
 
 ## Decision
 
-1. The schema keeps two numbers: `schema_version`, an integer for the shape of a term record, and `ontology_version`, a
+1. The schema keeps two numbers: `schema_version`, an integer for a term record's shape, and `ontology_version`, a
    Semantic Versioning 2.0.0 number for the content.
-2. MAJOR: an id removed or renamed, a verb's meaning changed, a type or value dropped, a schema change that breaks a
-   consumer's parser, a change of base IRI or licence. MINOR: additive terms, types, verbs or fields, and a retirement
-   (the id and IRI stay, marked retired). PATCH: wording, comments, metadata.
-3. Every change bumps `ontology_version` in the same change, with a release-history row; a change
-   without a bump fails the checks.
+2. MAJOR: an id removed or renamed, a verb's meaning changed, a type or value dropped, a parser-breaking schema
+   change, a change of base IRI or licence. MINOR: additive terms, types, verbs or fields, and a retirement
+   (the record stays, marked `retired`). PATCH: wording, comments, metadata (amended by ADR 0048).
+3. A vocabulary change bumps `ontology_version` in the same change, with a release-history row, or fails the
+   checks; other changes need none (amended by ADR 0044).
 4. A release is a tag `vX.Y.Z` on `master` with an immutable release carrying the source archive and its hash, later also
    the projections; tags cannot be updated or deleted. Pre-releases are tagged `vX.Y.Z-rc.N`.
-5. Consumers pin a release: a vendored copy records version, tag, commit and archive hash; a package pins the tag;
-   an artefact is pinned by digest; a linked-data consumer names the version IRI. A pre-release is
-   pinned only on a working branch.
+5. Consumers pin a release: a vendored copy records version, tag, commit and archive hash; a package pins the
+   vocabulary's tag; an artefact is pinned by digest; a linked-data consumer names the version IRI. A pre-release is
+   pinned only on a working branch (amended by ADR 0044).
 6. There is one vocabulary, edited in place here, never forked to be changed; consumers do not edit their copies.
 7. The first public release is 4.0.0: no term changes, but a new location, a licence, minted IRIs and a pinning
    obligation make a new consumption contract.
 
 ## Consequences
 
-- A consumer can tell from the version whether an upgrade can break its checks, and can prove which bytes it pinned.
-- Every change is a release step; batching and release candidates keep the cost bearable.
+- A consumer can tell from the version whether an upgrade can break its checks and prove which bytes it pinned.
+- Every vocabulary change is a release step; batching and release candidates keep the cost bearable.
 - Retiring a term is MINOR because nothing a consumer holds disappears; renaming one is MAJOR because it does.
 - A wrong release is corrected by a new one, never rewritten.
 - A vendoring consumer must re-pin to receive a fix; that friction is intended.

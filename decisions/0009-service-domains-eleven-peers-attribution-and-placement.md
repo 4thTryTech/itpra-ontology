@@ -9,9 +9,8 @@ Origin: Consolidates decisions taken between 2026-05 and 2026-11, before publica
 
 ## Context
 
-Enterprise IT is wider than one platform. The vocabulary needs a partition coarser than a capability domain,
-a rule for which partition owns a term, and a place for a recognised capability that no capability domain yet
-describes — without privileging the platform over what surrounds it.
+Enterprise IT is wider than one platform. The vocabulary needs a partition coarser than a capability domain
+and a rule for which partition owns a term — without privileging the platform over what surrounds it.
 
 ## Decision
 
@@ -20,33 +19,26 @@ describes — without privileging the platform over what surrounds it.
 2. The eleven service domains are peers: none is the platform's home, none adjacent. `SD-IT-OPERATIONS`
    holds the infrastructure platform without structural privilege.
 3. `interfaces_with` is symmetric and general: an exchange across a boundary where neither side contains the
-   other. A service domain carries it to the planes (ADR 0010) it exchanges across — `SD-END-USER`
-   Experience; `SD-SERVICE-DESK` Governance, Experience; `SD-FIELD-SUPPORT` Resource, Operations; `SD-APP-DEV`
-   Delivery, Experience; `SD-DATACENTER` and `SD-NETWORK` Resource; `SD-SECURITY-GRC` Security, Governance;
-   `SD-SERVICE-MGMT` Governance; `SD-BUSINESS-ANALYTICS` Resource, Experience; `SD-DIGITAL-EXPERIENCE`
-   Experience, Delivery; `SD-IT-OPERATIONS` carries none.
+   other. No service domain carries it to a plane (ADR 0010): the planes a domain works in follow from its
+   capability domains' `grouped_by` edges (amended by ADR 0047).
 4. Observing end-user experience is an operations capability; business analytics and customer-facing
    experience are domains of their own.
 5. A term belongs to exactly one service domain: `belongs_to_service_domain` is single-valued, every
-   capability domain carries it (the first domain's included) and no tool defaults it. Placement is per term,
+   capability domain carries it (IT Operations' included) and no tool defaults it. Placement is per term,
    never per topic.
 6. Behaviour that recurs across service domains is one shared function `supports` each capability
    (ADR 0011); a capability is never multi-homed, and two domains' capabilities meet through `interfaces_with`
    or a dependency. A function may cross service domains, each crossing decided by a record; a persona never
    does.
-7. A recognised capability that no capability domain yet describes is a placement: `type: Concept`, id
-   `SDP-<slug>`, one `belongs_to_service_domain` edge, aliases for its industry categories; not a capability,
-   not a `supports` target. Four stand — `SDP-uem` (`SD-END-USER`), `SDP-rpa` (`SD-APP-DEV`),
-   `SDP-product-analytics` (`SD-BUSINESS-ANALYTICS`), `SDP-dxm` (`SD-DIGITAL-EXPERIENCE`) — retired only by
-   a record.
+7. Withdrawn by ADR 0046, which removes the placements.
 
 ## Consequences
 
 - One partition covers all of enterprise IT: any term relates to any other, and one edge says who owns it.
 - Single-valued attribution forces a choice where a capability recurs: a shared function and single-homed
   capabilities, two records where one would read more simply.
-- A placement keeps an industry term findable before it is modelled, at the price of records that are not
-  capabilities; acronyms stay aliases, never ids.
+- A recognised capability that no capability describes has no record of its own: its market words are aliases
+  on the record that describes the behaviour, or wait for one; acronyms stay aliases, never ids.
 
 ## Alternatives
 

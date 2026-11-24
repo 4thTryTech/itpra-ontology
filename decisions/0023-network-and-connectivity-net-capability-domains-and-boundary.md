@@ -25,14 +25,14 @@ beyond the substrate, consuming what the authorities hold.
    and the access path have different owners.
 3. Five personas (ADR 0012) add operate and planning archetypes: Network Consumer, Network Engineering Team,
    Network Operations, Network Security & Compliance, Network Architect & Planner.
-4. The domain owns the enterprise network beyond the platform's own substrate networking — in-fabric networking,
-   addressing and service discovery are the Infrastructure Substrate (`SUB`) — and `interfaces_with` adjacent
-   domains rather than containing them.
+4. The domain owns the enterprise network beyond the infrastructure platform's substrate networking — in-fabric
+   networking, addressing and service discovery are the Infrastructure Substrate (`ITO-SUB`) — and meets each other
+   service domain at a boundary between peers, containing none (amended by ADR 0047).
 5. The seams: `NET-SEG` applies the control catalogue and threat intelligence of `SD-SECURITY-GRC` on the network
    path and supplies evidence, authoring neither; `NET-RAX` consumes identity of record (`SD-SECURITY-GRC`),
-   device posture (`SD-END-USER`) and workload identity (`SEC`), providing the path, not the directory or device;
-   `NET-OBS` observes the network path, not the platform (`OBS`) or the end user (`SD-END-USER`); `NET-RES` is
-   path resilience, distinct from `DCF-RES` and `RES`.
+   device posture (`SD-END-USER`) and workload identity (`ITO-SEC`), providing the path, not the directory or device;
+   `NET-OBS` observes the network path, not the platform (`ITO-OBS`) or the end user (`SD-END-USER`); `NET-RES` is
+   path resilience, distinct from `DCF-RES` and `ITO-RES`.
 6. The Service Desk (`SD-SERVICE-DESK`, ADR 0019) is the contact channel that routes a connectivity issue; Network
    Operations resolves it.
 
@@ -41,12 +41,12 @@ beyond the substrate, consuming what the authorities hold.
 - The enterprise-versus-substrate line is drawn once; no capability has to say which side of the fabric it is on.
 - Two Security-plane and two Operations-plane domains cost some disambiguation and buy clear ownership of posture
   versus path and performance versus assurance.
-- `NET-OBS`, `NET-RES` and `NET-SEG` parallel the platform's `OBS`, `RES` and `SEC`; the subject, the enterprise
+- `NET-OBS`, `NET-RES` and `NET-SEG` parallel the platform's `ITO-OBS`, `ITO-RES` and `ITO-SEC`; the subject, the enterprise
   network path, tells them apart.
 
 ## Alternatives
 
-- Fold network-edge security into `SEC` or `SD-SECURITY-GRC` — enforcement on the path has a distinct owner and
+- Fold network-edge security into `ITO-SEC` or `SD-SECURITY-GRC` — enforcement on the path has a distinct owner and
   lifecycle from host security and from authoring the catalogue.
 - One network domain owning in-fabric networking too — in-fabric networking is coupled to the substrate and
   belongs with it.

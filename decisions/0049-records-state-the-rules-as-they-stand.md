@@ -14,14 +14,14 @@ alone (ADR 0005), so each record has to be true by itself.
 ## Decision
 
 1. A record states its rules as they stand. When a later record amends a rule, the rule is restated in place
-   and names the amending record — `(amended by ADR NNNN)` — as a term's `source` does (ADR 0005 rule 4).
+   and names the amending record — `(amended by ADR NNNN)` — as a term's `source` does (ADR 0005 rule 4; amends its rule 2).
 2. A rule that a later record withdraws is replaced by one line that names that record. Rule numbers never
    change.
 3. An id cited in a record is a live id. When an id is renamed, the records that cite it follow; a removed id
    is cited only by the record that removes it and by the migration file.
-4. The amending record lists every rule it amends, and lands in the same change as the restatements.
+4. The amending record names each record it amends, and lands in the same change as the restatements.
 5. A record whose decision is replaced as a whole is superseded, not amended: its status says so, it names
-   its successor and it keeps its text (ADR 0005 rule 2).
+   its successor and it keeps its text (ADR 0005 rule 2; amends ADR 0017 rule 8).
 6. A record carries no change log. Earlier wording stays readable in the releases that carried it and in the
    repository's history.
 7. This replaces ADR 0045 rule 7: no id in a record is read through a mapping.

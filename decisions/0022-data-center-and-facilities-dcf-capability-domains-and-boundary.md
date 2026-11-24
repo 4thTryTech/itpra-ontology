@@ -25,19 +25,19 @@ Data Center & Facilities domain (`SD-DATACENTER`, ADR 0009) needs capability dom
    operations archetype: Facility Tenant, Facilities Engineering Team, Physical Security Officer, Facility
    Compliance & Assurance.
 3. The domain owns the physical hosting environment — white space, electrical plant, cooling, passive cabling and
-   cross-connects, physical access, facility monitoring and resilience — and `interfaces_with` adjacent domains
-   rather than containing them.
+   cross-connects, physical access, facility monitoring and resilience — and meets each other service domain at a
+   boundary between peers, containing none (amended by ADR 0047).
 4. The seams: the facility provides space, power, cooling and cabling on which the Infrastructure Substrate
-   (`SUB`) provisions logical resources; `DCF-CAB` is the physical medium under the logical network
+   (`ITO-SUB`) provisions logical resources; `DCF-CAB` is the physical medium under the logical network
    (`SD-NETWORK`) and the platform's virtual networking; `DCF-SEC` controls physical access and supplies its
-   evidence, owning neither logical identity (`SEC`) nor the control catalogue (`SD-SECURITY-GRC`); `DCF-MON`
-   observes the plant, not the workloads on it (`OBS`); `DCF-RES` is facility availability that workload
-   resilience (`RES`) consumes; `DCF-SPC` installs and decommissions equipment in the facility and hands deskside
+   evidence, owning neither logical identity (`ITO-SEC`) nor the control catalogue (`SD-SECURITY-GRC`); `DCF-MON`
+   observes the plant, not the workloads on it (`ITO-OBS`); `DCF-RES` is facility availability that workload
+   resilience (`ITO-RES`) consumes; `DCF-SPC` installs and decommissions equipment in the facility and hands deskside
    hardware to `SD-FIELD-SUPPORT`.
 
 ## Consequences
 
-- The physical/logical seam with `SUB` is drawn once: the facility provides, the platform provisions, and neither
+- The physical/logical seam with `ITO-SUB` is drawn once: the facility provides, the platform provisions, and neither
   restates the other.
 - Five of seven domains sit on the Resource plane; the domain is physical and resource-heavy, and the planes are
   not extended for it.
@@ -47,7 +47,7 @@ Data Center & Facilities domain (`SD-DATACENTER`, ADR 0009) needs capability dom
 
 ## Alternatives
 
-- Fold the facility into the Infrastructure Substrate (`SUB`) — the building, power and cooling have a different
+- Fold the facility into the Infrastructure Substrate (`ITO-SUB`) — the building, power and cooling have a different
   owner, lifecycle and consumer from the logical resources provisioned on them.
 - One data-center operations domain — loses the separately staffed physical-security and monitoring concerns.
 

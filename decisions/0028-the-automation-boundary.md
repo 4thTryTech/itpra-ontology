@@ -29,10 +29,10 @@ approval moment as a governance construct (ADR 0015); nothing names the partitio
    classes, identity ceilings) and the areas are scenario decisions.
 6. One concept, neither a governance moment nor a function, defines the partition: its sides are named in the
    definition, not as terms or edges. ADR 0029 and ADR 0031 reuse this shape.
-7. Edges: `depends_on` `GC-APPROVAL`, `FUNC-policy-authoring`, `FUNC-policy-evaluation`; `applies_to`
-   `COVERAGE-AREA`; `governs` `AUTON-ACTOR` (ADR 0030), `FUNC-runbook-automation`,
-   `FUNC-event-triggered-execution`, `FUNC-response-playbook-execution`, `FUNC-tool-invocation-mediation`,
-   `FUNC-agent-execution-sandboxing` (ADR 0033). Aliases: autonomous-action authorization, autonomy boundary.
+7. Edges: `depends_on` `GC-APPROVAL`, `FUNC-ito-policy-authoring`, `FUNC-ito-policy-evaluation`; `applies_to`
+   `COVERAGE-AREA`; `governs` `AUTON-ACTOR` (ADR 0030), `FUNC-ito-runbook-automation`,
+   `FUNC-ito-event-triggered-execution`, `FUNC-ito-response-playbook-execution`, `FUNC-ito-tool-invocation-mediation`,
+   `FUNC-ito-agent-execution-sandboxing` (ADR 0033). Aliases: autonomous-action authorization, autonomy boundary.
 
 ## Consequences
 

@@ -15,13 +15,13 @@ roles as specialisations; a build/run split is itself an operating-model choice.
 
 ## Decision
 
-1. A persona (`PERSONA-<slug>`, type `Persona`, entity `PERSONA`; ADR 0008) is a coarse, neutral role archetype
-   with goals and success measures — never a job title or a role of one operating model.
+1. A persona (`PERSONA-<code>-<slug>`, type `Persona`, entity `PERSONA`; ADR 0008) is a coarse, neutral role archetype
+   with goals and success measures — never a job title or a role of one operating model (amended by ADR 0045).
 2. Personas are tier-graduated: the reference tier carries a few archetypes, each refining into granular roles
    below it. A build/run split, a product owner or a cost owner are refinements, not personas.
-3. The first service domain carries a provider (`PERSONA-platform-team`), a consumer (`PERSONA-platform-consumer`)
-   and an assurance owner (`PERSONA-security-compliance`); the consumer is not called a service team, which
-   collides with the notion of an IT service.
+3. IT Operations carries a provider (`PERSONA-ito-platform-team`), a consumer (`PERSONA-ito-platform-consumer`)
+   and an assurance owner (`PERSONA-ito-security-compliance`); the consumer is not called a service team, which
+   collides with the notion of an IT service (amended by ADR 0045).
 4. Every other service domain mints its archetypes in its own file (ADR 0007, ADR 0009) on the same pattern and
    adds those its work needs (ADR 0017–0027); a persona belongs to one service domain and never crosses into
    another.

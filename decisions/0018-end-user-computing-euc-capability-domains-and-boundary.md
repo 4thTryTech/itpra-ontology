@@ -9,9 +9,9 @@ Origin: Consolidates decisions taken between 2026-05 and 2026-11, before publica
 
 ## Context
 
-The End-User Computing service domain (`SD-END-USER`) is the workforce computing experience outside the platform:
-endpoints, workspaces and the tooling people use. Its vocabulary overlaps with platform security, observability and
-substrate, the enterprise identity authority and the service desk, so each domain needs a stated boundary.
+The End-User Computing service domain (`SD-END-USER`) is the workforce computing experience:
+endpoints, workspaces and the tooling people use. Its vocabulary overlaps with the infrastructure platform's security,
+observability and substrate, the enterprise identity authority and the service desk, so each domain needs a stated boundary.
 
 ## Decision
 
@@ -28,10 +28,10 @@ substrate, the enterprise identity authority and the service desk, so each domai
    sign-in and posture-conditioned access experience, personal devices, virtual-workspace delivery, workplace
    resolution and the observation of the user's device and experience.
 5. It consumes, it does not own: `EUC-SEC` applies enterprise policy to endpoints and supplies compliance evidence,
-   distinct from platform security (`SEC`, ADR 0017) and the control catalog (ADR 0024); `EUC-IAM` consumes the
+   distinct from platform security (`ITO-SEC`, ADR 0017) and the control catalog (ADR 0024); `EUC-IAM` consumes the
    identity of record, owning neither directory nor workload identity; `EUC-VRW` delivers the workspace the substrate
-   (`SUB`) runs; `EUC-SUP` resolves what the desk routes (ADR 0019); `EUC-DEX` observes the endpoint, not the platform
-   (`OBS`). Physical work hands to Field Support (ADR 0020), endpoint connectivity to Network & Connectivity (ADR 0023).
+   (`ITO-SUB`) runs; `EUC-SUP` resolves what the desk routes (ADR 0019); `EUC-DEX` observes the endpoint, not the platform
+   (`ITO-OBS`). Physical work hands to Field Support (ADR 0020), endpoint connectivity to Network & Connectivity (ADR 0023).
 6. `EUC-SEC` and `EUC-IAM` stay separate although both sit in the Security plane: posture is an assurance concern,
    access an experience concern, with different owners.
 
@@ -44,7 +44,7 @@ substrate, the enterprise identity authority and the service desk, so each domai
 
 ## Alternatives
 
-- Fold endpoint posture into the platform's `SEC` — the device in the user's hands has its own owner, lifecycle and
+- Fold endpoint posture into the platform's `ITO-SEC` — the device in the user's hands has its own owner, lifecycle and
   consumer.
 - One endpoint-management domain for lifecycle, posture and observability — loses the posture and experience concerns
   that are first-class today.

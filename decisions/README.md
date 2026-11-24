@@ -8,6 +8,10 @@ cites the record that minted or changed it as `ADR NNNN`. From outside this repo
 - One decision per record, written to [the template](0000-template.md); `tools/adr-lint.py` enforces the shape and runs in CI.
 - Statuses: Accepted · Superseded (names its successor) · Deprecated · Rejected. A record is proposed as a pull request, together
   with the change it decides, and lands Accepted. Nothing else reaches `master`.
+- Rules as they stand ([ADR 0049](0049-records-state-the-rules-as-they-stand.md)): a rule a later record amends is restated in
+  place and ends `(amended by ADR NNNN)`; a withdrawn rule becomes one line naming the record that withdrew it; rule numbers
+  never change. A record is superseded only when its decision is replaced whole, and then keeps its text. Every id a record
+  cites is a live id; a rename updates the records that cite it in the same change. No record carries a change log.
 - Short: at most 60 lines and 500 words (hard limit 80 / 700). Context in six lines; Decision as numbered rules in the present
   tense; Consequences in three to six bullets with at least one trade-off; Alternatives one line each (name — why not); Sources as
   URL · what it supports · accessed date.

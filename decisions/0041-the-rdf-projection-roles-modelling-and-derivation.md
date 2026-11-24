@@ -30,8 +30,9 @@ checks. The projection must not become a second source of truth and must be rebu
 5. Schema source: type and verb lists stay in `schema.yaml`, enumerations are generated from them, every other
    schema fact lives once in the authoring schema; generated files are canonicalised (RDFC-1.0, then a line sort);
    dependencies are pinned exactly. The store is embedded, in process, loaded from the build, never committed.
-6. Retirement is not erasure: a retired id keeps resolving with `owl:deprecated` and `dcterms:isReplacedBy` (the
-   YAML `deprecated` field is a banned synonym — ADR 0007); content that must go is withdrawn and re-released.
+6. Retirement is not erasure: a record marked `retired` keeps resolving with `owl:deprecated`, and its `replaced_by`
+   as `dcterms:isReplacedBy` (the YAML `deprecated` field lists banned synonyms — ADR 0007); content that must go is
+   withdrawn and re-released (amended by ADR 0048).
 
 ## Consequences
 

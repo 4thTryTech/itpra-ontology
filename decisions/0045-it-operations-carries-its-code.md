@@ -19,20 +19,18 @@ eleven peers (ADR 0009).
    `ITO-COST`, `ITO-DATA`, `ITO-EXP` and `ITO-GOV`, its capabilities `CAP-ITO-<GRP>-<n>` (amends ADR 0010 rule 5,
    ADR 0017 rule 2).
 3. Its functions are `FUNC-ito-<slug>`, personas `PERSONA-ito-<slug>`, journeys `JRN-ito-<slug>` and workflows
-   `WF-ito-<slug>` (amends ADR 0011 rule 3 and the ids of ADR 0012 rule 3).
+   `WF-ito-<slug>` (amends ADR 0011 rule 3, ADR 0012 rules 1 and 3, ADR 0013 rule 1).
 4. No function id is uncoded: the code names the function's home service domain. A function may still support
    another domain's capability by a record (ADR 0009), and keeps its id.
-5. Its files are `domains-ito`, `capabilities-ito-<grp>`, `functions-ito-<grp>`, `personas-ito`, `journeys-ito`
-   and `workflows-ito` (amends ADR 0007 rule 3). A term file named with a code is that domain's; one without is
-   shared.
+5. Its files are `domains-ito`, `capabilities-ito-<grp>`, `functions-ito-<grp>`, `personas-ito` and
+   `journeys-ito` (amends ADR 0007 rule 3). A term file named with a code is that domain's; one without is
+   shared (amended by ADR 0046).
 6. The change is a rename and MAJOR (ADR 0003): each new id is the old one with the code inserted, labels,
    definitions, planes and boundaries stay, and `migrations/5.0.0.yaml` lists every pair. A renamed record's
    `source` names this record.
-7. An id written without the code in an earlier record reads as its coded successor; earlier records keep their
-   text (ADR 0005).
+7. Replaced by ADR 0049, under which every record cites the coded ids.
 8. Requirement ids stay with consumers (ADR 0001): `FR-<CODE>-<n>` and `NFR-<CODE>_<QA>-<n>` with a
-   service-domain code are every domain's form; the uncoded forms of ADR 0004 rule 5 stay reserved for older
-   registries.
+   service-domain code are every domain's form and the only reserved ones (amended by ADR 0046).
 
 ## Consequences
 
@@ -41,7 +39,8 @@ eleven peers (ADR 0009).
   but each consumer must re-pin and apply it.
 - The old ids' IRIs no longer name a term; the map is what a resolver needs to redirect them.
 - A function's id no longer shows that it is shared; in return, sharing one never renames it.
-- Earlier records show ids that no longer exist; rule 7 reconciles them, one indirection away.
+- Every record cites the coded ids (ADR 0049); the old ids appear only in the map, which a reader of an older
+  document needs.
 
 ## Alternatives
 

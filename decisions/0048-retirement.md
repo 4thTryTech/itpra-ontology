@@ -14,18 +14,18 @@ synonyms (ADR 0007).
 ## Decision
 
 1. A record is retired by the optional field `retired`, whose value is the `ontology_version` that retired it.
-   The record keeps its id, label, definition, relations and file.
+   The record keeps its id, label, definition, relations and file (amends ADR 0003 rule 2, ADR 0007 rule 1).
 2. The optional field `replaced_by` holds the id of the record that succeeds it. It is allowed only on a
    retired record, resolves to another record and never names the record itself.
 3. The two fields change the shape of a record: `schema_version` is 3.
 4. The projection marks a retired record `owl:deprecated` with the version that retired it, and states
-   `replaced_by` as `dcterms:isReplacedBy`; the record keeps resolving at its IRI (ADR 0041 rule 6).
+   `replaced_by` as `dcterms:isReplacedBy`; the record keeps resolving at its IRI (amends ADR 0041 rule 6).
 5. The linter refuses a `retired` value that is not a version, a `replaced_by` that does not resolve or names
    its own record, and a `replaced_by` on a record that is not retired (ADR 0042).
 6. Retirement is for a term that was released and defined something. A record is removed only in a MAJOR
    release, by a record that says why (ADR 0046).
 7. An id that must keep resolving under a new name is retired with `replaced_by`. A rename of many ids at once
-   is MAJOR and carried by a migration file (ADR 0045).
+   is MAJOR and carried by a migration file (ADR 0045; amends ADR 0004 rule 1).
 
 ## Consequences
 

@@ -28,14 +28,14 @@ boundary that keeps it an authority over estates, not a copy of their controls.
    and owns the enterprise registers; estates implement, enforce, scan, detect and supply evidence. The estate — a
    platform, an application landscape or a business unit — is the tenant unit (ADR 0014).
 4. The seams: `GRC-SOC` correlates what estates feed up and coordinates enterprise response; estate detection and
-   response stay with `CAP-SEC-6`, `CAP-SEC-7`, `CAP-SEC-8`. `GRC-IAM` owns the identity of record and entitlement
-   governance that `SEC` and `EUC-IAM` consume; it does not own workload identity (`CAP-SEC-1`, `CAP-SEC-2`,
-   `CAP-SEC-3`) or the sign-in experience. `GRC-RISK` owns the register and risk acceptance, consuming findings
-   from `CAP-SEC-4` and `CAP-SEC-7`. `GRC-CMP` attests evidence `GOV` produces. `GRC-POL` authors what `FND` and
-   `SEC` enforce. `GRC-AWR` has no platform counterpart. `GRC-INS` reports enterprise posture, not platform health
-   (`GOV`, `OBS`).
-5. Adjacent seams are `interfaces_with`: endpoint evidence from `SD-END-USER`, the contact channel of
-   `SD-SERVICE-DESK`, cross-provider coordination by `SD-SERVICE-MGMT`.
+   response stay with `CAP-ITO-SEC-6`, `CAP-ITO-SEC-7`, `CAP-ITO-SEC-8`. `GRC-IAM` owns the identity of record and entitlement
+   governance that `ITO-SEC` and `EUC-IAM` consume; it does not own workload identity (`CAP-ITO-SEC-1`, `CAP-ITO-SEC-2`,
+   `CAP-ITO-SEC-3`) or the sign-in experience. `GRC-RISK` owns the register and risk acceptance, consuming findings
+   from `CAP-ITO-SEC-4` and `CAP-ITO-SEC-7`. `GRC-CMP` attests evidence `ITO-GOV` produces. `GRC-POL` authors what `ITO-FND` and
+   `ITO-SEC` enforce. `GRC-AWR` has no platform counterpart. `GRC-INS` reports enterprise posture, not platform health
+   (`ITO-GOV`, `ITO-OBS`).
+5. Further seams are boundaries between peers: endpoint evidence from `SD-END-USER`, the contact channel of
+   `SD-SERVICE-DESK`, cross-provider coordination by `SD-SERVICE-MGMT` (amended by ADR 0047).
 
 ## Consequences
 
@@ -46,9 +46,9 @@ boundary that keeps it an authority over estates, not a copy of their controls.
 
 ## Alternatives
 
-- Restate the platform's controls under the enterprise domain — duplicates `SEC` and `GOV` and breaks single
+- Restate the platform's controls under the enterprise domain — duplicates `ITO-SEC` and `ITO-GOV` and breaks single
   ownership; the authority governs, estates implement.
-- Place identity governance in `SEC` — the identity of record and entitlement governance are enterprise
+- Place identity governance in `ITO-SEC` — the identity of record and entitlement governance are enterprise
   authorities the platform consumes.
 
 ## Sources
