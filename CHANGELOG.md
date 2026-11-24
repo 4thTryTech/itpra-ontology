@@ -68,7 +68,8 @@ Tooling (`tools/itpra-onto/`), which changes output and a consumer's configurati
   for a bump once the tag exists.
 - The release carries the RDF projection built from the release commit, `itpra-ontology-5.0.0-rdf.tar.gz`, with
   its `sha256`, beside the source archive (ADR 0043). On a manual run the release workflow creates the tag only
-  after both archives have built and the projection has validated.
+  after both archives have built and the projection has validated, and it refuses a pushed tag that is not on
+  `master`.
 
 ## 4.0.1 — 2026-11-23
 

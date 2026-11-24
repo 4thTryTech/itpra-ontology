@@ -4,8 +4,9 @@ name: release
 # and their hashes (ADR 0003, ADR 0043). Two ways in, one job: push the tag, or run this workflow on master with
 # the version — it then creates the tag. Either way the version must equal ontology_version and the pipeline
 # package's version (ADR 0044), CHANGELOG.md must have the section, and both archives are built from the release
-# commit. On a manual run nothing is tagged until everything has built and validated: a tag cannot be moved, so
-# it is created only for a commit that is known to release. A tag vX.Y.Z-rc.N is a pre-release.
+# commit, which must be on master: a pushed tag that points anywhere else is refused. On a manual run nothing is
+# tagged until everything has built and validated: a tag cannot be moved, so it is created only for a commit that
+# is known to release. A tag vX.Y.Z-rc.N is a pre-release.
 
 on:
   push:
@@ -47,7 +48,7 @@ jobs:
           echo "BASE_VERSION=$base" >> "$GITHUB_ENV"
       - name: Release notes come from CHANGELOG.md
         run: python3 tools/release-notes.py "$BASE_VERSION" > notes.md
-      - name: The release commit (a manual run releases master; an existing tag is never moved)
+      - name: The release commit (on master; an existing tag is never moved)
         run: |
           commit="$(git rev-parse HEAD)"
           if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
@@ -60,8 +61,14 @@ jobs:
               fi
               echo "tag $TAG already exists at HEAD"
             fi
-          elif [ "$(git rev-parse "$TAG^{commit}")" != "$commit" ]; then
-            echo "::error::the checkout is not the commit of $TAG"; exit 1
+          else
+            if [ "$(git rev-parse "$TAG^{commit}")" != "$commit" ]; then
+              echo "::error::the checkout is not the commit of $TAG"; exit 1
+            fi
+            git fetch --quiet origin "+refs/heads/master:refs/remotes/origin/master"
+            if ! git merge-base --is-ancestor "$commit" refs/remotes/origin/master; then
+              echo "::error::tag $TAG is at $commit, which is not on master; a release is tagged on master (ADR 0003)"; exit 1
+            fi
           fi
           echo "COMMIT=$commit" >> "$GITHUB_ENV"
       - name: Build the source archive and its hash
