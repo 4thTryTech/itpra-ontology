@@ -1,6 +1,5 @@
-# ITPRA ontology — FUNCTION library, DCF-PWR (Power & Energy Distribution)
-# type: Function. ids FUNC-dcf-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
-# the function (ADR 0011).
+# ITPRA ontology — DCF-PWR (Power & Energy Distribution): functions
+# type: Function. Ids FUNC-dcf-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0022.
 
 # Utility intake & primary supply (CAP-DCF-PWR-1)
 - id: FUNC-dcf-utility-intake

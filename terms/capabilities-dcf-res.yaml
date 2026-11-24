@@ -1,6 +1,5 @@
-# ITPRA ontology — DCF-RES (Facility Resilience & Continuity) capabilities
-# type: Capability. ids CAP-DCF-RES-<n>. Grouped under domain DCF-RES (ADR 0022). Physical-facility resilience;
-# the platform's workload resilience/DR (ITO) runs on top.
+# ITPRA ontology — DCF-RES (Facility Resilience & Continuity): capabilities
+# type: Capability. Ids CAP-DCF-RES-<n>, each grouped under DCF-RES. Decided in ADR 0022.
 
 - id: CAP-DCF-RES-1
   term: Facility Redundancy & Fault Tolerance

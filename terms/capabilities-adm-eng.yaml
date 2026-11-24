@@ -1,6 +1,5 @@
-# ITPRA ontology — ADM-ENG (Application Build & Engineering Practice) capabilities
-# type: Capability. ids CAP-ADM-ENG-<n>. Grouped under domain ADM-ENG (ADR 0021). CONSUMER-side: builds the
-# application; consumes the platform's software-delivery pipeline (ITO-DEL), does not own it (ADR 0021).
+# ITPRA ontology — ADM-ENG (Application Build & Engineering Practice): capabilities
+# type: Capability. Ids CAP-ADM-ENG-<n>, each grouped under ADM-ENG. Decided in ADR 0021.
 
 - id: CAP-ADM-ENG-1
   term: Application Design & Architecture

@@ -1,5 +1,5 @@
-# ITPRA ontology — ITO-COST (Cost & Capacity) capabilities
-# type: Capability. ids CAP-ITO-COST-<n>. Grouped under domain ITO-COST (ADR 0017).
+# ITPRA ontology — ITO-COST (Cost & Capacity): capabilities
+# type: Capability. Ids CAP-ITO-COST-<n>, each grouped under ITO-COST. Decided in ADR 0017.
 
 - id: CAP-ITO-COST-1
   term: Cost Attribution & Showback

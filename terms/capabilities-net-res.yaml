@@ -1,5 +1,5 @@
-# ITPRA ontology — NET-RES (Network Resilience & Continuity) capabilities
-# type: Capability. ids CAP-NET-RES-<n>. Grouped under domain NET-RES (ADR 0023).
+# ITPRA ontology — NET-RES (Network Resilience & Continuity): capabilities
+# type: Capability. Ids CAP-NET-RES-<n>, each grouped under NET-RES. Decided in ADR 0023.
 
 - id: CAP-NET-RES-1
   term: Redundant & Diverse-Path Connectivity

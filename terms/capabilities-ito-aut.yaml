@@ -1,5 +1,5 @@
-# ITPRA ontology — ITO-AUT (Provisioning & Automation) capabilities
-# type: Capability. ids CAP-ITO-AUT-<n>. Grouped under domain ITO-AUT (ADR 0017).
+# ITPRA ontology — ITO-AUT (Provisioning & Automation): capabilities
+# type: Capability. Ids CAP-ITO-AUT-<n>, each grouped under ITO-AUT. Decided in ADR 0017.
 
 - id: CAP-ITO-AUT-1
   term: Infrastructure-as-Code Provisioning

@@ -1,5 +1,5 @@
-# ITPRA ontology — DXC-CDP (Customer Data & Profiles) capabilities
-# type: Capability. ids CAP-DXC-CDP-<n>. Grouped under domain DXC-CDP (ADR 0027).
+# ITPRA ontology — DXC-CDP (Customer Data & Profiles): capabilities
+# type: Capability. Ids CAP-DXC-CDP-<n>, each grouped under DXC-CDP. Decided in ADR 0027.
 
 - id: CAP-DXC-CDP-1
   term: Customer Data Ingestion & Integration

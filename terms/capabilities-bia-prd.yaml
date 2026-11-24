@@ -1,6 +1,5 @@
-# ITPRA ontology — BIA-PRD (Product & User-Behavior Analytics) capabilities
-# type: Capability. ids CAP-BIA-PRD-<n>. Grouped under domain BIA-PRD (ADR 0026). Business product insight;
-# DISTINCT from security UEBA (CAP-ITO-SEC-7) and operational AIOps (CAP-ITO-OBS-6) per ADR 0026.
+# ITPRA ontology — BIA-PRD (Product & User-Behavior Analytics): capabilities
+# type: Capability. Ids CAP-BIA-PRD-<n>, each grouped under BIA-PRD. Decided in ADR 0026.
 
 - id: CAP-BIA-PRD-1
   term: Behavioral Event Collection

@@ -1,5 +1,5 @@
-# ITPRA ontology — FUNCTION library, BIA-WHS (Data Warehouse, Lakehouse & Modeling)
-# type: Function. ids FUNC-bia-<slug>. T1-neutral (ADR 0011). Functions `support` ≥1 capability. See ADR 0026.
+# ITPRA ontology — BIA-WHS (Data Warehouse, Lakehouse & Modeling): functions
+# type: Function. Ids FUNC-bia-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0026.
 
 - id: FUNC-bia-analytical-store-provisioning
   term: Analytical Store Provisioning

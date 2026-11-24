@@ -1,6 +1,5 @@
-# ITPRA ontology — FUNCTION library, GRC-CMP (Compliance, Audit & Evidence)
-# type: Function. ids FUNC-grc-<slug>. All T1-neutral; functions MAY name a standard/framework where that IS the
-# function (ADR 0011). Functions `support` >=1 capability. See ADR 0024.
+# ITPRA ontology — GRC-CMP (Compliance, Audit & Evidence): functions
+# type: Function. Ids FUNC-grc-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0024.
 
 # Control framework & obligation mapping (CAP-GRC-CMP-1)
 - id: FUNC-grc-control-framework-mapping

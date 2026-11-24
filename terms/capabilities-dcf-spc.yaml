@@ -1,6 +1,5 @@
-# ITPRA ontology — DCF-SPC (Facility Space & Capacity) capabilities
-# type: Capability. ids CAP-DCF-SPC-<n>. Grouped under domain DCF-SPC (ADR 0022); environment expression per ADR
-# 0014.
+# ITPRA ontology — DCF-SPC (Facility Space & Capacity): capabilities
+# type: Capability. Ids CAP-DCF-SPC-<n>, each grouped under DCF-SPC. Decided in ADR 0022.
 
 - id: CAP-DCF-SPC-1
   term: White-Space & Floor Provision

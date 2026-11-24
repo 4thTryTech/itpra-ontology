@@ -1,8 +1,7 @@
-# ITPRA ontology — FUNCTION library, ITO-DEL (Software Delivery)
-# type: Function. ids FUNC-ito-<slug>. All T1 neutral (no tool names; canary/blue-green kept as aliases). See
-# ADR 0011.
+# ITPRA ontology — ITO-DEL (Software Delivery): functions
+# type: Function. Ids FUNC-ito-<slug>; a function supports one or more capabilities. Decided in ADR 0011.
 
-# Continuous integration pipeline (supports CAP-ITO-DEL-1)
+# Continuous integration pipeline (CAP-ITO-DEL-1)
 - id: FUNC-ito-build-automation
   term: Build Automation
   type: Function
@@ -42,7 +41,7 @@
     - {rel: supports, target: CAP-ITO-DEL-1}
   source: ADR 0011 (amended by ADR 0045)
 
-# Deployment & promotion (supports CAP-ITO-DEL-2)
+# Deployment & promotion (CAP-ITO-DEL-2)
 - id: FUNC-ito-deployment-execution
   term: Deployment Execution
   type: Function
@@ -79,7 +78,7 @@
     - {rel: supports, target: CAP-ITO-DEL-2}
   source: ADR 0011 (amended by ADR 0045)
 
-# Supply-chain integrity verification (supports CAP-ITO-DEL-3; verifies what CAP-ITO-FND-5 records)
+# Supply-chain integrity verification (CAP-ITO-DEL-3)
 - id: FUNC-ito-artifact-signing
   term: Artifact Signing
   type: Function
@@ -107,7 +106,7 @@
     - {rel: supports, target: CAP-ITO-DEL-3}
   source: ADR 0011 (amended by ADR 0045)
 
-# Release rollback & roll-forward (supports CAP-ITO-DEL-4)
+# Release rollback & roll-forward (CAP-ITO-DEL-4)
 - id: FUNC-ito-release-rollback
   term: Release Rollback
   type: Function
@@ -126,7 +125,7 @@
     - {rel: supports, target: CAP-ITO-DEL-4}
   source: ADR 0011 (amended by ADR 0045)
 
-# Code quality analysis (supports CAP-ITO-DEL-5; distinct from CAP-ITO-SEC-9 application security testing)
+# Code quality analysis (CAP-ITO-DEL-5)
 - id: FUNC-ito-static-code-analysis
   term: Static Code Analysis
   type: Function

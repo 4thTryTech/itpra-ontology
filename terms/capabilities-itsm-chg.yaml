@@ -1,6 +1,5 @@
-# ITPRA ontology — ITSM-CHG (Cross-Domain Change Coordination) capabilities
-# type: Capability. ids CAP-ITSM-CHG-<n>. Grouped under domain ITSM-CHG (ADR 0025). Neutral cross-provider
-# coordination over GC-CHANGE / GC-APPROVAL / GC-RECORD.
+# ITPRA ontology — ITSM-CHG (Cross-Domain Change Coordination): capabilities
+# type: Capability. Ids CAP-ITSM-CHG-<n>, each grouped under ITSM-CHG. Decided in ADR 0025.
 
 - id: CAP-ITSM-CHG-1
   term: Cross-Provider Change Authorization

@@ -1,5 +1,5 @@
-# ITPRA ontology — FLD-IMAC (Install · Move · Add · Change) capabilities
-# type: Capability. ids CAP-FLD-IMAC-<n>. Grouped under domain FLD-IMAC (ADR 0020).
+# ITPRA ontology — FLD-IMAC (Install · Move · Add · Change): capabilities
+# type: Capability. Ids CAP-FLD-IMAC-<n>, each grouped under FLD-IMAC. Decided in ADR 0020.
 
 - id: CAP-FLD-IMAC-1
   term: Physical Install & Commissioning

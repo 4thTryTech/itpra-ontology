@@ -1,7 +1,7 @@
-# ITPRA ontology — FUNCTION library, ITO-SUB (Infrastructure Substrate)
-# type: Function. ids FUNC-ito-<slug>. All T1 neutral (TLS/DNS kept as aliases only). See ADR 0011.
+# ITPRA ontology — ITO-SUB (Infrastructure Substrate): functions
+# type: Function. Ids FUNC-ito-<slug>; a function supports one or more capabilities. Decided in ADR 0011.
 
-# Compute provisioning (supports CAP-ITO-SUB-1)
+# Compute provisioning (CAP-ITO-SUB-1)
 - id: FUNC-ito-compute-allocation
   term: Compute Allocation
   type: Function
@@ -29,7 +29,7 @@
     - {rel: supports, target: CAP-ITO-SUB-1}
   source: ADR 0011 (amended by ADR 0045)
 
-# Network & connectivity (supports CAP-ITO-SUB-2)
+# Network & connectivity (CAP-ITO-SUB-2)
 - id: FUNC-ito-network-provisioning
   term: Network Provisioning
   type: Function
@@ -57,7 +57,7 @@
     - {rel: supports, target: CAP-ITO-SUB-2}
   source: ADR 0011 (amended by ADR 0045)
 
-# Persistent storage (supports CAP-ITO-SUB-3)
+# Persistent storage (CAP-ITO-SUB-3)
 - id: FUNC-ito-volume-provisioning
   term: Volume Provisioning
   type: Function
@@ -76,7 +76,7 @@
     - {rel: supports, target: CAP-ITO-SUB-3}
   source: ADR 0011 (amended by ADR 0045)
 
-# Load balancing & ingress (supports CAP-ITO-SUB-4; health-checking shared with CAP-ITO-RES-4)
+# Load balancing & ingress (CAP-ITO-SUB-4)
 - id: FUNC-ito-load-balancing
   term: Load Balancing
   type: Function
@@ -107,7 +107,7 @@
     - {rel: supports, target: CAP-ITO-RES-4}
   source: ADR 0011 (amended by ADR 0045)
 
-# Substrate reclamation (supports CAP-ITO-SUB-5; orphan-detection shared with CAP-ITO-COST-3)
+# Substrate reclamation (CAP-ITO-SUB-5)
 - id: FUNC-ito-resource-reclamation
   term: Resource Reclamation
   type: Function
@@ -129,7 +129,7 @@
     - {rel: supports, target: CAP-ITO-COST-3}
   source: ADR 0011 (amended by ADR 0045)
 
-# API gateway & management (supports CAP-ITO-SUB-6; edge authn/authz reuses ITO-SEC)
+# API gateway & management (CAP-ITO-SUB-6)
 - id: FUNC-ito-api-routing
   term: API Routing
   type: Function
@@ -166,7 +166,7 @@
     - {rel: supports, target: CAP-ITO-SUB-6}
   source: ADR 0011 (amended by ADR 0045)
 
-# Service mesh & service connectivity (supports CAP-ITO-SUB-7; identity authz reuses ITO-SEC)
+# Service mesh & service connectivity (CAP-ITO-SUB-7)
 - id: FUNC-ito-traffic-policy-management
   term: Traffic Policy Management
   type: Function

@@ -1,6 +1,5 @@
-# ITPRA ontology — SVD-CON (Contact & Intake Channels) capabilities
-# type: Capability. ids CAP-SVD-CON-<n>. Grouped under domain SVD-CON (ADR 0019); environment expression per ADR
-# 0014.
+# ITPRA ontology — SVD-CON (Contact & Intake Channels): capabilities
+# type: Capability. Ids CAP-SVD-CON-<n>, each grouped under SVD-CON. Decided in ADR 0019.
 
 - id: CAP-SVD-CON-1
   term: Multi-Channel Contact Intake

@@ -1,8 +1,6 @@
-# ITPRA ontology — IT Operations (ITO) capability domains
-# type: Domain. The `id` IS the domain code used in capability ids: CAP-<id>-<n> (child: CAP-<id>-<n>.<m>). Each
-# domain is `grouped_by` an EXISTING capability PLANE (ADR 0010; terms/planes.yaml); the eleven span all seven
-# planes. Taxonomy ratified by ADR 0017; the `ITO` code on ids and files by ADR 0045. SCOPE: IT Operations owns
-# and operates the infrastructure platform. Owning service domain: SD-IT-OPERATIONS (ADR 0009 + ADR 0017).
+# ITPRA ontology — IT Operations (ITO): capability domains
+# type: Domain. A capability domain's id is the code its capabilities carry (CAP-<id>-<n>). Owned by
+# SD-IT-OPERATIONS. Decided in ADR 0017.
 
 - id: ITO-FND
   term: Platform Foundation

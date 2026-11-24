@@ -1,7 +1,5 @@
-# ITPRA ontology — FUNCTION library, ADM-VAL (Application Performance & Value Insight)
-# type: Function. ids FUNC-adm-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
-# the function (ADR 0011). Observes the APPLICATION & its value; consumes platform/workload observability
-# (ITO-OBS). See ADR 0021.
+# ITPRA ontology — ADM-VAL (Application Performance & Value Insight): functions
+# type: Function. Ids FUNC-adm-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0021.
 
 # Performance & behavior insight (CAP-ADM-VAL-1)
 - id: FUNC-adm-application-performance-monitoring
@@ -52,7 +50,7 @@
     - {rel: supports, target: CAP-ADM-VAL-4}
   source: ADR 0021
 
-# Agentic execution explainability (CAP-ADM-VAL-5) — ADR 0040
+# Agentic execution explainability (CAP-ADM-VAL-5)
 - id: FUNC-adm-execution-decision-trace-capture
   term: Execution Decision-Trace Capture
   type: Function

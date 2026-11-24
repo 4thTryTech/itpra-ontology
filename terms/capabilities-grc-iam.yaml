@@ -1,7 +1,5 @@
-# ITPRA ontology — GRC-IAM (Corporate Identity & Access Authority) capabilities
-# type: Capability. ids CAP-GRC-IAM-<n>. Grouped under domain GRC-IAM (ADR 0024). Enterprise identity AUTHORITY
-# — owns identity of record/entitlement governance the platform (ITO-SEC) and workplace (EUC-IAM) consume; does
-# NOT own workload identity or the end-user sign-in experience (ADR 0024).
+# ITPRA ontology — GRC-IAM (Corporate Identity & Access Authority): capabilities
+# type: Capability. Ids CAP-GRC-IAM-<n>, each grouped under GRC-IAM. Decided in ADR 0024.
 
 - id: CAP-GRC-IAM-1
   term: Identity of Record & Authoritative Source Management

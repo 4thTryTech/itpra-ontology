@@ -1,8 +1,7 @@
-# ITPRA ontology — FUNCTION library, ITO-RES (Resilience & Continuity)
-# type: Function. ids FUNC-ito-<slug>. All T1 neutral. CAP-ITO-RES-1 backup schedule reuses
-# FUNC-ito-job-scheduling (ITO-AUT); CAP-ITO-RES-4 reuses FUNC-ito-health-checking (ITO-SUB). See ADR 0011.
+# ITPRA ontology — ITO-RES (Resilience & Continuity): functions
+# type: Function. Ids FUNC-ito-<slug>; a function supports one or more capabilities. Decided in ADR 0011.
 
-# Backup (supports CAP-ITO-RES-1; schedule via shared FUNC-ito-job-scheduling)
+# Backup (CAP-ITO-RES-1)
 - id: FUNC-ito-backup-execution
   term: Backup Execution
   type: Function
@@ -21,7 +20,7 @@
     - {rel: supports, target: CAP-ITO-RES-1}
   source: ADR 0011 (amended by ADR 0045)
 
-# Restore (supports CAP-ITO-RES-2)
+# Restore (CAP-ITO-RES-2)
 - id: FUNC-ito-restore-execution
   term: Restore Execution
   type: Function
@@ -40,7 +39,7 @@
     - {rel: supports, target: CAP-ITO-RES-2}
   source: ADR 0011 (amended by ADR 0045)
 
-# Disaster recovery (supports CAP-ITO-RES-3)
+# Disaster recovery (CAP-ITO-RES-3)
 - id: FUNC-ito-failover-orchestration
   term: Failover Orchestration
   type: Function
@@ -59,7 +58,7 @@
     - {rel: supports, target: CAP-ITO-RES-3}
   source: ADR 0011 (amended by ADR 0045)
 
-# High availability (supports CAP-ITO-RES-4; reuses shared FUNC-ito-health-checking)
+# High availability (CAP-ITO-RES-4)
 - id: FUNC-ito-redundancy-management
   term: Redundancy Management
   type: Function
@@ -78,7 +77,7 @@
     - {rel: supports, target: CAP-ITO-RES-4}
   source: ADR 0011 (amended by ADR 0045)
 
-# Workload mobility (supports CAP-ITO-RES-5)
+# Workload mobility (CAP-ITO-RES-5)
 - id: FUNC-ito-live-migration
   term: Live Migration
   type: Function
@@ -97,7 +96,7 @@
     - {rel: supports, target: CAP-ITO-RES-5}
   source: ADR 0011 (amended by ADR 0045)
 
-# Chaos engineering (supports CAP-ITO-RES-6)
+# Chaos engineering (CAP-ITO-RES-6)
 - id: FUNC-ito-fault-injection
   term: Fault Injection
   type: Function

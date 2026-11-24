@@ -1,6 +1,5 @@
-# ITPRA ontology — NET-CON (Connectivity Provisioning & WAN) capabilities
-# type: Capability. ids CAP-NET-CON-<n>. Grouped under domain NET-CON (ADR 0023); environment expression per ADR
-# 0014.
+# ITPRA ontology — NET-CON (Connectivity Provisioning & WAN): capabilities
+# type: Capability. Ids CAP-NET-CON-<n>, each grouped under NET-CON. Decided in ADR 0023.
 
 - id: CAP-NET-CON-1
   term: Site & Branch Connectivity Provisioning

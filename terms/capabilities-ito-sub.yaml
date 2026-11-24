@@ -1,5 +1,5 @@
-# ITPRA ontology — ITO-SUB (Infrastructure Substrate) capabilities
-# type: Capability. ids CAP-ITO-SUB-<n>. Grouped under domain ITO-SUB (ADR 0017).
+# ITPRA ontology — ITO-SUB (Infrastructure Substrate): capabilities
+# type: Capability. Ids CAP-ITO-SUB-<n>, each grouped under ITO-SUB. Decided in ADR 0017.
 
 - id: CAP-ITO-SUB-1
   term: Compute Provisioning

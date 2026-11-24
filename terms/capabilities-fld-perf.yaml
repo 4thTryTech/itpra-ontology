@@ -1,5 +1,5 @@
-# ITPRA ontology — FLD-PERF (Field Performance & Insight) capabilities
-# type: Capability. ids CAP-FLD-PERF-<n>. Grouped under domain FLD-PERF (ADR 0020).
+# ITPRA ontology — FLD-PERF (Field Performance & Insight): capabilities
+# type: Capability. Ids CAP-FLD-PERF-<n>, each grouped under FLD-PERF. Decided in ADR 0020.
 
 - id: CAP-FLD-PERF-1
   term: Field Telemetry & Visit Record

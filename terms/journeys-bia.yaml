@@ -1,9 +1,6 @@
-# ITPRA ontology — Business Intelligence & Analytics (BIA) journey catalog
-# type: Journey. ids JRN-bia-<slug>. Each `grouped_by` exactly one EXISTING JourneyGroup
-# (JG-ONBOARDING..JG-EVOLUTION; reused, not redefined). Neutral — steps reference capabilities + neutral
-# governance construct points (request/approval/change/incident/record/feedback), never tools or named
-# processes. Relationships from the journey side: grouped_by, consumed_by (primary personas), depends_on
-# (capabilities exercised). Ratified by ADR 0026. Diagrams: WF-bia-<slug>.
+# ITPRA ontology — Business Intelligence & Analytics (BIA): journeys
+# type: Journey. Ids JRN-bia-<slug>; a journey is grouped by one journey group (ADR 0013). Decided in
+# ADR 0026.
 
 # ---- JG-ONBOARDING ----
 - id: JRN-bia-onboard-insight-consumer
@@ -193,7 +190,7 @@
     - {rel: depends_on, target: CAP-BIA-GOV-6}
   source: ADR 0026
 
-# ---- JG-GOVERNANCE (added by ADR 0037) ----
+# ---- JG-GOVERNANCE ----
 - id: JRN-bia-formalise-business-term
   term: Formalise a Business Term
   type: Journey

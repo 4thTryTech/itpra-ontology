@@ -1,10 +1,6 @@
-# ITPRA ontology — Business Intelligence & Analytics (BIA) capability domains
-# type: Domain. The `id` IS the domain code used in capability ids: CAP-<id>-<n> (child: CAP-<id>-<n>.<m>). Each
-# domain is `grouped_by` an EXISTING capability PLANE (terms/planes.yaml). SD-BUSINESS-ANALYTICS interfaces_with
-# PLANE-RESOURCE (it consumes the platform data substrate/streaming/storage) and PLANE-EXPERIENCE (it serves
-# insight to business consumers); every BIA group is placed under one of those two existing planes. Taxonomy
-# ratified by ADR 0026. Owning service domain: SD-BUSINESS-ANALYTICS (ADR 0009). Scope/boundary vs
-# ITO-DATA/ITO-OBS/ITO-SEC: ADR 0026.
+# ITPRA ontology — Business Intelligence & Analytics (BIA): capability domains
+# type: Domain. A capability domain's id is the code its capabilities carry (CAP-<id>-<n>). Owned by
+# SD-BUSINESS-ANALYTICS. Decided in ADR 0026.
 
 - id: BIA-INT
   term: Data Integration & Ingestion
@@ -79,10 +75,11 @@
     collection and a governed event taxonomy, journey/funnel/conversion analysis, cohort/retention/engagement
     analysis, and experimentation and insight activation. Business product insight; distinct from security
     UEBA (ITO-SEC, CAP-ITO-SEC-7) and operational AIOps (ITO-OBS, CAP-ITO-OBS-6).
+  aliases: [product analytics, user behavior analytics, digital analytics, customer analytics]
   relates_to:
     - {rel: grouped_by, target: PLANE-EXPERIENCE}
     - {rel: belongs_to_service_domain, target: SD-BUSINESS-ANALYTICS}
-  source: ADR 0026
+  source: ADR 0026 (amended by ADR 0046)
 
 - id: BIA-GOV
   term: Data Governance, Quality & Master Data

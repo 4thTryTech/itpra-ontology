@@ -1,6 +1,5 @@
-# ITPRA ontology — BIA-WHS (Data Warehouse, Lakehouse & Modeling) capabilities
-# type: Capability. ids CAP-BIA-WHS-<n>. Grouped under domain BIA-WHS (ADR 0026). Consumes the platform data
-# substrate (ITO-DATA/ITO-SUB), does not own it (ADR 0026).
+# ITPRA ontology — BIA-WHS (Data Warehouse, Lakehouse & Modeling): capabilities
+# type: Capability. Ids CAP-BIA-WHS-<n>, each grouped under BIA-WHS. Decided in ADR 0026.
 
 - id: CAP-BIA-WHS-1
   term: Governed Analytical Data Store

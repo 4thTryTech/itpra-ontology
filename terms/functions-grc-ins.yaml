@@ -1,5 +1,5 @@
-# ITPRA ontology — FUNCTION library, GRC-INS (Security & Risk Posture Insight)
-# type: Function. ids FUNC-grc-<slug>. All T1-neutral. Functions `support` >=1 capability. See ADR 0024.
+# ITPRA ontology — GRC-INS (Security & Risk Posture Insight): functions
+# type: Function. Ids FUNC-grc-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0024.
 
 # Consolidated posture reporting (CAP-GRC-INS-1)
 - id: FUNC-grc-posture-aggregation

@@ -1,6 +1,5 @@
-# ITPRA ontology — ITSM-REQ (Cross-Domain Request & Fulfillment Orchestration) capabilities
-# type: Capability. ids CAP-ITSM-REQ-<n>. Grouped under domain ITSM-REQ (ADR 0025). Neutral cross-provider
-# coordination over GC-REQUEST (+ GC-APPROVAL / GC-RECORD).
+# ITPRA ontology — ITSM-REQ (Cross-Domain Request & Fulfillment Orchestration): capabilities
+# type: Capability. Ids CAP-ITSM-REQ-<n>, each grouped under ITSM-REQ. Decided in ADR 0025.
 
 - id: CAP-ITSM-REQ-1
   term: Cross-Domain Request Intake & Triage

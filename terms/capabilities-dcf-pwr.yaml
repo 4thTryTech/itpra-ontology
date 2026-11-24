@@ -1,5 +1,5 @@
-# ITPRA ontology — DCF-PWR (Power & Energy Distribution) capabilities
-# type: Capability. ids CAP-DCF-PWR-<n>. Grouped under domain DCF-PWR (ADR 0022).
+# ITPRA ontology — DCF-PWR (Power & Energy Distribution): capabilities
+# type: Capability. Ids CAP-DCF-PWR-<n>, each grouped under DCF-PWR. Decided in ADR 0022.
 
 - id: CAP-DCF-PWR-1
   term: Utility Intake & Primary Supply

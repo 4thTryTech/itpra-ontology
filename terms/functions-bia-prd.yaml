@@ -1,6 +1,5 @@
-# ITPRA ontology — FUNCTION library, BIA-PRD (Product & User-Behavior Analytics)
-# type: Function. ids FUNC-bia-<slug>. T1-neutral (ADR 0011). Business product insight; distinct from security
-# UEBA & operational AIOps (ADR 0026). Functions `support` ≥1 capability. See ADR 0026.
+# ITPRA ontology — BIA-PRD (Product & User-Behavior Analytics): functions
+# type: Function. Ids FUNC-bia-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0026.
 
 - id: FUNC-bia-event-instrumentation
   term: Event Instrumentation & Taxonomy

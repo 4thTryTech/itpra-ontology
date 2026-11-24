@@ -1,9 +1,7 @@
-# ITPRA ontology — FUNCTION library, ITO-GOV (Governance & Service Management)
-# type: Function. ids FUNC-ito-<slug>. All T1 neutral. ITO-GOV stays operating-model-NEUTRAL
-# (request/approval/change/incident/record per ADR 0015); NO ITIL/DevOps vocabulary (CMDB/RFC/CAB/service-desk)
-# — operating-model mapping is a T2 concern. See ADR 0011.
+# ITPRA ontology — ITO-GOV (Governance & Service Management): functions
+# type: Function. Ids FUNC-ito-<slug>; a function supports one or more capabilities. Decided in ADR 0011.
 
-# Service request management (supports CAP-ITO-GOV-1; request-intake shared with CAP-ITO-EXP-1 later)
+# Service request management (CAP-ITO-GOV-1)
 - id: FUNC-ito-request-intake
   term: Request Intake
   type: Function
@@ -25,7 +23,7 @@
     - {rel: supports, target: CAP-ITO-GOV-1}
   source: ADR 0011 (amended by ADR 0045)
 
-# Change approval (supports CAP-ITO-GOV-2; the neutral change-authorization construct)
+# Change approval (CAP-ITO-GOV-2)
 - id: FUNC-ito-approval-routing
   term: Approval Routing
   type: Function
@@ -44,7 +42,7 @@
     - {rel: supports, target: CAP-ITO-GOV-2}
   source: ADR 0011 (amended by ADR 0045)
 
-# Incident & problem coordination (supports CAP-ITO-GOV-3; neutral disruption-response construct)
+# Incident & problem coordination (CAP-ITO-GOV-3)
 - id: FUNC-ito-incident-coordination
   term: Incident Coordination
   type: Function
@@ -72,7 +70,7 @@
     - {rel: supports, target: CAP-ITO-GOV-3}
   source: ADR 0011 (amended by ADR 0045)
 
-# System-of-record (supports CAP-ITO-GOV-4; authoritative record other governance reasons over)
+# System-of-record (CAP-ITO-GOV-4)
 - id: FUNC-ito-resource-record-management
   term: Resource Record Management
   type: Function
@@ -91,7 +89,7 @@
     - {rel: supports, target: CAP-ITO-GOV-4}
   source: ADR 0011 (amended by ADR 0045)
 
-# Multi-tenancy governance (supports CAP-ITO-GOV-5; reuses FUNC-ito-authorization-decision from ITO-SEC)
+# Multi-tenancy governance (CAP-ITO-GOV-5)
 - id: FUNC-ito-tenant-isolation-enforcement
   term: Tenant Isolation Enforcement
   type: Function
@@ -110,7 +108,7 @@
     - {rel: supports, target: CAP-ITO-GOV-5}
   source: ADR 0011 (amended by ADR 0045)
 
-# Audit & compliance evidence (supports CAP-ITO-GOV-6; reuses shared FUNC-ito-audit-logging from ITO-SEC)
+# Audit & compliance evidence (CAP-ITO-GOV-6)
 - id: FUNC-ito-compliance-evidence-collection
   term: Compliance Evidence Collection
   type: Function
@@ -129,7 +127,7 @@
     - {rel: supports, target: CAP-ITO-GOV-6}
   source: ADR 0011 (amended by ADR 0045)
 
-# Service lifecycle management (supports CAP-ITO-GOV-8)
+# Service lifecycle management (CAP-ITO-GOV-8)
 - id: FUNC-ito-service-onboarding
   term: Service Onboarding
   type: Function
@@ -148,8 +146,7 @@
     - {rel: supports, target: CAP-ITO-GOV-8}
   source: ADR 0011 (amended by ADR 0045)
 
-# Operational knowledge management (supports CAP-ITO-GOV-9; knowledge-retrieval shared with CAP-ITO-EXP-5
-# later)
+# Operational knowledge management (CAP-ITO-GOV-9)
 - id: FUNC-ito-knowledge-authoring
   term: Knowledge Authoring
   type: Function
@@ -174,7 +171,7 @@
     - {rel: supports, target: CAP-ITO-EXP-5}
   source: ADR 0011 (amended by ADR 0045)
 
-# Defect & nomination capture (supports CAP-ITO-GOV-10; platform-as-a-product feedback intake)
+# Defect & nomination capture (CAP-ITO-GOV-10)
 - id: FUNC-ito-feedback-intake
   term: Feedback Intake
   type: Function
@@ -193,7 +190,7 @@
     - {rel: supports, target: CAP-ITO-GOV-10}
   source: ADR 0011 (amended by ADR 0045)
 
-# Product backlog & roadmap (supports CAP-ITO-GOV-11; the platform-as-a-product management loop)
+# Product backlog & roadmap (CAP-ITO-GOV-11)
 - id: FUNC-ito-backlog-management
   term: Backlog Management
   type: Function

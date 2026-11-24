@@ -1,6 +1,5 @@
-# ITPRA ontology — FUNCTION library, SVD-HDL (Front-line Incident & Request Handling)
-# type: Function. ids FUNC-svd-<slug>. Functions `support` >=1 capability; NEVER derived_from on a Function (ADR
-# 0011). Neutral across tiered & swarming models (ADR 0019). See ADR 0019.
+# ITPRA ontology — SVD-HDL (Front-line Incident & Request Handling): functions
+# type: Function. Ids FUNC-svd-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0019.
 
 # First-line resolution (CAP-SVD-HDL-1)
 - id: FUNC-svd-first-line-troubleshooting

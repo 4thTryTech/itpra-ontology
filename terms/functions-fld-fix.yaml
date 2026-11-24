@@ -1,5 +1,5 @@
-# ITPRA ontology — FUNCTION library, FLD-FIX (Hardware Break-Fix & Depot Repair)
-# type: Function. ids FUNC-fld-<slug>. Functions `support` ≥1 capability. See ADR 0020.
+# ITPRA ontology — FLD-FIX (Hardware Break-Fix & Depot Repair): functions
+# type: Function. Ids FUNC-fld-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0020.
 
 # On-site fault isolation & component swap (CAP-FLD-FIX-1)
 - id: FUNC-fld-fault-isolation

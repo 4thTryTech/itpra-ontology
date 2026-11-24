@@ -1,5 +1,5 @@
-# ITPRA ontology — FLD-SAFE (On-site Safety, Access & Escort) capabilities
-# type: Capability. ids CAP-FLD-SAFE-<n>. Grouped under domain FLD-SAFE (ADR 0020).
+# ITPRA ontology — FLD-SAFE (On-site Safety, Access & Escort): capabilities
+# type: Capability. Ids CAP-FLD-SAFE-<n>, each grouped under FLD-SAFE. Decided in ADR 0020.
 
 - id: CAP-FLD-SAFE-1
   term: Site-Access Request & Scheduling

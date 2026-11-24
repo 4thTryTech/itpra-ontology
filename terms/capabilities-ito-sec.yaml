@@ -1,5 +1,5 @@
-# ITPRA ontology — ITO-SEC (Security & Identity) capabilities
-# type: Capability. ids CAP-ITO-SEC-<n>. Grouped under domain ITO-SEC (ADR 0017).
+# ITPRA ontology — ITO-SEC (Security & Identity): capabilities
+# type: Capability. Ids CAP-ITO-SEC-<n>, each grouped under ITO-SEC. Decided in ADR 0017.
 
 - id: CAP-ITO-SEC-1
   term: Identity & Authentication

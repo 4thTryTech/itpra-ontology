@@ -1,5 +1,5 @@
-# ITPRA ontology — EUC-WSP (Workspace & Productivity Services) capabilities
-# type: Capability. ids CAP-EUC-WSP-<n>. Grouped under domain EUC-WSP (ADR 0018).
+# ITPRA ontology — EUC-WSP (Workspace & Productivity Services): capabilities
+# type: Capability. Ids CAP-EUC-WSP-<n>, each grouped under EUC-WSP. Decided in ADR 0018.
 
 - id: CAP-EUC-WSP-1
   term: Productivity & Collaboration Application Provisioning

@@ -1,5 +1,5 @@
-# ITPRA ontology — ITO-EXP (Consumer Experience) capabilities
-# type: Capability. ids CAP-ITO-EXP-<n>. Grouped under domain ITO-EXP (ADR 0017).
+# ITPRA ontology — ITO-EXP (Consumer Experience): capabilities
+# type: Capability. Ids CAP-ITO-EXP-<n>, each grouped under ITO-EXP. Decided in ADR 0017.
 
 - id: CAP-ITO-EXP-1
   term: Self-Service Interface

@@ -1,9 +1,5 @@
-# ITPRA ontology — IT Operations (ITO) journey catalog
-# type: Journey. ids JRN-ito-<slug>. Each `grouped_by` exactly one JourneyGroup (JG-ONBOARDING..JG-EVOLUTION,
-# ADR 0013; the group is NOT encoded in the id). Neutral — steps reference capabilities + neutral governance
-# construct points (request/approval/change/incident/record), never tools or named processes. Relationships from
-# the journey side: grouped_by, consumed_by (primary personas), depends_on (capabilities exercised). Ratified by
-# ADR 0013; the `ito` code by ADR 0045. Diagrams: WF-ito-<slug> (terms/workflows-ito.yaml).
+# ITPRA ontology — IT Operations (ITO): journeys
+# type: Journey. Ids JRN-ito-<slug>; a journey is grouped by one journey group. Decided in ADR 0013.
 
 # ---- JG-ONBOARDING ----
 - id: JRN-ito-onboard-consumer

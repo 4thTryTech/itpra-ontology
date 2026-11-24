@@ -1,9 +1,6 @@
-# ITPRA ontology — End-User Computing (EUC) journey catalog
-# type: Journey. ids JRN-euc-<slug>. Each `grouped_by` exactly one EXISTING JourneyGroup
-# (JG-ONBOARDING..JG-EVOLUTION; reused, not redefined). Neutral — steps reference capabilities + neutral
-# governance construct points (request/approval/change/incident/record/feedback), never tools or named
-# processes. Relationships from the journey side: grouped_by, consumed_by (primary personas), depends_on
-# (capabilities exercised). Ratified by ADR 0018. Diagrams: WF-euc-<slug>.
+# ITPRA ontology — End-User Computing (EUC): journeys
+# type: Journey. Ids JRN-euc-<slug>; a journey is grouped by one journey group (ADR 0013). Decided in
+# ADR 0018.
 
 # ---- JG-ONBOARDING ----
 - id: JRN-euc-onboard-workforce-user

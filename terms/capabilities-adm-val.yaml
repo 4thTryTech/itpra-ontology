@@ -1,6 +1,5 @@
-# ITPRA ontology — ADM-VAL (Application Performance & Value Insight) capabilities
-# type: Capability. ids CAP-ADM-VAL-<n>. Grouped under domain ADM-VAL (ADR 0021). Observes the APPLICATION and
-# its value; distinct from platform/workload observability (ITO-OBS), whose signals it may consume.
+# ITPRA ontology — ADM-VAL (Application Performance & Value Insight): capabilities
+# type: Capability. Ids CAP-ADM-VAL-<n>, each grouped under ADM-VAL. Decided in ADR 0021.
 
 - id: CAP-ADM-VAL-1
   term: Application Performance & Behavior Insight

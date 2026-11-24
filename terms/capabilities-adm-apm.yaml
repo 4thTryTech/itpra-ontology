@@ -1,6 +1,5 @@
-# ITPRA ontology — ADM-APM (Application Portfolio & Lifecycle Management) capabilities
-# type: Capability. ids CAP-ADM-APM-<n>. Grouped under domain ADM-APM (ADR 0021); environment expression per ADR
-# 0014.
+# ITPRA ontology — ADM-APM (Application Portfolio & Lifecycle Management): capabilities
+# type: Capability. Ids CAP-ADM-APM-<n>, each grouped under ADM-APM. Decided in ADR 0021.
 
 - id: CAP-ADM-APM-1
   term: Application Inventory & Catalog

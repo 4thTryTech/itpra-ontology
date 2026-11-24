@@ -1,5 +1,5 @@
-# ITPRA ontology — SVD-COM (Customer Communication & Satisfaction) capabilities
-# type: Capability. ids CAP-SVD-COM-<n>. Grouped under domain SVD-COM (ADR 0019).
+# ITPRA ontology — SVD-COM (Customer Communication & Satisfaction): capabilities
+# type: Capability. Ids CAP-SVD-COM-<n>, each grouped under SVD-COM. Decided in ADR 0019.
 
 - id: CAP-SVD-COM-1
   term: Proactive Status & Outage Communication

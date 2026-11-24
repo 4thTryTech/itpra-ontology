@@ -1,5 +1,5 @@
-# ITPRA ontology — DXC-EXP (Experimentation & Optimization) capabilities
-# type: Capability. ids CAP-DXC-EXP-<n>. Grouped under domain DXC-EXP (ADR 0027).
+# ITPRA ontology — DXC-EXP (Experimentation & Optimization): capabilities
+# type: Capability. Ids CAP-DXC-EXP-<n>, each grouped under DXC-EXP. Decided in ADR 0027.
 
 - id: CAP-DXC-EXP-1
   term: Experiment Design & Hypothesis Management

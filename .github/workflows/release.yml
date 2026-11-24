@@ -2,8 +2,9 @@ name: release
 
 # A release is a tag vX.Y.Z on master with an immutable release carrying the source archive and its hash (ADR 0003).
 # Two ways in, one job: push the tag, or run this workflow on master with the version — it then creates the tag.
-# Either way the tag must equal ontology_version, CHANGELOG.md must have the section, the archive is built from the
-# tag, and the release is published with the archive and its sha256. A tag vX.Y.Z-rc.N is a pre-release.
+# Either way the tag must equal ontology_version and the pipeline package's version, CHANGELOG.md must have the
+# section, the source archive and the RDF projection are built from the tag, and the release is published with
+# both and their sha256 (ADR 0043, ADR 0044). A tag vX.Y.Z-rc.N is a pre-release.
 
 on:
   push:
@@ -36,6 +37,10 @@ jobs:
           declared="$(sed -n 's/^ontology_version:[[:space:]]*\([0-9][0-9.]*\).*/\1/p' schema.yaml)"
           if [ "$base" != "$declared" ]; then
             echo "::error::tag $TAG does not match ontology_version $declared in schema.yaml"; exit 1
+          fi
+          package="$(sed -n 's/^version[[:space:]]*=[[:space:]]*"\(.*\)"/\1/p' tools/itpra-onto/pyproject.toml | head -n 1)"
+          if [ "$package" != "$declared" ]; then
+            echo "::error::the pipeline package is version $package, not ontology_version $declared (ADR 0044)"; exit 1
           fi
           echo "VERSION=$version" >> "$GITHUB_ENV"
           echo "BASE_VERSION=$base" >> "$GITHUB_ENV"
@@ -72,6 +77,31 @@ jobs:
             echo "- Verify with \`sha256sum -c $name.tar.gz.sha256\`"
           } >> notes.md
           echo "ARCHIVE=$name.tar.gz" >> "$GITHUB_ENV"
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10.2.0
+        with:
+          python-version: "3.12"
+      - name: Build the RDF projection from the tag (clean, validated, reproducible)
+        run: |
+          if [ "$(git rev-parse HEAD)" != "$(git rev-parse "$TAG^{commit}")" ]; then
+            echo "::error::the checkout is not the commit of $TAG"; exit 1
+          fi
+          uv sync --locked --project tools/itpra-onto
+          uv run --project tools/itpra-onto itpra-onto build --no-store
+          uv run --project tools/itpra-onto itpra-onto build --check
+          uv run --project tools/itpra-onto itpra-onto validate
+      - name: Package the RDF projection and its hash
+        run: |
+          name="itpra-ontology-$VERSION-rdf"
+          tar --sort=name --mtime='UTC 1970-01-01' --owner=0 --group=0 --numeric-owner \
+            --transform "s,^rdf,$name," -C dist -cf - rdf | gzip -n > "$name.tar.gz"
+          sha256sum "$name.tar.gz" > "$name.tar.gz.sha256"
+          cat "$name.tar.gz.sha256"
+          {
+            echo "- RDF projection \`$name.tar.gz\` (canonical N-Quads, Turtle per asserted graph, build record), sha256 \`$(cut -d' ' -f1 "$name.tar.gz.sha256")\`"
+            echo "- Verify with \`sha256sum -c $name.tar.gz.sha256\`"
+          } >> notes.md
+          echo "RDF_ARCHIVE=$name.tar.gz" >> "$GITHUB_ENV"
       - name: Publish the release
         run: |
           if existing="$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" --jq .immutable 2>/dev/null)"; then
@@ -80,7 +110,7 @@ jobs:
           fi
           flags=(--verify-tag --title "ITPRA ontology $VERSION" --notes-file notes.md)
           case "$VERSION" in *-rc.*) flags+=(--prerelease);; esac
-          gh release create "$TAG" "$ARCHIVE" "$ARCHIVE.sha256" "${flags[@]}"
+          gh release create "$TAG" "$ARCHIVE" "$ARCHIVE.sha256" "$RDF_ARCHIVE" "$RDF_ARCHIVE.sha256" "${flags[@]}"
       - name: The published release is immutable
         run: |
           immutable="$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" --jq .immutable)"

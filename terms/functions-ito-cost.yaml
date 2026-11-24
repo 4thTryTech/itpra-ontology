@@ -1,8 +1,7 @@
-# ITPRA ontology — FUNCTION library, ITO-COST (Cost & Capacity)
-# type: Function. ids FUNC-ito-<slug>. All T1 neutral. CAP-ITO-COST-3 also reuses shared
-# FUNC-ito-orphan-detection (ITO-SUB) and FUNC-ito-anomaly-detection (ITO-OBS) for cost anomalies. See ADR 0011.
+# ITPRA ontology — ITO-COST (Cost & Capacity): functions
+# type: Function. Ids FUNC-ito-<slug>; a function supports one or more capabilities. Decided in ADR 0011.
 
-# Cost attribution & showback (supports CAP-ITO-COST-1)
+# Cost attribution & showback (CAP-ITO-COST-1)
 - id: FUNC-ito-cost-attribution
   term: Cost Attribution
   type: Function
@@ -21,7 +20,7 @@
     - {rel: supports, target: CAP-ITO-COST-1}
   source: ADR 0011 (amended by ADR 0045)
 
-# Capacity planning (supports CAP-ITO-COST-2)
+# Capacity planning (CAP-ITO-COST-2)
 - id: FUNC-ito-capacity-forecasting
   term: Capacity Forecasting
   type: Function
@@ -40,7 +39,7 @@
     - {rel: supports, target: CAP-ITO-COST-2}
   source: ADR 0011 (amended by ADR 0045)
 
-# Optimization recommendations (supports CAP-ITO-COST-3; reuses orphan-detection + anomaly-detection)
+# Optimization recommendations (CAP-ITO-COST-3)
 - id: FUNC-ito-rightsizing-recommendation
   term: Rightsizing Recommendation
   type: Function

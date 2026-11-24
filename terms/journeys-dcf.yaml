@@ -1,9 +1,6 @@
-# ITPRA ontology — Data Center & Facilities (DCF) journey catalog
-# type: Journey. ids JRN-dcf-<slug>. Each `grouped_by` exactly one EXISTING JourneyGroup
-# (JG-ONBOARDING..JG-EVOLUTION; reused, not redefined). Neutral — steps reference capabilities + neutral
-# governance construct points (request/approval/change/incident/record/feedback), never tools or named
-# processes. Relationships from the journey side: grouped_by, consumed_by (primary personas), depends_on
-# (capabilities exercised). Ratified by ADR 0022. Diagrams: WF-dcf-<slug>.
+# ITPRA ontology — Data Center & Facilities (DCF): journeys
+# type: Journey. Ids JRN-dcf-<slug>; a journey is grouped by one journey group (ADR 0013). Decided in
+# ADR 0022.
 
 # ---- JG-ONBOARDING ----
 - id: JRN-dcf-commission-facility

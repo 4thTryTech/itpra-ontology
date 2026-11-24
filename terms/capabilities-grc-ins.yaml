@@ -1,7 +1,5 @@
-# ITPRA ontology — GRC-INS (Security & Risk Posture Insight) capabilities
-# type: Capability. ids CAP-GRC-INS-<n>. Grouped under domain GRC-INS (ADR 0024). Enterprise security/risk
-# REPORTING layer — aggregates the other GRC groups + evidence the platform (ITO-GOV) and estates supply;
-# distinct from platform self-measurement (ITO-GOV) and observability (ITO-OBS) (ADR 0024).
+# ITPRA ontology — GRC-INS (Security & Risk Posture Insight): capabilities
+# type: Capability. Ids CAP-GRC-INS-<n>, each grouped under GRC-INS. Decided in ADR 0024.
 
 - id: CAP-GRC-INS-1
   term: Consolidated Security & Risk Posture Reporting

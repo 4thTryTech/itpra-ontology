@@ -1,6 +1,5 @@
-# ITPRA ontology — ITSM-SLM (Service-Level & Supplier/Provider Management) capabilities
-# type: Capability. ids CAP-ITSM-SLM-<n>. Grouped under domain ITSM-SLM (ADR 0025). Neutral cross-provider
-# coordination over GC-SERVICE-LEVEL / GC-OWNERSHIP / GC-FEEDBACK.
+# ITPRA ontology — ITSM-SLM (Service-Level & Supplier/Provider Management): capabilities
+# type: Capability. Ids CAP-ITSM-SLM-<n>, each grouped under ITSM-SLM. Decided in ADR 0025.
 
 - id: CAP-ITSM-SLM-1
   term: End-to-End Service-Level Commitment

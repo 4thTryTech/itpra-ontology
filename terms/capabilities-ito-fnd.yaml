@@ -1,7 +1,5 @@
-# ITPRA ontology — ITO-FND (Platform Foundation) capabilities
-# type: Capability. ids CAP-ITO-FND-<n>. Grouped under domain ITO-FND (ADR 0017); environment expression per
-# ADR 0014.
-# relates_to targets must resolve to ontology term ids.
+# ITPRA ontology — ITO-FND (Platform Foundation): capabilities
+# type: Capability. Ids CAP-ITO-FND-<n>, each grouped under ITO-FND. Decided in ADR 0017.
 
 - id: CAP-ITO-FND-1
   term: Platform Configuration Source of Truth

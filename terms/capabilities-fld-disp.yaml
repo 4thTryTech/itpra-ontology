@@ -1,6 +1,5 @@
-# ITPRA ontology — FLD-DISP (Dispatch & Scheduling) capabilities
-# type: Capability. ids CAP-FLD-DISP-<n>. Grouped under domain FLD-DISP (ADR 0020); environment expression per
-# ADR 0014.
+# ITPRA ontology — FLD-DISP (Dispatch & Scheduling): capabilities
+# type: Capability. Ids CAP-FLD-DISP-<n>, each grouped under FLD-DISP. Decided in ADR 0020.
 
 - id: CAP-FLD-DISP-1
   term: Dispatch Intake & Qualification

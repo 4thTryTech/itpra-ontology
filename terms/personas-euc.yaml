@@ -1,7 +1,5 @@
-# ITPRA ontology — End-User Computing (EUC) personas
-# type: Persona. ids PERSONA-euc-<slug>. Coarse, tier-graduated neutral role archetypes (mirrors the persona
-# model, ADR 0012): each refines into granular roles at T2/T3. Capabilities reference these via `consumed_by`;
-# relationships are expressed from the capability/journey side. Ratified by ADR 0018.
+# ITPRA ontology — End-User Computing (EUC): personas
+# type: Persona. Ids PERSONA-euc-<slug>. Decided in ADR 0018.
 
 - id: PERSONA-euc-workforce-user
   term: Workforce User

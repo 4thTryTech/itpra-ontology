@@ -1,6 +1,5 @@
-# ITPRA ontology — FUNCTION library, FLD-DISP (Dispatch & Scheduling)
-# type: Function. ids FUNC-fld-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
-# the function (ADR 0011). Functions `support` ≥1 capability (many-to-many). See ADR 0020.
+# ITPRA ontology — FLD-DISP (Dispatch & Scheduling): functions
+# type: Function. Ids FUNC-fld-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0020.
 
 # Dispatch intake & qualification (CAP-FLD-DISP-1)
 - id: FUNC-fld-work-order-intake

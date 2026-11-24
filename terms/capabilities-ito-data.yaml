@@ -1,6 +1,5 @@
-# ITPRA ontology — ITO-DATA (Data & Analytics) capabilities
-# type: Capability. ids CAP-ITO-DATA-<n>. Grouped under domain ITO-DATA (ADR 0017). Scope: data & analytics for
-# the platform and IT services (not business BI apps).
+# ITPRA ontology — ITO-DATA (Data & Analytics): capabilities
+# type: Capability. Ids CAP-ITO-DATA-<n>, each grouped under ITO-DATA. Decided in ADR 0017.
 
 - id: CAP-ITO-DATA-1
   term: Managed Data Stores

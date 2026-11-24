@@ -65,3 +65,7 @@ cites the record that minted or changed it as `ADR NNNN`. From outside this repo
 | 0043 | [Builds, artefacts and layers: the build reads the vocabulary alone](0043-builds-artefacts-and-layers.md) | Accepted | 2026-11-22 |
 | 0044 | [One release for the vocabulary and its tooling](0044-one-release-for-the-vocabulary-and-its-tooling.md) | Accepted | 2026-11-23 |
 | 0045 | [IT Operations carries its code: one id and file form for all eleven service domains](0045-it-operations-carries-its-code.md) | Accepted | 2026-11-23 |
+| 0046 | [Records without content leave: workflows, placements and unused id forms](0046-records-without-content-leave.md) | Accepted | 2026-11-24 |
+| 0047 | [Service domains read as peers: definitions in their own right, no domain-to-plane edges](0047-service-domains-read-as-peers.md) | Accepted | 2026-11-24 |
+| 0048 | [Retirement: a retired record stays, marked, and names its successor](0048-retirement.md) | Accepted | 2026-11-24 |
+| 0049 | [Records state the rules as they stand: amended in place, ids kept current](0049-records-state-the-rules-as-they-stand.md) | Accepted | 2026-11-24 |

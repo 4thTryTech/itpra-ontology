@@ -1,5 +1,5 @@
-# ITPRA ontology — DCF-CAB (Cabling & Physical Connectivity) capabilities
-# type: Capability. ids CAP-DCF-CAB-<n>. Grouped under domain DCF-CAB (ADR 0022).
+# ITPRA ontology — DCF-CAB (Cabling & Physical Connectivity): capabilities
+# type: Capability. Ids CAP-DCF-CAB-<n>, each grouped under DCF-CAB. Decided in ADR 0022.
 
 - id: CAP-DCF-CAB-1
   term: Structured Cabling Provision

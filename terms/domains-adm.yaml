@@ -1,11 +1,6 @@
-# ITPRA ontology — Application Development & Maintenance (ADM) capability domains
-# type: Domain. The `id` IS the domain code used in capability ids: CAP-<id>-<n> (child: CAP-<id>-<n>.<m>). Each
-# domain is `grouped_by` an EXISTING capability PLANE (terms/planes.yaml). SD-APP-DEV interfaces_with
-# PLANE-DELIVERY and PLANE-EXPERIENCE; each group is placed under one of those two existing planes. Taxonomy
-# ratified by ADR 0021; scope/boundary (incl. ADM-vs-ITO-DEL) by ADR 0021. SCOPE: ADM is the CONSUMER side
-# — teams that build/maintain business apps that RUN ON the platform. It does NOT own the platform's
-# software-delivery (ITO-DEL) pipeline/supply-chain; it consumes them. Owning service domain: SD-APP-DEV
-# (interfaces_with PLANE-DELIVERY + PLANE-EXPERIENCE; ADR 0009 + ADR 0021).
+# ITPRA ontology — Application Development & Maintenance (ADM): capability domains
+# type: Domain. A capability domain's id is the code its capabilities carry (CAP-<id>-<n>). Owned by
+# SD-APP-DEV. Decided in ADR 0021.
 
 - id: ADM-APM
   term: Application Portfolio & Lifecycle Management

@@ -1,5 +1,5 @@
-# ITPRA ontology — SVD-TRI (Triage, Classification & Routing) capabilities
-# type: Capability. ids CAP-SVD-TRI-<n>. Grouped under domain SVD-TRI (ADR 0019).
+# ITPRA ontology — SVD-TRI (Triage, Classification & Routing): capabilities
+# type: Capability. Ids CAP-SVD-TRI-<n>, each grouped under SVD-TRI. Decided in ADR 0019.
 
 - id: CAP-SVD-TRI-1
   term: Contact Classification

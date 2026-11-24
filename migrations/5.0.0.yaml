@@ -1,12 +1,13 @@
-# ITPRA ontology — ids and files renamed in 5.0.0 (ADR 0045)
-# IT Operations takes its code on every id and file name, as the ten other service domains carry theirs. Each
-# entry reads `old: new`; the new id is the old one with the code inserted, and a record's label, definition
-# and relations are otherwise as they were. This is not a term file: a consumer rewrites its references with it
-# (a registry's met_by and verified_by, documents, pins), and a resolver redirects <base>id/<old> to
-# <base>id/<new>.
+# ITPRA ontology — ids and files renamed or removed in 5.0.0 (ADR 0045, ADR 0046)
+# `ids` and `files` read `old: new`: IT Operations takes its code on every id and file name, as the ten other
+# service domains carry theirs; the new id is the old one with the code inserted, and a record's label and
+# relations are otherwise as they were (ADR 0045). `removed` lists the ids and files of 4.0.1 that have no
+# successor: the workflow records and the placements (ADR 0046). This is not a term file: a consumer rewrites
+# its references with it (a registry's met_by and verified_by, documents, pins), and a resolver redirects
+# <base>id/<old> to <base>id/<new>.
 from_version: 4.0.1
 to_version: 5.0.0
-decided_in: ADR 0045
+decided_in: ADR 0045; ADR 0046
 ids:
   # capability domains
   FND: ITO-FND
@@ -352,24 +353,6 @@ ids:
   JRN-decommission-offboard: JRN-ito-decommission-offboard
   JRN-platform-product-feedback: JRN-ito-platform-product-feedback
   JRN-run-delegated-actor: JRN-ito-run-delegated-actor
-  # workflows
-  WF-onboard-consumer: WF-ito-onboard-consumer
-  WF-provision-dev-environment: WF-ito-provision-dev-environment
-  WF-build-deploy-service: WF-ito-build-deploy-service
-  WF-provision-data-services: WF-ito-provision-data-services
-  WF-expose-service-api: WF-ito-expose-service-api
-  WF-observe-and-meet-slo: WF-ito-observe-and-meet-slo
-  WF-scale-and-routine-change: WF-ito-scale-and-routine-change
-  WF-patch-platform: WF-ito-patch-platform
-  WF-incident-response: WF-ito-incident-response
-  WF-security-response: WF-ito-security-response
-  WF-disaster-recovery: WF-ito-disaster-recovery
-  WF-change-approval: WF-ito-change-approval
-  WF-compliance-audit: WF-ito-compliance-audit
-  WF-cost-value-review: WF-ito-cost-value-review
-  WF-upgrade-migrate: WF-ito-upgrade-migrate
-  WF-decommission-offboard: WF-ito-decommission-offboard
-  WF-platform-product-feedback: WF-ito-platform-product-feedback
 files:
   terms/capabilities-automation.yaml: terms/capabilities-ito-aut.yaml
   terms/capabilities-cost.yaml: terms/capabilities-ito-cost.yaml
@@ -396,4 +379,45 @@ files:
   terms/functions-substrate.yaml: terms/functions-ito-sub.yaml
   terms/journeys.yaml: terms/journeys-ito.yaml
   terms/personas.yaml: terms/personas-ito.yaml
-  terms/workflows.yaml: terms/workflows-ito.yaml
+removed:
+  ids:
+    # workflows (ids as in 4.0.1)
+    - WF-onboard-consumer
+    - WF-provision-dev-environment
+    - WF-build-deploy-service
+    - WF-provision-data-services
+    - WF-expose-service-api
+    - WF-observe-and-meet-slo
+    - WF-scale-and-routine-change
+    - WF-patch-platform
+    - WF-incident-response
+    - WF-security-response
+    - WF-disaster-recovery
+    - WF-change-approval
+    - WF-compliance-audit
+    - WF-cost-value-review
+    - WF-upgrade-migrate
+    - WF-decommission-offboard
+    - WF-platform-product-feedback
+    - WF-itsm-onboard-provider
+    - WF-itsm-introduce-service
+    - WF-itsm-fulfill-cross-domain-request
+    - WF-itsm-coordinate-cross-provider-change
+    - WF-itsm-monitor-service-levels
+    - WF-itsm-integrate-systems-of-record
+    - WF-itsm-coordinate-cross-provider-incident
+    - WF-itsm-run-major-incident
+    - WF-itsm-resolve-cross-provider-problem
+    - WF-itsm-review-provider-performance
+    - WF-itsm-assure-record-integrity
+    - WF-itsm-improve-service-value
+    - WF-itsm-retire-or-transition-service
+    # placements
+    - SDP-uem
+    - SDP-rpa
+    - SDP-product-analytics
+    - SDP-dxm
+  files:
+    - terms/workflows.yaml
+    - terms/workflows-itsm.yaml
+    - terms/service-domain-placements.yaml

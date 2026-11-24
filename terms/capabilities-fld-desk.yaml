@@ -1,5 +1,5 @@
-# ITPRA ontology — FLD-DESK (Deskside / On-site Assistance) capabilities
-# type: Capability. ids CAP-FLD-DESK-<n>. Grouped under domain FLD-DESK (ADR 0020).
+# ITPRA ontology — FLD-DESK (Deskside / On-site Assistance): capabilities
+# type: Capability. Ids CAP-FLD-DESK-<n>, each grouped under FLD-DESK. Decided in ADR 0020.
 
 - id: CAP-FLD-DESK-1
   term: On-Site Triage & Diagnosis

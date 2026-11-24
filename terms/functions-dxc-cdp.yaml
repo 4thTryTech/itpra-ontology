@@ -1,6 +1,5 @@
-# ITPRA ontology — FUNCTION library, DXC-CDP (Customer Data & Profiles)
-# type: Function. ids FUNC-dxc-<slug>. All T1-neutral; a function MAY name a recognized technique where that IS
-# the function (ADR 0011).
+# ITPRA ontology — DXC-CDP (Customer Data & Profiles): functions
+# type: Function. Ids FUNC-dxc-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0027.
 
 # Customer data ingestion & integration (CAP-DXC-CDP-1)
 - id: FUNC-dxc-data-collection

@@ -1,6 +1,5 @@
-# ITPRA ontology — FUNCTION library, DCF-SPC (Facility Space & Capacity)
-# type: Function. ids FUNC-dcf-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
-# the function (ADR 0011). Functions `support` >=1 capability (many-to-many). See ADR 0022.
+# ITPRA ontology — DCF-SPC (Facility Space & Capacity): functions
+# type: Function. Ids FUNC-dcf-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0022.
 
 # White-space & floor provision (CAP-DCF-SPC-1)
 - id: FUNC-dcf-white-space-layout

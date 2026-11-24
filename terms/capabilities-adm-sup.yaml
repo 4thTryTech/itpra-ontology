@@ -1,7 +1,5 @@
-# ITPRA ontology — ADM-SUP (Application Support & Maintenance Modes) capabilities
-# type: Capability. ids CAP-ADM-SUP-<n>. Grouped under domain ADM-SUP (ADR 0021). Maintenance modes follow
-# ISO/IEC 14764 (corrective/adaptive/perfective/preventive). Owns APPLICATION resolution; distinct from the
-# cross-domain contact channel (Service Desk) and platform runtime incidents (ITO) (ADR 0021).
+# ITPRA ontology — ADM-SUP (Application Support & Maintenance Modes): capabilities
+# type: Capability. Ids CAP-ADM-SUP-<n>, each grouped under ADM-SUP. Decided in ADR 0021.
 
 - id: CAP-ADM-SUP-1
   term: Application Support Triage & Resolution

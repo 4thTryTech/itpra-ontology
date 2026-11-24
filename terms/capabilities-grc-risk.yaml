@@ -1,7 +1,5 @@
-# ITPRA ontology — GRC-RISK (Enterprise Vulnerability, Threat & Risk Management) capabilities
-# type: Capability. ids CAP-GRC-RISK-<n>. Grouped under domain GRC-RISK (ADR 0024). Enterprise risk AUTHORITY —
-# owns the risk register/treatment/acceptance and aggregates findings the platform (ITO-SEC CAP-ITO-SEC-4/7) and
-# other estates supply; does NOT run the platform's own scanners (ADR 0024).
+# ITPRA ontology — GRC-RISK (Enterprise Vulnerability, Threat & Risk Management): capabilities
+# type: Capability. Ids CAP-GRC-RISK-<n>, each grouped under GRC-RISK. Decided in ADR 0024.
 
 - id: CAP-GRC-RISK-1
   term: Enterprise Risk Assessment & Treatment

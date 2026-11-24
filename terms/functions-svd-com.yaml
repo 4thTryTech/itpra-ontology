@@ -1,6 +1,5 @@
-# ITPRA ontology — FUNCTION library, SVD-COM (Customer Communication & Satisfaction)
-# type: Function. ids FUNC-svd-<slug>. Functions `support` >=1 capability; NEVER derived_from on a Function (ADR
-# 0011). See ADR 0019.
+# ITPRA ontology — SVD-COM (Customer Communication & Satisfaction): functions
+# type: Function. Ids FUNC-svd-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0019.
 
 # Proactive status & outage communication (CAP-SVD-COM-1)
 - id: FUNC-svd-status-broadcast

@@ -1,7 +1,7 @@
-# ITPRA ontology — FUNCTION library, ITO-FND (Platform Foundation)
-# type: Function. ids FUNC-ito-<slug>. All T1 neutral (no tool names; SBOM kept as an alias only). See ADR 0011.
+# ITPRA ontology — ITO-FND (Platform Foundation): functions
+# type: Function. Ids FUNC-ito-<slug>; a function supports one or more capabilities. Decided in ADR 0011.
 
-# Platform configuration source of truth (supports CAP-ITO-FND-1)
+# Platform configuration source of truth (CAP-ITO-FND-1)
 - id: FUNC-ito-version-control
   term: Version Control
   type: Function
@@ -29,7 +29,7 @@
     - {rel: supports, target: CAP-ITO-FND-1}
   source: ADR 0011 (amended by ADR 0045)
 
-# Secrets management (supports CAP-ITO-FND-2)
+# Secrets management (CAP-ITO-FND-2)
 - id: FUNC-ito-secret-storage
   term: Secret Storage
   type: Function
@@ -57,7 +57,7 @@
     - {rel: supports, target: CAP-ITO-FND-2}
   source: ADR 0011 (amended by ADR 0045)
 
-# Artifact & image registry (supports CAP-ITO-FND-3)
+# Artifact & image registry (CAP-ITO-FND-3)
 - id: FUNC-ito-artifact-storage
   term: Artifact Storage
   type: Function
@@ -76,7 +76,7 @@
     - {rel: supports, target: CAP-ITO-FND-3}
   source: ADR 0011 (amended by ADR 0045)
 
-# Policy-as-code evaluation (supports CAP-ITO-FND-4; evaluation shared with CAP-ITO-SEC-5 admission)
+# Policy-as-code evaluation (CAP-ITO-FND-4)
 - id: FUNC-ito-policy-authoring
   term: Policy Authoring
   type: Function
@@ -98,7 +98,7 @@
     - {rel: supports, target: CAP-ITO-SEC-5}
   source: ADR 0011 (amended by ADR 0045)
 
-# Platform provenance & component inventory (supports CAP-ITO-FND-5)
+# Platform provenance & component inventory (CAP-ITO-FND-5)
 - id: FUNC-ito-component-inventory
   term: Component Inventory
   type: Function

@@ -1,5 +1,5 @@
-# ITPRA ontology — FUNCTION library, ITSM-SLM (Service-Level & Supplier/Provider Management)
-# type: Function. ids FUNC-itsm-<slug>. All T1-neutral. Functions `support` >=1 capability. See ADR 0025.
+# ITPRA ontology — ITSM-SLM (Service-Level & Supplier/Provider Management): functions
+# type: Function. Ids FUNC-itsm-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0025.
 
 # End-to-end service-level commitment (CAP-ITSM-SLM-1)
 - id: FUNC-itsm-commitment-composition

@@ -1,6 +1,5 @@
-# ITPRA ontology — BIA-SEM (Semantic Layer & Self-Service Analytics) capabilities
-# type: Capability. ids CAP-BIA-SEM-<n>. Grouped under domain BIA-SEM (ADR 0026). Experience-plane
-# (consumer-facing) group.
+# ITPRA ontology — BIA-SEM (Semantic Layer & Self-Service Analytics): capabilities
+# type: Capability. Ids CAP-BIA-SEM-<n>, each grouped under BIA-SEM. Decided in ADR 0026.
 
 - id: CAP-BIA-SEM-1
   term: Semantic & Metrics Model

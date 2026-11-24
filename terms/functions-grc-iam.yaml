@@ -1,6 +1,5 @@
-# ITPRA ontology — FUNCTION library, GRC-IAM (Corporate Identity & Access Authority)
-# type: Function. ids FUNC-grc-<slug>. All T1-neutral; functions MAY name a standard/technique where that IS the
-# function (ADR 0011). Functions `support` >=1 capability. See ADR 0024.
+# ITPRA ontology — GRC-IAM (Corporate Identity & Access Authority): functions
+# type: Function. Ids FUNC-grc-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0024.
 
 # Identity of record & authoritative sources (CAP-GRC-IAM-1)
 - id: FUNC-grc-authoritative-source-integration
@@ -89,7 +88,7 @@
     - {rel: supports, target: CAP-GRC-IAM-5}
   source: ADR 0024
 
-# Delegated authority to non-human principals (ADR 0035)
+# Delegated authority to non-human principals
 - id: FUNC-grc-delegated-authority-governance
   term: Delegated Authority Governance
   type: Function

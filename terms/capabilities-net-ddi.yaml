@@ -1,5 +1,5 @@
-# ITPRA ontology — NET-DDI (Naming, Addressing & DNS) capabilities
-# type: Capability. ids CAP-NET-DDI-<n>. Grouped under domain NET-DDI (ADR 0023).
+# ITPRA ontology — NET-DDI (Naming, Addressing & DNS (DDI)): capabilities
+# type: Capability. Ids CAP-NET-DDI-<n>, each grouped under NET-DDI. Decided in ADR 0023.
 
 - id: CAP-NET-DDI-1
   term: Enterprise DNS Resolution & Zones
