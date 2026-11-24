@@ -5,7 +5,7 @@ type: dataset
 authors:
   - name: "4th Try Tech (Michael Lehman)"
 version: 5.0.0
-date-released: 2026-11-23
+date-released: 2026-11-24
 license: CC-BY-4.0
 repository-code: "https://github.com/4thtrytech/itpra-ontology"
 url: "https://itpra.4thtry.tech/"
