@@ -114,7 +114,6 @@
   term: belongs to service domain
   type: RelationshipType
   definition: >
-    The subject term — a capability domain or a concept — is owned by the target service domain, its single
-    owning service domain. Single-valued: a term names at most one owning service domain, and every
-    capability domain carries exactly one.
-  source: ADR 0008 (amended by ADR 0047)
+    The subject capability domain is owned by the target service domain, its single owning service domain.
+    Single-valued: every capability domain carries exactly one.
+  source: ADR 0008 (amended by ADR 0046, ADR 0047)

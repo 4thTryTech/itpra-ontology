@@ -14,12 +14,13 @@ for outside use holds only what a consumer can use.
 
 ## Decision
 
-1. The vocabulary holds no `Workflow` record: the thirty are removed. The entity type `WORKFLOW`, the type
-   `Workflow`, the id form `WF-<code>-<slug>` and the verb `realized_in` stay, for a consumer's own diagram of
-   a journey (amends ADR 0001 rule 2, ADR 0013 rule 6, ADR 0045 rule 5).
-2. The four placements are removed, and the `SDP-` prefix with them (amends ADR 0009 rule 7, ADR 0004 rule 2,
-   ADR 0007 rules 3 and 4).
-   No placement is minted again: a recognised capability waits for a capability that describes it.
+1. The vocabulary holds no `Workflow` record: the thirty are removed. `WORKFLOW`, the type `Workflow`, the form
+   `WF-<code>-<slug>` and `realized_in` stay, for a consumer's own diagram of a journey (amends ADR 0001
+   rule 2, ADR 0013 rule 6, ADR 0045 rule 5).
+2. The four placements are removed, with the `SDP-` prefix and the pair `CONCEPT`→`SERVICE_DOMAIN` of
+   `belongs_to_service_domain`, which only they used (amends ADR 0009 rule 7, ADR 0004 rule 2, ADR 0007
+   rules 3 and 4, ADR 0008 rule 3). No placement is minted again: a recognised capability waits for a
+   capability that describes it.
 3. A removed placement's market words move, as aliases, to the record that describes the behaviour: unified
    endpoint management to `EUC-DEV`, product analytics to `BIA-PRD`, digital experience management to
    `SD-DIGITAL-EXPERIENCE`. Robotic process automation keeps no record: no capability describes it.

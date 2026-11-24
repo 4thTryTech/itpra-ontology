@@ -23,7 +23,7 @@ domain but one carried `interfaces_with` edges to planes. The planes group every
    verb — is worded to hold for all eleven domains. "The infrastructure platform" names what
    `SD-IT-OPERATIONS` owns and operates and is used only where a record is about it.
 4. No service domain carries an `interfaces_with` edge to a plane: the sixteen edges are removed (amends
-   ADR 0009 rule 3). The planes a domain works in follow from its capability domains' `grouped_by` edges.
+   ADR 0009 rules 3 and 6). The planes a domain works in follow from its capability domains' `grouped_by` edges.
 5. `interfaces_with` keeps its meaning and its declared pair (ADR 0008). An edge between the terms of two
    service domains is added only by a record that decides it.
 6. A reworded definition changes no id, label, type or relation, and its `source` names this record. The

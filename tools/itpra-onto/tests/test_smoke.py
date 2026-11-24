@@ -275,7 +275,8 @@ def test_installed_versions_match_pyproject_pins():
 def test_package_version_is_the_ontology_version():
     """One tag covers the vocabulary and the package (ADR 0044): the distribution's version — declared, in
     the package, and as installed — is ``schema.yaml``'s ``ontology_version``, so a build's
-    ``pipeline_version`` names the release it was built from."""
+    ``pipeline_version`` names the release it was built from. The authoring schema's own ``version``, which
+    the generated artefacts carry, is the same number."""
     import yaml
 
     import itpra_onto
@@ -287,3 +288,5 @@ def test_package_version_is_the_ontology_version():
     assert pyproject["project"]["version"] == ontology_version
     assert itpra_onto.__version__ == ontology_version
     assert importlib.metadata.version("itpra-onto") == ontology_version
+    authoring_schema = PROJECT_ROOT / "src" / "itpra_onto" / "schema" / "itpra.linkml.yaml"
+    assert str(yaml.safe_load(authoring_schema.read_text(encoding="utf-8"))["version"]) == ontology_version

@@ -25,7 +25,8 @@ hold, and the 4 placements (`SDP-…`) stood in for capability domains that now 
 The vocabulary holds 1,560 records. The `WORKFLOW` entity type, the `Workflow` type, the id form `WF-<code>-<slug>` and
 the verb `realized_in` stay for a consumer's own diagrams. The placements' market words are now aliases: unified
 endpoint management (UEM, MDM, EMM) on `EUC-DEV`, product analytics on `BIA-PRD`, digital experience management (DXM)
-on `SD-DIGITAL-EXPERIENCE`; robotic process automation has no record. `SVC-` is no longer a reserved prefix, and the
+on `SD-DIGITAL-EXPERIENCE`; robotic process automation has no record. `belongs_to_service_domain` is declared for
+capability domains only: the pair from a concept, which only placements used, leaves `CONCEPT` and ADR 0008. `SVC-` is no longer a reserved prefix, and the
 reserved requirement-id forms are `FR-<CODE>-<n>` and `NFR-<CODE>_<QA>-<n>` only.
 
 **3. Service domains read as peers** (ADR 0047). The 16 `interfaces_with` edges from a service domain to a plane are
@@ -57,7 +58,8 @@ Tooling (`tools/itpra-onto/`), which changes output and a consumer's configurati
   it leave the package. The built `schema` graph no longer declares `FR` and `NFR` under `REQUIREMENT`, nor the
   `statement`, `target` and `meets` properties.
 - The built graphs state their licence (`dcterms:license`, CC BY 4.0; ADR 0002) and project the retirement fields.
-- The package's version is the release's: `5.0.0`, and `pipeline_version` in a build's provenance with it.
+- The package's version is the release's: `5.0.0`, and with it `pipeline_version` in a build's provenance and the
+  authoring schema's `version`, which the generated JSON Schema, Pydantic module and OWL file carry.
 - The `itpra-onto release` command, which did nothing, is removed.
 - The version-bump check lets a vocabulary change join a version that is on `master` but not tagged yet, and asks
   for a bump once the tag exists.

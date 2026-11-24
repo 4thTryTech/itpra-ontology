@@ -223,5 +223,4 @@
     - {rel: governs, target: CONCEPT}
     - {rel: depends_on, target: CONCEPT}
     - {rel: depends_on, target: FUNCTION}
-    - {rel: belongs_to_service_domain, target: SERVICE_DOMAIN}
-  source: ADR 0008
+  source: ADR 0008 (amended by ADR 0046)

@@ -27,9 +27,9 @@ and a rule for which partition owns a term — without privileging the platform 
    capability domain carries it (IT Operations' included) and no tool defaults it. Placement is per term,
    never per topic.
 6. Behaviour that recurs across service domains is one shared function `supports` each capability
-   (ADR 0011); a capability is never multi-homed, and two domains' capabilities meet through `interfaces_with`
-   or a dependency. A function may cross service domains, each crossing decided by a record; a persona never
-   does.
+   (ADR 0011); a capability is never multi-homed, and two domains' capabilities meet through a dependency. A
+   function may cross service domains, each crossing decided by a record; a persona never does (amended by
+   ADR 0047).
 7. Withdrawn by ADR 0046, which removes the placements.
 
 ## Consequences
