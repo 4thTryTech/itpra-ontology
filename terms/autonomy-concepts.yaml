@@ -1,23 +1,6 @@
-# ITPRA ontology — neutral autonomy / automation-governance concepts
-# SHARED file: it belongs to no single service domain, so neither its name nor its ids carry a service-domain
-# code (ADR 0007, ADR 0045).
-# Cross-cutting Concept vocabulary for how the platform bounds autonomous action. Operating-model-neutral and
-# tool-neutral: no ITIL/DevOps process names, no products. These are NOT governance "moments" (those are the ADR
-# 0015 GC-* set in governance-constructs.yaml) — they are standing, governed artifacts the moments act on.
-# Minted under ADR 0028 (evaluate-not-auto-add per ADR 0011: the enforcement machinery — policy-as-code,
-# approval routing, privileged-access ceilings — already existed as functions; what was missing was the named
-# partition itself). ADR 0030 amends AUTON-BOUNDARY to reach actions selected at RUNTIME by the executing actor,
-# and mints the sibling AUTON-ACTOR. AUTON-ACTOR is deliberately a Concept, NOT a Persona: a persona is a human
-# ACCOUNTABLE role archetype (ADR 0012) and a delegated actor is never the accountable party. ADR 0030 completes
-# the set with AUTON-HARNESS (where the actor runs; the enforcement point) and AUTON-INFLIGHT-CONTROL (what the
-# accountable persona can still do while it runs). The four answer different questions: BOUNDARY = what may run
-# unattended; ACTOR = who runs it; HARNESS = where it runs; INFLIGHT-CONTROL = intervention during the run. ADR
-# 0030 also RULED that GC-APPROVAL already reaches plan-level approval, so no plan-approval concept is minted
-# (granularity is a scenario decision). ADR 0028 amends AUTON-BOUNDARY again: the partition is over an action
-# AND the part of the estate it lands in. Permission presumes controls (attribution, recording, interruption)
-# that are themselves FUNCTIONS, and functions are partitioned by COVERAGE-AREA - so the boundary granted
-# permission on the assumption of coverage it never checked. Sound in the enterprise-standard area; silently
-# unsound elsewhere.
+# ITPRA ontology — autonomy concepts: how autonomous and delegated action is bounded, run and controlled
+# SHARED file: it belongs to no single service domain, so neither its name nor its ids carry a service-domain code.
+# type: Concept. Ids AUTON-<SLUG>. Decided in ADR 0028, ADR 0030.
 
 - id: AUTON-BOUNDARY
   term: Automation boundary
@@ -80,17 +63,17 @@
     the resulting action trace. The budget bounds work in progress, not elapsed wall-clock time: a run
     suspended on a timer or awaiting a signal, holding no resident compute, is not consuming it, and the
     elapsed time of that suspension is governed by the validity of the permission the run acts under rather
-    than by the harness budget (ADR 0039). The harness is what the platform operates, governs, and can intervene in; the actor's reasoning
-    and the loop it runs are what execute INSIDE it. T1 asserts the harness exists, is governed, and is the
-    enforcement point where the boundary is applied; its construction, loop shape, and tool-protocol binding
-    are scenario decisions.
+    than by the harness budget (ADR 0039). The harness is what the infrastructure platform operates, governs,
+    and can intervene in; the actor's reasoning and the loop it runs are what execute INSIDE it. T1 asserts
+    the harness exists, is governed, and is the enforcement point where the boundary is applied; its
+    construction, loop shape, and tool-protocol binding are scenario decisions.
   aliases: [scaffold, agentic execution loop, agent runtime, agent sandbox]
   relates_to:
     - {rel: applies_to, target: AUTON-ACTOR}
     - {rel: depends_on, target: AUTON-BOUNDARY}
     - {rel: depends_on, target: FUNC-ito-policy-evaluation}
     - {rel: depends_on, target: FUNC-ito-audit-logging}
-  source: ADR 0030
+  source: ADR 0030 (amended by ADR 0039, ADR 0047)
 
 - id: AUTON-INFLIGHT-CONTROL
   term: In-flight action control
@@ -108,4 +91,4 @@
     - {rel: applies_to, target: AUTON-ACTOR}
     - {rel: depends_on, target: AUTON-HARNESS}
     - {rel: depends_on, target: GC-OWNERSHIP}
-  source: ADR 0030
+  source: ADR 0030 (amended by ADR 0039)

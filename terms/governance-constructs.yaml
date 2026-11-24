@@ -1,25 +1,18 @@
-# ITPRA ontology — neutral governance constructs
-# SHARED file: it belongs to no single service domain, so neither its name nor its ids carry a service-domain
-# code (ADR 0007, ADR 0045).
-# The canonical set of operating-model-NEUTRAL governance "moments" T1 uses to describe how the platform is
-# requested, decided, operated, recorded, and improved. Ratified by ADR 0015. This set is the stable JOIN KEY
-# between T1 and every T2 operating model: a T2 maps each construct it uses into one model's vocabulary (a
-# cross-walk to one operating model exists downstream, never here — these definitions name no operating-model or
-# tool terms). Deliberately COARSE governance moments, not a clone of any framework's practice list. type:
-# Concept. Used by the capability `Governance touchpoints` field and journey construct points. Organized into
-# five moment-groups (noted per term).
+# ITPRA ontology — governance constructs: the operating-model-neutral governance moments
+# SHARED file: it belongs to no single service domain, so neither its name nor its ids carry a service-domain code.
+# type: Concept. Ids GC-<slug>. Decided in ADR 0015.
 
-# ===== Engage — how a consumer reaches the platform =====
+# ===== Engage — how a consumer reaches a service =====
 
 - id: GC-REQUEST
   term: Request point
   type: Concept
   definition: >
-    Moment-group Engage. Where a consumer asks the platform for something — a service, resource, access, or
-    action — and the platform receives, validates, and routes that ask. The neutral anchor for any
-    consumer-initiated demand on the platform.
+    Moment-group Engage. Where a consumer asks a service provider for something — a service, resource,
+    access, or action — and the provider receives, validates, and routes that ask. The neutral anchor for any
+    consumer-initiated demand on a provider.
   aliases: [request, service request, demand point]
-  source: ADR 0015
+  source: ADR 0015 (amended by ADR 0047)
 
 - id: GC-CATALOG
   term: Catalog / offer
@@ -27,9 +20,9 @@
   definition: >
     Moment-group Engage. How an available service or resource is described and presented so a consumer can
     discover, understand, and select it for consumption. The neutral anchor for the published surface of what
-    the platform offers.
+    a provider offers.
   aliases: [catalog, offer, service offering]
-  source: ADR 0015
+  source: ADR 0015 (amended by ADR 0047)
 
 # ===== Decide & Control — governance gates on what proceeds and what changes =====
 
@@ -49,9 +42,10 @@
   definition: >
     Moment-group Decide & Control. Where a modification to a managed thing is introduced in a controlled way,
     with its intent recorded and its effect made reversible or recoverable. The neutral anchor for introducing
-    change to the platform or a tenant workload, including release and deployment of that change.
+    change to a service, the estate it runs on, or a tenant workload, including release and deployment of that
+    change.
   aliases: [change, release point]
-  source: ADR 0015
+  source: ADR 0015 (amended by ADR 0047)
 
 # ===== Operate & Restore — running the service, recovering it, and committing to its level =====
 
@@ -79,12 +73,12 @@
   term: Service-level / commitment point
   type: Concept
   definition: >
-    Moment-group Operate & Restore. Where the platform states a commitment about a service — a target level of
-    a quality such as availability or latency — and is measured against it, informing whether effort should go
+    Moment-group Operate & Restore. Where a provider states a commitment about a service — a target level of a
+    quality such as availability or latency — and is measured against it, informing whether effort should go
     to reliability or to change. The neutral anchor for service-level commitments and the headroom against
     them; the measurable target is set at T2/T3.
   aliases: [service level, commitment point, objective]
-  source: ADR 0015
+  source: ADR 0015 (amended by ADR 0047)
 
 # ===== Record & Improve — authoritative state and the learning loop =====
 
@@ -92,21 +86,21 @@
   term: Record / system-of-record update
   type: Concept
   definition: >
-    Moment-group Record & Improve. Where authoritative state about the platform or a managed thing is written,
-    so the record remains the trustworthy account of what exists and what happened. The neutral anchor for any
+    Moment-group Record & Improve. Where authoritative state about a service or a managed thing is written, so
+    the record remains the trustworthy account of what exists and what happened. The neutral anchor for any
     authoritative write — configuration, inventory, or audit trail.
   aliases: [record, system-of-record update, audit record]
-  source: ADR 0015
+  source: ADR 0015 (amended by ADR 0047)
 
 - id: GC-FEEDBACK
   term: Feedback / improvement point
   type: Concept
   definition: >
     Moment-group Record & Improve. Where feedback, defects, or improvement ideas are captured and fed into a
-    prioritized improvement loop that evolves the platform as a product. The neutral anchor for the ongoing
+    prioritized improvement loop that evolves a service as a product. The neutral anchor for the ongoing
     improvement and product-feedback loop.
   aliases: [feedback, improvement point, improvement loop]
-  source: ADR 0015
+  source: ADR 0015 (amended by ADR 0047)
 
 # ===== Cross-cutting =====
 

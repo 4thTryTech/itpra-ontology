@@ -1,17 +1,6 @@
-# ITPRA ontology — neutral knowledge-role partition
-# SHARED file: it belongs to no single service domain, so neither its name nor its ids carry a service-domain
-# code (ADR 0007, ADR 0045).
-# Cross-cutting Concept vocabulary for the ROLES knowledge plays in the estate, independent of how many physical
-# stores hold it. Operating-model-neutral and tool-neutral. Minted under ADR 0031 (evaluate-not-auto-add per ADR
-# 0011). ONE concept defining a partition, the same shape as AUTON-BOUNDARY and COVERAGE-AREA - not three
-# sibling concepts: no role needed relationships of its own. The roles are not service-domain owned (no
-# belongs_to_service_domain): in the IT estate alone the authoritative role is played by service-desk and
-# operational knowledge, the governing role by the configuration relationship model, and the system of record
-# (CAP-ITO-GOV-4) plays two roles at once. A role one store can play twice and several domains can each play is a
-# partition, not a capability. The obligations BETWEEN roles are NOT edges on this concept (no new relationship
-# verbs - ADR 0031 D3): they are carried by functions (FUNC-ito-access-policy-propagation, FUNC-ito-erasure-propagation,
-# FUNC-ito-retrieval-provenance) and by the definition text below ("a derived representation is never
-# authoritative").
+# ITPRA ontology — knowledge roles: the partition of knowledge by the role it plays
+# SHARED file: it belongs to no single service domain, so neither its name nor its ids carry a service-domain code.
+# type: Concept. Id KNOWLEDGE-ROLE. Decided in ADR 0031.
 
 - id: KNOWLEDGE-ROLE
   term: Knowledge role
