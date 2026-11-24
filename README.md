@@ -5,7 +5,7 @@ domains, capabilities, functions, personas, journeys, workflows, dimensions, gov
 and cross-cutting concepts an enterprise IT platform is described with. Tool-agnostic, neutral to any operating model,
 and machine-readable so that architecture documents can be checked against it ([ADR 0001](decisions/0001-purpose-scope-and-tier-neutrality.md)).
 
-**Status:** current release `5.0.0` (2026-11-23): IT Operations' ids and files take the code `ITO`, so all eleven
+**Status:** current release `5.0.0` (2026-11-24): IT Operations' ids and files take the code `ITO`, so all eleven
 service domains follow one form — a MAJOR release that renames ids ([ADR 0045](decisions/0045-it-operations-carries-its-code.md);
 old → new in [migrations/5.0.0.yaml](migrations/5.0.0.yaml)). Releases from `4.0.0` on are listed in
 [CHANGELOG.md](CHANGELOG.md) and on the repository's Releases page, each with its source archive and `sha256`.
@@ -79,4 +79,4 @@ repository at `4.0.0`. The decision records consolidate what was decided in that
 | 3.16.1 – 3.16.3 | 2026-11-21 | Preparation for publication: the base IRI; citations re-pointed to these records; comments scrubbed; three engineering definitions complete the durable-execution obligations |
 | 4.0.0 | 2026-11-21 | First public release: a new location, the licences, minted IRIs and the pinning contract; no term changes |
 | 4.0.1 | 2026-11-23 | The pipeline package joins the release; one release for the vocabulary and its tooling; no term changes |
-| 5.0.0 | 2026-11-23 | IT Operations carries its code: 356 ids and 26 files renamed to the form of the other ten domains (MAJOR) |
+| 5.0.0 | 2026-11-24 | IT Operations carries its code: 356 ids and 26 files renamed to the form of the other ten domains (MAJOR); the pipeline builds the vocabulary alone |
