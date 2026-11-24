@@ -1,8 +1,8 @@
 """Tests for the RDF emitter (``itpra_onto.emit``; ADR 0041).
 
-Every test reads the REAL input files (the vocabulary and, with an overlay, the consumer's requirement
-registries); nothing is ever written to them. Alternative configs are written to ``tmp_path`` only. IRIs are
-always built from the loaded config, never typed here (ADR 0004; ``test_iri_config.py`` scans this file too).
+Every test reads the REAL input files (the vocabulary); nothing is ever written to them. Alternative
+configs are written to ``tmp_path`` only. IRIs are always built from the loaded config, never typed here
+(ADR 0004; ``test_iri_config.py`` scans this file too).
 """
 
 from __future__ import annotations
@@ -16,24 +16,13 @@ import pyoxigraph as ox
 import pytest
 
 from itpra_onto import emit, schema_loading
-from itpra_onto.authoring import default_registry_files, default_term_files
-from itpra_onto.config import DEFAULT_CONFIG_PATH, Config, OverlayConfig, load_config
+from itpra_onto.authoring import default_term_files
+from itpra_onto.config import DEFAULT_CONFIG_PATH, Config, load_config
 from itpra_onto.emit import InputPathError, parse_source
-from itpra_onto.parity import default_registries as parity_default_registries
 from itpra_onto.profile import compute_profile, load_records
-
-FIXTURE = Path(__file__).resolve().parent / "fixtures" / "cap-fnd-1.expected.nq"
-WORKED_EXAMPLE_SUBJECTS = (
-    "CAP-ITO-FND-1",
-    "FR-FND-1",
-    "FUNC-ito-version-control",
-    "FUNC-ito-change-review",
-    "FUNC-ito-configuration-rollback",
-)
-EXPECTED_SUB_PROJECTS = 11
 EXPECTED_VERBS = 17
-LANG_TAGGED_SLOTS = ("term", "definition", "aliases", "deprecated", "statement")
-UNTAGGED_SLOTS = ("id", "source", "requirement_target")
+LANG_TAGGED_SLOTS = ("term", "definition", "aliases", "deprecated")
+UNTAGGED_SLOTS = ("id", "source")
 
 
 # ---------------------------------------------------------------------------------------------------
@@ -71,21 +60,9 @@ def _match(dataset: ox.Dataset, s=None, p=None, o=None, g=None) -> list[ox.Quad]
 
 
 def _instance_quads(dataset: ox.Dataset, config: Config) -> list[ox.Quad]:
-    """Quads in ``t1`` and every ``req/*`` graph."""
-    t1, req_prefix = config.iri.graph_ns + "t1", config.iri.graph_ns + "req/"
-    return [
-        q for q in dataset
-        if isinstance(q.graph_name, ox.NamedNode)
-        and (q.graph_name.value == t1 or q.graph_name.value.startswith(req_prefix))
-    ]
-
-
-def _req_graphs(dataset: ox.Dataset, config: Config) -> set[str]:
-    prefix = config.iri.graph_ns + "req/"
-    return {
-        q.graph_name.value for q in dataset
-        if isinstance(q.graph_name, ox.NamedNode) and q.graph_name.value.startswith(prefix)
-    }
+    """Quads in ``t1``."""
+    t1 = config.iri.graph_ns + "t1"
+    return [q for q in dataset if isinstance(q.graph_name, ox.NamedNode) and q.graph_name.value == t1]
 
 
 def _sorted_nquads(dataset: ox.Dataset) -> list[str]:
@@ -93,13 +70,6 @@ def _sorted_nquads(dataset: ox.Dataset) -> list[str]:
     dataset.canonicalize(ox.CanonicalizationAlgorithm.RDFC_1_0)
     raw = ox.serialize(dataset, format=ox.RdfFormat.N_QUADS).decode("utf-8")
     return sorted(raw.splitlines(keepends=True))
-
-
-def replace_overlay(config: Config, **overlay: str) -> Config:
-    """``config`` with an overlay of exactly the given keys (dataclass replace; nothing touches disk)."""
-    from dataclasses import replace
-
-    return replace(config, overlay=OverlayConfig(**overlay))
 
 
 def _write_config(tmp_path: Path, **paths: str) -> Path:
@@ -124,15 +94,11 @@ def test_term_file_set_equals_the_authoring_set(config: Config):
     assert set(emit.term_files(config)) == set(default_term_files())
 
 
-def test_registry_file_set_equals_the_authoring_set(config: Config):
-    assert emit.registry_files(config) == default_registry_files()
-
-
 def test_shipped_config_passes_the_guard(config: Config):
     inputs = emit.load_inputs(config)
-    assert inputs.terms and (inputs.requirements or config.overlay is None)  # registries only with an overlay
+    assert inputs.terms
     assert inputs.ontology_version
-    for path in [*emit.term_files(config), *emit.registry_files(config)]:
+    for path in emit.term_files(config):
         assert emit.guard_input_path(path, repo_root=config.repo_root) == path
 
 
@@ -150,17 +116,6 @@ def test_guard_refuses_a_worktree_ontology_dir_inside_the_repository(tmp_path: P
         emit.load_inputs(config)
 
 
-@pytest.mark.overlay  # the shipped overlay's excluded_dirs and requirements_glob
-def test_guard_refuses_a_requirements_glob_under_an_excluded_dir(tmp_path: Path, config: Config):
-    assert config.overlay is not None and config.overlay.excluded_dirs
-    excluded = config.overlay.excluded_dirs[0]
-    pattern = (config.repo_root / excluded / "*" / "requirements" / "*.yaml").as_posix()
-    ontology = emit.ontology_dir(config).as_posix()  # valid, so the registry glob is what is refused
-    bad = load_config(_write_config(tmp_path, ontology_dir=ontology, requirements_glob=pattern))
-    with pytest.raises(InputPathError, match=rf"rule \(c\).*{re.escape(excluded)}"):
-        emit.load_inputs(bad)
-
-
 @pytest.mark.parametrize(
     ("relative", "rule"),
     [
@@ -174,7 +129,7 @@ def test_guard_refuses_a_requirements_glob_under_an_excluded_dir(tmp_path: Path,
         ("terms/dist/leak.yaml", "c"),
         ("terms/public/leak.yaml", "c"),
         ("terms/__pycache__/leak.yaml", "c"),
-        ("registries/x/docs/dist/leak.yaml", "c"),
+        ("a/b/docs/dist/leak.yaml", "c"),
         # case-insensitive, like every other name comparison in this pipeline
         ("terms/DIST/leak.yaml", "c"),
     ],
@@ -192,40 +147,18 @@ def test_guard_rule_a_is_the_configured_repository_root(tmp_path: Path, config: 
     assert emit.guard_input_path(other, repo_root=tmp_path) == other
 
 
-def test_guard_refuses_configured_exclusions_at_any_depth_only_when_configured(config: Config):
-    """A consumer's ``[overlay] excluded_dirs`` are refused at any depth, case-insensitively — and are not a
-    rule of the core: the same path passes when nothing is excluded. No path here exists on disk;
-    :func:`emit.guard_input_path` checks shape, never existence."""
+def test_guard_refuses_excluded_names_at_any_depth_only_when_given(config: Config):
+    """Names passed as ``excluded`` are refused at any depth, case-insensitively; the same path passes when
+    nothing is excluded. No path here exists on disk; :func:`emit.guard_input_path` checks shape, never
+    existence."""
     root = config.repo_root
-    nested = root / "some" / "Recon" / "x.yaml"
-    with pytest.raises(InputPathError, match=r"rule \(c\).*Recon"):
-        emit.guard_input_path(nested, repo_root=root, excluded=("recon",))
+    nested = root / "some" / "Drafts" / "x.yaml"
+    with pytest.raises(InputPathError, match=r"rule \(c\).*Drafts"):
+        emit.guard_input_path(nested, repo_root=root, excluded=("drafts",))
     assert emit.guard_input_path(nested, repo_root=root) == nested
-    top = root / "scenarios" / "acme" / "x.yaml"
-    with pytest.raises(InputPathError, match=r"rule \(c\).*scenarios"):
-        emit.guard_input_path(top, repo_root=root, excluded=("scenarios",))
-
-
-@pytest.mark.overlay  # needs the consumer's registries
-def test_registry_graphs_name_the_registry(config: Config):
-    registries = {emit.registry_of(p, config) for p in emit.registry_files(config)}
-    assert len(registries) == EXPECTED_SUB_PROJECTS
-    assert "ITO" in registries
-    assert parity_default_registries(config) == tuple(sorted(registries))
-
-
-def test_registry_of_names_the_first_component_below_the_glob_prefix(tmp_path: Path):
-    """``req/<X>``: X is the first path component below the glob's fixed prefix, or the stem of a file that
-    sits directly there."""
-    root = load_config().repo_root / "registries"
-    cfg = load_config(_write_config(tmp_path, ontology_dir=emit.ontology_dir(load_config()).as_posix()))
-    nested = replace_overlay(cfg, requirements_glob=(root / "*" / "docs" / "*.yaml").as_posix())
-    assert emit.registry_root(nested) == root
-    assert emit.registry_of(root / "ITO" / "docs" / "functional.yaml", nested) == "ITO"
-    flat = replace_overlay(cfg, requirements_glob=(root / "*.yaml").as_posix())
-    assert emit.registry_of(root / "platform.yaml", flat) == "platform"
-    with pytest.raises(emit.EmitError, match="outside"):
-        emit.registry_of(load_config().repo_root / "elsewhere" / "x.yaml", nested)
+    top = root / "private" / "acme" / "x.yaml"
+    with pytest.raises(InputPathError, match=r"rule \(c\).*private"):
+        emit.guard_input_path(top, repo_root=root, excluded=("private",))
 
 
 # ---------------------------------------------------------------------------------------------------
@@ -241,8 +174,6 @@ def test_type_to_class_table(config: Config, vocab: emit.Vocabulary):
     assert table["Concept"] == id_ns + "CONCEPT"
     assert table["EntityType"] == onto_ns + "EntityType"
     assert table["RelationshipType"] == onto_ns + "RelationshipType"
-    assert {k: v.value for k, v in vocab.requirement_class.items()} == {"FR": id_ns + "FR", "NFR": id_ns + "NFR"}
-    assert vocab.requirement_base.value == id_ns + "REQUIREMENT"
 
 
 def test_stale_schema_prefixes_fail_loudly(tmp_path: Path):
@@ -383,17 +314,6 @@ def test_parse_source_full_corpus_never_trips_the_grammar(config: Config):
 # acceptance: the CAP-ITO-FND-1 worked example, byte for byte after canonicalisation
 
 
-@pytest.mark.overlay  # needs the consumer's registries
-def test_cap_fnd_1_worked_example_matches_fixture(config: Config):
-    """The fixture carries the placeholder ``{BASE}`` token, never the configured base IRI literal
-    (``test_iri_config.py``'s placeholder scan covers ``.nq`` fixtures too); substitute the real
-    base in here, at comparison time, rather than in the fixture file."""
-    subjects = {f"<{config.iri.id_ns}{s}>" for s in WORKED_EXAMPLE_SUBJECTS}
-    lines = [line for line in _sorted_nquads(emit.emit(config=config)) if line.split(" ", 1)[0] in subjects]
-    expected = FIXTURE.read_bytes().replace(b"{BASE}", config.iri.base.encode("utf-8"))
-    assert "".join(lines).encode("utf-8") == expected
-
-
 def test_emit_is_deterministic(config: Config):
     inputs = emit.load_inputs(config)
     first = _sorted_nquads(emit.emit(inputs, config))
@@ -427,28 +347,12 @@ def test_per_verb_edge_counts_equal_the_profile(dataset: ox.Dataset, config: Con
 
 
 def test_record_counts_per_type(dataset: ox.Dataset, config: Config, vocab: emit.Vocabulary):
-    terms, _reqs = load_records()
+    terms = load_records()
     t1 = _graph(config, "t1")
     for type_value, expected in Counter(r["type"] for r in terms).items():
         cls = vocab.term_class[type_value]
         typed = {q.subject for q in _match(dataset, None, emit.RDF_TYPE, cls, t1)}
         assert len(typed) == expected, type_value
-
-
-@pytest.mark.overlay  # needs the consumer's registries
-def test_requirement_counts_per_sub_project(dataset: ox.Dataset, config: Config, vocab: emit.Vocabulary):
-    assert len(_req_graphs(dataset, config)) == EXPECTED_SUB_PROJECTS
-    expected: Counter = Counter()
-    for req in emit.load_inputs(config).requirements:
-        expected[(req.registry, req.record["type"])] += 1
-    for (sub, type_value), n in expected.items():
-        graph = _graph(config, f"req/{sub}")
-        cls = vocab.requirement_class[type_value]
-        assert len(list(_match(dataset, None, emit.RDF_TYPE, cls, graph))) == n, (sub, type_value)
-        base = list(_match(dataset, None, emit.RDF_TYPE, vocab.requirement_base, graph))
-        records = sum(c for (s, _t), c in expected.items() if s == sub)
-        assert len(base) == records
-        assert len(_match(dataset, None, emit.RDF_TYPE, emit.SKOS_CONCEPT, graph)) == records, sub
 
 
 # ---------------------------------------------------------------------------------------------------
@@ -495,25 +399,15 @@ def test_no_alt_label_equals_its_own_pref_label(dataset: ox.Dataset, vocab: emit
     assert offenders == []
 
 
-REGISTRY_ONLY_SLOTS = frozenset({"statement", "rationale"})  # literals that exist only on requirement records
-
-
 def test_language_tags(dataset: ox.Dataset, vocab: emit.Vocabulary, config: Config):
     for slot_name in LANG_TAGGED_SLOTS:
         literals = [q.object for q in dataset.quads_for_predicate(vocab.slot_iri(slot_name))]
-        if not literals and config.overlay is None and slot_name in REGISTRY_ONLY_SLOTS:
-            continue  # no registries in a core-only run
         assert literals, slot_name
         assert {lit.language for lit in literals} == {emit.LANG}, slot_name
     untagged = [vocab.slot_iri(s) for s in UNTAGGED_SLOTS] + [vocab.onto(emit.AUTHORING_FILE)]
     for predicate in untagged:
         literals = [q.object for q in dataset.quads_for_predicate(predicate) if isinstance(q.object, ox.Literal)]
         assert all(lit.language is None for lit in literals), predicate.value
-
-
-def test_target_omitted_when_null(dataset: ox.Dataset, vocab: emit.Vocabulary):
-    """Every registry record has ``target: ~`` today, so no ``itpra-o:target`` triple is emitted."""
-    assert list(dataset.quads_for_predicate(vocab.slot_iri("requirement_target"))) == []
 
 
 def test_decided_in_links(dataset: ox.Dataset, config: Config):
@@ -546,18 +440,7 @@ def _term(record: dict) -> emit.TermRecord:
     return emit.TermRecord(record=record, file="terms/fixture.yaml")
 
 
-def _req(record: dict) -> emit.RegistryRecord:
-    return emit.RegistryRecord(record=record, file="registries/ITO/functional.yaml", registry="ITO")
-
-
 _GOOD_TERM = {"id": "CAP-FIXTURE-1", "term": "Fixture", "type": "Capability", "definition": "A fixture."}
-_GOOD_REQ = {
-    "id": "FR-FIXTURE-1",
-    "type": "FR",
-    "statement": "A fixture.",
-    "met_by": ["CAP-ITO-FND-1"],
-    "verified_by": ["JRN-ito-patch-platform"],
-}
 
 
 def test_term_file_that_is_not_a_list_is_an_emit_error(tmp_path: Path):
@@ -579,21 +462,6 @@ def test_empty_term_file_is_no_records(tmp_path: Path):
     path = tmp_path / "empty.yaml"
     path.write_text("", encoding="utf-8")
     assert emit._term_file_records(path) == []
-
-
-@pytest.mark.parametrize(
-    ("text", "match"),
-    [
-        ("- a list\n", "must be a top-level mapping"),
-        ("requirements: not-a-list\n", "`requirements` must be a list"),
-        ("requirements:\n  - NFR-BARE-1\n", r"requirements\[0\] is not a mapping"),
-    ],
-)
-def test_malformed_registry_is_an_emit_error(tmp_path: Path, text: str, match: str):
-    path = tmp_path / "functional.yaml"
-    path.write_text(text, encoding="utf-8")
-    with pytest.raises(emit.EmitError, match=match):
-        emit._registry_file_records(path)
 
 
 @pytest.mark.parametrize("field", ["id", "type"])
@@ -621,14 +489,6 @@ def test_unpinned_term_type_names_the_record(vocab: emit.Vocabulary):
     with pytest.raises(emit.EmitError, match="which no Term subclass pins") as info:
         list(emit.term_triples(_term({**_GOOD_TERM, "type": "Nope"}), vocab))
     assert info.value.record_id == "CAP-FIXTURE-1"
-
-
-@pytest.mark.parametrize("field", ["id", "type"])
-def test_requirement_without_a_string_id_or_type_is_an_emit_error(vocab: emit.Vocabulary, field: str):
-    record = dict(_GOOD_REQ)
-    del record[field]
-    with pytest.raises(emit.EmitError, match=f"no string `{field}`"):
-        list(emit.requirement_triples(_req(record), vocab))
 
 
 @pytest.mark.parametrize("bad_id", ["CAP X", "CAP<X>", 'CAP"X', "CAP{X}", "CAP|X", "CAP\\X", "CAP^X", "CAP`X", "CAP\tX"])
@@ -659,31 +519,15 @@ def test_relates_to_verb_that_is_not_a_string_is_an_emit_error(vocab: emit.Vocab
 
 def test_iri_safe_but_pattern_breaking_id_still_reaches_the_graph(vocab: emit.Vocabulary):
     """The guard is IRI-safety, not the schema id pattern: '1-bad' and 'X/Y' must reach the graph, where the
-    `id-pattern` shape reports them as the consumer's linter does (fixtures/structural/id-pattern.yaml)."""
+    `id-pattern` shape reports them as the linter does (fixtures/structural/id-pattern.yaml)."""
     for iri_safe in ("1-bad", "TEN-DIM-DATA/X"):
         triples = list(emit.term_triples(_term({**_GOOD_TERM, "id": iri_safe}), vocab))
         assert triples[0][0] == vocab.id(iri_safe)
 
 
-@pytest.mark.parametrize("key", ["met_by", "verified_by"])
-def test_scalar_met_by_or_verified_by_is_an_emit_error(vocab: emit.Vocabulary, key: str):
-    """A scalar is not silently read as a one-element list."""
-    record = {**_GOOD_REQ, key: "CAP-ITO-FND-1"}
-    with pytest.raises(emit.EmitError, match=f"`{key}` must be a list") as info:
-        list(emit.requirement_triples(_req(record), vocab))
-    assert info.value.record_id == "FR-FIXTURE-1"
-
-
-def test_requirement_reference_that_cannot_be_an_iri_is_an_emit_error(vocab: emit.Vocabulary):
-    with pytest.raises(emit.EmitError, match="cannot be an IRI local name") as info:
-        list(emit.requirement_triples(_req({**_GOOD_REQ, "met_by": ["CAP ITO-FND 1"]}), vocab))
-    assert info.value.record_id == "FR-FIXTURE-1"
-
-
 def _with_first_term(inputs: emit.Inputs, record: dict) -> emit.Inputs:
     return emit.Inputs(
         terms=(emit.TermRecord(record, inputs.terms[0].file), *inputs.terms[1:]),
-        requirements=inputs.requirements,
         ontology_version=inputs.ontology_version,
     )
 

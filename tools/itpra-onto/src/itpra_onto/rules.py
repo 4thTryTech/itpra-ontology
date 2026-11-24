@@ -1,8 +1,7 @@
 """Apply the versioned SPARQL materialisation rules to an emitted dataset (ADR 0041 D4).
 
 ADR 0041 D4: versioned ``CONSTRUCT`` rules kept in git, run in a stated order into a separate ``inferred``
-graph; no reasoner; **no named inverse properties are minted** — the rule slot exists and stays empty. The
-requirement-meets rule reads a consumer's ``req/*`` graphs and runs only with an ``[overlay]``.
+graph; no reasoner; **no named inverse properties are minted** — the rule slot exists and stays empty.
 
 Rules live under this package's ``rules/``: one ``.rq`` file per rule (the graphs :mod:`itpra_onto.emit`
 asserts are the only thing they read) plus an ordered ``manifest.yaml`` (:func:`load_manifest`). A rule file
@@ -65,7 +64,6 @@ class Rule:
     reads: tuple[str, ...]
     produces: str
     path: Path
-    overlay: bool = False
 
     @property
     def text(self) -> str:
@@ -86,15 +84,12 @@ class RuleReport:
     elapsed: float
 
 
-def load_manifest(config: Config | None = None, *, rules_dir: Path = RULES_DIR, all_rules: bool = False) -> list[Rule]:
+def load_manifest(config: Config | None = None, *, rules_dir: Path = RULES_DIR) -> list[Rule]:
     """Read ``rules_dir/manifest.yaml`` in file order and resolve each entry's rule file.
 
-    A rule marked ``overlay: true`` reads the consumer's ``req/*`` graphs and is left out when the
-    configuration has no ``[overlay]`` (ADR 0043 D1), unless ``all_rules`` is set — the rules
-    digest hashes every shipped rule whatever the configuration. The manifest and rule files name no base
-    IRI; :func:`prefix_block` and :func:`apply_rules` are what consume ``config``'s IRIs.
+    The manifest and rule files name no base IRI; :func:`prefix_block` and :func:`apply_rules` are what
+    consume ``config``'s IRIs.
     """
-    config = config if config is not None else load_config()
     manifest_path = rules_dir / MANIFEST_NAME
     if not manifest_path.exists():
         raise RuleError(f"{manifest_path}: manifest file does not exist")
@@ -120,7 +115,6 @@ def load_manifest(config: Config | None = None, *, rules_dir: Path = RULES_DIR, 
             raise RuleError(f"{manifest_path}: rule {rule_id!r} names a file that does not exist: {path}")
         rules.append(
             Rule(
-                overlay=bool(entry.get("overlay", False)),
                 id=rule_id,
                 file=str(entry["file"]),
                 description=str(entry["description"]),
@@ -129,8 +123,6 @@ def load_manifest(config: Config | None = None, *, rules_dir: Path = RULES_DIR, 
                 path=path,
             )
         )
-    if not all_rules and config.overlay is None:
-        rules = [rule for rule in rules if not rule.overlay]
     return rules
 
 

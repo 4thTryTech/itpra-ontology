@@ -1,0 +1,7 @@
+# Rules of the test layer (tests/test_layers.py), in the layout of the pipeline's own rules directory.
+
+- id: noted-term
+  file: 10-noted-term.rq
+  description: Every term of the vocabulary a note is about, linked back to that note.
+  reads: [notes, t1]
+  produces: notedBy

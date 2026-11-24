@@ -20,7 +20,7 @@ old → new in [migrations/5.0.0.yaml](migrations/5.0.0.yaml)). Releases from `4
 | `migrations/` | The id and file renames of a MAJOR release, old → new (`5.0.0.yaml`: [ADR 0045](decisions/0045-it-operations-carries-its-code.md)) |
 | `decisions/` | The decision records that shape the vocabulary, numbered from 0001 in reading order ([index](decisions/README.md)) |
 | `tools/` · `tests/` | The checks that run in CI |
-| `tools/itpra-onto/` | The ontology-as-code pipeline: the vocabulary projected to RDF, validated with SHACL and built into canonical artefacts ([ADR 0041](decisions/0041-the-rdf-projection-roles-modelling-and-derivation.md), [ADR 0042](decisions/0042-validation-parity-register-shapes-fixtures-and-the-parity-check.md), [ADR 0043](decisions/0043-builds-artefacts-and-the-consumer-overlay.md); [its README](tools/itpra-onto/README.md)) |
+| `tools/itpra-onto/` | The ontology-as-code pipeline: the vocabulary projected to RDF, validated with SHACL and built into canonical artefacts ([ADR 0041](decisions/0041-the-rdf-projection-roles-modelling-and-derivation.md), [ADR 0042](decisions/0042-validation-parity-register-shapes-fixtures-and-the-parity-check.md), [ADR 0043](decisions/0043-builds-artefacts-and-layers.md); [its README](tools/itpra-onto/README.md)) |
 
 ## Reading the vocabulary
 

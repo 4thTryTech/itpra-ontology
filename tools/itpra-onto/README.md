@@ -10,8 +10,8 @@ The YAML stays authoritative; every emitted graph is derived from it (ADR 0041 D
 Decision records cited as `ADR NNNN` are the ontology's own, in `decisions/` at the repository root; the
 pipeline is decided in [ADR 0041](https://github.com/4thtrytech/itpra-ontology/blob/master/decisions/0041-the-rdf-projection-roles-modelling-and-derivation.md)
 (the RDF projection), [ADR 0042](https://github.com/4thtrytech/itpra-ontology/blob/master/decisions/0042-validation-parity-register-shapes-fixtures-and-the-parity-check.md)
-(validation parity) and [ADR 0043](https://github.com/4thtrytech/itpra-ontology/blob/master/decisions/0043-builds-artefacts-and-the-consumer-overlay.md)
-(builds, artefacts and the consumer overlay).
+(validation parity) and [ADR 0043](https://github.com/4thtrytech/itpra-ontology/blob/master/decisions/0043-builds-artefacts-and-layers.md)
+(builds, artefacts and layers).
 
 ## Layout
 
@@ -24,13 +24,14 @@ beside `pyproject.toml`.
 ## Configuration
 
 `itpra-onto.toml`, next to `pyproject.toml`, is read by `itpra_onto.config.load_config()`; paths are
-relative to its directory. `ITPRA_ONTO_CONFIG` (an environment variable; tests and CI) points at another
-file.
+relative to its directory. The file in effect is `$ITPRA_ONTO_CONFIG`, else `itpra-onto.toml` in the working
+directory or one of its parents, else the one beside a checkout's `pyproject.toml`;
+`itpra-onto --config PATH <command>` names it for one invocation.
 
 | Table | Keys | Meaning |
 |---|---|---|
 | `[iri]` | `base`, `id_path`, `onto_path`, `graph_path` | The base IRI and the three namespaces built from it: `itpra:` = `<base><id_path>` (one IRI per record), `itpra-o:` = `<base><onto_path>` (verbs, classes and annotation properties), `itpra-g:` = `<base><graph_path>` (named graphs). Every key is required; a missing one raises `ConfigError` — no default is baked into the code (ADR 0004). |
-| `[paths]` | `ontology_dir`, `dist_dir`, `store_dir` | The vocabulary's directory (`schema.yaml`, `entities.yaml`, `relationships.yaml`, `terms/*.yaml`), the output root (`<dist_dir>/rdf/`, `<dist_dir>/schema/`) and the embedded store's directory. |
+| `[paths]` | `repo_root`, `ontology_dir`, `dist_dir`, `store_dir` | The repository root every input must lie under and file labels are relative to (default `../..`; read from the configuration, never from where the package is installed), the vocabulary's directory (`schema.yaml`, `entities.yaml`, `relationships.yaml`, `terms/*.yaml`), the output root (`<dist_dir>/rdf/`, `<dist_dir>/schema/`) and the embedded store's directory. |
 | `[python]` | `pinned` | The interpreter version the package is pinned to (`3.12`). |
 
 The base IRI is written once, in `[iri] base`: the LinkML prefixes are generated from it (`gen-prefixes`),
@@ -39,29 +40,15 @@ the schema's own `id:` is substituted in memory at load time, and rule, shape an
 before they run or parse. `tests/test_iri_config.py` fails if the literal appears outside `itpra-onto.toml`
 and the two generated fragments. A host ending in `.invalid` is a placeholder that `itpra-onto release` refuses.
 
-## Core and overlay
+## Layers
 
-The **core** is built from the vocabulary alone: the `schema` and `t1` graphs, the `inferred` graph from
-the five vocabulary rules, the `structural`, `crossfield` and generated verb shapes, and the generated
-LinkML artefacts. Everything a *consumer* layers on top is the **overlay**, an optional `[overlay]` table
-(ADR 0043 D1):
-
-| Key | What it enables |
-|---|---|
-| `requirements_glob` | The consumer's requirement registries. Each becomes a `req/<X>` graph and enables the `requirement-meets` rule (`overlay: true` in `rules/manifest.yaml`), `shapes/requirements.ttl` and the requirement fixtures. A registry is named by the first path component below the glob's fixed prefix (the components before its first wildcard), or by the file's stem when the file sits directly there. |
-| `linter_script` | The consumer's own linter, which `parity` compares the shapes against (ADR 0042 D5). |
-| `excluded_dirs` | Directory names the input-path guard refuses at any depth, case-insensitively, beyond the built-in `dist`, `public` and `__pycache__`. |
-
-`[paths] repo_root` (default `../..`, two levels above the configuration file) is the repository root every input
-must lie under and the root file labels are relative to; it is read from the configuration, never from where the
-package is installed. The file in effect is `$ITPRA_ONTO_CONFIG`, else `itpra-onto.toml` in the working directory
-or one of its parents (a consumer's overlay project), else the one beside a checkout's `pyproject.toml`;
-`itpra-onto --config PATH <command>` names it for one invocation.
-
-Without the table, `build` emits `schema` + `t1` + `inferred` only, `validate` loads no requirements
-shapes, `validate --authoring` checks the term files only, and `parity` compares the ontology's own lint
-rather than a consumer's linter. A configuration that still carries `requirements_glob` under `[paths]` is
-read as an overlay with that one key.
+A build can take layers (`itpra_onto.layers.Layer`; ADR 0043 D2). A layer adds quads in named graphs of its
+own once the vocabulary is emitted, names a rules directory that runs after the vocabulary's rules, names a
+shapes directory validated beside the vocabulary's shapes, and declares its input files and code so the
+provenance record covers them. Rule ids are unique across the vocabulary and every layer. Layers are passed
+in code — `build.build(layers=[…])`, `build.check(layers=[…])`, or `cli.main(argv, layers=[…])` for a command
+line that includes them — and a build without one is the vocabulary's own. `tests/test_layers.py` builds
+with a small one.
 
 ## Commands
 
@@ -73,11 +60,11 @@ read as an overlay with that one key.
 | `gen-prefixes [--check]` | Regenerates `schema/generated/itpra-prefixes.linkml.yaml` from `[iri]`. Sorted, LF. `--check` as above. |
 | `gen-verb-shapes [--check]` | Regenerates `shapes/generated/verb-pairs.ttl` (rule `B-22`: one SHACL-SPARQL shape per verb, allowing only the (subject class, object class) pairs its `itpra_verb` annotation declares) from `schema/itpra.linkml.yaml`. `shapes/generated/` is owned by this command; never edit it by hand. `--check` as above. |
 | `gen-artifacts [--check]` | Regenerates `<dist_dir>/schema/` (`itpra.schema.json`, `itpra_models.py`, `itpra.owl.nt`, `itpra.shacl.nt`, `doc/`) from the LinkML schema. Two runs are byte-identical. `--check` regenerates into a temporary directory and exits 1 on any difference. |
-| `lint [--root DIR] [--json]` | Lints the vocabulary with the ontology's own rules (`itpra_onto.lint`; the register's `core`-home rows: file shape, required and unknown fields, unique ids and the id pattern, known types and verbs, resolving targets, `derived_from` kept off Functions, the `source:` grammar and resolving decision citations, the two version numbers). Standard library plus PyYAML only, so a consumer's linter imports the same module and runs it first (ADR 0042 D1). Exit 1 on any error; `--json` prints the findings and nothing else. |
-| `validate --authoring [--quiet]` | LinkML-validates every term file (and, with an overlay, every registry) against `schema/itpra.linkml.yaml`, in-process, closed mode. One line per file and a total; exit 0 only if every file passes. `--quiet` prints failing files only. See [`schema/README.md`](src/itpra_onto/schema/README.md). |
+| `lint [--root DIR] [--json]` | Lints the vocabulary (`itpra_onto.lint`; the register's Table A: file shape, required and unknown fields, unique ids and the id pattern, known types and verbs, resolving targets, `derived_from` kept off Functions, the `source:` grammar and resolving decision citations, the two version numbers). Standard library plus PyYAML only (ADR 0042 D1). Exit 1 on any error; `--json` prints the findings and nothing else. |
+| `validate --authoring [--quiet]` | LinkML-validates every term file against `schema/itpra.linkml.yaml`, in-process, closed mode. One line per file and a total; exit 0 only if every file passes. `--quiet` prints failing files only. See [`schema/README.md`](src/itpra_onto/schema/README.md). |
 | `validate [--shapes DIR] [--json]` | Emits, applies the rules and SHACL-validates the result against `shapes/` (or `DIR`). One line per finding, sorted, then a summary. Exit 0 only when no `sh:Violation` fired; a `sh:Warning` is advisory. `--json` prints a JSON list of `rule`/`subject`/`severity`/`message` and nothing else on stdout. An input the emitter refuses is reported as an `emit-error` finding (exit 1), never a traceback. |
 | `build [--out DIR] [--no-store] [--check]` | Emits, applies the rules, adds the `provenance` graph, canonicalises and writes `<dist_dir>/rdf/` (or `DIR`), then loads the embedded store unless `--no-store`. `--check` builds into a temporary directory, never touches the store, and exits 1 if `base/` would differ from what is on disk or is missing. |
-| `parity [--json] [--fixtures] [--sub X ...]` | Compares a linter with the shapes over the comparable rule ids. Without an `[overlay]`: the ontology's own lint over the `core`-home rows (core mode). With one: the consumer's linter (`[overlay] linter_script`) over every comparable row. The real tree by default (`--sub X`, repeatable, restricts the consumer's linter to those registries), or fixture by fixture with `--fixtures` (`--sub` ignored; registry fixtures are skipped in core mode). `--json` prints one object and nothing else. |
+| `parity [--json] [--fixtures]` | Compares the linter (`itpra_onto.lint`) with the shapes over the comparable rule ids: the real tree by default, or fixture by fixture with `--fixtures`. `--json` prints one object and nothing else. |
 | `release` | Not implemented yet. Exits 1 while `[iri] base` has a `.invalid` host; otherwise prints that it is not implemented and exits 2. |
 
 `python -m itpra_onto.profile` prints the per-verb profile read off the data (type pairs with counts,
@@ -88,23 +75,22 @@ per-record edge counts, meta-edges) that the schema's `itpra_verb` annotations w
 `itpra_onto.emit` (`load_inputs()` then `emit()`) builds an in-memory `pyoxigraph.Dataset`. It reads every
 `*.yaml` directly under `ontology_dir` except `schema.yaml` and `PIN.yaml`, then every `*.yaml` under
 `terms/` (not recursive beyond that, so an ontology directory that is a repository root sweeps up no
-tooling), `schema.yaml` for `ontology_version` only, and the overlay's registries if any. Every path first
-passes the **input-path guard** (ADR 0043 D1): under the repository root; no component beginning with `.`;
-not under `dist`, `public`, `__pycache__` or an `excluded_dirs` name at any depth; a file must be `.yaml`.
-A violation raises `InputPathError` naming the path and the rule.
+tooling), and `schema.yaml` for `ontology_version` only. Every path first passes the **input-path guard**
+(ADR 0043 D1): under the repository root; no component beginning with `.`; not under `dist`, `public` or
+`__pycache__` at any depth; a file must be `.yaml`. A violation raises `InputPathError` naming the path and
+the rule.
 
 Only named graphs are written; the default graph stays empty, and no query reads the union (ADR 0041 D3):
 
 | Graph | Holds |
 |---|---|
-| `schema` | The ontology header and version IRI, the concept scheme, each EntityType record as an `owl:Class` under `skos:Concept`, `FR`/`NFR` under `REQUIREMENT`, the 17 verbs as `owl:ObjectProperty` with `rdfs:seeAlso` to their RelationshipType record, the annotation properties, and the declarations of what the rules derive and the build records (each with an `rdfs:comment` naming the rule or build step that asserts it). No domain, range, inverse or functional axioms (ADR 0041 D2). |
-| `t1` | Every term record. |
-| `req/<X>` | One per registry: its FR/NFR records, typed `REQUIREMENT`, `FR` or `NFR` and, like every term, explicitly `skos:Concept`, so listing concepts needs no reasoning. |
+| `schema` | The ontology header and version IRI, the concept scheme, each EntityType record as an `owl:Class` under `skos:Concept`, the 17 verbs as `owl:ObjectProperty` with `rdfs:seeAlso` to their RelationshipType record, the annotation properties, and the declarations of what the rules derive and the build records (each with an `rdfs:comment` naming the rule or build step that asserts it). No domain, range, inverse or functional axioms (ADR 0041 D2). |
+| `t1` | Every term record, typed by its entity type and, explicitly, `skos:Concept`, so listing concepts needs no reasoning. |
 | `inferred` | Written only by the rules (below). |
 | `provenance` | Written only by `build` (below). |
 
-Every predicate and class is the `slot_uri`/`class_uri` of `schema/itpra.linkml.yaml`; labels, definitions
-and statements are tagged `@en`; no data graph contains a blank node. A `source` value is kept verbatim as
+Every predicate and class is the `slot_uri`/`class_uri` of `schema/itpra.linkml.yaml`; labels and definitions
+are tagged `@en`; no data graph contains a blank node. A `source` value is kept verbatim as
 `dcterms:source`, and each `ADR NNNN` in it becomes `itpra-o:decidedIn <id>ADR-NNNN` (`itpra-o:amendedBy`/
 `itpra-o:extendedBy` inside an `(amended by …)`/`(extended by …)` tail). The grammar is strict (ADR 0005):
 each `;`-separated item mentioning `ADR` must match `ADR NNNN` exactly, optionally followed by one such tail,
@@ -116,7 +102,7 @@ its entirety, never a `decidedIn` link; a bare `ADR NNNN` means the record of th
 `itpra_onto.rules.apply_rules()` runs the SPARQL `CONSTRUCT` files under `rules/` in the order
 `rules/manifest.yaml` states and writes every constructed triple into `inferred`, never into an asserted
 graph — no reasoner, no inverse minted (ADR 0041 D4). A rule's `WHERE` reads graphs by name
-(`GRAPH itpra-g:t1 { … }`, or a `STRSTARTS` test over every `req/*` graph); its template has no `GRAPH`
+(`GRAPH itpra-g:t1 { … }`); its template has no `GRAPH`
 clause, and the file declares no base IRI or `itpra*` prefix: `rules.prefix_block(config)` is prepended at
 run time. A file with no `CONSTRUCT` is skipped and contributes zero triples.
 
@@ -125,7 +111,6 @@ run time. A file with no `CONSTRUCT` is skipped and contributes zero triples.
 | 10 | `capability-in-plane` | `itpra-o:inPlane`: `groupedBy` Capability→Domain→Plane, flattened | `t1` |
 | 20 | `capability-in-service-domain` | `itpra-o:inServiceDomain`: `groupedBy` then `belongsToServiceDomain` | `t1` |
 | 30 | `function-in-domain` | `itpra-o:inDomain`: `supports` then `groupedBy`; one triple per distinct domain | `t1` |
-| 40 | `requirement-meets` | `itpra-o:meets`, the inverse of the authored `metBy` — the one materialised reverse link, kept for a consumer's traceability check (ADR 0042 D7). Overlay only | every `req/*` graph |
 | 50 | `boundary-governed-function` | `itpra-o:BoundaryGovernedFunction` typing for every function `AUTON-BOUNDARY` (the automation boundary, ADR 0028) `governs` directly | `t1` |
 | 90 | `inverses` | Nothing: the deliberately empty slot. No named inverse is minted for any verb; SPARQL inverse paths (`^itpra-o:supports`) are used instead | — |
 
@@ -139,8 +124,8 @@ canonicalises the whole dataset (RDFC-1.0, then a line sort — `itpra_onto.cano
 under `<dist_dir>/rdf/`:
 
 - `full/itpra.nq` — sorted canonical N-Quads of every graph, `inferred` and `provenance` included.
-- `base/<graph>.ttl` — one Turtle file per *asserted* graph (`schema.ttl`, `t1.ttl`, one `req/<X>.ttl` per
-  registry), never `inferred` or `provenance`, so `base/` is exactly what re-running the rules regenerates;
+- `base/<graph>.ttl` — one Turtle file per *asserted* graph (`schema.ttl`, `t1.ttl`), never `inferred` or
+  `provenance`, so `base/` is exactly what re-running the rules regenerates;
   each declares the `itpra*` prefixes plus `rdf`, `rdfs`, `owl`, `skos`, `dcterms` and `prov`.
 - `base/manifest.json` — every base file's sha256 and quad count, sorted keys.
 - `build.json` — the provenance record: sorted keys, indent 2, LF.
@@ -168,27 +153,26 @@ digest-addressed and attached to the release (ADR 0043 D4). Nothing under `dist/
 pySHACL and normalises the result into `Finding`/`ValidationReport` objects; its module docstring is the
 full reference. The load-bearing points:
 
-- **Shape files:** every `shapes/*.ttl` (`requirements.ttl` only with an overlay), then every
-  `shapes/generated/*.ttl`. A shape file declares no `@prefix`: the loader prepends the `itpra*` block plus
+- **Shape files:** every `shapes/*.ttl`, then every `shapes/generated/*.ttl`. A shape file declares no `@prefix`: the loader prepends the `itpra*` block plus
   `sh`, `rdf`, `rdfs`, `skos`, `owl`, `xsd`, `dcterms` and `prov`, and injects one `owl:Ontology` node,
   `itpra-o:shapesPrefixes`, carrying `sh:declare` for all of them. Blank nodes are renamed per file so two
   files' `[...]` nodes never collide. The shapes graph is an input, never written into `full/itpra.nq`.
 - **One named shape node per rule**, carrying its target, path, constraint, `sh:severity` and
   `itpra-o:ruleId "<id>"` directly — never a `sh:property [...]` wrapper, because the rule id is read off the
   shape pySHACL's `sh:sourceShape` names. Every `sh:sparql` node sets `sh:prefixes itpra-o:shapesPrefixes`.
-- **Graphs validated** (default): `t1`, `inferred` and every `req/*` the dataset carries, copied into a
-  fresh store's default graph — never `schema` or `provenance`; pySHACL would otherwise validate the union
-  of every named graph.
+- **Graphs validated** (default): every named graph except `schema`, `provenance` and `shapes` — `t1` and
+  `inferred` — copied into a fresh store's default graph; pySHACL would otherwise validate the union of
+  every named graph.
 - **Severity:** `sh:Violation` for a rule the linter reports as an error, `sh:Warning` for a warning and
   for a declared-but-unstated minimum (ADR 0042 D3). Exit 0 only when no Violation fired.
 
 [`shapes/REGISTER.md`](src/itpra_onto/shapes/REGISTER.md) is the contract (ADR 0042 D1): Table A maps every linter rule
-id to exactly one mechanism — `generated` (closed before emission by the authoring schema), `core` (SHACL
-Core over the emitted graph), `sparql` (`sh:SPARQLConstraint`) or `python` (stays in code, with a reason);
+id to exactly one mechanism — `generated` (closed before emission by the authoring schema), `emit` (refused
+by the emitter), `core` (SHACL Core over the emitted graph), `sparql` (`sh:SPARQLConstraint`) or `python`
+(stays in code, with a reason);
 Table B lists every rule the shapes add beyond the linter (`B-n`), each marked stricter than the linter;
 Table C is the severity mapping. The shape files have disjoint ownership (ADR 0042 D2): `structural.ttl`
-(Core; `t1`, `inferred`), `crossfield.ttl` (SPARQL; `t1`, `req/*`), `requirements.ttl` (`req/*`) and the
-generated `verb-pairs.ttl` — see [`shapes/README.md`](src/itpra_onto/shapes/README.md).
+(Core; `t1`, `inferred`), `crossfield.ttl` (SPARQL; `t1`) and the generated `verb-pairs.ttl` — see [`shapes/README.md`](src/itpra_onto/shapes/README.md).
 
 **Fixtures** (ADR 0042 D4): one YAML file per rule id, `fixtures/<group>/<rule-id>.yaml`, describes one
 deliberately broken record — a `mutate` of a real record (`set`, `append_relates_to` or `delete`) or an
@@ -202,35 +186,24 @@ quad injection in its group's test module.
 
 ## Parity
 
-`itpra-onto parity` (`itpra_onto.parity`) compares a linter with the shapes over the same `(rule, subject,
-severity)` triples (ADR 0042 D5). On conflict the rule text wins (ADR 0042 D6). Two modes, chosen by the
-configuration: **core mode** without an `[overlay]` — the ontology's own lint (`itpra_onto.lint`, in process)
-over the register's `core`-home comparable rows (`field-missing`, `id-pattern`, `target-unresolved`,
-`function-derived-from`; `type-unknown`, `verb-unknown` and `relates-to-malformed` through the emitter's
-refusals); **overlay mode** with one — the consumer's linter (`[overlay] linter_script`, `--json`, which runs
-the same core first and adds its own rules) over every comparable row. The register's `home` column says which
-rows are the core's.
+`itpra-onto parity` (`itpra_onto.parity`) compares the linter (`itpra_onto.lint`, in process) with the shapes
+over the same `(rule, subject, severity)` triples (ADR 0042 D5). On conflict the rule text wins (ADR 0042 D6).
 
-- **Comparable ids:** Table A rows whose mechanism is `core` or `sparql`, parsed from the register at run
-  time (a parse failure is a `ParityError`); in core mode only those whose `home` is `core` or `both`, the
-  consumer-home ones joining `outside_scope`. `python` rows are reported as `outside_scope`, never compared;
-  Table B rules have no linter analogue and are proven by fixture only.
-- **Emit-time mapping:** ids the emitter refuses before any graph exists (Table A's `generated` rows plus
-  `relates-to-malformed` and `req-link-malformed`) reach SHACL only as `emit-error`; `--fixtures` matches
-  the linter's finding for the id recovered from the fixture's filename against that marker, by subject.
-- **Real tree:** in overlay mode the consumer's linter runs once per registry (`--sub X` restricts) and its
-  findings are unioned and deduplicated (a shared-term defect would otherwise count once per registry); in
-  core mode the lint runs once over the vocabulary. SHACL runs once over the whole dataset; linter findings
-  on EntityType meta-edges are excluded and reported. Exit 0 iff `linter_only` and `shacl_only` are empty and
-  there are no `emit_errors`. `--json` keys: `mode`, `comparable_rules`,
-  `linter`, `shacl`, `linter_only`, `shacl_only`, `stricter_findings`, `outside_scope`, `meta_edge_excluded`,
-  `emit_errors`.
-- **`--fixtures`:** every fixture with `expect.count >= 1` is materialised into a temporary tree mirroring
-  the real layout (the vocabulary and, in overlay mode, the fixture's registry and a byte-identical copy of
-  the consumer's linter, which locates its repository from its own path) for the linter side; the SHACL side
-  stays the in-memory harness. Core mode skips the registry fixtures. Verdicts: `both`,
-  `shacl-only` (expected for every stricter rule), `linter-only`, `neither`. Exit 0 unless a comparable or
-  emit-time-mapped rule verdicts `neither` or `linter-only`; exit 2 is a usage error; a `ParityError` propagates.
+- **Comparable ids:** Table A rows whose mechanism is `core` or `sparql` (`field-missing`, `id-pattern`,
+  `target-unresolved`, `function-derived-from`), parsed from the register at run time (a parse failure is a
+  `ParityError`). `python` rows are reported as `outside_scope`, never compared; Table B rules have no linter
+  analogue and are proven by fixture only.
+- **Emit-time mapping:** ids the emitter refuses before any graph exists (Table A's `generated` and `emit`
+  rows: `type-unknown`, `verb-unknown`, `relates-to-malformed`) reach SHACL only as `emit-error`; `--fixtures`
+  matches the linter's finding for the id recovered from the fixture's filename against that marker, by subject.
+- **Real tree:** the linter runs once over the vocabulary and SHACL once over the whole dataset; linter
+  findings on EntityType meta-edges are excluded and reported. Exit 0 iff `linter_only` and `shacl_only` are
+  empty and there are no `emit_errors`. `--json` keys: `comparable_rules`, `linter`, `shacl`, `linter_only`,
+  `shacl_only`, `stricter_findings`, `outside_scope`, `meta_edge_excluded`, `emit_errors`.
+- **`--fixtures`:** every fixture with `expect.count >= 1` is written into a temporary copy of the vocabulary
+  for the linter side; the SHACL side stays the in-memory harness. Verdicts: `both`, `shacl-only` (expected for
+  every stricter rule), `linter-only`, `neither`. Exit 0 unless a fixture verdicts `neither`, or `linter-only`
+  on a comparable or emit-time-mapped rule; exit 2 is a usage error; a `ParityError` propagates.
 
 ## Generated artefacts, never committed
 
@@ -255,12 +228,9 @@ uv run pytest -q                               # the whole suite
 uv run pytest -q -s tests/test_competency.py   # with the printed tables and timings
 ```
 
-Tests that need the overlay (registries, the consumer's linter) carry the `overlay` marker and are skipped
-when the configuration in use has no `[overlay]`; the rest must pass on the vocabulary alone. Point
-`ITPRA_ONTO_CONFIG` at a file without the table for a core-only run. Every expected count is computed from
-`emit.load_inputs()`, never a literal. `tests/competency/cq-NN-*.rq` holds 36 single-purpose SPARQL queries
-run against one store holding `schema` + `t1` + every `req/*` + `inferred`; every query asserting an empty
-result has a sibling counting query that confirms the pattern's positive count first.
+Every expected count is computed from `emit.load_inputs()`, never a literal. `tests/competency/cq-NN-*.rq`
+holds 24 single-purpose SPARQL queries run against one store holding `schema` + `t1` + `inferred`; every
+query asserting an empty result has a sibling counting query that confirms the pattern's positive count first.
 
 ## Dependency pins
 

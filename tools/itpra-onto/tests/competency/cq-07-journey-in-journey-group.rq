@@ -1,0 +1,12 @@
+# CQ5 (part 2) — every Journey's `groupedBy` edge to a JourneyGroup, one row per (journey, group).
+#
+# test_competency.py checks the cardinality is exactly one per journey and that every target is typed
+# JOURNEY_GROUP.
+
+SELECT ?journey ?group
+WHERE {
+  GRAPH itpra-g:t1 {
+    ?journey a itpra:JOURNEY ;
+             itpra-o:groupedBy ?group .
+  }
+}

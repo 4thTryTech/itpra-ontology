@@ -7,7 +7,7 @@ schema's namespace map without the importer redeclaring them), but LinkML's ``Sc
 requires ``id`` to be present on the object actually being loaded; it is not filled in by merging an
 import. On disk, the field holds :data:`SCHEMA_ID_SENTINEL` — never an IRI — so that
 ``schema/itpra.linkml.yaml`` carries no IRI literal outside the generated fragments either. Every
-consumer of the schema (``itpra-onto validate --authoring``, the test suite) loads it through this
+user of the schema (``itpra-onto validate --authoring``, the test suite) loads it through this
 module rather than constructing a ``SchemaView`` / ``Validator`` straight from the file path, so the
 substitution happens exactly once.
 

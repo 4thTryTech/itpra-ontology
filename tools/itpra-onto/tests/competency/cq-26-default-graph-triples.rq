@@ -1,8 +1,0 @@
-# CQ14 (part 1) — does the default (unnamed) graph hold any triple at all?
-#
-# ASK query. Run WITHOUT `use_default_graph_as_union`, so it inspects only the store's own default
-# graph, never any named graph (emit.py never writes there). Expected: False.
-
-ASK {
-  ?s ?p ?o .
-}

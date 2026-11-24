@@ -286,7 +286,7 @@ def test_validate_and_parity_are_implemented():
     (test_parity.py) are implemented; this is only a smoke check that ``parity`` does not print the
     not-implemented message ``release`` still prints."""
     result = subprocess.run(
-        [sys.executable, "-m", "itpra_onto.cli", "parity", "--sub", "ITO"],
+        [sys.executable, "-m", "itpra_onto.cli", "parity"],
         cwd=PROJECT_ROOT,
         capture_output=True,
         text=True,

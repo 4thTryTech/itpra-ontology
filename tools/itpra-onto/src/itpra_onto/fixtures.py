@@ -1,10 +1,9 @@
-"""The fixture harness for SHACL validation parity (ADR 0042 D4), importable by the tests of the three
-hand-written shape files (``shapes/REGISTER.md``: ``structural``, ``crossfield``, ``requirements``).
+"""The fixture harness for SHACL validation parity (ADR 0042 D4), importable by the tests of the two
+hand-written shape files (``shapes/REGISTER.md``: ``structural`` and ``crossfield``).
 
 A fixture is one YAML file under ``fixtures/<group>/<rule-id>.yaml`` describing a single, deliberately
-broken record — a mutation of one real, currently-clean record from the live ontology/requirements
-registries, or a whole new record added alongside them — plus what that mutation is expected to make the
-shapes report. It is the mechanism ADR 0042 D4 asks for: one deliberately broken record per rule, and clean
+broken record — a mutation of one real, currently-clean record of the vocabulary, or a whole new record
+added alongside them — plus what that mutation is expected to make the shapes report. It is the mechanism ADR 0042 D4 asks for: one deliberately broken record per rule, and clean
 data must pass every shape file unmodified.
 
 **Fixture file grammar** (every field below):
@@ -48,12 +47,13 @@ data must pass every shape file unmodified.
       # exactly one of set / append_relates_to / delete is given
 
     add:                         # or: introduce a whole NEW record instead of mutating one
-      file: terms                # "terms" (-> a term record of the vocabulary) or "registry:<X>/<functional|non-functional>"
+      file: terms                # "terms": a term record of the vocabulary
       record: {id: CAP-FIXTURE-1, type: Capability, term: "...", definition: "...", relates_to: []}
 
 Only one of ``mutate``/``add`` is given per fixture. :func:`apply_fixture` never touches disk — both paths
 work on an in-memory, deep-copied :class:`itpra_onto.emit.Inputs`, exactly the object
-:func:`itpra_onto.emit.load_inputs` returns from the real, clean corpus. A fixture's ``add.record`` is
+:func:`itpra_onto.emit.load_inputs` returns from the real, clean corpus. A :class:`Corpus` says what a
+fixture mutates and how the result becomes a dataset; the default is the vocabulary alone. A fixture's ``add.record`` is
 tagged with a synthetic, human-readable ``file`` string (never a real path — :data:`SYNTHETIC_FILE`) so the
 emitted ``itpra-o:authoringFile`` triple is still present without implying a file that does not exist.
 
@@ -70,16 +70,18 @@ grammar is enforced at emit time" — B-10 is documented, not shape-bearing, pre
 from __future__ import annotations
 
 import copy
+from collections.abc import Callable
 from dataclasses import dataclass, replace
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
+import pyoxigraph as ox
 import yaml
 
 from itpra_onto import emit, rules, shacl
 from itpra_onto.config import Config, load_config
-from itpra_onto.emit import Inputs, RegistryRecord, TermRecord
+from itpra_onto.emit import Inputs, TermRecord
 
 PACKAGE_DIR = Path(__file__).resolve().parent  # src/itpra_onto: the package's own code and data
 FIXTURES_DIR = PACKAGE_DIR / "fixtures"  # the fixtures ship inside the package
@@ -104,7 +106,7 @@ class MutateAction:
 
 @dataclass(frozen=True)
 class AddAction:
-    file: str  # "terms" | "registry:<X>/functional" | "registry:<X>/non-functional"
+    file: str  # "terms" for the vocabulary; a corpus may define other values
     record: dict[str, Any]
 
 
@@ -184,8 +186,8 @@ def load_fixture(path: Path) -> Fixture:
     else:
         add = _require_mapping(raw["add"], path=path, where="'add'")
         file = add.get("file")
-        if file != "terms" and not (isinstance(file, str) and file.startswith("registry:")):
-            raise FixtureError(f"{path}: add.file must be 'terms' or 'registry:<X>/<functional|non-functional>', got {file!r}")
+        if not isinstance(file, str) or not file:
+            raise FixtureError(f"{path}: add.file must name where the record goes ('terms'), got {file!r}")
         record = _require_mapping(add.get("record"), path=path, where="'add.record'")
         action = AddAction(file=file, record=record)
 
@@ -222,7 +224,8 @@ def fixture_files(fixtures_dir: Path) -> list[Path]:
 # apply_fixture(): an in-memory, disk-free mutation of emit.Inputs
 
 
-def _apply_mutation(record: dict[str, Any], mutate: MutateAction) -> dict[str, Any]:
+def mutated_record(record: dict[str, Any], mutate: MutateAction) -> dict[str, Any]:
+    """A deep copy of ``record`` with ``mutate`` applied (``set``, ``append_relates_to`` or ``delete``)."""
     rec = copy.deepcopy(record)
     if mutate.set is not None:
         rec.update(copy.deepcopy(mutate.set))
@@ -244,29 +247,15 @@ def apply_fixture(inputs: Inputs, fixture: Fixture) -> Inputs:
         terms = list(inputs.terms)
         for index, term in enumerate(terms):
             if term.record.get("id") == action.id:
-                terms[index] = TermRecord(record=_apply_mutation(term.record, action), file=term.file)
+                terms[index] = TermRecord(record=mutated_record(term.record, action), file=term.file)
                 return replace(inputs, terms=tuple(terms))
 
-        requirements = list(inputs.requirements)
-        for index, req in enumerate(requirements):
-            if req.record.get("id") == action.id:
-                requirements[index] = RegistryRecord(
-                    record=_apply_mutation(req.record, action), file=req.file, registry=req.registry
-                )
-                return replace(inputs, requirements=tuple(requirements))
+        raise FixtureError(f"{fixture.path}: mutate.id {action.id!r} matches no term record")
 
-        raise FixtureError(f"{fixture.path}: mutate.id {action.id!r} matches no term or requirement record")
-
-    record = copy.deepcopy(action.record)
-    if action.file == "terms":
-        terms = (*inputs.terms, TermRecord(record=record, file=SYNTHETIC_FILE))
-        return replace(inputs, terms=terms)
-
-    registry, _, _kind = action.file.removeprefix("registry:").partition("/")
-    if not registry:
-        raise FixtureError(f"{fixture.path}: add.file {action.file!r} names no registry")
-    requirements = (*inputs.requirements, RegistryRecord(record=record, file=SYNTHETIC_FILE, registry=registry))
-    return replace(inputs, requirements=requirements)
+    if action.file != "terms":
+        raise FixtureError(f"{fixture.path}: add.file {action.file!r} is not 'terms'")
+    terms = (*inputs.terms, TermRecord(record=copy.deepcopy(action.record), file=SYNTHETIC_FILE))
+    return replace(inputs, terms=terms)
 
 
 def _mutated_focus_id(fixture: Fixture) -> str:
@@ -291,8 +280,30 @@ class Expectation:
     cofires: tuple[str, ...] = ()
 
 
+def _vocabulary_dataset(inputs: Inputs, config: Config) -> ox.Dataset:
+    return rules.apply_rules(emit.emit(inputs, config), config).dataset
+
+
+@dataclass(frozen=True)
+class Corpus:
+    """What a fixture mutates and how the mutated data becomes the dataset the shapes see.
+
+    ``load(config)`` returns the clean data; ``apply(data, fixture)`` returns a mutated copy; ``dataset(data,
+    config)`` emits it and applies the rules (an :class:`itpra_onto.emit.EmitError` here becomes the
+    ``emit-error`` finding); ``shapes_dirs`` are shape directories loaded beside the one a caller names.
+    """
+
+    load: Callable[[Config], Any] = emit.load_inputs
+    apply: Callable[[Any, Fixture], Any] = apply_fixture
+    dataset: Callable[[Any, Config], ox.Dataset] = _vocabulary_dataset
+    shapes_dirs: tuple[Path, ...] = ()
+
+
+VOCABULARY = Corpus()
+
+
 def run_fixture(
-    fixture_path: Path, shapes_dir: Path, *, config: Config | None = None
+    fixture_path: Path, shapes_dir: Path, *, config: Config | None = None, corpus: Corpus = VOCABULARY
 ) -> tuple[shacl.ValidationReport, Expectation]:
     """Load -> apply -> emit -> rules -> validate one fixture file; return ``(report, expected)``.
 
@@ -311,11 +322,10 @@ def run_fixture(
         cofires=fixture.cofires,
     )
 
-    inputs = emit.load_inputs(config)
-    mutated = apply_fixture(inputs, fixture)
+    mutated = corpus.apply(corpus.load(config), fixture)
 
     try:
-        dataset = emit.emit(mutated, config)
+        dataset = corpus.dataset(mutated, config)
     except emit.EmitError as exc:
         # The message carries the exception class name ("SourceGrammarError: ..."), so assert_fixture can
         # require the specific emit-time guard a fixture names (expect.emit_error).
@@ -323,21 +333,18 @@ def run_fixture(
         report = shacl.ValidationReport(conforms=False, findings=(finding,), results_text=finding.message, graphs=())
         return report, expected
 
-    dataset = rules.apply_rules(dataset, config).dataset
-    shapes = shacl.load_shapes(shapes_dir, config=config)
+    shapes = shacl.load_shapes(shapes_dir, config=config, extra_dirs=corpus.shapes_dirs)
     report = shacl.validate(dataset, shapes, config=config)
     return report, expected
 
 
 @lru_cache(maxsize=None)
-def _clean_report(shapes_dir_str: str, config: Config) -> shacl.ValidationReport:
+def _clean_report(shapes_dir_str: str, config: Config, corpus: Corpus = VOCABULARY) -> shacl.ValidationReport:
     """The shapes under ``shapes_dir_str`` run over the real, unmutated corpus — memoised (cheap for the many
     fixtures one shape file's test module runs, since it depends only on ``shapes_dir``/``config``, not on
     any one fixture)."""
-    inputs = emit.load_inputs(config)
-    dataset = emit.emit(inputs, config)
-    dataset = rules.apply_rules(dataset, config).dataset
-    shapes = shacl.load_shapes(Path(shapes_dir_str), config=config)
+    dataset = corpus.dataset(corpus.load(config), config)
+    shapes = shacl.load_shapes(Path(shapes_dir_str), config=config, extra_dirs=corpus.shapes_dirs)
     return shacl.validate(dataset, shapes, config=config)
 
 
@@ -345,7 +352,9 @@ def _format_findings(findings: Any) -> str:
     return "\n".join(f"  {f.severity:9} {f.rule_id!r:30} {f.focus!r:40} {f.message}" for f in findings) or "  (none)"
 
 
-def assert_fixture(fixture_path: Path, shapes_dir: Path, *, config: Config | None = None) -> None:
+def assert_fixture(
+    fixture_path: Path, shapes_dir: Path, *, config: Config | None = None, corpus: Corpus = VOCABULARY
+) -> None:
     """Assert that ``fixture_path`` proves exactly its own rule: the expected rule fires with the expected
     severity on the expected focus exactly ``count`` times; no OTHER ``Violation``-severity rule fires on
     that same focus that did not already fire on clean data (a fixture proves one rule, not a cascade); and
@@ -361,7 +370,7 @@ def assert_fixture(fixture_path: Path, shapes_dir: Path, *, config: Config | Non
     """
     config = config if config is not None else load_config()
     fixture = load_fixture(fixture_path)
-    report, expected = run_fixture(fixture_path, shapes_dir, config=config)
+    report, expected = run_fixture(fixture_path, shapes_dir, config=config, corpus=corpus)
 
     def local(focus: str) -> str:
         return shacl.focus_local_name(focus, config)
@@ -374,7 +383,7 @@ def assert_fixture(fixture_path: Path, shapes_dir: Path, *, config: Config | Non
         f"{_format_findings(report.findings)}"
     )
 
-    clean = _clean_report(str(shapes_dir), config)
+    clean = _clean_report(str(shapes_dir), config, corpus)
     clean_same_rule = [f for f in clean.findings if f.rule_id == expected.rule]
     assert not clean_same_rule, (
         f"{fixture_path}: rule {expected.rule!r} already fires on CLEAN (unmutated) data — this fixture proves "

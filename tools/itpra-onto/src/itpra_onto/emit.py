@@ -1,6 +1,6 @@
 """Emit the authored YAML as RDF quads in named graphs (ADR 0041).
 
-Modelling (ADR 0041 D2): every term and requirement record is a ``skos:Concept`` in one concept scheme, with
+Modelling (ADR 0041 D2): every term record is a ``skos:Concept`` in one concept scheme, with
 its authored fields as literals; the EntityType records form a thin ``owl:Class`` layer; each relationship
 verb is an ``owl:ObjectProperty`` and every ``relates_to`` edge becomes one triple on that predicate; a
 record's ``source`` is kept verbatim and the ``ADR NNNN`` references in it (the grammar is ADR 0005's) become
@@ -8,15 +8,13 @@ record's ``source`` is kept verbatim and the ``ADR NNNN`` references in it (the 
 statements (ADR 0008) and are never emitted. Identifiers (ADR 0004): ``<base>id/<id>`` for records,
 ``<base>onto#`` for the schema vocabulary, ``<base>graph/`` for the named graphs.
 
-Inputs (read-only): the vocabulary's term files under ``[paths] ontology_dir`` (:func:`term_files`),
-``schema.yaml`` itself (only for ``ontology_version``), and every registry matched by
-``[overlay] requirements_glob`` when a consumer configures one. Every path passes :func:`guard_input_path`
-before it is opened (ADR 0043 D1).
+Inputs (read-only): the vocabulary's term files under ``[paths] ontology_dir`` (:func:`term_files`) and
+``schema.yaml`` itself (only for ``ontology_version``). Every path passes :func:`guard_input_path` before it
+is opened (ADR 0043 D1).
 
 Output: an in-memory :class:`pyoxigraph.Dataset`; nothing is written to disk here (that is ``build``).
-Graphs (ADR 0041 D3): ``<graph_ns>schema`` (thin OWL), ``<graph_ns>t1`` (every term record) and one
-``<graph_ns>req/<X>`` per consumer registry. The default graph stays empty; ``inferred`` is written only by
-:mod:`itpra_onto.rules`.
+Graphs (ADR 0041 D3): ``<graph_ns>schema`` (thin OWL) and ``<graph_ns>t1`` (every term record). The
+default graph stays empty; ``inferred`` is written only by :mod:`itpra_onto.rules`.
 
 IRI discipline (ADR 0004): no base IRI appears in this module. Record, schema-vocabulary and graph IRIs
 come from :class:`itpra_onto.config.IriConfig`; every predicate and class for an authored field or verb is
@@ -27,7 +25,6 @@ W3C/DCMI vocabularies below are module constants.
 from __future__ import annotations
 
 import glob
-import itertools
 import os
 import re
 from collections.abc import Iterable, Iterator
@@ -40,7 +37,7 @@ import yaml
 from linkml_runtime.utils.schemaview import SchemaView
 
 from itpra_onto import schema_loading
-from itpra_onto.authoring import REQUIREMENT_BASE_CLASS, TERM_BASE_CLASS, discriminator_map
+from itpra_onto.authoring import TERM_BASE_CLASS, discriminator_map
 from itpra_onto.config import Config, load_config
 
 
@@ -84,7 +81,6 @@ DERIVED_PROPERTY_RULES = {
     "inPlane": ("in plane", "capability-in-plane"),
     "inServiceDomain": ("in service domain", "capability-in-service-domain"),
     "inDomain": ("in domain", "function-in-domain"),
-    "meets": ("meets", "requirement-meets"),
 }
 BOUNDARY_GOVERNED_FUNCTION = "BoundaryGovernedFunction"
 BOUNDARY_GOVERNED_FUNCTION_RULE = "boundary-governed-function"
@@ -106,7 +102,7 @@ PROVENANCE_PROPERTY_LABELS = {
 
 # ---- validation vocabulary (shapes/REGISTER.md) — declared here so it is discoverable from the schema
 # graph like every other predicate this pipeline mints, but NEVER asserted by this module: only
-# shapes/*.ttl carries itpra-o:ruleId triples, on shape nodes, never on t1/req data.
+# shapes/*.ttl carries itpra-o:ruleId triples, on shape nodes, never on data.
 RULE_ID = "ruleId"
 
 SCHEME_LOCAL = "scheme/t1"  # safe because no record id contains "/" (the id pattern, ADR 0004)
@@ -120,16 +116,11 @@ SCHEMA_LABELS = {  # English rdfs:label for schema-namespace terms that have no 
     ENTITY_TYPE_CLASS: "entity type",
     RELATIONSHIP_TYPE_CLASS: "relationship type",
     "deprecated": "banned label",
-    "statement": "statement",
-    "requirement_target": "target",
     DECIDED_IN: "decided in",
     AMENDED_BY: "amended by",
     EXTENDED_BY: "extended by",
     AUTHORING_FILE: "authoring file",
 }
-
-# Registry YAML key -> LinkML slot whose slot_uri is the predicate.
-REGISTRY_LINK_SLOTS = {"met_by": "met_by", "verified_by": "verified_by", "qa": "qa"}
 
 try:  # the C loader parses the same YAML 1.1 as SafeLoader, several times faster
     _YAML_LOADER: type = yaml.CSafeLoader
@@ -138,17 +129,16 @@ except AttributeError:  # pragma: no cover - pyyaml built without libyaml
 
 
 # =====================================================================================================
-# Input-path guard (ADR 0043 D1: the build reads the vocabulary and the configured overlay, nothing else)
+# Input-path guard (ADR 0043 D1: the build reads the inputs it is given, under the repository root)
 
 # Generated output is never an input: dist/, public/ and __pycache__/ are refused at ANY depth, matched
-# case-insensitively against every directory component. A consumer names further directories to refuse in
-# ``[overlay] excluded_dirs`` (its own non-neutral or private trees); they are matched the same way.
+# case-insensitively against every directory component. A caller may name further directories to refuse.
 FORBIDDEN_DIR_NAMES = frozenset({"dist", "public", "__pycache__"})
 
 
 class InputPathError(RuntimeError):
-    """An input path the emitter must not read (ADR 0043 D1): generated output, a hidden tree, or a
-    directory the consumer excluded."""
+    """An input path the emitter must not read (ADR 0043 D1): generated output, a hidden tree, or an
+    excluded directory."""
 
 
 class EmitError(RuntimeError):
@@ -170,12 +160,10 @@ class SourceGrammarError(EmitError):
 def guard_input_path(path: Path, *, repo_root: Path, is_file: bool = True, excluded: Iterable[str] = ()) -> Path:
     """Return ``path`` resolved, or raise :class:`InputPathError` naming the path and the violated rule.
 
-    Rules (ADR 0043 D1): (a) under ``repo_root`` (the consumer's repository root, ``Config.repo_root``); (b)
-    no component, relative to the root, beginning
-    with ``.`` (``.git/``, ``.venv/``, ``.store/``, worktrees); (c) not under any directory named
-    (case-insensitively) ``dist``, ``public`` or ``__pycache__``, nor one of ``excluded`` — the consumer's
-    ``[overlay] excluded_dirs`` — at ANY depth; (d) a file must be ``.yaml``. Directories and glob patterns
-    are checked against (a)–(c).
+    Rules (ADR 0043 D1): (a) under ``repo_root`` (``Config.repo_root``); (b) no component, relative to the
+    root, beginning with ``.`` (``.git/``, ``.venv/``, ``.store/``, worktrees); (c) not under any directory
+    named (case-insensitively) ``dist``, ``public`` or ``__pycache__``, nor one of ``excluded``, at ANY
+    depth; (d) a file must be ``.yaml``. Directories and glob patterns are checked against (a)–(c).
     """
     resolved = Path(os.path.abspath(path)) if _is_glob(path) else path.resolve()
     repo_root = repo_root.resolve()
@@ -212,19 +200,8 @@ class TermRecord:
 
 
 @dataclass(frozen=True)
-class RegistryRecord:
-    """One requirement registry record, tagged with its authoring file and the registry it belongs to
-    (the ``X`` of its ``req/<X>`` graph; :func:`registry_of`)."""
-
-    record: dict[str, Any]
-    file: str
-    registry: str
-
-
-@dataclass(frozen=True)
 class Inputs:
     terms: tuple[TermRecord, ...]
-    requirements: tuple[RegistryRecord, ...]
     ontology_version: str
 
 
@@ -233,64 +210,25 @@ def _config_relative(config: Config, configured: str) -> Path:
     return config.config_path.parent / configured
 
 
-def _excluded(config: Config) -> tuple[str, ...]:
-    """The consumer's ``[overlay] excluded_dirs`` — none without an overlay."""
-    return config.overlay.excluded_dirs if config.overlay is not None else ()
-
-
 def ontology_dir(config: Config) -> Path:
-    return guard_input_path(
-        _config_relative(config, config.paths.ontology_dir), repo_root=config.repo_root, is_file=False, excluded=_excluded(config)
-    )
+    return guard_input_path(_config_relative(config, config.paths.ontology_dir), repo_root=config.repo_root, is_file=False)
 
 
 def schema_file(config: Config) -> Path:
     """``schema.yaml`` of the vocabulary, guarded."""
-    return guard_input_path(ontology_dir(config) / "schema.yaml", repo_root=config.repo_root, excluded=_excluded(config))
+    return guard_input_path(ontology_dir(config) / "schema.yaml", repo_root=config.repo_root)
 
 
 def term_files(config: Config | None = None) -> list[Path]:
     """The vocabulary's files (ontology ADR 0007): every ``*.yaml`` directly under the ontology dir except
-    ``schema.yaml`` and the consumer's ``PIN.yaml``, then every ``*.yaml`` under ``terms/``. Not recursive
-    beyond that, so an ontology dir that is a repository root (the public layout) does not sweep up tooling."""
+    ``schema.yaml`` and ``PIN.yaml`` (the pin file of a vendored copy, ADR 0003), then every ``*.yaml`` under
+    ``terms/``. Not recursive beyond that, so an ontology dir that is a repository root does not sweep up
+    tooling."""
     config = config if config is not None else load_config()
     root = ontology_dir(config)
     top = sorted(p for p in root.glob("*.yaml") if p.name not in ("schema.yaml", "PIN.yaml"))
     terms = sorted((root / "terms").glob("*.yaml")) if (root / "terms").is_dir() else []
-    return [guard_input_path(p, repo_root=config.repo_root, excluded=_excluded(config)) for p in top + terms]
-
-
-def registry_files(config: Config | None = None) -> list[Path]:
-    """The consumer's requirement registries — only when an ``[overlay]`` names ``requirements_glob``;
-    the core build has none (ADR 0043 D1)."""
-    config = config if config is not None else load_config()
-    if config.overlay is None or not config.overlay.requirements_glob:
-        return []
-    pattern = _config_relative(config, config.overlay.requirements_glob)
-    excluded = _excluded(config)
-    guard_input_path(pattern, repo_root=config.repo_root, is_file=False, excluded=excluded)
-    return sorted(guard_input_path(Path(p), repo_root=config.repo_root, excluded=excluded) for p in glob.glob(str(pattern)))
-
-
-def registry_root(config: Config) -> Path | None:
-    """The fixed directory the overlay's ``requirements_glob`` starts from — its components before the first
-    wildcard. ``None`` without an overlay."""
-    if config.overlay is None or not config.overlay.requirements_glob:
-        return None
-    pattern = _config_relative(config, config.overlay.requirements_glob)
-    fixed = Path(*itertools.takewhile(lambda part: not glob.has_magic(part), pattern.parts))
-    return Path(os.path.abspath(fixed)).resolve()
-
-
-def registry_of(registry_file: Path, config: Config) -> str:
-    """The registry a file belongs to, which names its ``req/<X>`` graph (ADR 0041 D3, ADR 0043 D1): the
-    first path component below :func:`registry_root`, or the file's stem when it sits directly there."""
-    root = registry_root(config)
-    resolved = registry_file.resolve()
-    if root is None or resolved == root or not resolved.is_relative_to(root):
-        raise EmitError(f"{registry_file}: registry file lies outside the overlay's requirements_glob root ({root})")
-    parts = resolved.relative_to(root).parts
-    return parts[0] if len(parts) > 1 else Path(parts[0]).stem
+    return [guard_input_path(p, repo_root=config.repo_root) for p in top + terms]
 
 
 def _load_yaml(path: Path) -> Any:
@@ -327,28 +265,8 @@ def _term_file_records(path: Path, repo_root: Path | None = None) -> list[dict[s
     return data
 
 
-def _registry_file_records(path: Path, repo_root: Path | None = None) -> list[dict[str, Any]]:
-    """The records of one registry file (the same input-shape guard as :func:`_term_file_records`
-    — a top level that is not a mapping, a ``requirements`` value that is not a list, or an entry that is not
-    a mapping is an :class:`EmitError` naming the file)."""
-    data = _load_yaml(path)
-    if data is None:
-        return []
-    if not isinstance(data, dict):
-        raise EmitError(f"{_shown(path, repo_root)}: a registry must be a top-level mapping, got {type(data).__name__}")
-    records = data.get("requirements")
-    if records is None:
-        return []
-    if not isinstance(records, list):
-        raise EmitError(f"{_shown(path, repo_root)}: `requirements` must be a list, got {type(records).__name__}")
-    for index, record in enumerate(records):
-        if not isinstance(record, dict):
-            raise EmitError(f"{_shown(path, repo_root)}: requirements[{index}] is not a mapping: {record!r}")
-    return records
-
-
 def load_inputs(config: Config | None = None) -> Inputs:
-    """Read every term record and registry record, each tagged with its authoring file (and registry)."""
+    """Read every term record, each tagged with its authoring file."""
     config = config if config is not None else load_config()
     root = config.repo_root
     terms = tuple(
@@ -356,13 +274,8 @@ def load_inputs(config: Config | None = None) -> Inputs:
         for path in term_files(config)
         for record in _term_file_records(path, root)
     )
-    requirements = tuple(
-        RegistryRecord(record, _repo_relative(path, root), registry_of(path, config))
-        for path in registry_files(config)
-        for record in _registry_file_records(path, root)
-    )
     version = str(_load_yaml(schema_file(config))["ontology_version"])
-    return Inputs(terms=terms, requirements=requirements, ontology_version=version)
+    return Inputs(terms=terms, ontology_version=version)
 
 
 # =====================================================================================================
@@ -501,8 +414,6 @@ class Vocabulary:
         self.sv.imports_closure()
         self._check_namespaces()
         self.term_class = self._class_table(TERM_BASE_CLASS, "type")
-        self.requirement_class = self._class_table(REQUIREMENT_BASE_CLASS, "requirement_type")
-        self.requirement_base = self.class_iri(REQUIREMENT_BASE_CLASS)
         self.verb_slots = sorted(n for n, s in self.sv.all_slots().items() if "verbs" in (s.in_subset or []))
         self.verb = {name: self.slot_iri(name) for name in self.verb_slots}
 
@@ -554,7 +465,7 @@ class Vocabulary:
 # record id or reference containing one is refused as an EmitError before a NamedNode is minted, instead of
 # pyoxigraph's bare ValueError escaping. This is deliberately NOT the schema's full id pattern: an id that is
 # IRI-safe but breaks the pattern (e.g. a leading digit, or a "/") must still reach the graph, where the
-# `id-pattern` shape reports it exactly as the consumer's linter does (shapes/REGISTER.md Table A).
+# `id-pattern` shape reports it exactly as the linter does (shapes/REGISTER.md Table A).
 _IRI_UNSAFE = re.compile(r'[\x00-\x20<>"{}|\\^`\x7f]')
 
 
@@ -590,21 +501,6 @@ def check_term_record(term: TermRecord) -> None:
     """Input-shape guard for one term record: string ``id`` and ``type``."""
     _required_string(term.record, "id", where=term.file)
     _required_string(term.record, "type", where=term.file)
-
-
-def check_requirement_record(req: RegistryRecord) -> None:
-    """Input-shape guard for one registry record: string ``id`` and ``type``; ``met_by`` / ``verified_by`` a
-    list when present (a scalar would otherwise be read as a one-element list and hide the defect the
-    consumer's linter reports as ``req-link-malformed``)."""
-    record_id = _required_string(req.record, "id", where=req.file)
-    _required_string(req.record, "type", where=req.file)
-    for key in ("met_by", "verified_by"):
-        value = req.record.get(key)
-        if value is not None and not isinstance(value, list):
-            raise EmitError(
-                f"{req.file}: {record_id}: `{key}` must be a list of ids, got {type(value).__name__} {value!r}",
-                record_id=record_id,
-            )
 
 
 def _en(value: Any) -> ox.Literal:
@@ -699,42 +595,6 @@ def source_triples(
 
 
 # =====================================================================================================
-# req/<X> — one registry record -> triples
-
-
-def requirement_triples(req: RegistryRecord, vocab: Vocabulary) -> Iterator[Triple]:
-    """Triples for one FR/NFR record. Explicit ``skos:Concept`` type as on terms, so a "list all skos:Concept"
-    query needs no reasoning (ADR 0041 D2)."""
-    rec = req.record
-    check_requirement_record(req)
-    subject = record_node(vocab, rec["id"], where=req.file, record_id=rec["id"])
-    cls = vocab.requirement_class.get(rec["type"])
-    if cls is None:
-        raise EmitError(
-            f"{req.file}: {rec['id']} has type {rec['type']!r}, which no Requirement subclass pins",
-            record_id=rec["id"],
-        )
-    yield subject, RDF_TYPE, vocab.requirement_base
-    yield subject, RDF_TYPE, cls
-    yield subject, RDF_TYPE, SKOS_CONCEPT
-    yield subject, vocab.slot_iri("id"), ox.Literal(str(rec["id"]))
-    # `statement` absent reaches the graph fine, no crash (shapes/REGISTER.md Table A, `req-statement-missing`
-    # row: unlike type-unknown/verb-unknown, a missing statement does not crash emission, so a real shape
-    # reports it) — the same tolerance as term_triples' `term`/`definition` above.
-    if rec.get("statement") is not None and normalise_text(rec["statement"]):
-        yield subject, vocab.slot_iri("statement"), _en(rec["statement"])
-    yield subject, SKOS_IN_SCHEME, vocab.scheme
-    yield subject, vocab.onto(AUTHORING_FILE), ox.Literal(req.file)
-    target = rec.get("target")
-    if target is not None and normalise_text(target):
-        yield subject, vocab.slot_iri("requirement_target"), _plain(target)
-    for key, slot_name in REGISTRY_LINK_SLOTS.items():
-        for value in _as_list(rec.get(key)):  # unresolvable ids are kept as IRIs, never dropped
-            node = record_node(vocab, str(value), where=f"{rec['id']}: {key}", record_id=rec["id"])
-            yield subject, vocab.slot_iri(slot_name), node
-
-
-# =====================================================================================================
 # schema — thin OWL (ADR 0041 D2: no domain, range, inverse or functional axioms)
 
 
@@ -758,16 +618,13 @@ def _ontology_header(version: str, vocab: Vocabulary) -> Iterator[Triple]:
 
 
 def _class_declarations(inputs: Inputs, vocab: Vocabulary) -> Iterator[Triple]:
-    """Each EntityType record is an ``owl:Class ⊑ skos:Concept`` (punning, ADR 0041 D2); FR/NFR ⊑ REQUIREMENT."""
+    """Each EntityType record is an ``owl:Class ⊑ skos:Concept`` (punning, ADR 0041 D2)."""
     for term in inputs.terms:
         if term.record.get("type") == META_SUBJECT_TYPE:
             node = record_node(vocab, term.record.get("id"), where=term.file, record_id=term.record.get("id"))
             yield from _owl_class(node, term.record.get("term"))
     for class_name in (ENTITY_TYPE_CLASS, RELATIONSHIP_TYPE_CLASS):
         yield from _owl_class(vocab.class_iri(class_name), SCHEMA_LABELS[class_name])
-    for class_name in vocab.sv.class_descendants(REQUIREMENT_BASE_CLASS, reflexive=False):
-        parent = vocab.sv.get_class(class_name).is_a
-        yield vocab.class_iri(class_name), RDFS_SUBCLASS_OF, vocab.class_iri(parent)
 
 
 def _owl_class(iri: ox.NamedNode, label: Any) -> Iterator[Triple]:
@@ -799,30 +656,26 @@ def _verb_declarations(inputs: Inputs, vocab: Vocabulary) -> Iterator[Triple]:
 
 
 def _annotation_declarations(vocab: Vocabulary) -> Iterator[Triple]:
-    """bannedLabel ⊑ skos:hiddenLabel and statement ⊑ skos:definition (their ``broad_mappings``); decidedIn
-    ⊑ prov:wasInfluencedBy with amendedBy/extendedBy ⊑ decidedIn (ADR 0041 D2); target and authoringFile."""
-    for slot_name in ("deprecated", "statement"):
-        prop = vocab.slot_iri(slot_name)
-        yield prop, RDF_TYPE, OWL_ANNOTATION_PROPERTY
-        for broader in vocab.sv.get_slot(slot_name).broad_mappings:
-            yield prop, RDFS_SUBPROPERTY_OF, vocab.expand(broader)
-        yield prop, RDFS_LABEL, _en(SCHEMA_LABELS[slot_name])
+    """bannedLabel ⊑ skos:hiddenLabel (its ``broad_mappings``); decidedIn ⊑ prov:wasInfluencedBy with
+    amendedBy/extendedBy ⊑ decidedIn (ADR 0041 D2); authoringFile."""
+    prop = vocab.slot_iri("deprecated")
+    yield prop, RDF_TYPE, OWL_ANNOTATION_PROPERTY
+    for broader in vocab.sv.get_slot("deprecated").broad_mappings:
+        yield prop, RDFS_SUBPROPERTY_OF, vocab.expand(broader)
+    yield prop, RDFS_LABEL, _en(SCHEMA_LABELS["deprecated"])
     decided_in = vocab.onto(DECIDED_IN)
     for local, parent in ((DECIDED_IN, PROV_WAS_INFLUENCED_BY), (AMENDED_BY, decided_in), (EXTENDED_BY, decided_in)):
         yield vocab.onto(local), RDF_TYPE, OWL_OBJECT_PROPERTY
         yield vocab.onto(local), RDFS_SUBPROPERTY_OF, parent
         yield vocab.onto(local), RDFS_LABEL, _en(SCHEMA_LABELS[local])
-    for prop, label_key in (
-        (vocab.slot_iri("requirement_target"), "requirement_target"),
-        (vocab.onto(AUTHORING_FILE), AUTHORING_FILE),
-    ):
-        yield prop, RDF_TYPE, OWL_ANNOTATION_PROPERTY
-        yield prop, RDFS_LABEL, _en(SCHEMA_LABELS[label_key])
+    authoring_file = vocab.onto(AUTHORING_FILE)
+    yield authoring_file, RDF_TYPE, OWL_ANNOTATION_PROPERTY
+    yield authoring_file, RDFS_LABEL, _en(SCHEMA_LABELS[AUTHORING_FILE])
 
 
 def _derived_declarations(vocab: Vocabulary) -> Iterator[Triple]:
-    """The rule-derived vocabulary's schema declarations (ADR 0041 D4): four ``owl:ObjectProperty`` roll-up /
-    reverse-link predicates and one ``owl:Class`` (``BoundaryGovernedFunction ⊑ FUNCTION``), each carrying an
+    """The rule-derived vocabulary's schema declarations (ADR 0041 D4): three ``owl:ObjectProperty`` roll-up
+    predicates and one ``owl:Class`` (``BoundaryGovernedFunction ⊑ FUNCTION``), each carrying an
     ``rdfs:comment`` naming the rule that mints it and stating it is never asserted by this emitter — only
     ``rules/*.rq`` produces these triples, into the ``inferred`` graph."""
     for local, (label, rule_id) in DERIVED_PROPERTY_RULES.items():
@@ -851,11 +704,11 @@ def _provenance_declarations(vocab: Vocabulary) -> Iterator[Triple]:
 
 def _validation_declarations(vocab: Vocabulary) -> Iterator[Triple]:
     """``itpra-o:ruleId`` (``shapes/REGISTER.md``): the annotation property a SHACL shape node carries,
-    naming the register rule id it enforces (Table A, shared with the consumer's linter, or a Table-B
-    addition). Declared here so it is discoverable from the schema graph like every other predicate this
-    pipeline mints; never asserted here — only ``shapes/*.ttl`` (and the test fixtures
-    under ``tests/fixtures/shapes-smoke/``) carry ``itpra-o:ruleId`` triples, always on a shape node, never
-    on ``t1``/``req/*`` data."""
+    naming the register rule id it enforces (Table A, shared with the linter, or a Table-B addition).
+    Declared here so it is discoverable from the schema graph like every other predicate this pipeline
+    mints; never asserted here — only ``shapes/*.ttl`` (and the test fixtures under
+    ``tests/fixtures/shapes-smoke/``) carry ``itpra-o:ruleId`` triples, always on a shape node, never on
+    data."""
     prop = vocab.onto(RULE_ID)
     yield prop, RDF_TYPE, OWL_ANNOTATION_PROPERTY
     yield prop, RDFS_LABEL, _en("rule id")
@@ -879,37 +732,31 @@ def emit(inputs: Inputs | None = None, config: Config | None = None) -> ox.Datas
     # term's `type`/`id`) is built — never a KeyError/TypeError from deep inside a generator.
     for term in inputs.terms:
         check_term_record(term)
-    for req in inputs.requirements:
-        check_requirement_record(req)
     dataset = ox.Dataset()
     _add(dataset, schema_triples(inputs, vocab), vocab.graph("schema"))
     t1 = vocab.graph("t1")
     for term in inputs.terms:
         _add(dataset, term_triples(term, vocab), t1)
-    for req in inputs.requirements:
-        _add(dataset, requirement_triples(req, vocab), vocab.graph(f"req/{req.registry}"))
     return dataset
 
 
 def dangling_object_iris(dataset: ox.Dataset, config: Config | None = None) -> set[str]:
-    """Object IRIs in the id namespace that are no subject in ``t1`` / ``req/*``.
+    """Object IRIs in the id namespace that are no subject in any record graph (every named graph but
+    ``schema``).
 
     ADR nodes (``decidedIn`` targets, which have no record of their own) and the concept scheme are excluded.
-    The consumer's linter accepts some ``met_by`` / ``verified_by`` prefixes without resolving them; this
-    surfaces what it lets through.
     """
     config = config if config is not None else load_config()
     id_ns, graph_ns = config.iri.id_ns, config.iri.graph_ns
-    instance_graphs = [
+    record_quads = [
         q for q in dataset
-        if isinstance(q.graph_name, ox.NamedNode)
-        and (q.graph_name.value == graph_ns + "t1" or q.graph_name.value.startswith(graph_ns + "req/"))
+        if isinstance(q.graph_name, ox.NamedNode) and q.graph_name.value != graph_ns + "schema"
     ]
-    subjects = {q.subject.value for q in instance_graphs}
+    subjects = {q.subject.value for q in record_quads}
     excluded_prefixes = (id_ns + ADR_LOCAL_PREFIX,)
     return {
         q.object.value
-        for q in instance_graphs
+        for q in record_quads
         if isinstance(q.object, ox.NamedNode)
         and q.object.value.startswith(id_ns)
         and q.object.value not in subjects

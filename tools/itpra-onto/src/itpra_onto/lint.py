@@ -1,13 +1,14 @@
 """Lint the vocabulary: the ontology's own rules, implemented once (ADR 0042 D1, D5).
 
-The rules here are the register's ``core``-home rows of Table A (``shapes/REGISTER.md``): file shape, required
-and unknown fields, unique ids and the id pattern, known types and verbs, resolving targets, ``derived_from``
+The rules here are the rows of the register's Table A (``shapes/REGISTER.md``): file shape, required and
+unknown fields, unique ids and the id pattern, known types and verbs, resolving targets, ``derived_from``
 kept off Functions (ADR 0011), the ``source:`` grammar and resolving decision citations (ADR 0005), the two
-version numbers (ADR 0003). A consumer's linter runs :func:`lint_vocabulary` first and adds its own rules —
-registries, prose, manifests (ADR 0042 D7); ``itpra-onto parity`` compares these findings with the shapes.
+version numbers (ADR 0003). :func:`lint_vocabulary` returns the merged vocabulary beside its findings, so a
+caller can check further rules against the same terms; ``itpra-onto parity`` compares these findings with the
+shapes.
 
-Standard library plus PyYAML only, so a consumer's linter can import this module without the pipeline's RDF
-dependencies (``import itpra_onto.lint`` with ``src/`` on ``sys.path`` is enough).
+Standard library plus PyYAML only, so the module imports without the pipeline's RDF dependencies
+(``import itpra_onto.lint`` with ``src/`` on ``sys.path`` is enough).
 """
 
 from __future__ import annotations
@@ -31,7 +32,7 @@ ADR_ITEM_RE = re.compile(r"^ADR (\d{4})(?: \((amended|extended) by ADR \d{4}(?:,
 ADR_NUM_RE = re.compile(r"\bADR (\d{4})\b")
 URL_RE = re.compile(r"https?://")
 DECISION_FILE_RE = re.compile(r"^(\d{4})-.+\.md$")
-NOT_VOCABULARY = ("schema.yaml", "PIN.yaml")  # the meta-schema, and a consumer's release pin beside its copy
+NOT_VOCABULARY = ("schema.yaml", "PIN.yaml")  # the meta-schema, and the pin file of a vendored copy (ADR 0003)
 
 # Every rule id this module emits — the register's `core`-home Table A rows (tests keep the two in step).
 CORE_RULE_IDS = (
@@ -56,7 +57,7 @@ CORE_RULE_IDS = (
 
 @dataclass
 class Vocabulary:
-    """The merged vocabulary a lint run read: what a consumer's own rules need next."""
+    """The merged vocabulary a lint run read: what further rules over the same terms need."""
 
     terms: dict[str, dict[str, Any]] = field(default_factory=dict)  # id -> record, in file order
     files: dict[str, str] = field(default_factory=dict)  # id -> the file label it was read from
@@ -220,7 +221,7 @@ def summary_line(findings: list[Finding], vocab: Vocabulary) -> str:
 
 
 def main(argv: list[str] | None = None, *, default_root: Path | None = None) -> int:
-    """``itpra-onto lint`` / a consumer's shim. ``--root`` defaults to ``default_root``, else the configured
+    """``itpra-onto lint``. ``--root`` defaults to ``default_root``, else the configured
     ``[paths] ontology_dir``. Exit 1 on any error; warnings never fail."""
     ap = argparse.ArgumentParser(prog="itpra-onto lint", description="Lint the vocabulary with the ontology's own rules.")
     ap.add_argument("--root", help="the vocabulary's directory (schema.yaml beside its term files)")

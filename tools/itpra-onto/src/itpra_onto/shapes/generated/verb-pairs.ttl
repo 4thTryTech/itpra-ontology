@@ -7,8 +7,8 @@
 #
 # Rule B-22 (shapes/REGISTER.md Table B): an edge whose object is a resolved record, and whose (subject
 # class, object class) is not among the verb's allowed pairs, is a Violation. Dangling objects are left to
-# target-unresolved / req-target-unresolved. No @prefix block and no base IRI: itpra_onto.shacl.load_shapes
-# prepends both at load time, as for the hand-written shapes/*.ttl files.
+# target-unresolved. No @prefix block and no base IRI: itpra_onto.shacl.load_shapes prepends both at load
+# time, as for the hand-written shapes/*.ttl files.
 
 # applies_to (evidence: data; predicate itpra-o:appliesTo); allowed pairs: (Capability, Concept), (Concept, Capability), (Concept, Concept), (Concept, EntityType), (Function, Concept)
 itpra-o:VerbPairsAppliesToShape
@@ -25,9 +25,9 @@ itpra-o:VerbPairsAppliesToShape
             WHERE {
                 $this itpra-o:appliesTo ?value .
                 $this rdf:type ?subjectClass .
-                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 ?value rdf:type ?objectClass .
-                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 FILTER NOT EXISTS {
                     $this rdf:type ?s .
                     ?value rdf:type ?o .
@@ -58,9 +58,9 @@ itpra-o:VerbPairsBelongsToServiceDomainShape
             WHERE {
                 $this itpra-o:belongsToServiceDomain ?value .
                 $this rdf:type ?subjectClass .
-                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 ?value rdf:type ?objectClass .
-                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 FILTER NOT EXISTS {
                     $this rdf:type ?s .
                     ?value rdf:type ?o .
@@ -73,7 +73,7 @@ itpra-o:VerbPairsBelongsToServiceDomainShape
         """ ;
     ] .
 
-# categorized_as (evidence: data; predicate itpra-o:categorizedAs); allowed pairs: (NFR, QualityAttribute)
+# categorized_as (evidence: meta-only; predicate itpra-o:categorizedAs); allowed pairs: none; unresolvable (no record class): (NFR, QualityAttribute)
 itpra-o:VerbPairsCategorizedAsShape
     a sh:NodeShape ;
     sh:targetSubjectsOf itpra-o:categorizedAs ;
@@ -81,21 +81,21 @@ itpra-o:VerbPairsCategorizedAsShape
     itpra-o:ruleId "B-22" ;
     sh:sparql [
         a sh:SPARQLConstraint ;
-        sh:message "B-22: categorized_as edge {$this} -> {?value}: subject class {?subjectClass} with object class {?objectClass} is not an allowed pair for categorized_as (itpra_verb pairs: (NFR, QualityAttribute))" ;
+        sh:message "B-22: categorized_as edge {$this} -> {?value}: subject class {?subjectClass} with object class {?objectClass} is not an allowed pair for categorized_as (itpra_verb pairs: none)" ;
         sh:prefixes itpra-o:shapesPrefixes ;
         sh:select """
             SELECT DISTINCT $this ?value ?subjectClass ?objectClass
             WHERE {
                 $this itpra-o:categorizedAs ?value .
                 $this rdf:type ?subjectClass .
-                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 ?value rdf:type ?objectClass .
-                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 FILTER NOT EXISTS {
                     $this rdf:type ?s .
                     ?value rdf:type ?o .
                     FILTER(
-                        (?s = itpra:NFR && ?o = itpra:QUALITY_ATTRIBUTE)
+                        false
                     )
                 }
             }
@@ -117,9 +117,9 @@ itpra-o:VerbPairsConsumedByShape
             WHERE {
                 $this itpra-o:consumedBy ?value .
                 $this rdf:type ?subjectClass .
-                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 ?value rdf:type ?objectClass .
-                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 FILTER NOT EXISTS {
                     $this rdf:type ?s .
                     ?value rdf:type ?o .
@@ -147,9 +147,9 @@ itpra-o:VerbPairsDecomposesIntoShape
             WHERE {
                 $this itpra-o:decomposesInto ?value .
                 $this rdf:type ?subjectClass .
-                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 ?value rdf:type ?objectClass .
-                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 FILTER NOT EXISTS {
                     $this rdf:type ?s .
                     ?value rdf:type ?o .
@@ -176,9 +176,9 @@ itpra-o:VerbPairsDependsOnShape
             WHERE {
                 $this itpra-o:dependsOn ?value .
                 $this rdf:type ?subjectClass .
-                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 ?value rdf:type ?objectClass .
-                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 FILTER NOT EXISTS {
                     $this rdf:type ?s .
                     ?value rdf:type ?o .
@@ -209,9 +209,9 @@ itpra-o:VerbPairsDerivedFromShape
             WHERE {
                 $this itpra-o:derivedFrom ?value .
                 $this rdf:type ?subjectClass .
-                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 ?value rdf:type ?objectClass .
-                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 FILTER NOT EXISTS {
                     $this rdf:type ?s .
                     ?value rdf:type ?o .
@@ -238,9 +238,9 @@ itpra-o:VerbPairsGovernsShape
             WHERE {
                 $this itpra-o:governs ?value .
                 $this rdf:type ?subjectClass .
-                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 ?value rdf:type ?objectClass .
-                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 FILTER NOT EXISTS {
                     $this rdf:type ?s .
                     ?value rdf:type ?o .
@@ -268,9 +268,9 @@ itpra-o:VerbPairsGroupedByShape
             WHERE {
                 $this itpra-o:groupedBy ?value .
                 $this rdf:type ?subjectClass .
-                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 ?value rdf:type ?objectClass .
-                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 FILTER NOT EXISTS {
                     $this rdf:type ?s .
                     ?value rdf:type ?o .
@@ -299,9 +299,9 @@ itpra-o:VerbPairsInterfacesWithShape
             WHERE {
                 $this itpra-o:interfacesWith ?value .
                 $this rdf:type ?subjectClass .
-                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 ?value rdf:type ?objectClass .
-                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 FILTER NOT EXISTS {
                     $this rdf:type ?s .
                     ?value rdf:type ?o .
@@ -313,7 +313,7 @@ itpra-o:VerbPairsInterfacesWithShape
         """ ;
     ] .
 
-# met_by (evidence: data; predicate itpra-o:metBy); allowed pairs: (FR, Capability), (NFR, Capability)
+# met_by (evidence: meta-only; predicate itpra-o:metBy); allowed pairs: none; unresolvable (no record class): (FR, Capability), (NFR, Capability), (REQUIREMENT, Capability)
 itpra-o:VerbPairsMetByShape
     a sh:NodeShape ;
     sh:targetSubjectsOf itpra-o:metBy ;
@@ -321,22 +321,21 @@ itpra-o:VerbPairsMetByShape
     itpra-o:ruleId "B-22" ;
     sh:sparql [
         a sh:SPARQLConstraint ;
-        sh:message "B-22: met_by edge {$this} -> {?value}: subject class {?subjectClass} with object class {?objectClass} is not an allowed pair for met_by (itpra_verb pairs: (FR, Capability), (NFR, Capability))" ;
+        sh:message "B-22: met_by edge {$this} -> {?value}: subject class {?subjectClass} with object class {?objectClass} is not an allowed pair for met_by (itpra_verb pairs: none)" ;
         sh:prefixes itpra-o:shapesPrefixes ;
         sh:select """
             SELECT DISTINCT $this ?value ?subjectClass ?objectClass
             WHERE {
                 $this itpra-o:metBy ?value .
                 $this rdf:type ?subjectClass .
-                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 ?value rdf:type ?objectClass .
-                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 FILTER NOT EXISTS {
                     $this rdf:type ?s .
                     ?value rdf:type ?o .
                     FILTER(
-                        (?s = itpra:FR && ?o = itpra:CAPABILITY) ||
-                        (?s = itpra:NFR && ?o = itpra:CAPABILITY)
+                        false
                     )
                 }
             }
@@ -358,9 +357,9 @@ itpra-o:VerbPairsOwnsShape
             WHERE {
                 $this itpra-o:owns ?value .
                 $this rdf:type ?subjectClass .
-                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 ?value rdf:type ?objectClass .
-                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 FILTER NOT EXISTS {
                     $this rdf:type ?s .
                     ?value rdf:type ?o .
@@ -387,9 +386,9 @@ itpra-o:VerbPairsProducesShape
             WHERE {
                 $this itpra-o:produces ?value .
                 $this rdf:type ?subjectClass .
-                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 ?value rdf:type ?objectClass .
-                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 FILTER NOT EXISTS {
                     $this rdf:type ?s .
                     ?value rdf:type ?o .
@@ -416,9 +415,9 @@ itpra-o:VerbPairsRealizedInShape
             WHERE {
                 $this itpra-o:realizedIn ?value .
                 $this rdf:type ?subjectClass .
-                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 ?value rdf:type ?objectClass .
-                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 FILTER NOT EXISTS {
                     $this rdf:type ?s .
                     ?value rdf:type ?o .
@@ -445,9 +444,9 @@ itpra-o:VerbPairsSupersedesShape
             WHERE {
                 $this itpra-o:supersedes ?value .
                 $this rdf:type ?subjectClass .
-                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 ?value rdf:type ?objectClass .
-                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 FILTER NOT EXISTS {
                     $this rdf:type ?s .
                     ?value rdf:type ?o .
@@ -474,9 +473,9 @@ itpra-o:VerbPairsSupportsShape
             WHERE {
                 $this itpra-o:supports ?value .
                 $this rdf:type ?subjectClass .
-                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 ?value rdf:type ?objectClass .
-                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 FILTER NOT EXISTS {
                     $this rdf:type ?s .
                     ?value rdf:type ?o .
@@ -488,7 +487,7 @@ itpra-o:VerbPairsSupportsShape
         """ ;
     ] .
 
-# verified_by (evidence: data; predicate itpra-o:verifiedBy); allowed pairs: (FR, Journey), (NFR, Journey)
+# verified_by (evidence: meta-only; predicate itpra-o:verifiedBy); allowed pairs: none; unresolvable (no record class): (FR, Journey), (NFR, Journey), (REQUIREMENT, Journey)
 itpra-o:VerbPairsVerifiedByShape
     a sh:NodeShape ;
     sh:targetSubjectsOf itpra-o:verifiedBy ;
@@ -496,22 +495,21 @@ itpra-o:VerbPairsVerifiedByShape
     itpra-o:ruleId "B-22" ;
     sh:sparql [
         a sh:SPARQLConstraint ;
-        sh:message "B-22: verified_by edge {$this} -> {?value}: subject class {?subjectClass} with object class {?objectClass} is not an allowed pair for verified_by (itpra_verb pairs: (FR, Journey), (NFR, Journey))" ;
+        sh:message "B-22: verified_by edge {$this} -> {?value}: subject class {?subjectClass} with object class {?objectClass} is not an allowed pair for verified_by (itpra_verb pairs: none)" ;
         sh:prefixes itpra-o:shapesPrefixes ;
         sh:select """
             SELECT DISTINCT $this ?value ?subjectClass ?objectClass
             WHERE {
                 $this itpra-o:verifiedBy ?value .
                 $this rdf:type ?subjectClass .
-                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?subjectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 ?value rdf:type ?objectClass .
-                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FR, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:NFR, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
+                FILTER(?objectClass IN (itpra-o:EntityType, itpra-o:RelationshipType, itpra:CAPABILITY, itpra:CONCEPT, itpra:DOMAIN, itpra:FUNCTION, itpra:JOURNEY, itpra:JOURNEY_GROUP, itpra:PERSONA, itpra:PLANE, itpra:QUALITY_ATTRIBUTE, itpra:SERVICE_DOMAIN, itpra:WORKFLOW))
                 FILTER NOT EXISTS {
                     $this rdf:type ?s .
                     ?value rdf:type ?o .
                     FILTER(
-                        (?s = itpra:FR && ?o = itpra:JOURNEY) ||
-                        (?s = itpra:NFR && ?o = itpra:JOURNEY)
+                        false
                     )
                 }
             }

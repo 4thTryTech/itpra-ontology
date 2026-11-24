@@ -1,0 +1,10 @@
+# Positive control for cq-19: total quads across EVERY named graph (schema, t1 and
+# inferred). Guards the "no blank nodes anywhere" ASK query against vacuous truth over an
+# empty store; test_competency.py asserts this is non-zero and equals the in-memory dataset's own size.
+
+SELECT (COUNT(*) AS ?n)
+WHERE {
+  GRAPH ?g {
+    ?s ?p ?o .
+  }
+}

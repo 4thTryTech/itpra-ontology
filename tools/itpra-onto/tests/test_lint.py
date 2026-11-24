@@ -1,7 +1,7 @@
 """Tests for ``itpra_onto.lint``: the ontology's own rules, one implementation (ADR 0042 D1, D5).
 
 Every rule is proven on a small vocabulary written under ``tmp_path``; the real vocabulary lints clean; the
-file set equals the emitter's; the rule ids equal the register's core-home rows.
+file set equals the emitter's; the rule ids equal the register's Table A rows.
 """
 
 from __future__ import annotations
@@ -82,9 +82,8 @@ def test_vocabulary_files_equal_the_emitters_file_set():
     assert lint.vocabulary_files(emit.ontology_dir(config)) == emit.term_files(config)
 
 
-def test_core_rule_ids_equal_the_registers_core_home_rows():
-    rows = parity.parse_table_a_rows(shapes_dir=None)
-    assert set(lint.CORE_RULE_IDS) == set(parity.core_rule_ids(rows))
+def test_core_rule_ids_equal_the_registers_table_a_rows():
+    assert set(lint.CORE_RULE_IDS) == set(parity.parse_table_a(shapes_dir=None))
 
 
 def test_file_labels_are_relative_to_rel_to(tmp_path: Path):
@@ -192,7 +191,7 @@ def test_cli_lint_defaults_to_the_configured_vocabulary():
 
 
 def test_the_module_imports_without_the_rdf_dependencies(tmp_path: Path):
-    """A consumer's linter imports the core with only the standard library and PyYAML (ADR 0042 D5)."""
+    """The linter imports with only the standard library and PyYAML (ADR 0042 D5)."""
     code = (
         "import sys; sys.path.insert(0, sys.argv[1]); import itpra_onto.lint as m; "
         "banned = {'rdflib', 'pyoxigraph', 'pyshacl', 'linkml', 'linkml_runtime'}; "

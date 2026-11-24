@@ -1,5 +1,5 @@
 # Smoke shapes for tests/test_shacl.py. NOT under shapes/ -- not part of the real shape files; two tiny,
-# self-contained shapes proving the harness itself works, independent of structural/crossfield/requirements.
+# self-contained shapes proving the harness itself works, independent of the real shape files.
 #
 # No @prefix declarations here (itpra_onto.shacl.load_shapes prepends the standard block at load time --
 # see that module's docstring): itpra:/itpra-o:/itpra-g: plus sh:/rdf:/rdfs:/skos:/owl:/xsd:/dcterms:/prov:

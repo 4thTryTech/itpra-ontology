@@ -23,20 +23,24 @@ hashes identically whether checked out with ``core.autocrlf=input``/``true`` or 
 touches line endings — a checkout with CRLF in the working tree and LF in the index would otherwise disagree
 with a CI runner on ``input_hash`` alone. The record is written
 twice, once machine-readable (``<out>/build.json``) and once as RDF: the dataset's own node
-(``<base>dataset`` — a plain resource directly under the base IRI, distinct from any term or requirement id
+(``<base>dataset`` — a plain resource directly under the base IRI, distinct from any record id
 under ``<base>id/``, any schema vocabulary term under ``<base>onto#`` and any named graph under
 ``<base>graph/``) carries the seven scalars as literals plus one ``prov:wasDerivedFrom`` per input file, each
 input a ``prov:Entity`` of its own carrying ``dcterms:identifier`` (its repo-relative path) and
 ``itpra-o:sha256`` (that one file's own, line-ending-normalised hash). ``prov:wasDerivedFrom`` is the right
 predicate for dataset-to-input provenance (``itpra-o:decidedIn`` is reserved for a term's link to its
 decision record, a different relation entirely; ADR 0041 D2). All of this lands in a fourth named graph,
-``<graph_ns>provenance``, alongside ``schema``/``t1``/``req/<X>``/``inferred``.
+``<graph_ns>provenance``, alongside ``schema``/``t1``/``inferred``.
+
+A build may take layers (:mod:`itpra_onto.layers`): their quads, rules, input files and code join the same
+dataset and the same provenance record; a graph a layer adds is written to ``base/`` under its own local
+name.
 
 **Canonical outputs** under ``<out>``:
 
 * ``full/itpra.nq`` — sorted canonical N-Quads of every graph, including ``inferred`` and ``provenance``.
 * ``base/<graph>.ttl`` — one Turtle file per *asserted* graph, excluding ``inferred`` and ``provenance``:
-  ``schema.ttl``, ``t1.ttl``, ``req/<X>.ttl`` (one per registry, in a ``req/`` subdirectory). Turtle
+  ``schema.ttl``, ``t1.ttl`` (a graph local name containing ``/`` becomes a subdirectory). Turtle
   determinism is an empirical finding, not an assumption: ``ox.serialize()`` given a plain
   Python list of :class:`pyoxigraph.Triple` serialises that list in exactly the order given (confirmed
   empirically — unlike a :class:`pyoxigraph.Dataset`/:class:`pyoxigraph.Store`, whose internal storage
@@ -79,14 +83,15 @@ import tempfile
 import time
 import tomllib
 from collections import Counter
-from collections.abc import Iterable
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
 import pyoxigraph as ox
 
-from itpra_onto import canon, emit, rules
+from itpra_onto import canon, emit, layers as layers_module, rules
 from itpra_onto.config import Config, load_config
+from itpra_onto.layers import Layer
 
 PACKAGE_DIR = Path(__file__).resolve().parent  # src/itpra_onto: the package's own code and data
 
@@ -97,7 +102,6 @@ FULL_FILENAME = "itpra.nq"
 BASE_DIRNAME = "base"
 MANIFEST_FILENAME = "manifest.json"
 BUILD_FILENAME = "build.json"
-REQ_SUBDIRNAME = "req"
 
 PROVENANCE_GRAPH_LOCAL = "provenance"
 DATASET_LOCAL = "dataset"  # <base>dataset — see module docstring for why this shape, not <graph_ns>dataset
@@ -207,13 +211,13 @@ def compute_input_hash(paths: Iterable[Path], repo_root: Path) -> str:
     return hash_contributions((emit._repo_relative(p, repo_root), normalised_bytes(p.read_bytes())) for p in paths)
 
 
-def input_files(config: Config | None = None) -> list[Path]:
-    """Every file the build hashes for provenance: every term file, every registry file (as
-    :mod:`itpra_onto.emit` reads them) and the vocabulary's ``schema.yaml`` itself — sorted by repo-relative
-    posix path, the fixed order :func:`compute_input_hash` and the provenance graph's
-    ``prov:wasDerivedFrom`` edges both rely on."""
+def input_files(config: Config | None = None, layers: Sequence[Layer] = ()) -> list[Path]:
+    """Every file the build hashes for provenance: every term file (as :mod:`itpra_onto.emit` reads them),
+    the vocabulary's ``schema.yaml`` itself and every file a layer reads — sorted by repo-relative posix
+    path, the fixed order :func:`compute_input_hash` and the provenance graph's ``prov:wasDerivedFrom``
+    edges both rely on."""
     config = config if config is not None else load_config()
-    paths = [*emit.term_files(config), *emit.registry_files(config), emit.schema_file(config)]
+    paths = [*emit.term_files(config), emit.schema_file(config), *layers_module.input_files(config, layers)]
     return sorted(paths, key=lambda p: emit._repo_relative(p, config.repo_root))
 
 
@@ -271,23 +275,25 @@ def _code_files() -> list[Path]:
     return sorted(PACKAGE_DIR.rglob("*.py"), key=_package_relative)
 
 
-def _code_hash() -> str:
+def _code_hash(layers: Sequence[Layer] = ()) -> str:
     """sha256 over every pipeline ``.py`` file's line-ending-normalised bytes, path-prefixed exactly like
     :func:`compute_input_hash` — the provenance record's identity for the CODE that produced a build, not
-    just the data it was run against (a bug fix with unchanged inputs must still change this)."""
-    return hash_contributions((_package_relative(p), normalised_bytes(p.read_bytes())) for p in _code_files())
+    just the data it was run against (a bug fix with unchanged inputs must still change this). A layer's own
+    code follows the pipeline's, labelled by the layer's name."""
+    contributions = [(_package_relative(p), p) for p in _code_files()] + layers_module.code_files(layers)
+    return hash_contributions((label, normalised_bytes(path.read_bytes())) for label, path in contributions)
 
 
-def compute_provenance(config: Config, inputs: emit.Inputs) -> Provenance:
-    paths = input_files(config)
+def compute_provenance(config: Config, inputs: emit.Inputs, layers: Sequence[Layer] = ()) -> Provenance:
+    paths = input_files(config, layers)
     return Provenance(
         input_hash=compute_input_hash(paths, config.repo_root),
         pipeline_version=_pipeline_version(),
         environment_hash=_environment_hash(),
-        rules_version=rules.rules_digest(config),
+        rules_version=layers_module.rules_version(config, layers),
         ontology_version=inputs.ontology_version,
         schema_hash=_schema_hash(),
-        code_hash=_code_hash(),
+        code_hash=_code_hash(layers),
         input_files=tuple(
             (emit._repo_relative(p, config.repo_root), hashlib.sha256(normalised_bytes(p.read_bytes())).hexdigest())
             for p in paths
@@ -363,12 +369,16 @@ def _turtle_prefixes(config: Config) -> dict[str, str]:
     }
 
 
+_GRAPH_SEGMENT_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
+
+
 def _base_graph_filename(graph_local: str) -> str:
-    if graph_local in ("schema", "t1"):
-        return f"{graph_local}.ttl"
-    if graph_local.startswith("req/"):
-        return f"{REQ_SUBDIRNAME}/{graph_local.removeprefix('req/')}.ttl"
-    raise BuildError(f"build: unexpected asserted graph {graph_local!r} — not schema, t1 or req/<X>")
+    """``<local name>.ttl``; a ``/`` in the local name becomes a subdirectory. A local name that is not a
+    plain relative path of safe segments is refused."""
+    segments = graph_local.split("/")
+    if not all(_GRAPH_SEGMENT_RE.match(segment) for segment in segments):
+        raise BuildError(f"build: asserted graph {graph_local!r} cannot name a file under base/")
+    return f"{graph_local}.ttl"
 
 
 def _base_turtle_files(full_nquads: bytes, config: Config) -> dict[str, tuple[bytes, int]]:
@@ -442,26 +452,27 @@ class BuildReport:
     elapsed: dict[str, float]  # emit, rules, canonicalise, write, load (seconds)
 
 
-def build(config: Config | None = None, out_dir: Path | str | None = None, *, load_store: bool = True) -> BuildReport:
+def build(
+    config: Config | None = None,
+    out_dir: Path | str | None = None,
+    *,
+    load_store: bool = True,
+    layers: Sequence[Layer] = (),
+) -> BuildReport:
     """Emit, apply the rules, add a provenance graph, write the canonical artefacts, and (by default) load
     the disposable store. See the module docstring for the full recipe and every determinism finding."""
     config = config if config is not None else load_config()
     resolved_out = Path(out_dir).resolve() if out_dir is not None else dist_rdf_dir(config)
     timings: dict[str, float] = {}
 
-    started = time.perf_counter()
-    inputs = emit.load_inputs(config)
-    asserted = emit.emit(inputs, config)
-    timings["emit"] = time.perf_counter() - started
+    assembled = layers_module.assemble(config, layers)
+    timings["emit"] = assembled.emit_seconds
+    timings["rules"] = assembled.rules_seconds
 
     started = time.perf_counter()
-    rule_report = rules.apply_rules(asserted, config)
-    timings["rules"] = time.perf_counter() - started
-
-    started = time.perf_counter()
-    provenance = compute_provenance(config, inputs)
+    provenance = compute_provenance(config, assembled.inputs, layers)
     full_dataset = ox.Dataset()
-    for quad in rule_report.dataset:
+    for quad in assembled.dataset:
         full_dataset.add(quad)
     for quad in _provenance_quads(config, provenance):
         full_dataset.add(quad)
@@ -506,7 +517,7 @@ def build(config: Config | None = None, out_dir: Path | str | None = None, *, lo
     return BuildReport(
         out_dir=resolved_out,
         graph_counts=graph_counts,
-        inferred_counts=dict(rule_report.counts),
+        inferred_counts=dict(assembled.rule_counts),
         total_quads=total_quads,
         store_quad_count=store_quad_count,
         input_hash=provenance.input_hash,
@@ -535,7 +546,7 @@ def _tree_diff(reference_dir: Path, candidate_dir: Path) -> list[str]:
     return diffs
 
 
-def check(config: Config | None = None, out_dir: Path | str | None = None) -> list[str]:
+def check(config: Config | None = None, out_dir: Path | str | None = None, *, layers: Sequence[Layer] = ()) -> list[str]:
     """Build into a fresh temp directory (never touching the store) and diff its ``base/`` against
     ``<out>/base/``. Returns the list of differences (empty = up to date) — the local, filesystem form of
     the CI drift check (a plain directory diff, since ``dist/rdf/`` is never committed — ADR 0043 D5)."""
@@ -543,5 +554,5 @@ def check(config: Config | None = None, out_dir: Path | str | None = None) -> li
     target_out = Path(out_dir).resolve() if out_dir is not None else dist_rdf_dir(config)
     with tempfile.TemporaryDirectory(prefix="itpra-onto-build-check-") as tmp:
         fresh_out = Path(tmp) / "rdf"
-        build(config=config, out_dir=fresh_out, load_store=False)
+        build(config=config, out_dir=fresh_out, load_store=False, layers=layers)
         return _tree_diff(target_out / BASE_DIRNAME, fresh_out / BASE_DIRNAME)

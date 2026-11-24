@@ -1,0 +1,12 @@
+# CQ5 (part 4) — every Domain's `groupedBy` edge to a Plane, one row per (domain, plane).
+#
+# test_competency.py checks the cardinality is exactly one per domain and that every target is typed
+# PLANE.
+
+SELECT ?domain ?plane
+WHERE {
+  GRAPH itpra-g:t1 {
+    ?domain a itpra:DOMAIN ;
+            itpra-o:groupedBy ?plane .
+  }
+}

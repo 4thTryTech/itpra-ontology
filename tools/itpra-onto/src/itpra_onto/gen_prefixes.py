@@ -11,7 +11,7 @@ declaring those three prefixes themselves.
 ``schema/itpra.linkml.yaml`` has one further IRI LinkML requires directly on the importing file and
 will not accept purely by inheritance from an import: the schema's own ``id:``. Rather than also
 generating a second physical copy of the (large, hand-authored, otherwise unchanged) schema file, that
-one field is injected in memory at load time by :mod:`itpra_onto.schema_loading`, which every consumer
+one field is injected in memory at load time by :mod:`itpra_onto.schema_loading`, which every user
 (``itpra-onto validate --authoring``, the test suite) goes through instead of constructing a
 ``SchemaView``/``Validator`` directly from ``schema/itpra.linkml.yaml``'s path. See that module's
 docstring and ``schema/README.md`` for why: empirically, LinkML merges

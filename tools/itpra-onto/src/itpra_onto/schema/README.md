@@ -6,7 +6,7 @@ entry into one RDF predicate per verb (ADR 0041 D2).
 
 | File | Edited by | Holds |
 |---|---|---|
-| `itpra.linkml.yaml` | hand | The shared `Term` record shape, one subclass per `type` value (per-type rules go in `slot_usage`), `RelatesTo`, the requirement classes (`RequirementRegistry`, `Requirement`, `FR`, `NFR`), predicate and class mappings (`slot_uri`, `class_uri`), and one slot per relationship verb carrying the `itpra_verb` annotation. Declares no `itpra:`/`itpra-o:`/`itpra-g:` prefix and no real `id:` itself — see "The base IRI is a configuration item" below |
+| `itpra.linkml.yaml` | hand | The shared `Term` record shape, one subclass per `type` value (per-type rules go in `slot_usage`), `RelatesTo`, predicate and class mappings (`slot_uri`, `class_uri`), and one slot per relationship verb carrying the `itpra_verb` annotation. Declares no `itpra:`/`itpra-o:`/`itpra-g:` prefix and no real `id:` itself — see "The base IRI is a configuration item" below |
 | `generated/itpra-enums.linkml.yaml` | **generator only** | `EntityTypeEnum` and `RelationshipVerbEnum`, built from the vocabulary's `schema.yaml` |
 | `generated/itpra-prefixes.linkml.yaml` | **generator only** | The `itpra:`/`itpra-o:`/`itpra-g:` prefix declarations, built from `itpra-onto.toml` `[iri]`. Imported by both files above |
 
@@ -17,7 +17,7 @@ entry into one RDF predicate per verb (ADR 0041 D2).
 | `type` value list | `schema.yaml` `types:` | `itpra-onto gen-enums` → `EntityTypeEnum` |
 | Relationship verb list | `schema.yaml` `relationships:` | `itpra-onto gen-enums` → `RelationshipVerbEnum` |
 | id pattern | `schema.yaml` `id.pattern` | copied into `itpra.linkml.yaml`. A test fails if the two differ |
-| Record shape, per-type refinement, requirement classes | `itpra.linkml.yaml` only | — |
+| Record shape, per-type refinement | `itpra.linkml.yaml` only | — |
 | Per-verb domain / range / cardinality / inverse | `itpra.linkml.yaml` only (`itpra_verb` annotations; ADR 0008) | — |
 | Predicate and class IRIs | `itpra.linkml.yaml` only (`slot_uri`, `class_uri`) | — |
 
@@ -79,10 +79,6 @@ with an `itpra_verb` annotation. The tests fail until both exist.
   its `type`, and a `type` that names no subclass fails on the enum. A subclass pins its `type` with
   `slot_usage: {type: {pattern: "^<Value>$"}}`, not `equals_string`, because gen-shacl 1.11.1 rejects
   `equals_string` on an enum-typed slot.
-- **Registries** (a consumer's requirement registries, `[overlay] requirements_glob`; none without an
-  overlay) are a mapping with the single key `requirements:`, checked against the tree_root class
-  `RequirementRegistry`. FR and NFR records are told apart by `type`. The YAML keys `type` and `target` are
-  slot aliases there (`requirement_type`, `requirement_target`), so they do not collide with the term slots.
 - The JSON Schema plugin runs in **closed** mode, so an unknown key is an error. Files are read as UTF-8 by
   `itpra_onto.authoring`. The stock `linkml-validate` CLI's YAML loader opens files in the platform
   encoding (cp1252 on Windows).
@@ -95,8 +91,6 @@ JSON Schema can enforce these rules directly:
 - at least one `grouped_by` on Capability, Domain and Journey (`has_member`)
 - at least one `supports` on Function
 - no `derived_from` on Function (`all_members` / `none_of`; ADR 0011)
-- at least one `met_by` and one `verified_by` on every requirement
-- `qa` required on NFR and forbidden on FR
 
 It cannot check these:
 
@@ -115,7 +109,7 @@ The full grammar is in the header of `itpra.linkml.yaml`. In short, each of the 
 annotations:
   itpra_verb:
     value:
-      carried_by: relates_to | slot:<name>
+      carried_by: relates_to
       evidence: data | meta-only | definition
       domain: [<Class>, …]          # = distinct subjects of pairs, sorted
       range: [<Class>, …]           # = distinct objects of pairs, sorted
@@ -127,7 +121,7 @@ annotations:
 ```
 
 `<Class>` is a class in this schema. Where no `type` value exists, it is an UPPER_SNAKE EntityType id
-instead (`SERVICE`, `ADR`). The tests enforce four things:
+instead (`SERVICE`, `ADR`, `REQUIREMENT`). The tests enforce four things:
 
 - For every `evidence: data` verb, the declared `pairs` set equals the set read off the data.
 - Every declared `cardinality` holds.
@@ -154,14 +148,6 @@ the class is punned with:
 | Plane | PLANE |
 | ServiceDomain | SERVICE_DOMAIN |
 | QualityAttribute | QUALITY_ATTRIBUTE |
-| Requirement | REQUIREMENT |
-| NFR | NFR |
+| Concept | CONCEPT |
 
-Four classes have **none**:
-
-| Class | Status |
-|---|---|
-| Concept | `CONCEPT` (ADR 0008) |
-| FR | `FR` (ADR 0008; `REQUIREMENT` is the generic kind) |
-| EntityType | Schema-namespace class |
-| RelationshipType | Schema-namespace class |
+Two classes have **none**: `EntityType` and `RelationshipType` are schema-namespace classes.

@@ -1,110 +1,50 @@
 """``itpra-onto parity`` (ADR 0042 D5; ``shapes/REGISTER.md`` is the register the comparison is read from).
 
-Compares the consumer's linter's ``--json`` findings (``[overlay] linter_script``) against pySHACL's
-(:mod:`itpra_onto.shacl`) over the SAME inputs, as ``(rule, subject, severity)`` triples — the shape both
-``--json`` outputs share (the linter's own contract; ``itpra_onto.cli._cmd_validate``'s ``--json`` payload).
+Compares the linter's findings (:mod:`itpra_onto.lint`) against pySHACL's (:mod:`itpra_onto.shacl`) over the
+SAME inputs, as ``(rule, subject, severity)`` triples — the shape both sides' ``--json`` outputs share.
 
-**Guards.** The register parser fails loudly (exact header row, row count equal to the
-Counts section's stated figure, and a cross-check that every comparable id is an ``itpra-o:ruleId`` in the
-loaded shapes and every shape ``ruleId`` is a Table A or Table B id); linter findings of
-``target-unresolved``/``verb-unknown`` on an EntityType record (meta-edges, never projected) are excluded
-from the real-tree comparison and reported; an ``EmitError`` becomes an ``emit-error`` finding that fails the
-comparison; ``req-link-malformed`` joins the emit-time mapping; and ``--fixtures`` fails on ``linter-only``
-for a comparable/emit-mapped rule (:func:`fixture_failures`).
+**Guards.** The register parser fails loudly (exact header row, row count equal to the Counts section's
+stated figure, and a cross-check that every comparable id is an ``itpra-o:ruleId`` in the loaded shapes and
+every shape ``ruleId`` is a Table A or Table B id); linter findings of ``target-unresolved``/``verb-unknown``
+on an EntityType record (meta-edges, never projected) are excluded from the real-tree comparison and
+reported; an ``EmitError`` becomes an ``emit-error`` finding that fails the comparison; and ``--fixtures``
+fails on ``linter-only`` for a comparable or emit-mapped rule (:func:`fixture_failures`).
 
-**Comparable set.** Only rows of ``shapes/REGISTER.md`` Table A (the "A/C" sub-table; the "B" sub-table's
-ids are a consumer's own manifest rules and stay outside the graph — ADR 0042 D7) whose ``mechanism``
-column reads ``core`` or ``sparql`` exist on *both* sides under the same rule id, and are therefore directly
-comparable by rule-id equality. This module parses that table at run time (:func:`parse_table_a`) rather
-than hard-coding the id list, so the register stays the single source; a parse failure raises
-:class:`ParityError` rather than silently falling back to a stale hard-coded set. **The erratum applies**:
-Table A's own row for ``relates-to-malformed`` still literally reads ``core``, but the register's own
-"Erratum" paragraph (below Table B) corrects this to an emit-time ``python`` guard
-(``emit.py``'s ``_verb_edges``) — :func:`comparable_rule_ids` excludes it, and it is folded into
-:func:`emit_time_mapped_rule_ids` instead. :func:`parse_table_a` defensively greps for that erratum
-paragraph's own header text and raises :class:`ParityError` if it is gone, so a future register edit that
-removes or rewords the erratum cannot silently desync this module's hard-coded override.
+**Comparable set.** Rows of ``shapes/REGISTER.md`` Table A whose ``mechanism`` reads ``core`` or ``sparql``
+exist on *both* sides under the same rule id, and are compared by rule-id equality. The table is parsed at
+run time (:func:`parse_table_a`), so the register stays the single source; a parse failure raises
+:class:`ParityError` rather than falling back to a hard-coded set.
 
-**Emit-time mapping.** Four Table A ids never reach a graph to shape at all: the emitter raises
-``EmitError`` for them before ``emit()`` returns (Table A's ``generated`` mechanism, plus the erratum-
-corrected ``relates-to-malformed``): ``type-unknown``, ``verb-unknown``, ``req-type-invalid``,
-``relates-to-malformed``. :mod:`itpra_onto.fixtures`'s ``run_fixture`` already turns an ``EmitError`` into a
-single synthetic ``rule_id="emit-error"`` finding (its own module docstring) — SHACL/pySHACL never sees a
-rule-specific id for these, only the generic marker. Comparing them therefore cannot be rule-id equality:
-:func:`_nominal_rule_id` recovers the ORIGINAL id a given ``rule: emit-error`` fixture proves (the fixture's
-own filename, stripped of a trailing ``-emit-guard`` suffix — ``shapes/README.md``'s "a positive fixture,
-plus a `-emit-guard` sibling" convention), and the ``--fixtures`` comparison (below) matches the linter's
-OWN finding for that recovered id against the SHACL/emit side's ``emit-error`` marker, on the SAME subject
-— never by rule-id equality, since ``emit-error`` is not a real Table A id on either side.
+**Emit-time mapping.** A ``generated`` or ``emit`` row never reaches a graph: the emitter raises
+``EmitError`` first, and :mod:`itpra_onto.fixtures` turns that into one synthetic ``emit-error`` finding.
+Comparing those rows cannot be rule-id equality: :func:`nominal_rule_id` recovers the id a ``rule:
+emit-error`` fixture proves (its filename, stripped of a trailing ``-emit-guard``), and the ``--fixtures``
+comparison matches the linter's own finding for that id against the ``emit-error`` marker on the same
+subject.
 
-**Real-tree comparison** (``itpra-onto parity``, no ``--fixtures``): runs the consumer's linter's ``--json``
-once per registry (default: every registry the overlay's ``requirements_glob`` matches; ``--sub`` restricts)
-as a subprocess of ``[overlay] linter_script`` (never a modified copy — the real tree needs no
-materialisation, unlike ``--fixtures`` below), and :func:`itpra_onto.shacl.validate` ONCE over the whole
-emitted+ruled dataset (every graph: ``t1``, ``inferred``, every ``req/<X>``, the same default
-:func:`itpra_onto.shacl.default_validation_graphs` selection ``itpra-onto validate`` itself uses).
-**Avoiding an N-times-duplicated term finding**: a linter that re-reads the ENTIRE shared vocabulary on every
-per-registry invocation (each run independent of the others) reports a defect in a shared TERM (not a
-per-registry requirement) once per registry, while pySHACL reports it exactly once (it validates the union
-graph a single time). This module does not attempt to partition either side by registry (a term finding has
-no single owning registry to partition by in the first place — it is shared vocabulary); instead it takes
-the **union, deduplicated** of the per-registry linter runs' ``(rule, subject, severity)`` triples before
-comparing. Since a requirement-registry finding's ``subject`` is unique to the one registry that produced
-it, union+dedup reduces exactly to "count each requirement-registry finding once" for those, and to "the
-term defect is one row in the set, not N" for shared-vocabulary findings — both sides end up counting each
-real-world defect exactly once, with no per-registry partitioning machinery needed at all.
+**Real-tree comparison** (``itpra-onto parity``): the linter over the vocabulary, and one
+:func:`itpra_onto.shacl.validate` over the emitted and ruled dataset, both restricted to the comparable ids.
 
-**``--fixtures`` comparison**: for every fixture under ``fixtures/**/*.yaml`` whose ``expect.count >= 1``
-(a ``count: 0`` clean-case/defence-in-depth fixture proves the shape does NOT fire in isolation — there is
-nothing for the linter side to independently confirm or deny, so it is out of scope for parity and skipped
-here; ``shapes/REGISTER.md``'s "Note on proof style" documents why those fixtures exist), this module
-**materialises the fixture's mutation onto disk**, in a fresh temporary directory that mirrors just enough
-of the real tree for the REAL, UNMODIFIED linter script to run against the mutated data:
-
-* the ontology directory (``[paths] ontology_dir``) — a full copy (mutated in place, or with one new file
-  added, matching the fixture).
-* the consumer's registry files — copied only for the ONE registry the fixture's mutated/added record
-  belongs to (a term-only fixture copies none at all; the linter is expected to degrade gracefully to a
-  missing-registry warning in that case).
-* ``[overlay] linter_script`` — **a byte-identical copy of the real script**, not a modified one, at the SAME
-  path relative to the repository root. This is load-bearing, not incidental: a linter that locates its
-  repository root by walking up from **the script file's own on-disk location** (never from the process's
-  cwd or from ``sys.argv``) would, if run uncopied, always resolve back to the ACTUAL repository root and
-  read the ACTUAL, unmutated vocabulary — the mutation would silently never be seen. Copying the script
-  into the scratch tree at the same relative depth makes that ancestor walk land on the scratch root
-  instead.
-
-**The SHACL/emit side of ``--fixtures`` never touches the scratch copy — it stays exactly the existing
-in-memory ``itpra_onto.fixtures.run_fixture`` call.** ``emit.guard_input_path`` (ADR 0043 D1) refuses any
-input path outside the repository root, and a scratch directory under the system temp directory is normally
-NOT under the repository root — so even if this module wanted to point the emitter at the scratch tree, it
-could not. The guard's rules (a)–(d) bind only :mod:`itpra_onto.emit`, not the consumer's linter, which is
-exactly why the scratch directory is free to live anywhere writable.
-
-Every fixture's verdict is one of ``both`` (linter and SHACL both independently catch the mutation under
-the SAME nominal rule id), ``shacl-only`` (only the shape fires — the expected verdict for every Table B
-"stricter than the linter" id, and for the one Table A id, ``req-target-unresolved``, whose own fixture
-deliberately exercises a record where the SPARQL shape's ``sh:class`` type-check is stricter than the
-linter's own soft instance-prefix fallback — see ``fixtures/requirements/req-target-unresolved.yaml``'s own
-header), ``linter-only`` (a real gap in the SHACL projection — never expected), or ``neither`` (neither side
-caught it at all — always a bug, and a failure in :mod:`tests.test_parity` whenever the fixture's nominal
-rule is comparable or emit-time-mapped).
+**``--fixtures`` comparison**: for every fixture under ``fixtures/**/*.yaml`` whose ``expect.count >= 1`` (a
+``count: 0`` clean-case fixture proves a shape does NOT fire — there is nothing for the linter to confirm,
+so it is skipped), the mutation is written into a scratch copy of the vocabulary and the linter runs over
+that copy, while the shape side stays the in-memory :func:`itpra_onto.fixtures.run_fixture` call. Each
+fixture's verdict is ``both``, ``shacl-only`` (expected for every Table B id), ``linter-only`` (a gap in the
+shapes — never expected) or ``neither`` (always a bug).
 """
 
 from __future__ import annotations
 
 import copy
-import json
 import re
 import shutil
-import subprocess
-import sys
 import tempfile
-from collections.abc import Sequence
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+import pyoxigraph as ox
 import yaml
 
 from itpra_onto import emit, fixtures, lint, rules, shacl
@@ -114,61 +54,22 @@ PACKAGE_DIR = Path(__file__).resolve().parent  # src/itpra_onto: the package's o
 REGISTER_MD = PACKAGE_DIR / "shapes" / "REGISTER.md"
 FIXTURES_DIR = fixtures.FIXTURES_DIR
 
+COMPARABLE_MECHANISMS = ("core", "sparql")
+EMIT_TIME_MECHANISMS = ("generated", "emit")
+MECHANISMS = (*COMPARABLE_MECHANISMS, *EMIT_TIME_MECHANISMS, "python")
 
-def linter_script(config: Config | None = None) -> Path:
-    """The consumer's linter, ``[overlay] linter_script`` (ADR 0042 D5)."""
-    config = require_overlay(config)
-    if not config.overlay.linter_script:  # type: ignore[union-attr]
-        raise ParityError("parity needs [overlay] linter_script in itpra-onto.toml: the consumer's linter to compare")
-    return (config.config_path.parent / config.overlay.linter_script).resolve()  # type: ignore[union-attr]
-
-
-def require_overlay(config: Config | None = None) -> Config:
-    """``parity`` compares the consumer's linter with the shapes over the consumer's registries: without an
-    ``[overlay]`` there is nothing to compare (ADR 0042 D5, ADR 0043 D1)."""
-    config = config if config is not None else load_config()
-    if config.overlay is None:
-        raise ParityError(
-            "parity needs an [overlay] in itpra-onto.toml (requirements_glob, linter_script): "
-            "the core build has no consumer linter or registries to compare"
-        )
-    return config
-
-
-def _default_linter_arg(config: Config) -> str:
-    """The registry name passed to the linter for a term-only fixture: any registry serves, since the linter
-    reports only its absence from the scratch tree (module docstring)."""
-    registries = default_registries(config)
-    return registries[0] if registries else ""
-
-# Table A mechanisms that ARE directly comparable by rule-id equality (module docstring).
-_COMPARABLE_MECHANISMS = ("core", "sparql")
-
-# The erratum: `relates-to-malformed`'s Table A row literally reads `core`, but shapes/REGISTER.md's own
-# "Erratum" paragraph (below Table B) corrects this to an emit-time `python` guard. Applied by
-# comparable_rule_ids()/emit_time_mapped_rule_ids(), never by mutating the parsed table itself.
-_RELATES_TO_MALFORMED = "relates-to-malformed"
-# Table A `python` rows enforced by a plain emit-time `raise EmitError` (not a LinkML-generated constraint):
-# mapped to the `emit-error` synthetic finding exactly like the `generated` rows.
-_EMIT_TIME_PYTHON_IDS = frozenset({_RELATES_TO_MALFORMED, "req-link-malformed"})
-_ERRATUM_MARKER = "**Erratum: `relates-to-malformed`'s mechanism (Table A, pre-A) is corrected here"
-
-_AC_SECTION_RE = re.compile(
-    r"### A/C — ontology term integrity.*?\n(.*?)\n### B — derived-package", re.DOTALL
-)
+_TABLE_A_SECTION_RE = re.compile(r"\n## Table A .*?\n(.*?)\n## Table B ", re.DOTALL)
 _TABLE_B_SECTION_RE = re.compile(r"\n## Table B .*?\n(.*?)\n## Table C ", re.DOTALL)
 _TABLE_B_ID_RE = re.compile(r"^\|\s*(B-[0-9]+(?:-[a-z0-9-]+)?)\s*\|", re.MULTILINE)
 _ID_CELL_RE = re.compile(r"`([^`]+)`")
-# The exact header the A/C sub-table must carry (as written in the register), and the Counts line
-# stating its row count — both checked, so a register edit that reshapes the table fails loudly.
-TABLE_A_HEADER = "| id | home | sev | check | family | mechanism | target | notes |"
-HOMES = ("core", "consumer", "both")  # who implements the rule: itpra_onto.lint, the consumer's linter, or each for its own records
-_TABLE_A_ROWS_COUNT_RE = re.compile(r"\*\*Table A 'A/C' sub-table rows:\*\* (\d+)")
+# The exact header Table A must carry, and the Counts line stating its row count — both checked, so a
+# register edit that reshapes the table fails loudly.
+TABLE_A_HEADER = "| id | sev | check | family | mechanism | target | notes |"
+_TABLE_A_ROWS_COUNT_RE = re.compile(r"\*\*Table A rows:\*\* (\d+)")
 
-# The consumer's linter checks `relates_to` on EntityType records too (their meta-edges), but the emitter
-# never projects a meta-edge (a schema statement, ADR 0008), so no graph ever carries one. Findings of
-# these ids on an EntityType subject are python-only by construction and are left out of the comparison
-# (and reported).
+# The linter checks `relates_to` on EntityType records too (their meta-edges), but the emitter never
+# projects a meta-edge (a schema statement, ADR 0008), so no graph ever carries one. Findings of these ids
+# on an EntityType subject are python-only by construction and are left out of the comparison (and reported).
 META_EDGE_RULE_IDS = frozenset({"target-unresolved", "verb-unknown"})
 EMIT_ERROR_RULE = "emit-error"
 
@@ -178,7 +79,7 @@ class ParityError(RuntimeError):
 
 
 # =====================================================================================================
-# Register parsing (shapes/REGISTER.md Table A, "A/C" sub-table)
+# Register parsing (shapes/REGISTER.md)
 
 
 def parse_table_b_ids(register_path: Path = REGISTER_MD) -> frozenset[str]:
@@ -193,87 +94,71 @@ def parse_table_b_ids(register_path: Path = REGISTER_MD) -> frozenset[str]:
     return ids
 
 
-def shape_rule_ids(shapes_dir: Path = shacl.SHAPES_DIR, config: Config | None = None) -> frozenset[str]:
-    """Every ``itpra-o:ruleId`` value in the loaded shapes (hand-written and generated)."""
+def shape_rule_ids(
+    shapes: ox.Dataset | None = None, *, shapes_dir: Path = shacl.SHAPES_DIR, config: Config | None = None
+) -> frozenset[str]:
+    """Every ``itpra-o:ruleId`` value in ``shapes`` (default: the shapes loaded from ``shapes_dir``)."""
     config = config if config is not None else load_config()
-    shapes = shacl.load_shapes(shapes_dir, config=config)
+    if shapes is None:
+        shapes = shacl.load_shapes(shapes_dir, config=config)
     return frozenset(shacl._shape_rule_ids(shapes, config).values())
 
 
-@dataclass(frozen=True)
-class TableARow:
-    home: str  # one of HOMES
-    mechanism: str
-
-
-def parse_table_a_rows(
+def parse_table_a(
     register_path: Path = REGISTER_MD,
     *,
     shapes_dir: Path | None = shacl.SHAPES_DIR,
     config: Config | None = None,
-) -> dict[str, TableARow]:
-    """``id -> (home, mechanism)`` for every row of Table A's "A/C" sub-table (module docstring), parsed from the
-    register at run time so it stays the single source. Raises :class:`ParityError` — never a silent
-    fallback to a hard-coded id list — if:
+) -> dict[str, str]:
+    """``id -> mechanism`` for every row of Table A, parsed from the register at run time so it stays the
+    single source. Raises :class:`ParityError` — never a silent fallback to a hard-coded id list — if:
 
-    * the section or the erratum paragraph this module relies on cannot be found;
-    * the header row is not exactly :data:`TABLE_A_HEADER`, or a row cannot be parsed;
-    * the number of rows differs from the "Table A 'A/C' sub-table rows" figure the register's Counts
-      section states;
-    * (``shapes_dir`` given — the default) a comparable id is not an ``itpra-o:ruleId`` in the loaded shapes,
-      or a ``ruleId`` in the shapes appears in neither Table A nor Table B. ``shapes_dir=None``
-      skips this cross-check (the register alone is parsed).
+    * the section cannot be found, the header row is not exactly :data:`TABLE_A_HEADER`, or a row cannot be
+      parsed or names a mechanism outside :data:`MECHANISMS`;
+    * the number of rows differs from the "Table A rows" figure the register's Counts section states;
+    * (``shapes_dir`` given — the default) a comparable id is not an ``itpra-o:ruleId`` in the shapes loaded
+      from it, or a ``ruleId`` there appears in neither Table A nor Table B. ``shapes_dir=None`` skips this
+      cross-check (the register alone is parsed).
     """
     path = register_path
     text = path.read_text(encoding="utf-8")
-    if _ERRATUM_MARKER not in text:
-        raise ParityError(
-            f"{path}: expected the relates-to-malformed erratum paragraph (starting {_ERRATUM_MARKER!r}) "
-            "was not found — the register changed; re-check this module's erratum handling before trusting "
-            "its parity output"
-        )
-    match = _AC_SECTION_RE.search(text)
+    match = _TABLE_A_SECTION_RE.search(text)
     if not match:
-        raise ParityError(f"{path}: could not locate the '### A/C' Table A sub-table")
+        raise ParityError(f"{path}: could not locate the '## Table A' section")
     lines = [ln.strip() for ln in match.group(1).splitlines() if ln.strip().startswith("|")]
     if len(lines) < 3:
-        raise ParityError(f"{path}: Table A 'A/C' sub-table has too few rows ({len(lines)})")
+        raise ParityError(f"{path}: Table A has too few rows ({len(lines)})")
     if lines[0] != TABLE_A_HEADER:
-        raise ParityError(f"{path}: Table A 'A/C' header row is {lines[0]!r}, expected exactly {TABLE_A_HEADER!r}")
+        raise ParityError(f"{path}: Table A header row is {lines[0]!r}, expected exactly {TABLE_A_HEADER!r}")
     if not re.fullmatch(r"\|(?:-+\|)+", lines[1]):
-        raise ParityError(f"{path}: Table A 'A/C' second row is not a '|---|' separator: {lines[1]!r}")
-    rows: dict[str, TableARow] = {}
+        raise ParityError(f"{path}: Table A second row is not a '|---|' separator: {lines[1]!r}")
+    mechanisms: dict[str, str] = {}
     for row in lines[2:]:  # skip the header row and the '|---|...' separator
         cells = [c.strip() for c in row.strip("|").split("|")]
-        if len(cells) < 6:
-            raise ParityError(f"{path}: malformed Table A row (expected >=6 columns): {row!r}")
+        if len(cells) < 5:
+            raise ParityError(f"{path}: malformed Table A row (expected >=5 columns): {row!r}")
         id_match = _ID_CELL_RE.search(cells[0])
-        home_match = _ID_CELL_RE.search(cells[1])
-        mech_match = _ID_CELL_RE.search(cells[5])
-        if not id_match or not home_match or not mech_match:
-            raise ParityError(f"{path}: could not extract id/home/mechanism from Table A row: {row!r}")
-        if home_match.group(1) not in HOMES:
-            raise ParityError(f"{path}: Table A row {id_match.group(1)!r} has home {home_match.group(1)!r}, expected one of {HOMES}")
-        if id_match.group(1) in rows:
-            raise ParityError(f"{path}: Table A 'A/C' lists {id_match.group(1)!r} twice")
-        rows[id_match.group(1)] = TableARow(home=home_match.group(1), mechanism=mech_match.group(1))
-    if not rows:
-        raise ParityError(f"{path}: parsed zero Table A 'A/C' rows")
-    mechanisms = {rid: r.mechanism for rid, r in rows.items()}
+        mech_match = _ID_CELL_RE.search(cells[4])
+        if not id_match or not mech_match:
+            raise ParityError(f"{path}: could not extract id/mechanism from Table A row: {row!r}")
+        if mech_match.group(1) not in MECHANISMS:
+            raise ParityError(f"{path}: Table A row {id_match.group(1)!r} has mechanism {mech_match.group(1)!r}, expected one of {MECHANISMS}")
+        if id_match.group(1) in mechanisms:
+            raise ParityError(f"{path}: Table A lists {id_match.group(1)!r} twice")
+        mechanisms[id_match.group(1)] = mech_match.group(1)
+    if not mechanisms:
+        raise ParityError(f"{path}: parsed zero Table A rows")
 
     count_match = _TABLE_A_ROWS_COUNT_RE.search(text)
     if not count_match:
-        raise ParityError(f"{path}: the Counts section states no \"**Table A 'A/C' sub-table rows:** <n>\" figure")
+        raise ParityError(f'{path}: the Counts section states no "**Table A rows:** <n>" figure')
     stated = int(count_match.group(1))
     if stated != len(mechanisms):
-        raise ParityError(f"{path}: Table A 'A/C' has {len(mechanisms)} rows but the Counts section states {stated}")
+        raise ParityError(f"{path}: Table A has {len(mechanisms)} rows but the Counts section states {stated}")
 
     if shapes_dir is not None:
-        in_shapes = shape_rule_ids(shapes_dir, config)
-        expected = set(comparable_rule_ids(mechanisms))
-        if (config if config is not None else load_config()).overlay is None:
-            expected &= core_rule_ids(rows)  # the consumer-home shapes are not loaded without an overlay
-        missing = sorted(expected - in_shapes)
+        in_shapes = shape_rule_ids(shapes_dir=shapes_dir, config=config)
+        missing = sorted(set(comparable_rule_ids(mechanisms)) - in_shapes)
         if missing:
             raise ParityError(
                 f"{path}: comparable Table A id(s) {missing} are no itpra-o:ruleId in the shapes under {shapes_dir}"
@@ -284,109 +169,48 @@ def parse_table_a_rows(
                 f"{path}: itpra-o:ruleId value(s) {unregistered} in the shapes under {shapes_dir} appear in "
                 "neither Table A nor Table B"
             )
-    return rows
-
-
-def parse_table_a(
-    register_path: Path = REGISTER_MD,
-    *,
-    shapes_dir: Path | None = shacl.SHAPES_DIR,
-    config: Config | None = None,
-) -> dict[str, str]:
-    """``id -> mechanism`` for every row of Table A's "A/C" sub-table (:func:`parse_table_a_rows`)."""
-    return {rid: row.mechanism for rid, row in parse_table_a_rows(register_path, shapes_dir=shapes_dir, config=config).items()}
-
-
-def core_rule_ids(rows: dict[str, TableARow]) -> frozenset[str]:
-    """The ids :mod:`itpra_onto.lint` implements: Table A rows whose home is ``core`` or ``both``."""
-    return frozenset(rid for rid, row in rows.items() if row.home in ("core", "both"))
+    return mechanisms
 
 
 def comparable_rule_ids(mechanisms: dict[str, str]) -> tuple[str, ...]:
-    """Ids whose Table A mechanism is ``core``/``sparql``, minus ``relates-to-malformed`` (the erratum)."""
-    ids = {rid for rid, mech in mechanisms.items() if mech in _COMPARABLE_MECHANISMS}
-    ids.discard(_RELATES_TO_MALFORMED)
-    return tuple(sorted(ids))
+    """Ids whose Table A mechanism is ``core`` or ``sparql``."""
+    return tuple(sorted(rid for rid, mech in mechanisms.items() if mech in COMPARABLE_MECHANISMS))
 
 
 def emit_time_mapped_rule_ids(mechanisms: dict[str, str]) -> tuple[str, ...]:
-    """Ids an ``emit-error`` synthetic finding can stand in for: Table A's ``generated`` rows, plus the
-    ``python`` rows enforced by a plain emit-time ``raise`` (:data:`_EMIT_TIME_PYTHON_IDS`:
-    ``relates-to-malformed`` — the erratum, module docstring — and ``req-link-malformed``).
-    Each of those must be a Table A row, or :class:`ParityError` (the register and this module drifted)."""
-    ids = {rid for rid, mech in mechanisms.items() if mech == "generated"}
-    missing = sorted(_EMIT_TIME_PYTHON_IDS - set(mechanisms))
-    if missing:
-        raise ParityError(f"emit-time-mapped id(s) {missing} are not Table A 'A/C' rows")
-    ids |= _EMIT_TIME_PYTHON_IDS
-    return tuple(sorted(ids))
+    """Ids an ``emit-error`` synthetic finding can stand in for: Table A's ``generated`` and ``emit`` rows."""
+    return tuple(sorted(rid for rid, mech in mechanisms.items() if mech in EMIT_TIME_MECHANISMS))
 
 
 def outside_scope_rule_ids(mechanisms: dict[str, str]) -> tuple[str, ...]:
-    """Table A 'A/C' ids that are neither comparable nor emit-time-mapped (mechanism ``python``) — reported,
-    never hidden, so a reader can see the full Table A inventory this module's comparison touches."""
-    comparable = set(comparable_rule_ids(mechanisms))
-    emit_mapped = set(emit_time_mapped_rule_ids(mechanisms))
-    return tuple(sorted(set(mechanisms) - comparable - emit_mapped))
+    """Table A ids that are neither comparable nor emit-time-mapped (mechanism ``python``) — reported, never
+    hidden, so a reader can see the full inventory the comparison touches."""
+    return tuple(sorted(rid for rid, mech in mechanisms.items() if mech == "python"))
 
 
-def _nominal_rule_id(fixture: fixtures.Fixture) -> str:
+def nominal_rule_id(fixture: fixtures.Fixture) -> str:
     """The Table A/B id a fixture proves. Equal to ``fixture.rule`` except for an emit-time-guard fixture
     (``rule: emit-error``), whose real id is the fixture's own filename with a trailing ``-emit-guard``
     suffix stripped (module docstring's "Emit-time mapping")."""
-    if fixture.rule != "emit-error":
+    if fixture.rule != EMIT_ERROR_RULE:
         return fixture.rule
     return fixture.path.stem.removesuffix("-emit-guard")
 
 
 # =====================================================================================================
-# Running the linter as a subprocess
+# The linter side
 
 
-def default_registries(config: Config | None = None) -> tuple[str, ...]:
-    """Every registry the overlay's ``requirements_glob`` matches (:func:`itpra_onto.emit.registry_of`), sorted."""
-    config = config if config is not None else load_config()
-    return tuple(sorted({emit.registry_of(path, config) for path in emit.registry_files(config)}))
-
-
-def _run_linter_json(script: Path, sub_arg: str, *, cwd: Path) -> list[dict[str, Any]]:
-    proc = subprocess.run(
-        [sys.executable, str(script), sub_arg, "--json"],
-        cwd=str(cwd),
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-        errors="replace",
-        check=False,
-    )
-    try:
-        payload = json.loads(proc.stdout)
-    except json.JSONDecodeError as exc:
-        raise ParityError(
-            f"linter --json ({script}, sub={sub_arg!r}, exit {proc.returncode}) did not print valid JSON: "
-            f"stdout={proc.stdout[:2000]!r} stderr={proc.stderr[:2000]!r}"
-        ) from exc
-    if not isinstance(payload, list):
-        raise ParityError(f"linter --json ({script}, sub={sub_arg!r}): expected a JSON list, got {type(payload).__name__}")
-    return payload
-
-
-def run_linter(sub: str, config: Config | None = None) -> list[dict[str, Any]]:
-    """Run the REAL, committed consumer linter against the real repository tree for one registry."""
-    config = config if config is not None else load_config()
-    return _run_linter_json(linter_script(config), sub, cwd=config.repo_root)
-
-
-def core_lint_findings(config: Config | None = None, *, ontology_dir: Path | None = None) -> list[dict[str, Any]]:
-    """The ontology's own lint (:mod:`itpra_onto.lint`) over ``ontology_dir`` (default: the configured one) — the
-    linter side of a core-mode comparison, where no consumer overlay names a linter (ADR 0042 D5)."""
+def lint_findings(config: Config | None = None, *, ontology_dir: Path | None = None) -> list[dict[str, Any]]:
+    """:mod:`itpra_onto.lint` over ``ontology_dir`` (default: the configured one)."""
     config = config if config is not None else load_config()
     root = ontology_dir if ontology_dir is not None else emit.ontology_dir(config)
     findings, _vocab = lint.lint_vocabulary(root, rel_to=config.repo_root)
     return findings
 
 
-def _linter_findings_as_set(findings: list[dict[str, Any]], rule_ids: frozenset[str]) -> set[tuple[str, str, str]]:
+def findings_as_set(findings: Iterable[dict[str, Any]], rule_ids: frozenset[str]) -> set[tuple[str, str, str]]:
+    """Linter ``--json`` rows as ``{(rule, subject, severity)}``, restricted to ``rule_ids``."""
     return {(f["rule"], f["subject"], f["severity"]) for f in findings if f.get("rule") in rule_ids}
 
 
@@ -409,7 +233,6 @@ class RealTreeComparison:
     # The emitter refused the inputs (an EmitError); the SHACL side never ran. Each entry is the
     # synthetic `emit-error` finding {rule, subject, severity, message}. Non-empty -> the comparison fails.
     emit_errors: tuple[dict[str, str], ...] = ()
-    mode: str = "overlay"  # "core": itpra_onto.lint over the core rules; "overlay": the consumer\'s linter
 
     @property
     def empty_symmetric_difference(self) -> bool:
@@ -439,41 +262,43 @@ def emit_error_as_dict(exc: emit.EmitError, config: Config) -> dict[str, str]:
     }
 
 
-def run_real_tree(
-    subs: Sequence[str] | None = None,
+def compare(
+    linter: set[tuple[str, str, str]],
+    shacl_findings: set[tuple[str | None, str, str]],
     *,
-    config: Config | None = None,
-    register_path: Path = REGISTER_MD,
+    comparable: frozenset[str],
+    outside_scope: Sequence[str],
+    entity_types: frozenset[str] = frozenset(),
+    emit_errors: Sequence[dict[str, str]] = (),
 ) -> RealTreeComparison:
-    """The primary parity comparison: the union (deduplicated) of the consumer's linter's ``--json`` findings
-    over ``subs`` (default: every registry — :func:`default_registries`), restricted to the comparable
-    (``core``/``sparql``) rule ids, versus one whole-tree :func:`itpra_onto.shacl.validate` run restricted
-    to the same ids (module docstring: "Avoiding an N-times-duplicated term finding").
+    """One :class:`RealTreeComparison` from both sides' ``(rule, subject, severity)`` sets. ``linter`` holds
+    comparable ids only; a finding of :data:`META_EDGE_RULE_IDS` on one of ``entity_types`` is set aside."""
+    excluded = {f for f in linter if f[0] in META_EDGE_RULE_IDS and f[1] in entity_types}
+    linter = linter - excluded
+    shacl_comparable = {f for f in shacl_findings if f[0] in comparable}
+    stricter = {f for f in shacl_findings if f[0] not in comparable}
+    return RealTreeComparison(
+        comparable_rules=tuple(sorted(comparable)),
+        linter_count=len(linter),
+        shacl_count=len(shacl_comparable),
+        linter_only=tuple(sorted(linter - shacl_comparable)),
+        shacl_only=tuple(sorted(shacl_comparable - linter)),
+        stricter_findings=tuple(sorted(stricter)),
+        outside_scope=tuple(outside_scope),
+        meta_edge_excluded=tuple(sorted(excluded)),
+        emit_errors=tuple(emit_errors),
+    )
 
-    A linter finding of ``target-unresolved``/``verb-unknown`` on an EntityType record is excluded
-    (meta-edges never reach a graph — ``meta_edge_excluded``); an :class:`itpra_onto.emit.EmitError` becomes
-    the synthetic ``emit-error`` finding (``emit_errors``) instead of a traceback, and fails the comparison."""
+
+def run_real_tree(*, config: Config | None = None, register_path: Path = REGISTER_MD) -> RealTreeComparison:
+    """The primary parity comparison: the linter's findings over the vocabulary, restricted to the comparable
+    (``core``/``sparql``) rule ids, versus one :func:`itpra_onto.shacl.validate` run restricted to the same
+    ids. An :class:`itpra_onto.emit.EmitError` becomes the synthetic ``emit-error`` finding (``emit_errors``)
+    instead of a traceback, and fails the comparison."""
     config = config if config is not None else load_config()
-    rows = parse_table_a_rows(register_path, config=config)
-    mechanisms = {rid: r.mechanism for rid, r in rows.items()}
-    comparable_all = frozenset(comparable_rule_ids(mechanisms))
-    outside = outside_scope_rule_ids(mechanisms)
-    core_mode = config.overlay is None
-
-    linter_union: set[tuple[str, str, str]] = set()
-    if core_mode:
-        # No consumer linter to run: the ontology's own lint over the core-home comparable rules; the
-        # consumer-home comparable rules have nothing to compare against and are reported as outside scope.
-        comparable = comparable_all & core_rule_ids(rows)
-        outside = tuple(sorted(set(outside) | (comparable_all - comparable)))
-        linter_union = _linter_findings_as_set(core_lint_findings(config), comparable)
-    else:
-        comparable = comparable_all
-        targets = tuple(subs) if subs else default_registries(config)
-        if not targets:
-            raise ParityError("run_real_tree: no registries to compare against (subs=() and none discovered)")
-        for sub in targets:
-            linter_union |= _linter_findings_as_set(run_linter(sub), comparable)
+    mechanisms = parse_table_a(register_path, config=config)
+    comparable = frozenset(comparable_rule_ids(mechanisms))
+    linter = findings_as_set(lint_findings(config), comparable)
 
     emit_errors: tuple[dict[str, str], ...] = ()
     all_shacl: set[tuple[str | None, str, str]] = set()
@@ -485,28 +310,16 @@ def run_real_tree(
         emit_errors = (emit_error_as_dict(exc, config),)
     else:
         dataset = rules.apply_rules(asserted, config).dataset
-        shapes = shacl.load_shapes(config=config)
-        report = shacl.validate(dataset, shapes, config=config)
+        report = shacl.validate(dataset, shacl.load_shapes(config=config), config=config)
         all_shacl = shacl.findings_as_set(report, config)
 
-    meta_types = entity_type_record_ids(inputs) if inputs is not None else frozenset()
-    excluded = {f for f in linter_union if f[0] in META_EDGE_RULE_IDS and f[1] in meta_types}
-    linter_union -= excluded
-
-    shacl_comparable = {f for f in all_shacl if f[0] in comparable}
-    stricter = {f for f in all_shacl if f[0] not in comparable}
-
-    return RealTreeComparison(
-        comparable_rules=tuple(sorted(comparable)),
-        linter_count=len(linter_union),
-        shacl_count=len(shacl_comparable),
-        linter_only=tuple(sorted(linter_union - shacl_comparable)),
-        shacl_only=tuple(sorted(shacl_comparable - linter_union)),
-        stricter_findings=tuple(sorted(stricter)),
-        outside_scope=outside,
-        meta_edge_excluded=tuple(sorted(excluded)),
+    return compare(
+        linter,
+        all_shacl,
+        comparable=comparable,
+        outside_scope=outside_scope_rule_ids(mechanisms),
+        entity_types=entity_type_record_ids(inputs) if inputs is not None else frozenset(),
         emit_errors=emit_errors,
-        mode="core" if core_mode else "overlay",
     )
 
 
@@ -517,7 +330,6 @@ def _finding_dict(finding: tuple[str, str, str]) -> dict[str, str]:
 
 def comparison_as_dict(comparison: RealTreeComparison) -> dict[str, Any]:
     return {
-        "mode": comparison.mode,
         "comparable_rules": list(comparison.comparable_rules),
         "linter": comparison.linter_count,
         "shacl": comparison.shacl_count,
@@ -531,7 +343,7 @@ def comparison_as_dict(comparison: RealTreeComparison) -> dict[str, Any]:
 
 
 def print_report(comparison: RealTreeComparison) -> None:
-    print(f"parity ({comparison.mode} mode): {len(comparison.comparable_rules)} comparable rule id(s): {', '.join(comparison.comparable_rules)}")
+    print(f"parity: {len(comparison.comparable_rules)} comparable rule id(s): {', '.join(comparison.comparable_rules)}")
     for e in comparison.emit_errors:
         print(f"parity: EMIT ERROR — the SHACL side did not run: {e['severity']}  {e['rule']}  {e['subject']}  {e['message']}")
     print(f"parity: linter {comparison.linter_count} finding(s), shacl {comparison.shacl_count} finding(s) (comparable set)")
@@ -553,27 +365,26 @@ def print_report(comparison: RealTreeComparison) -> None:
         print(f"parity: {len(comparison.stricter_findings)} stricter (Table B) SHACL finding(s) on the real tree (informational):")
         for f in comparison.stricter_findings:
             print(f"  stricter     {f[2]:8} {f[0]:25} {f[1]}")
-    print(f"parity: {len(comparison.outside_scope)} linter rule id(s) outside the comparable set (mechanism python/generated): "
+    print(f"parity: {len(comparison.outside_scope)} linter rule id(s) outside the comparable set (mechanism python): "
           f"{', '.join(comparison.outside_scope)}")
 
 
 # =====================================================================================================
-# Materialising a fixture's mutation onto disk (--fixtures only; module docstring)
+# Writing a fixture's mutation into a scratch copy of the vocabulary (--fixtures only; module docstring)
 
 
-def _load_yaml_file(path: Path) -> Any:
+def load_yaml_file(path: Path) -> Any:
     with path.open(encoding="utf-8") as fh:
         return yaml.safe_load(fh)
 
 
-def _dump_yaml_file(path: Path, data: Any) -> None:
+def dump_yaml_file(path: Path, data: Any) -> None:
     with path.open("w", encoding="utf-8") as fh:
         yaml.safe_dump(data, fh, sort_keys=False, allow_unicode=True, default_flow_style=False)
 
 
-def _scratch_path(scratch_root: Path, real: Path, repo_root: Path) -> Path:
-    """Where ``real`` lives in the scratch tree: the same path relative to the repository root, so the
-    consumer's linter finds everything where its own layout puts it."""
+def scratch_path(scratch_root: Path, real: Path, repo_root: Path) -> Path:
+    """Where ``real`` lives in the scratch tree: the same path relative to the repository root."""
     resolved = real.resolve()
     root = repo_root.resolve()
     if not resolved.is_relative_to(root):
@@ -581,111 +392,44 @@ def _scratch_path(scratch_root: Path, real: Path, repo_root: Path) -> Path:
     return scratch_root / resolved.relative_to(root)
 
 
-def _copy_ontology_dir(scratch_root: Path, config: Config | None = None) -> None:
+def copy_ontology_dir(scratch_root: Path, config: Config | None = None) -> Path:
+    """Copy the vocabulary into the scratch tree; returns the copy's directory."""
     config = config if config is not None else load_config()
-    shutil.copytree(emit.ontology_dir(config), _scratch_path(scratch_root, emit.ontology_dir(config), config.repo_root), dirs_exist_ok=True)
-
-
-def _copy_linter_script(scratch_root: Path, config: Config | None = None) -> None:
-    config = config if config is not None else load_config()
-    dest = _scratch_path(scratch_root, linter_script(config), config.repo_root)
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(linter_script(config), dest)
-
-
-def _registry_files_of(registry: str, config: Config) -> list[Path]:
-    return [p for p in emit.registry_files(config) if emit.registry_of(p, config) == registry]
-
-
-def _copy_registry_dir(scratch_root: Path, registry: str, config: Config | None = None) -> None:
-    config = config if config is not None else load_config()
-    files = _registry_files_of(registry, config)
-    if not files:
-        raise ParityError(f"no registry file of {registry!r} matches the overlay's requirements_glob")
-    for src in files:
-        dest = _scratch_path(scratch_root, src, config.repo_root)
-        dest.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(src, dest)
-
-
-def _materialize_mutate_term(scratch_root: Path, record_file: str, record_id: str, mutate: fixtures.MutateAction) -> None:
-    path = scratch_root / record_file
-    data = _load_yaml_file(path)
-    if not isinstance(data, list):
-        raise ParityError(f"{path}: expected a term file top-level list")
-    for index, rec in enumerate(data):
-        if isinstance(rec, dict) and rec.get("id") == record_id:
-            data[index] = fixtures._apply_mutation(rec, mutate)
-            break
-    else:
-        raise ParityError(f"{path}: mutate.id {record_id!r} not found")
-    _dump_yaml_file(path, data)
-
-
-def _materialize_mutate_registry(scratch_root: Path, record_file: str, record_id: str, mutate: fixtures.MutateAction) -> None:
-    path = scratch_root / record_file
-    data = _load_yaml_file(path) or {}
-    reqs = data.get("requirements")
-    if not isinstance(reqs, list):
-        raise ParityError(f"{path}: expected a top-level 'requirements' list")
-    for index, rec in enumerate(reqs):
-        if isinstance(rec, dict) and rec.get("id") == record_id:
-            reqs[index] = fixtures._apply_mutation(rec, mutate)
-            break
-    else:
-        raise ParityError(f"{path}: mutate.id {record_id!r} not found")
-    _dump_yaml_file(path, data)
-
-
-def _materialize_add_term(scratch_root: Path, record: dict[str, Any], config: Config) -> None:
-    path = _scratch_path(scratch_root, emit.ontology_dir(config), config.repo_root) / "_fixture-scratch.yaml"
-    existing = _load_yaml_file(path) if path.exists() else []
-    existing = existing or []
-    existing.append(copy.deepcopy(record))
-    _dump_yaml_file(path, existing)
-
-
-def _materialize_add_registry(scratch_root: Path, registry: str, kind: str, record: dict[str, Any], config: Config) -> None:
-    """Append ``record`` to the registry file of ``registry`` whose stem is ``kind`` (``registry:<X>/<kind>``)."""
-    matches = [p for p in _registry_files_of(registry, config) if p.stem == kind]
-    if len(matches) != 1:
-        raise ParityError(f"registry {registry!r} has {len(matches)} file(s) named {kind}.yaml; add.file needs exactly one")
-    path = _scratch_path(scratch_root, matches[0], config.repo_root)
-    data = _load_yaml_file(path) or {}
-    reqs = data.setdefault("requirements", [])
-    reqs.append(copy.deepcopy(record))
-    _dump_yaml_file(path, data)
+    dest = scratch_path(scratch_root, emit.ontology_dir(config), config.repo_root)
+    shutil.copytree(emit.ontology_dir(config), dest, dirs_exist_ok=True)
+    return dest
 
 
 def materialize_fixture(
     fixture: fixtures.Fixture, scratch_root: Path, real_inputs: emit.Inputs, config: Config | None = None
-) -> str:
-    """Apply ``fixture``'s mutation/addition onto the scratch copy of the tree rooted at ``scratch_root``
-    (which must already hold a copy of the ontology dir and the linter script — module docstring). Returns
-    the registry name to pass as the linter's positional argument."""
+) -> None:
+    """Apply ``fixture``'s mutation or addition to the scratch copy of the vocabulary under ``scratch_root``
+    (:func:`copy_ontology_dir`)."""
     config = config if config is not None else load_config()
     action = fixture.action
     if isinstance(action, fixtures.MutateAction):
-        for term in real_inputs.terms:
-            if term.record.get("id") == action.id:
-                _materialize_mutate_term(scratch_root, term.file, action.id, action)
-                return _default_linter_arg(config)
-        for req in real_inputs.requirements:
-            if req.record.get("id") == action.id:
-                _copy_registry_dir(scratch_root, req.registry, config)
-                _materialize_mutate_registry(scratch_root, req.file, action.id, action)
-                return req.registry
-        raise ParityError(f"materialize_fixture: mutate.id {action.id!r} matches no term or requirement record")
+        record_file = next((t.file for t in real_inputs.terms if t.record.get("id") == action.id), None)
+        if record_file is None:
+            raise ParityError(f"materialize_fixture: mutate.id {action.id!r} matches no term record")
+        path = scratch_root / record_file
+        data = load_yaml_file(path)
+        if not isinstance(data, list):
+            raise ParityError(f"{path}: expected a term file top-level list")
+        for index, rec in enumerate(data):
+            if isinstance(rec, dict) and rec.get("id") == action.id:
+                data[index] = fixtures.mutated_record(rec, action)
+                break
+        else:
+            raise ParityError(f"{path}: mutate.id {action.id!r} not found")
+        dump_yaml_file(path, data)
+        return
 
-    if action.file == "terms":
-        _materialize_add_term(scratch_root, action.record, config)
-        return _default_linter_arg(config)
-    registry, _, kind = action.file.removeprefix("registry:").partition("/")
-    if not registry or not kind:
-        raise ParityError(f"materialize_fixture: add.file {action.file!r} does not name a registry/kind")
-    _copy_registry_dir(scratch_root, registry, config)
-    _materialize_add_registry(scratch_root, registry, kind, action.record, config)
-    return registry
+    if action.file != "terms":
+        raise ParityError(f"materialize_fixture: add.file {action.file!r} is not 'terms'")
+    path = scratch_path(scratch_root, emit.ontology_dir(config), config.repo_root) / "_fixture-scratch.yaml"
+    existing = (load_yaml_file(path) if path.exists() else []) or []
+    existing.append(copy.deepcopy(action.record))
+    dump_yaml_file(path, existing)
 
 
 # =====================================================================================================
@@ -694,8 +438,8 @@ def materialize_fixture(
 
 @dataclass(frozen=True)
 class FixtureVerdict:
-    fixture: str  # e.g. "structural/field-missing.yaml" (repo-relative to fixtures/)
-    nominal_rule: str  # the Table A/B id this fixture proves (module docstring's _nominal_rule_id)
+    fixture: str  # e.g. "structural/field-missing.yaml" (relative to its fixtures directory)
+    nominal_rule: str  # the Table A/B id this fixture proves (nominal_rule_id)
     focus: str
     shacl_caught: bool
     shacl_rule_seen: str | None  # the actual SHACL-side rule_id (may be "emit-error")
@@ -719,41 +463,25 @@ def verdict_as_dict(verdict: FixtureVerdict) -> dict[str, Any]:
     }
 
 
-def _run_one_fixture(
-    fixture_path: Path,
-    shapes_dir: Path,
-    real_inputs: emit.Inputs,
-    config: Config,
+def verdict_for(
+    fixture: fixtures.Fixture,
+    label: str,
+    report: shacl.ValidationReport,
+    linter_findings: Iterable[dict[str, Any]],
+    *,
     comparable: frozenset[str],
     emit_mapped: frozenset[str],
+    config: Config,
 ) -> FixtureVerdict:
-    fixture = fixtures.load_fixture(fixture_path)
-    nominal = _nominal_rule_id(fixture)
-
-    report, _expected = fixtures.run_fixture(fixture_path, shapes_dir, config=config)
-
+    """One fixture's verdict from both sides' findings: the shape side's ``report`` over the mutated data and
+    the linter's rows over the same mutation."""
+    nominal = nominal_rule_id(fixture)
     # An emit-time fixture naming expect.emit_error matches only that EmitError class, not any emit error
     # on the same subject (fixtures.finding_matches).
     shacl_matches = [f for f in report.findings if fixtures.finding_matches(f, fixture, config)]
     shacl_caught = fixture.count >= 1 and len(shacl_matches) == fixture.count
-    shacl_rule_seen = shacl_matches[0].rule_id if shacl_matches else None
-
-    with tempfile.TemporaryDirectory(prefix="itpra-parity-") as tmp:
-        scratch_root = Path(tmp)
-        _copy_ontology_dir(scratch_root, config)
-        if config.overlay is None:  # core mode: the ontology's own lint over the mutated scratch copy
-            materialize_fixture(fixture, scratch_root, real_inputs, config)
-            linter_findings = core_lint_findings(config, ontology_dir=_scratch_path(scratch_root, emit.ontology_dir(config), config.repo_root))
-        else:
-            _copy_linter_script(scratch_root, config)
-            sub_arg = materialize_fixture(fixture, scratch_root, real_inputs, config)
-            script = _scratch_path(scratch_root, linter_script(config), config.repo_root)
-            linter_findings = _run_linter_json(script, sub_arg, cwd=scratch_root)
-
-    focus_findings = [f for f in linter_findings if f.get("subject") == fixture.focus]
-    linter_rules_seen = tuple(sorted({f["rule"] for f in focus_findings}))
+    linter_rules_seen = tuple(sorted({f["rule"] for f in linter_findings if f.get("subject") == fixture.focus}))
     linter_caught = nominal in linter_rules_seen
-
     if shacl_caught and linter_caught:
         verdict = "both"
     elif shacl_caught:
@@ -762,13 +490,12 @@ def _run_one_fixture(
         verdict = "linter-only"
     else:
         verdict = "neither"
-
     return FixtureVerdict(
-        fixture=fixture_path.relative_to(FIXTURES_DIR).as_posix(),
+        fixture=label,
         nominal_rule=nominal,
         focus=fixture.focus,
         shacl_caught=shacl_caught,
-        shacl_rule_seen=shacl_rule_seen,
+        shacl_rule_seen=shacl_matches[0].rule_id if shacl_matches else None,
         linter_caught=linter_caught,
         linter_rules_seen=linter_rules_seen,
         verdict=verdict,
@@ -783,46 +510,45 @@ def run_fixtures(
     register_path: Path = REGISTER_MD,
 ) -> list[FixtureVerdict]:
     """The ``--fixtures`` comparison: one :class:`FixtureVerdict` per fixture with ``expect.count >= 1``
-    under ``fixtures/**/*.yaml`` (module docstring: a ``count: 0`` clean-case fixture has nothing for the
-    linter side to independently confirm, so it is skipped here)."""
+    under ``fixtures/**/*.yaml``."""
     config = config if config is not None else load_config()
-    rows = parse_table_a_rows(register_path, shapes_dir=shapes_dir, config=config)
-    mechanisms = {rid: r.mechanism for rid, r in rows.items()}
+    mechanisms = parse_table_a(register_path, shapes_dir=shapes_dir, config=config)
     comparable = frozenset(comparable_rule_ids(mechanisms))
     emit_mapped = frozenset(emit_time_mapped_rule_ids(mechanisms))
-    if config.overlay is None:  # core mode: only what itpra_onto.lint implements can be compared
-        comparable &= core_rule_ids(rows)
-        emit_mapped &= core_rule_ids(rows)
     real_inputs = emit.load_inputs(config)
-    term_ids = {t.record.get("id") for t in real_inputs.terms}
 
     verdicts: list[FixtureVerdict] = []
     for fixture_path in sorted(FIXTURES_DIR.glob("*/*.yaml")):
         fixture = fixtures.load_fixture(fixture_path)
         if fixture.count < 1:
             continue
-        if config.overlay is None and _needs_registry(fixture, term_ids):
-            continue  # a registry fixture: nothing to materialise without a consumer overlay
-        verdicts.append(_run_one_fixture(fixture_path, shapes_dir, real_inputs, config, comparable, emit_mapped))
+        report, _expected = fixtures.run_fixture(fixture_path, shapes_dir, config=config)
+        with tempfile.TemporaryDirectory(prefix="itpra-parity-") as tmp:
+            scratch_root = Path(tmp)
+            scratch_ontology = copy_ontology_dir(scratch_root, config)
+            materialize_fixture(fixture, scratch_root, real_inputs, config)
+            linter_findings = lint_findings(config, ontology_dir=scratch_ontology)
+        verdicts.append(
+            verdict_for(
+                fixture,
+                fixture_path.relative_to(FIXTURES_DIR).as_posix(),
+                report,
+                linter_findings,
+                comparable=comparable,
+                emit_mapped=emit_mapped,
+                config=config,
+            )
+        )
     return verdicts
-
-
-def _needs_registry(fixture: fixtures.Fixture, term_ids: set[str | None]) -> bool:
-    """A fixture that adds a registry record or mutates one (its id is no term's)."""
-    action = fixture.action
-    if isinstance(action, fixtures.AddAction):
-        return action.file != "terms"
-    return action.id not in term_ids
 
 
 FAILING_VERDICTS = ("neither", "linter-only")
 
 
 def fixture_failures(verdicts: Sequence[FixtureVerdict]) -> list[FixtureVerdict]:
-    """The verdicts that fail ``parity --fixtures``: ``neither`` on any fixture (nothing noticed
-    the mutation at all — always a bug), and ``linter-only`` on a comparable or emit-time-mapped rule (the
-    projection has a gap the linter does not). ``linter-only`` on a Table B id cannot occur (the linter has
-    no such id)."""
+    """The verdicts that fail ``parity --fixtures``: ``neither`` on any fixture (nothing noticed the mutation
+    at all — always a bug), and ``linter-only`` on a comparable or emit-time-mapped rule (the shapes have a
+    gap the linter does not). ``linter-only`` on a Table B id cannot occur (the linter has no such id)."""
     return [
         v for v in verdicts if v.verdict == "neither" or (v.verdict in FAILING_VERDICTS and v.comparable)
     ]

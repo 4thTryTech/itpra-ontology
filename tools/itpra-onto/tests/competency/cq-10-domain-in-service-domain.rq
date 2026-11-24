@@ -1,0 +1,12 @@
+# CQ5 (part 5) — every Domain's `belongsToServiceDomain` edge, one row per (domain, service domain).
+#
+# test_competency.py checks the cardinality is exactly one per domain and that every target is typed
+# SERVICE_DOMAIN.
+
+SELECT ?domain ?sd
+WHERE {
+  GRAPH itpra-g:t1 {
+    ?domain a itpra:DOMAIN ;
+            itpra-o:belongsToServiceDomain ?sd .
+  }
+}

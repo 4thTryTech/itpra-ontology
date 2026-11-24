@@ -18,22 +18,20 @@ unless one register says where each rule lives, every rule is proven to fire, an
    (a SHACL Core shape), `sparql` (a `sh:SPARQLConstraint`) or `python` (the linter keeps it); a second table lists
    rules only the shapes have; error maps to `sh:Violation`, warning to `sh:Warning`; a rule enforced before any
    graph exists reports as `emit-error`.
-2. Shapes are hand-written in files with disjoint ownership — structural, cross-field, a consumer's requirement
-   shapes — plus one generated file with a shape per verb for the class pairs the authoring schema declares
-   (ADR 0008). Shapes carry a rule id and a severity and no base IRI; schema-generated SHACL and OWL document the
-   authoring shape only.
+2. Shapes are hand-written in files with disjoint ownership — structural and cross-field — plus one generated
+   file with a shape per verb for the class pairs the authoring schema declares (ADR 0008). Shapes carry a rule
+   id and a severity and no base IRI; schema-generated SHACL and OWL document the authoring shape only.
 3. Shapes may be stricter than the linter where the vocabulary states a rule it never checked — label integrity,
    one authoring file per record, resolving decision links, single-valued roll-ups, allowed edge pairs. A minimum
    the data satisfies but no rule states stays a warning until a record promotes it.
 4. Every rule has a fixture: one broken record, applied in memory, fires exactly that rule on that focus with no
    cascade, while clean data fires nothing; a rule no mutation reaches is proven by quad injection.
-5. `parity` runs the consumer's linter and the shapes over the same tree and compares the `core` and `sparql`
-   ids as `(rule, subject, severity)`; stricter rules are tested by fixture alone; `python` rules are reported,
-   never compared. It runs only where a consumer overlay names a linter (ADR 0043).
+5. `parity` runs the linter and the shapes over the same tree and compares the `core` and `sparql` ids as
+   `(rule, subject, severity)`; stricter rules are tested by fixture alone; `python` rules are reported, never
+   compared.
 6. On conflict the rule text — `schema.yaml`, the authoring schema, a decision record — wins; the fix goes to the
    check that misreads it, never to the data.
-7. Outside the graph: file structure, id uniqueness before emission, prose checks, a consumer's own
-   manifest and traceability rules.
+7. Outside the graph: file structure, id uniqueness before emission and prose checks.
 
 ## Consequences
 

@@ -1,7 +1,7 @@
 """Tests for the SPARQL materialisation rules (``itpra_onto.rules``; ADR 0041 D4).
 
-Every test reads the REAL input files (the vocabulary and, with an overlay, the requirements registries),
-exactly like ``test_emit.py``: nothing is ever written to them. Expected counts are always COMPUTED from
+Every test reads the REAL input files (the vocabulary), exactly like ``test_emit.py``: nothing is ever
+written to them. Expected counts are always COMPUTED from
 ``emit.load_inputs()`` in this file (never a literal), since the schema's ``itpra_verb`` annotation counts
 are a snapshot taken at authoring time and the live ontology keeps growing. Alternative rule directories used
 to test :func:`rules.rules_digest` are written to ``tmp_path`` only.
@@ -9,7 +9,6 @@ to test :func:`rules.rules_digest` are written to ``tmp_path`` only.
 
 from __future__ import annotations
 
-import importlib.util
 import shutil
 import time
 from pathlib import Path
@@ -26,7 +25,6 @@ EXPECTED_RULE_IDS = (
     "capability-in-plane",
     "capability-in-service-domain",
     "function-in-domain",
-    "requirement-meets",
     "boundary-governed-function",
     "inverses",
 )
@@ -148,31 +146,6 @@ def _expected_in_domain(inputs: Inputs) -> set[tuple[str, str]]:
     return pairs
 
 
-def _expected_meets(inputs: Inputs) -> set[tuple[str, str]]:
-    pairs: set[tuple[str, str]] = set()
-    for req in inputs.requirements:
-        met_by = req.record.get("met_by")
-        targets = met_by if isinstance(met_by, list) else ([met_by] if met_by else [])
-        for cap_id in targets:
-            pairs.add((str(cap_id), req.record["id"]))
-    return pairs
-
-
-def _linter_boundary_governed_functions():
-    """Import the consumer's linter's (``[overlay] linter_script``) helper by path.
-
-    The script is a CLI (guarded by ``if __name__ == "__main__":``), so ``exec_module`` under a different
-    module name never runs ``main()``; only top-level defs and three empty module-level lists execute.
-    """
-    from itpra_onto import parity
-
-    spec = importlib.util.spec_from_file_location("itpra_onto_consumer_lint_under_test", parity.linter_script())
-    assert spec and spec.loader
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module._boundary_governed_functions
-
-
 def _expected_boundary_governed_functions(inputs: Inputs) -> set[str]:
     by_id = _by_id(inputs)
     boundary = by_id.get("AUTON-BOUNDARY") or {}
@@ -188,7 +161,7 @@ def _expected_boundary_governed_functions(inputs: Inputs) -> set[str]:
 
 
 def test_manifest_lists_rules_in_the_documented_order():
-    manifest = rules.load_manifest(all_rules=True)  # the shipped set, overlay rules included
+    manifest = rules.load_manifest()
     assert tuple(rule.id for rule in manifest) == EXPECTED_RULE_IDS
 
 
@@ -246,15 +219,6 @@ def test_function_in_domain_set(report: rules.RuleReport, config: Config, inputs
     assert _actual_pairs(report, config, "inDomain") == _expected_in_domain(inputs)
 
 
-@pytest.mark.overlay  # needs the consumer's registries
-def test_requirement_meets_count(report: rules.RuleReport, inputs: Inputs):
-    assert report.counts["requirement-meets"] == len(_expected_meets(inputs))
-
-
-def test_requirement_meets_set(report: rules.RuleReport, config: Config, inputs: Inputs):
-    assert _actual_pairs(report, config, "meets") == _expected_meets(inputs)
-
-
 def test_boundary_governed_function_count(report: rules.RuleReport, inputs: Inputs):
     expected = _expected_boundary_governed_functions(inputs)
     assert report.counts["boundary-governed-function"] == len(expected)
@@ -269,18 +233,7 @@ def test_total_equals_sum_of_counts(report: rules.RuleReport):
 
 
 # ---------------------------------------------------------------------------------------------------
-# the boundary-governed set equals the consumer's linter helper's (same ids, not just the same count)
-
-
-@pytest.mark.overlay  # imports the consumer's linter
-def test_boundary_governed_set_equals_the_linter_helper(inputs: Inputs):
-    terms = {t.record["id"]: t.record for t in inputs.terms}
-    helper = _linter_boundary_governed_functions()
-    from_linter = helper(terms)
-    from_here = _expected_boundary_governed_functions(inputs)
-    assert from_linter == from_here
-    assert from_linter, "expected at least one boundary-governed function in the real ontology"
-    print(f"\nboundary-governed functions ({len(from_linter)}): {sorted(from_linter)}")
+# the boundary-governed set equals the one computed from the YAML (same ids, not just the same count)
 
 
 def test_boundary_governed_set_matches_the_graph(report: rules.RuleReport, config: Config, inputs: Inputs):
@@ -358,8 +311,6 @@ def test_no_derived_predicate_or_class_collides_with_an_asserted_one(dataset: ox
     inferred = config.iri.graph_ns + "inferred"
     asserted_predicates = {q.predicate.value for q in dataset if q.graph_name.value != inferred}
     derived_predicates = {config.iri.onto_ns + local for local in emit.DERIVED_PROPERTY_RULES}
-    if config.overlay is None:
-        derived_predicates.discard(config.iri.onto_ns + "meets")  # requirement-meets is an overlay rule; it did not run
     assert derived_predicates.isdisjoint(asserted_predicates)
     inferred_predicates = {q.predicate.value for q in report.dataset if q.graph_name.value == inferred}
     assert derived_predicates <= inferred_predicates

@@ -2,6 +2,13 @@
 
 Changes to the vocabulary, newest first. Versions follow [ADR 0003](decisions/0003-versioning-releases-and-pinning.md).
 
+## Unreleased
+
+No vocabulary change. `tools/itpra-onto/` now builds, validates and compares the vocabulary alone, and a build can
+take layers (`itpra_onto.layers`; ADR 0043). The `[overlay]` configuration table and the requirement classes, rule,
+shapes and fixtures that went with it leave the package, so a configuration or caller that used them changes with
+the next release. ADR 0041, ADR 0042 and ADR 0043 are reworded to match; ADR 0043 has a new title and file name.
+
 ## 5.0.0 — 2026-11-23
 
 **MAJOR: ids renamed.** IT Operations takes the code `ITO` on every id and file name, as the ten other service domains

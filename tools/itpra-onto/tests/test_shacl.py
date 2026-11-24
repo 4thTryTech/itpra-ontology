@@ -9,8 +9,8 @@ conforms plus its fixture; (d) ``shapes_digest`` stability/sensitivity; (e) ``lo
 and the no-base-IRI-literal discipline; (f) the CLI; (g) timing; (h) ``ShaclError`` for a malformed
 ``sh:sparql`` constraint (pySHACL returns a ``ValidationFailure`` object rather than raising).
 
-Every test reads the REAL input files (the vocabulary and, with an overlay, the requirements registries)
-exactly like ``test_emit.py``/``test_rules.py``: nothing here is ever written to them. The smoke shapes
+Every test reads the real vocabulary files exactly like ``test_emit.py``/``test_rules.py``: nothing here
+is ever written to them. The smoke shapes
 (``tests/fixtures/shapes-smoke/``) are test-only — not part of the shape files under ``shapes/``.
 """
 
@@ -86,7 +86,7 @@ def test_validate_graphs_selection_excludes_a_graph_not_named(config: Config, sm
     shacl.validate()'s own ``graphs`` parameter is what actually restricts what gets checked — proven here
     by a decoy graph that is validated only when named."""
     t1 = ox.NamedNode(config.iri.graph_ns + "t1")
-    decoy = ox.NamedNode(config.iri.graph_ns + "req/DECOY")
+    decoy = ox.NamedNode(config.iri.graph_ns + "extra/DECOY")
     dataset = ox.Dataset()
     included = ox.NamedNode(config.iri.id_ns + "CAP-SMOKE-INCLUDED")
     excluded = ox.NamedNode(config.iri.id_ns + "CAP-SMOKE-EXCLUDED")
@@ -99,32 +99,28 @@ def test_validate_graphs_selection_excludes_a_graph_not_named(config: Config, sm
     assert included.value in foci
     assert excluded.value not in foci
 
-    both = shacl.validate(dataset, smoke_shapes, config=config, graphs=("t1", "req/DECOY"))
+    both = shacl.validate(dataset, smoke_shapes, config=config, graphs=("t1", "extra/DECOY"))
     foci_both = {f.focus for f in both.findings}
     assert included.value in foci_both
     assert excluded.value in foci_both
 
 
-def test_default_validation_graphs_selects_t1_inferred_and_req_star_only(config: Config):
+def test_default_validation_graphs_selects_every_data_graph(config: Config):
+    """Every named graph is validated except the three that hold no instance data: schema, provenance, shapes."""
     graph_ns = config.iri.graph_ns
     dataset = ox.Dataset()
     dummy = ox.NamedNode(config.iri.id_ns + "X")
-    for local in ("schema", "t1", "req/ITO", "req/BIA", "inferred", "provenance"):
+    for local in ("schema", "t1", "extra/b", "extra/a", "inferred", "provenance", "shapes"):
         dataset.add(ox.Quad(dummy, emit.RDF_TYPE, dummy, ox.NamedNode(graph_ns + local)))
 
     selected = shacl.default_validation_graphs(dataset, config)
-    assert selected == ("inferred", "req/BIA", "req/ITO", "t1")
+    assert selected == ("extra/a", "extra/b", "inferred", "t1")
 
 
 def test_validate_default_graphs_over_the_real_corpus_match_expectation(config: Config, clean_dataset: ox.Dataset):
-    """Sanity check against the real, full pipeline output (schema/t1/req-per-registry/inferred/provenance are
-    NOT present here since build() adds provenance, not emit()+rules() — this fixture chain matches
-    test_rules.py's own, which never adds a provenance graph)."""
-    selected = shacl.default_validation_graphs(clean_dataset, config)
-    assert "t1" in selected
-    assert "inferred" in selected
-    assert any(g.startswith("req/") for g in selected) == (config.overlay is not None)  # req/* only with an overlay
-    assert "schema" not in selected
+    """Sanity check against the real emit()+rules() output: the asserted and the inferred graph are
+    validated, the schema graph is not."""
+    assert shacl.default_validation_graphs(clean_dataset, config) == ("inferred", "t1")
 
 
 # ---------------------------------------------------------------------------------------------------
@@ -215,12 +211,12 @@ def test_shapes_digest_ignores_non_ttl_files(tmp_path: Path):
     assert before == after
 
 
-def test_real_shapes_digest_is_stable_and_covers_the_three_groups():
-    """The hand-written shape files are `structural.ttl`, `crossfield.ttl` and `requirements.ttl`; the digest is stable
+def test_real_shapes_digest_is_stable_and_covers_every_shape_file():
+    """The hand-written shape files are `structural.ttl` and `crossfield.ttl`; the digest is stable
     across calls and every shape file is under it (an empty directory would also be well-defined)."""
     names = [path.relative_to(SHAPES_DIR).as_posix() for path in shacl.shape_files(SHAPES_DIR)]
     # hand-written files first (sorted), then the generator-owned shapes/generated/ (ADR 0042 D2)
-    assert names == ["crossfield.ttl", "requirements.ttl", "structural.ttl", "generated/verb-pairs.ttl"]
+    assert names == ["crossfield.ttl", "structural.ttl", "generated/verb-pairs.ttl"]
     assert shacl.shapes_digest(SHAPES_DIR) == shacl.shapes_digest(SHAPES_DIR)
 
 
@@ -408,7 +404,6 @@ def _mutated_inputs(config: Config, inputs: emit.Inputs, fixture_name: str) -> e
     [
         ("structural/relates-to-malformed.yaml", "CAP-ITO-FND-1", "EmitError"),
         ("crossfield/B-13-emit-guard.yaml", "CAP-ITO-FND-1", "SourceGrammarError"),
-        pytest.param("structural/req-link-malformed.yaml", "FR-FND-1", "EmitError", marks=pytest.mark.overlay),
     ],
 )
 def test_cli_validate_json_reports_an_emit_error_as_a_finding(
@@ -450,19 +445,19 @@ def test_cli_validate_plain_reports_an_emit_error_as_a_finding(
 def test_cli_validate_reports_an_input_file_defect_without_a_record(
     monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture
 ):
-    """A file-level defect (here: a registry whose `requirements` is not a list) names no
-    record: the finding's subject is the placeholder, the message names the file."""
+    """A file-level defect (here: a term file that is not a list of records) names no record: the
+    finding's subject is the placeholder, the message names the file."""
     from itpra_onto import cli
 
     def refuse(config=None):
-        raise emit.EmitError("registries/SVD/functional.yaml: `requirements` must be a list, got str")
+        raise emit.EmitError("terms/functions-ito-fnd.yaml: a term file must be a top-level list of records, got str")
 
     monkeypatch.setattr(emit, "load_inputs", refuse)
     code = cli.main(["validate", "--json"])
     payload = json.loads(capsys.readouterr().out)
     assert code == 1
     assert payload[0]["rule"] == "emit-error" and payload[0]["subject"] == shacl.NO_RECORD_FOCUS
-    assert "functional.yaml" in payload[0]["message"]
+    assert "functions-ito-fnd.yaml" in payload[0]["message"]
 
 
 # ---------------------------------------------------------------------------------------------------

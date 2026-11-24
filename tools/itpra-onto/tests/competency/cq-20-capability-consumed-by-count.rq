@@ -1,0 +1,11 @@
+# Positive control for cq-06: total itpra-o:consumedBy edges whose subject is typed
+# itpra:CAPABILITY, in t1. test_competency.py asserts this equals the `consumed_by` edge count computed
+# from every Capability record's `relates_to` list.
+
+SELECT (COUNT(*) AS ?n)
+WHERE {
+  GRAPH itpra-g:t1 {
+    ?cap a itpra:CAPABILITY ;
+         itpra-o:consumedBy ?persona .
+  }
+}

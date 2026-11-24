@@ -1,7 +1,7 @@
 """SHACL validation harness (ADR 0042; ``shapes/REGISTER.md`` is the rule register the shapes implement).
 
-This module is the *machinery* the three hand-written shape files (``structural``, ``crossfield``,
-``requirements``; disjoint ownership, ADR 0042 D2) and the generated verb-pair file plug into. It creates
+This module is the *machinery* the two hand-written shape files (``structural`` and ``crossfield``;
+disjoint ownership, ADR 0042 D2) and the generated verb-pair file plug into. It creates
 no shapes of its own beyond the tiny smoke pair under ``tests/fixtures/shapes-smoke/`` this package's own
 tests use.
 
@@ -42,8 +42,8 @@ file, follows this — ``tests/test_iri_config.py``'s base-IRI literal scan alre
   ``sh:prefixes itpra-o:shapesPrefixes ;`` on every ``sh:sparql`` node (the node need not exist — this
   package injects it at load time; a shape file that already carries the real thing, e.g. because a test
   fixture doubles as documentation, still works).
-* ``itpra-o:ruleId`` is the register's rule id (``shapes/REGISTER.md`` Table A, shared with the consumer's
-  linter) or a Table-B id (``B-n``); ``sh:severity`` follows Table C (``sh:Violation`` for linter ``err``,
+* ``itpra-o:ruleId`` is the register's rule id (``shapes/REGISTER.md`` Table A, shared with the linter)
+  or a Table-B id (``B-n``); ``sh:severity`` follows Table C (``sh:Violation`` for linter ``err``,
   ``sh:Warning`` for ``warn`` and the
   advisory candidate minimums). ``sh:message`` is free text for humans; ``itpra-o:ruleId`` is what
   ``itpra-onto parity`` compares.
@@ -73,10 +73,9 @@ identical between two checkouts of the same commit), and ``validate`` loads them
    wanted named graphs' quads into a **fresh** :class:`pyoxigraph.Store`'s **default** graph (confirmed:
    pySHACL validates a store's default-graph content the same way as named-graph content — the "union"
    finding above holds regardless of which graph a triple started in) before handing that scratch store to
-   pySHACL. Default selection (``graphs=None``): every graph locally named ``t1``, ``inferred``, or
-   matching ``req/*`` that the input actually carries (``shapes/REGISTER.md``: shapes
-   target ``t1``, ``req/*``, and, for the two ``inferred``-graph rows (B-18/B-19), ``inferred`` — never
-   ``schema``: a shape's ``sh:targetClass`` matches on the ``rdf:type`` triples already asserted in the
+   pySHACL. Default selection (``graphs=None``): every named graph the input actually carries except
+   ``schema``, ``provenance`` and ``shapes`` (``shapes/REGISTER.md``: shapes target the record graphs
+   and, for the two ``inferred``-graph rows (B-18/B-19), ``inferred`` — never ``schema``: a shape's ``sh:targetClass`` matches on the ``rdf:type`` triples already asserted in the
    *data*, which needs no class-declaration triples from ``schema`` present at all, confirmed empirically).
 2. pySHACL's ``shacl_graph`` parameter does **not** accept a raw :class:`pyoxigraph.Store`/``Dataset`` whose
    shapes live in a *named* (non-default) graph — it raises ``ValueError: Cannot determine the format of
@@ -141,11 +140,10 @@ SH = "http://www.w3.org/ns/shacl#"
 XSD = "http://www.w3.org/2001/XMLSchema#"
 DCTERMS = "http://purl.org/dc/terms/"
 
-# Every graph a default (graphs=None) validate() call includes: an exact-match local name, or a prefix.
-_DEFAULT_EXACT_GRAPHS = ("t1", "inferred")
-_DEFAULT_GRAPH_PREFIX = "req/"
+# Graphs a default (graphs=None) validate() call never includes; every other named graph is validated.
+_NEVER_VALIDATED_GRAPHS = frozenset({"schema", "provenance", SHAPES_GRAPH_LOCAL})
 
-# Severity local names (Table C) -> the consumer's linter's vocabulary ("error"/"warning"), so
+# Severity local names (Table C) -> the linter's vocabulary ("error"/"warning"), so
 # findings_as_set() is directly comparable to its `--json` (rule, subject, severity) rows.
 SEVERITY_TO_LINTER = {"Violation": "error", "Warning": "warning", "Info": "info"}
 
@@ -161,10 +159,7 @@ class ShaclError(RuntimeError):
 GENERATED_SUBDIR = "generated"  # shapes/generated/ — owned by itpra_onto.gen_verb_shapes
 
 
-OVERLAY_SHAPE_FILES = frozenset({"requirements.ttl"})  # target req/*: loaded only with an [overlay] (ADR 0043 D1)
-
-
-def shape_files(shapes_dir: Path = SHAPES_DIR, *, overlay: bool = True) -> list[Path]:
+def shape_files(shapes_dir: Path = SHAPES_DIR) -> list[Path]:
     """Every ``*.ttl`` file directly under ``shapes_dir`` (sorted by name), then every ``*.ttl`` file directly
     under ``shapes_dir/generated/`` (sorted by name).
 
@@ -175,8 +170,7 @@ def shape_files(shapes_dir: Path = SHAPES_DIR, *, overlay: bool = True) -> list[
     ``itpra_verb`` annotations). A generated file follows the same conventions as a hand-written one — no
     ``@prefix`` block, no base IRI; this loader prepends both.
     """
-    top = sorted(p for p in shapes_dir.glob("*.ttl") if overlay or p.name not in OVERLAY_SHAPE_FILES)
-    return top + sorted((shapes_dir / GENERATED_SUBDIR).glob("*.ttl"))
+    return sorted(shapes_dir.glob("*.ttl")) + sorted((shapes_dir / GENERATED_SUBDIR).glob("*.ttl"))
 
 
 def _standard_prefixes(config: Config) -> dict[str, str]:
@@ -220,10 +214,13 @@ def _prefix_declare_triples(config: Config, prefixes: dict[str, str]) -> list[tu
     return triples
 
 
-def load_shapes(shapes_dir: Path = SHAPES_DIR, config: Config | None = None) -> ox.Dataset:
+def load_shapes(
+    shapes_dir: Path = SHAPES_DIR, config: Config | None = None, *, extra_dirs: Sequence[Path] = ()
+) -> ox.Dataset:
     """Parse every ``shapes_dir/*.ttl`` and ``shapes_dir/generated/*.ttl`` file (:func:`shape_files`) plus the
     synthetic prefixes-declare resource into one :class:`pyoxigraph.Dataset`, every triple in the named graph
-    ``<graph_ns>shapes``.
+    ``<graph_ns>shapes``. ``extra_dirs`` are further shape directories in the same layout, loaded after
+    ``shapes_dir`` in the order given (a layer's shapes, :mod:`itpra_onto.layers`).
 
     The ``@prefix`` block (:func:`_standard_prefixes`) is prepended to each file's text before parsing —
     no shape file declares it (module docstring). Each file is parsed with ``rename_blank_nodes=True``
@@ -240,7 +237,7 @@ def load_shapes(shapes_dir: Path = SHAPES_DIR, config: Config | None = None) -> 
     for s, p, o in _prefix_declare_triples(config, prefixes):
         dataset.add(ox.Quad(s, p, o, graph))
 
-    for path in shape_files(shapes_dir, overlay=config.overlay is not None):
+    for path in [p for directory in (shapes_dir, *extra_dirs) for p in shape_files(Path(directory))]:
         text = prefix_block + path.read_text(encoding="utf-8")
         try:
             parsed = ox.parse(
@@ -295,12 +292,11 @@ def _graph_locals_present(dataset_or_store: ox.Dataset | ox.Store, config: Confi
 
 
 def default_validation_graphs(dataset_or_store: ox.Dataset | ox.Store, config: Config | None = None) -> tuple[str, ...]:
-    """Every named graph ``validate(graphs=None)`` includes: locally named ``t1``/``inferred``, or matching
-    ``req/*`` — never ``schema``/``provenance`` (module docstring point 1)."""
+    """Every named graph ``validate(graphs=None)`` includes: all the input carries except ``schema``,
+    ``provenance`` and ``shapes`` (module docstring point 1)."""
     config = config if config is not None else load_config()
     present = _graph_locals_present(dataset_or_store, config)
-    selected = {g for g in present if g in _DEFAULT_EXACT_GRAPHS or g.startswith(_DEFAULT_GRAPH_PREFIX)}
-    return tuple(sorted(selected))
+    return tuple(sorted(present - _NEVER_VALIDATED_GRAPHS))
 
 
 def _scratch_data_store(dataset_or_store: ox.Dataset | ox.Store, config: Config, graph_locals: Sequence[str]) -> ox.Store:
@@ -341,7 +337,7 @@ class ValidationReport:
 
 def focus_local_name(focus: str, config: Config | None = None) -> str:
     """``focus`` with the id namespace stripped, if it starts with one — the parity-comparable subject form
-    (matching the consumer's linter's bare ids in its ``--json`` output)."""
+    (matching the linter's bare ids in its ``--json`` output)."""
     config = config if config is not None else load_config()
     id_ns = config.iri.id_ns
     return focus.removeprefix(id_ns) if focus.startswith(id_ns) else focus
@@ -417,7 +413,7 @@ def emit_error_finding(exc: emit.EmitError, config: Config | None = None, *, foc
 
 def findings_as_set(report: ValidationReport, config: Config | None = None) -> set[tuple[str | None, str, str]]:
     """``report.findings`` as ``{(rule_id, focus_local_name, severity)}`` — the parity-comparable form,
-    matching the consumer's linter's ``(rule, subject, severity)`` ``--json`` rows (``severity`` mapped
+    matching the linter's ``(rule, subject, severity)`` ``--json`` rows (``severity`` mapped
     through :data:`SEVERITY_TO_LINTER` to the linter's ``"error"``/``"warning"`` vocabulary, since that is
     what ``itpra-onto parity`` sets its identity test against)."""
     config = config if config is not None else load_config()
