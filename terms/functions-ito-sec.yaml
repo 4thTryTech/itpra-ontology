@@ -1,11 +1,7 @@
-# ITPRA ontology — FUNCTION library, ITO-SEC (Security & Identity)
-# type: Function. ids FUNC-ito-<slug>. A function `supports` one or more capabilities (many-to-many). Functions
-# are flat — no tier annotation, no `derived_from` — per ADR 0011 (which supersedes ADR 0011 §3 on function
-# tiering). A function may freely name a specific standard, protocol, or technique where that *is* the function.
-# Technique acronyms like SAST/DAST/SCA/CSPM/MFA are kept as ALIASES on the more general functions here. See ADR
-# 0011.
+# ITPRA ontology — ITO-SEC (Security & Identity): functions
+# type: Function. Ids FUNC-ito-<slug>; a function supports one or more capabilities. Decided in ADR 0011.
 
-# Identity & authentication (supports CAP-ITO-SEC-1)
+# Identity & authentication (CAP-ITO-SEC-1)
 - id: FUNC-ito-credential-authentication
   term: Credential Authentication
   type: Function
@@ -44,7 +40,7 @@
     - {rel: supports, target: CAP-ITO-SEC-1}
   source: ADR 0011 (amended by ADR 0045)
 
-# Authorization & access control (supports CAP-ITO-SEC-2)
+# Authorization & access control (CAP-ITO-SEC-2)
 - id: FUNC-ito-authorization-decision
   term: Authorization Decision
   type: Function
@@ -94,7 +90,7 @@
     - {rel: supports, target: CAP-ITO-SEC-2}
   source: ADR 0011 (amended by ADR 0045)
 
-# Certificate & workload credential management (supports CAP-ITO-SEC-3)
+# Certificate & workload credential management (CAP-ITO-SEC-3)
 - id: FUNC-ito-certificate-issuance
   term: Certificate Issuance
   type: Function
@@ -131,7 +127,7 @@
     - {rel: supports, target: CAP-ITO-SEC-3}
   source: ADR 0011 (amended by ADR 0045)
 
-# Vulnerability management (supports CAP-ITO-SEC-4)
+# Vulnerability management (CAP-ITO-SEC-4)
 - id: FUNC-ito-vulnerability-scanning
   term: Vulnerability Scanning
   type: Function
@@ -168,7 +164,7 @@
     - {rel: supports, target: CAP-ITO-SEC-4}
   source: ADR 0011 (amended by ADR 0045)
 
-# Admission & policy enforcement (supports CAP-ITO-SEC-5; pairs with CAP-ITO-FND-4 policy-evaluation later)
+# Admission & policy enforcement (CAP-ITO-SEC-5)
 - id: FUNC-ito-admission-control
   term: Admission Control
   type: Function
@@ -187,7 +183,7 @@
     - {rel: supports, target: CAP-ITO-SEC-5}
   source: ADR 0011 (amended by ADR 0045)
 
-# Security event detection & audit (supports CAP-ITO-SEC-6; audit-logging shared with CAP-ITO-GOV-6)
+# Security event detection & audit (CAP-ITO-SEC-6)
 - id: FUNC-ito-security-event-aggregation
   term: Security Event Aggregation
   type: Function
@@ -209,7 +205,7 @@
     - {rel: supports, target: CAP-ITO-GOV-6}
   source: ADR 0011 (amended by ADR 0045)
 
-# Threat detection (supports CAP-ITO-SEC-7; complements shared anomaly-detection + packet-analysis)
+# Threat detection (CAP-ITO-SEC-7)
 - id: FUNC-ito-signature-detection
   term: Signature Detection
   type: Function
@@ -233,7 +229,7 @@
     - {rel: supports, target: CAP-ITO-SEC-7}
   source: ADR 0011 (amended by ADR 0045)
 
-# Security response orchestration (supports CAP-ITO-SEC-8; builds on CAP-ITO-AUT-6 orchestration)
+# Security response orchestration (CAP-ITO-SEC-8)
 - id: FUNC-ito-response-playbook-execution
   term: Response Playbook Execution
   type: Function
@@ -264,7 +260,7 @@
     - {rel: supports, target: CAP-ITO-SEC-6}
   source: ADR 0011 (amended by ADR 0045)
 
-# Application security testing (supports CAP-ITO-SEC-9; neutral terms, SAST/DAST as aliases)
+# Application security testing (CAP-ITO-SEC-9)
 - id: FUNC-ito-source-code-security-testing
   term: Source Code Security Testing
   type: Function

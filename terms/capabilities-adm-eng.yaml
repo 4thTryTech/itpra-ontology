@@ -1,21 +1,20 @@
-# ITPRA ontology — ADM-ENG (Application Build & Engineering Practice) capabilities
-# type: Capability. ids CAP-ADM-ENG-<n>. Grouped under domain ADM-ENG (ADR 0021). CONSUMER-side: builds the
-# application; consumes the platform's software-delivery pipeline (ITO-DEL), does not own it (ADR 0021).
+# ITPRA ontology — ADM-ENG (Application Build & Engineering Practice): capabilities
+# type: Capability. Ids CAP-ADM-ENG-<n>, each grouped under ADM-ENG. Decided in ADR 0021.
 
 - id: CAP-ADM-ENG-1
   term: Application Design & Architecture
   type: Capability
   definition: >
     Designs the structure and behavior of an application — its components, interfaces, data, and the patterns
-    it follows — so it meets its functional intent and quality bar and fits the platform it will run on,
-    before and during implementation.
+    it follows — so it meets its functional intent and quality bar and fits the infrastructure platform it
+    will run on, before and during implementation.
     Designing a multi-step, side-effecting sequence includes designing its recovery and reversal: step boundaries,
     which steps may safely re-execute, how a partially completed sequence is unwound, and how the definition
     changes while runs against it are open (ADR 0039).
   relates_to:
     - {rel: grouped_by, target: ADM-ENG}
     - {rel: consumed_by, target: PERSONA-adm-app-team}
-  source: ADR 0021 (amended by ADR 0039)
+  source: ADR 0021 (amended by ADR 0039, ADR 0047)
 
 - id: CAP-ADM-ENG-2
   term: Application Implementation & Source Management
@@ -86,7 +85,7 @@
     deterministic components and defining how they coordinate, specifying what context the model-grounded
     component may see at inference time, and setting the application-side policy for which model a task is
     routed to. A member of ADM-ENG rather than a separate group: this is application engineering, in the
-    same sense that evaluating it is application testing. Consumes the platform's model-provider gateway
+    same sense that evaluating it is application testing. Consumes IT Operations' model-provider gateway
     (CAP-ITO-SUB-8) rather than owning it. Coordination topologies, context budgets, and provider choice
     bind at T2/T3.
   aliases: [AI engineering, GenAI application engineering, agentic application development, inference-time behaviour design]
@@ -95,7 +94,7 @@
     - {rel: depends_on, target: CAP-ADM-ENG-1}
     - {rel: consumed_by, target: PERSONA-adm-model-grounded-engineer}
     - {rel: consumed_by, target: PERSONA-adm-app-team}
-  source: ADR 0034
+  source: ADR 0034 (amended by ADR 0047)
 
 - id: CAP-ADM-ENG-7
   term: Autonomous-Behaviour Guardrail Design
@@ -105,18 +104,17 @@
     or autonomous actions may operate, and builds their enforcement into the application itself. Sits with
     the builder because a guardrail is part of the application's own behaviour, the same reasoning that
     keeps application testing in ADM-QAT rather than moving it to the enterprise control catalogue. Distinct
-    from EVALUATING whether the guardrail works, which is offline and sampled (CAP-ADM-QAT-6), and from the
-    platform's runtime enforcement of the automation boundary (CAP-ITO-AUT-8). The enterprise standard for
+    from EVALUATING whether the guardrail works, which is offline and sampled (CAP-ADM-QAT-6), and from IT
+    Operations' runtime enforcement of the automation boundary (CAP-ITO-AUT-8). The enterprise standard for
     what guardrails must cover is authored elsewhere and consumed here. Governed semantic constraints - the
-    governing semantic model's rules (CAP-BIA-GOV-7) - are one source of guardrail rules, so an actor's
-    output can be checked against the meaning it claims to use before it is returned or acted on
-    (answer-time conformance; ADR 0031).
-    Where a call site is chosen at runtime, no authoring site exists to attach an idempotency key, so bounding
-    duplicate effects is guardrail work (ADR 0039).
+    governing semantic model's rules (CAP-BIA-GOV-7) - are one source of guardrail rules, so an actor's output
+    can be checked against the meaning it claims to use before it is returned or acted on (answer-time
+    conformance; ADR 0031). Where a call site is chosen at runtime, no authoring site exists to attach an
+    idempotency key, so bounding duplicate effects is guardrail work (ADR 0039).
   aliases: [guardrails, behavioural boundaries, agent safety design, tool-use boundaries]
   relates_to:
     - {rel: grouped_by, target: ADM-ENG}
     - {rel: depends_on, target: CAP-ADM-ENG-6}
     - {rel: consumed_by, target: PERSONA-adm-model-grounded-engineer}
     - {rel: consumed_by, target: PERSONA-adm-app-team}
-  source: ADR 0034 (amended by ADR 0039)
+  source: ADR 0034 (amended by ADR 0039, ADR 0047)

@@ -1,9 +1,6 @@
-# ITPRA ontology — Onsite / Field Support (FLD) journey catalog
-# type: Journey. ids JRN-fld-<slug>. Each `grouped_by` exactly one EXISTING JourneyGroup
-# (JG-ONBOARDING..JG-EVOLUTION; reused, not redefined). Neutral — steps reference capabilities + neutral
-# governance construct points (request/approval/change/incident/record/feedback), never tools or named
-# processes. Relationships from the journey side: grouped_by, consumed_by (primary personas), depends_on
-# (capabilities exercised). Ratified by ADR 0020. Diagrams: WF-fld-<slug>.
+# ITPRA ontology — Onsite / Field Support (FLD): journeys
+# type: Journey. Ids JRN-fld-<slug>; a journey is grouped by one journey group (ADR 0013). Decided in
+# ADR 0020.
 
 # ---- JG-ONBOARDING ----
 - id: JRN-fld-onboard-site-engagement
@@ -39,7 +36,7 @@
     - {rel: depends_on, target: CAP-FLD-LOG-3}
   source: ADR 0020
 
-# ---- JG-DELIVERY (Build & Deliver) ----
+# ---- JG-DELIVERY ----
 - id: JRN-fld-dispatch-deskside-visit
   term: Dispatch & Complete a Deskside Visit
   type: Journey
@@ -92,7 +89,7 @@
     - {rel: depends_on, target: CAP-FLD-DESK-4}
   source: ADR 0020
 
-# ---- JG-OPERATIONS (Operate) ----
+# ---- JG-OPERATIONS ----
 - id: JRN-fld-replenish-trunk-stock
   term: Replenish Technician Trunk Stock
   type: Journey
@@ -123,7 +120,7 @@
     - {rel: depends_on, target: CAP-FLD-DESK-4}
   source: ADR 0020
 
-# ---- JG-RESPONSE (Respond & Recover) ----
+# ---- JG-RESPONSE ----
 - id: JRN-fld-break-fix-hardware-failure
   term: Break-Fix a Hardware Failure
   type: Journey
@@ -156,7 +153,7 @@
     - {rel: depends_on, target: CAP-FLD-PERF-1}
   source: ADR 0020
 
-# ---- JG-GOVERNANCE (Govern & Assure) ----
+# ---- JG-GOVERNANCE ----
 - id: JRN-fld-gain-site-access-permit
   term: Gain Site Access & Work Permit
   type: Journey
@@ -189,7 +186,7 @@
     - {rel: depends_on, target: CAP-FLD-PERF-4}
   source: ADR 0020
 
-# ---- JG-EVOLUTION (Evolve & Retire) ----
+# ---- JG-EVOLUTION ----
 - id: JRN-fld-decommission-dispose-equipment
   term: Decommission & Dispose of Equipment
   type: Journey

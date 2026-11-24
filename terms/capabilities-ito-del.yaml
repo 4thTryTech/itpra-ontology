@@ -1,5 +1,5 @@
-# ITPRA ontology — ITO-DEL (Software Delivery) capabilities
-# type: Capability. ids CAP-ITO-DEL-<n>. Grouped under domain ITO-DEL (ADR 0017).
+# ITPRA ontology — ITO-DEL (Software Delivery): capabilities
+# type: Capability. Ids CAP-ITO-DEL-<n>, each grouped under ITO-DEL. Decided in ADR 0017.
 
 - id: CAP-ITO-DEL-1
   term: Continuous Integration Pipeline

@@ -1,5 +1,5 @@
-# ITPRA ontology — SVD-MAJ (Major-Incident Coordination & Escalation) capabilities
-# type: Capability. ids CAP-SVD-MAJ-<n>. Grouped under domain SVD-MAJ (ADR 0019).
+# ITPRA ontology — SVD-MAJ (Major-Incident Coordination & Escalation): capabilities
+# type: Capability. Ids CAP-SVD-MAJ-<n>, each grouped under SVD-MAJ. Decided in ADR 0019.
 
 - id: CAP-SVD-MAJ-1
   term: Major-Incident Declaration & Mobilization

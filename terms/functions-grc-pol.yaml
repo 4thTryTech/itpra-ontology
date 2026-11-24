@@ -1,6 +1,5 @@
-# ITPRA ontology — FUNCTION library, GRC-POL (Policy, Standards & Control Governance)
-# type: Function. ids FUNC-grc-<slug>. All T1-neutral; functions MAY name a standard/technique where that IS the
-# function (ADR 0011). Functions `support` >=1 capability. See ADR 0024.
+# ITPRA ontology — GRC-POL (Policy, Standards & Control Governance): functions
+# type: Function. Ids FUNC-grc-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0024.
 
 # Security policy lifecycle (CAP-GRC-POL-1)
 - id: FUNC-grc-policy-authoring

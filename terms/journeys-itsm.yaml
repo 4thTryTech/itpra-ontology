@@ -1,10 +1,6 @@
-# ITPRA ontology — IT Service Management & Integration (ITSM) journey catalog
-# type: Journey. ids JRN-itsm-<slug>. Each `grouped_by` exactly one EXISTING JourneyGroup
-# (JG-ONBOARDING..JG-EVOLUTION; reused, not redefined). Neutral — steps reference capabilities + neutral
-# governance construct points (request/approval/change/incident/problem/record/service-level/catalog/
-# ownership/feedback), never tools or named processes. Relationships from the journey side: grouped_by,
-# consumed_by (primary personas), depends_on (capabilities exercised). Ratified by ADR 0025. Diagrams:
-# WF-itsm-<slug>.
+# ITPRA ontology — IT Service Management & Integration (ITSM): journeys
+# type: Journey. Ids JRN-itsm-<slug>; a journey is grouped by one journey group (ADR 0013). Decided in
+# ADR 0025.
 
 # ---- JG-ONBOARDING ----
 - id: JRN-itsm-onboard-provider

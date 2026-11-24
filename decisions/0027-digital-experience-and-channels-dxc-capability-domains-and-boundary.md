@@ -9,8 +9,8 @@ Origin: Consolidates decisions taken between 2026-05 and 2026-11, before publica
 
 ## Context
 
-The customer-facing digital experience shares words with the platform's Consumer Experience (`EXP`), which serves
-internal consumers, with Digital Experience Monitoring (`CAP-OBS-9`), with business analytics of customer data and
+The customer-facing digital experience shares words with the platform's Consumer Experience (`ITO-EXP`), which serves
+internal consumers, with Digital Experience Monitoring (`CAP-ITO-OBS-9`), with business analytics of customer data and
 with the identity and privacy authorities. The Digital Experience & Channels domain (`SD-DIGITAL-EXPERIENCE`,
 ADR 0009) needs capability domains on its two planes and a boundary that keeps its consumer the external customer.
 
@@ -21,7 +21,7 @@ ADR 0009) needs capability domains on its two planes and a boundary that keeps i
    Profiles, `DXC-COM` Digital Commerce — and those that provision and ship the running experience on the Delivery
    plane — `DXC-JRN` Customer Journey Orchestration, `DXC-EXP` Experimentation & Optimization, `DXC-CHN` Channel
    Delivery & Experience Insight. Capability ids are `CAP-DXC-<GRP>-<n>` (ADR 0004).
-2. `DXC-EXP` and `DXC-JRN` are domain codes; the platform domain `EXP` and journey prefix `JRN-` are other id
+2. `DXC-EXP` and `DXC-JRN` are domain codes; the platform domain `ITO-EXP` and journey prefix `JRN-` are other id
    families (ADR 0004).
 3. `DXC-PER` and `DXC-CDP` stay separate: the consented data tier and the targeting that consumes it have different
    owners, and consent is a distinct mandate. Digital commerce is a reference-tier domain, not a retail
@@ -30,13 +30,14 @@ ADR 0009) needs capability domains on its two planes and a boundary that keeps i
    Team, Experience Practitioner, Experience Governance & Privacy; the consumer is the external customer, not a
    workforce member.
 5. The domain owns the customer-facing experience — content, personalisation, journeys, profile and consent,
-   experimentation, commerce, channel delivery with outcome insight — runs on the platform, which does not own its
-   experience logic, and `interfaces_with` adjacent domains rather than containing them.
+   experimentation, commerce, channel delivery with outcome insight — runs on the infrastructure platform, which
+   does not own its experience logic, and meets each other service domain at a boundary between peers, containing
+   none (amended by ADR 0047).
 6. The seams: `CAP-DXC-CHN-5` is customer-outcome insight — engagement, conversion, friction — consuming, not
-   duplicating, the technical monitoring of `CAP-OBS-9`; `DXC-CDP` consumes the identity of record and applies the
+   duplicating, the technical monitoring of `CAP-ITO-OBS-9`; `DXC-CDP` consumes the identity of record and applies the
    privacy control catalogue (`SD-SECURITY-GRC`), owning neither; operational, real-time use of customer data is
    this domain, analytical use is `SD-BUSINESS-ANALYTICS` (ADR 0026); `DXC-CHN` serves external customers while
-   `EXP` serves internal consumers and `SUB` hosts both.
+   `ITO-EXP` serves internal consumers and `ITO-SUB` hosts both.
 
 ## Consequences
 
@@ -50,7 +51,7 @@ ADR 0009) needs capability domains on its two planes and a boundary that keeps i
 
 - Fold customer data into `SD-BUSINESS-ANALYTICS` — the operational profile and consent experience activate
   personalisation in real time; analytical use is the adjacent domain.
-- Own Digital Experience Monitoring — page performance is `CAP-OBS-9`; this domain owns the customer-outcome view,
+- Own Digital Experience Monitoring — page performance is `CAP-ITO-OBS-9`; this domain owns the customer-outcome view,
   a different subject.
 
 ## Sources

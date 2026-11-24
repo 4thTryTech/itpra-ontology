@@ -15,8 +15,8 @@ and record the work.
 
 ## Decision
 
-1. Field Support has seven capability domains, each `grouped_by` Operations or Resource, the planes its service domain
-   interfaces with (ADR 0009, ADR 0010): `FLD-DISP` Dispatch & Scheduling (Operations); `FLD-DESK` Deskside / On-site
+1. Field Support has seven capability domains, each `grouped_by` Operations or Resource, per ADR 0010
+   (amended by ADR 0047): `FLD-DISP` Dispatch & Scheduling (Operations); `FLD-DESK` Deskside / On-site
    Assistance (Operations); `FLD-IMAC` Install · Move · Add · Change (Resource); `FLD-FIX` Hardware Break-Fix & Depot
    Repair (Resource); `FLD-LOG` Spares, Stock & Logistics (Resource); `FLD-SAFE` On-site Safety, Access & Escort
    (Operations); `FLD-PERF` Field Performance & Insight (Operations).
@@ -30,7 +30,7 @@ and record the work.
 5. Field Support owns the hands at a location and the coordination, spares and safety around them; it performs and
    reports but does not own the change authority and asset record (ADR 0017, ADR 0018, ADR 0022), warranty
    entitlement, inventory finance, the site's access controls and safety policy (ADR 0022, ADR 0024) or the disposal
-   standard. `FLD-PERF` observes the visit and the service commitment, not the platform (`OBS`) or the endpoint
+   standard. `FLD-PERF` observes the visit and the service commitment, not the platform (`ITO-OBS`) or the endpoint
    (`EUC-DEX`); site connectivity is Network & Connectivity's (ADR 0023).
 6. Dispatch is a Field Support domain, not the desk's: the desk routes a request (ADR 0019); Field Support qualifies
    it, assigns by skill and credential and tracks the visit — the reciprocal of End-User Computing's hand-off of

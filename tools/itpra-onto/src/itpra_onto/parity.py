@@ -411,7 +411,7 @@ def materialize_fixture(
         record_file = next((t.file for t in real_inputs.terms if t.record.get("id") == action.id), None)
         if record_file is None:
             raise ParityError(f"materialize_fixture: mutate.id {action.id!r} matches no term record")
-        path = scratch_root / record_file
+        path = scratch_path(scratch_root, emit.ontology_dir(config), config.repo_root) / record_file
         data = load_yaml_file(path)
         if not isinstance(data, list):
             raise ParityError(f"{path}: expected a term file top-level list")

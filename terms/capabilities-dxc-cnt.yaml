@@ -1,6 +1,5 @@
-# ITPRA ontology — DXC-CNT (Content Management & Composition) capabilities
-# type: Capability. ids CAP-DXC-CNT-<n>. Grouped under domain DXC-CNT (ADR 0027); environment expression per ADR
-# 0014.
+# ITPRA ontology — DXC-CNT (Content Management & Composition): capabilities
+# type: Capability. Ids CAP-DXC-CNT-<n>, each grouped under DXC-CNT. Decided in ADR 0027.
 
 - id: CAP-DXC-CNT-1
   term: Structured Content Modeling & Authoring

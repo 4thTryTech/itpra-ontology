@@ -1,12 +1,6 @@
-# ITPRA ontology — neutral coverage-partitioning concepts
-# SHARED file: it belongs to no single service domain, so neither its name nor its ids carry a service-domain
-# code (ADR 0007, ADR 0045).
-# Cross-cutting Concept vocabulary for the case where one function's coverage is PARTITIONED across the estate
-# and provided by DIFFERENT tools per partition, simultaneously — not one coverage whose internals vary (that is
-# the ENV-DIM-* idea, ADR 0014). Operating-model- and tool-neutral: no products, no ITIL/ DevOps process names,
-# no actual zone names. Minted under ADR 0029 (evaluate-not-auto-add per ADR 0011: the binding machinery —
-# functions and the T3 tool index — already existed; what was missing was the named partition the coverage is
-# split across, and the assertion that a baseline covers everything not overridden).
+# ITPRA ontology — coverage partitioning: the areas a function's coverage may be partitioned across
+# SHARED file: it belongs to no single service domain, so neither its name nor its ids carry a service-domain code.
+# type: Concept. Ids COVERAGE-AREA and AREA-<slug>. Decided in ADR 0029.
 
 - id: COVERAGE-AREA
   term: Coverage area
@@ -34,9 +28,9 @@
   type: Concept
   definition: >
     The default coverage area every function is served in unless a derived architecture declares an override area
-    for it: the enterprise standard tool coverage. Named in every T2/T3 manifest by convention and defaulted by the
-    linter; declared here so the id resolves as a term (ADR 0008, taking up ADR 0029).
+    for it: the enterprise standard tool coverage. A derived architecture names it by convention and assumes it
+    wherever no other area is declared.
   aliases: [baseline area, enterprise standard area]
   relates_to:
     - {rel: applies_to, target: COVERAGE-AREA}
-  source: ADR 0029
+  source: ADR 0029 (amended by ADR 0047)

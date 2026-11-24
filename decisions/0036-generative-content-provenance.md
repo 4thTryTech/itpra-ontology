@@ -24,8 +24,8 @@ item is in question.
 3. `FUNC-dxc-content-provenance` (`supports` `CAP-DXC-CNT-4`, `applies_to` `AUTON-ACTOR`) records how a content item
    came to exist, including whether it was machine-generated and from what, and presents that record at the publish
    decision point and on later review. It is a different object from rights tracking (`FUNC-dxc-asset-rights`),
-   component and artifact provenance (`FUNC-provenance-tracking`, `FUNC-provenance-verification`) and runtime
-   retrieval citation (`FUNC-retrieval-provenance`, ADR 0033).
+   component and artifact provenance (`FUNC-ito-provenance-tracking`, `FUNC-ito-provenance-verification`) and runtime
+   retrieval citation (`FUNC-ito-retrieval-provenance`, ADR 0033).
 4. The record is evidence that informs an accountable person's gate, not proof that replaces it; the reference tier
    asks that it be recorded and presented, not verified.
 5. No named-standard function for content credentials: the standard is one encoding of the record, not the behaviour,

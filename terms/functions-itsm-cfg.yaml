@@ -1,6 +1,5 @@
-# ITPRA ontology — FUNCTION library, ITSM-CFG (System-of-Record & Configuration Integration)
-# type: Function. ids FUNC-itsm-<slug>. Federation/normalization/reconciliation are neutral data-integration
-# techniques nameable at T1 (ADR 0011). Functions `support` >=1 capability. See ADR 0025.
+# ITPRA ontology — ITSM-CFG (System-of-Record & Configuration Integration): functions
+# type: Function. Ids FUNC-itsm-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0025.
 
 # Federated system-of-record integration (CAP-ITSM-CFG-1)
 - id: FUNC-itsm-record-federation

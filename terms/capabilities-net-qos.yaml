@@ -1,5 +1,5 @@
-# ITPRA ontology — NET-QOS (Network Performance & Quality of Service) capabilities
-# type: Capability. ids CAP-NET-QOS-<n>. Grouped under domain NET-QOS (ADR 0023).
+# ITPRA ontology — NET-QOS (Network Performance & Quality of Service): capabilities
+# type: Capability. Ids CAP-NET-QOS-<n>, each grouped under NET-QOS. Decided in ADR 0023.
 
 - id: CAP-NET-QOS-1
   term: Traffic Classification & Prioritization

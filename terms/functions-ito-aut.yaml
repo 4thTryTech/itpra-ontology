@@ -1,8 +1,7 @@
-# ITPRA ontology — FUNCTION library, ITO-AUT (Provisioning & Automation)
-# type: Function. ids FUNC-ito-<slug>. All T1 neutral: no operating-model term ("GitOps") and no tool names.
-# See ADR 0011.
+# ITPRA ontology — ITO-AUT (Provisioning & Automation): functions
+# type: Function. Ids FUNC-ito-<slug>; a function supports one or more capabilities. Decided in ADR 0011.
 
-# Infrastructure-as-code provisioning (supports CAP-ITO-AUT-1)
+# Infrastructure-as-code provisioning (CAP-ITO-AUT-1)
 - id: FUNC-ito-declarative-definition-management
   term: Declarative Definition Management
   type: Function
@@ -30,7 +29,7 @@
     - {rel: supports, target: CAP-ITO-AUT-1}
   source: ADR 0011 (amended by ADR 0045)
 
-# Desired-state reconciliation (supports CAP-ITO-AUT-2)
+# Desired-state reconciliation (CAP-ITO-AUT-2)
 - id: FUNC-ito-state-reconciliation
   term: State Reconciliation
   type: Function
@@ -49,7 +48,7 @@
     - {rel: supports, target: CAP-ITO-AUT-2}
   source: ADR 0011 (amended by ADR 0045)
 
-# Drift detection & reporting (supports CAP-ITO-AUT-3; detection shared with CAP-ITO-SEC-4 posture drift)
+# Drift detection & reporting (CAP-ITO-AUT-3)
 - id: FUNC-ito-drift-detection
   term: Drift Detection
   type: Function
@@ -70,7 +69,7 @@
     - {rel: supports, target: CAP-ITO-AUT-3}
   source: ADR 0011 (amended by ADR 0045)
 
-# Configuration management (supports CAP-ITO-AUT-4)
+# Configuration management (CAP-ITO-AUT-4)
 - id: FUNC-ito-configuration-baseline-management
   term: Configuration Baseline Management
   type: Function
@@ -89,8 +88,7 @@
     - {rel: supports, target: CAP-ITO-AUT-4}
   source: ADR 0011 (amended by ADR 0045)
 
-# Provisioning workflow orchestration (supports CAP-ITO-AUT-5; orchestration engine shared with
-# CAP-ITO-AUT-6)
+# Provisioning workflow orchestration (CAP-ITO-AUT-5)
 - id: FUNC-ito-workflow-orchestration
   term: Workflow Orchestration
   type: Function
@@ -118,7 +116,7 @@
     - {rel: supports, target: CAP-ITO-AUT-5}
   source: ADR 0011 (amended by ADR 0045)
 
-# Operational task orchestration (supports CAP-ITO-AUT-6; CAP-ITO-SEC-8 SOAR builds on this)
+# Operational task orchestration (CAP-ITO-AUT-6)
 - id: FUNC-ito-runbook-automation
   term: Runbook Automation
   type: Function
@@ -137,8 +135,7 @@
     - {rel: supports, target: CAP-ITO-AUT-6}
   source: ADR 0011 (amended by ADR 0045)
 
-# Scheduled job execution (supports CAP-ITO-AUT-7; scheduling family shared with CAP-ITO-OBS-5,
-# CAP-ITO-RES-1 later)
+# Scheduled job execution (CAP-ITO-AUT-7)
 - id: FUNC-ito-job-scheduling
   term: Job Scheduling
   type: Function
@@ -168,7 +165,7 @@
     - {rel: supports, target: CAP-ITO-AUT-7}
   source: ADR 0011 (amended by ADR 0045)
 
-# Generic configuration lifecycle additions (ADR 0032 — one-function adds; also exercised by CAP-ITO-OBS-11)
+# Configuration lifecycle
 - id: FUNC-ito-configuration-templating
   term: Configuration Templating
   type: Function
@@ -232,7 +229,7 @@
   relates_to:
     - {rel: supports, target: CAP-ITO-AUT-8}
   source: ADR 0033 (amended by ADR 0045)
-# In-flight version compatibility (ADR 0039 - the package's only behavioural mint; supports CAP-ITO-DEL-4 too)
+# In-flight version compatibility
 - id: FUNC-ito-execution-version-compatibility
   term: Execution Version Compatibility
   type: Function

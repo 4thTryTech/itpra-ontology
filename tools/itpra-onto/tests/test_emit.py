@@ -384,6 +384,54 @@ def test_no_domain_range_or_inverse_axioms(dataset: ox.Dataset):
     assert [q for q in dataset if q.predicate.value in forbidden or q.object.value in forbidden] == []
 
 
+def test_the_header_declares_the_licence(dataset: ox.Dataset, config: Config, vocab: emit.Vocabulary):
+    """ADR 0002: the licence is declared in the header of every projection — the ontology and the concept
+    scheme, in the ``schema`` graph, and nowhere in ``t1``."""
+    licensed = {q.subject for q in _match(dataset, None, emit.DCTERMS_LICENSE, emit.LICENCE, _graph(config, "schema"))}
+    assert licensed == {vocab.ontology, vocab.scheme}
+    assert len(list(dataset.quads_for_predicate(emit.DCTERMS_LICENSE))) == 2
+
+
+def test_retired_in_is_declared_as_an_annotation_property(dataset: ox.Dataset, config: Config, vocab: emit.Vocabulary):
+    retired_in = vocab.slot_iri("retired")
+    assert retired_in == ox.NamedNode(config.iri.onto_ns + "retiredIn")
+    assert ox.Quad(retired_in, emit.RDF_TYPE, emit.OWL_ANNOTATION_PROPERTY, _graph(config, "schema")) in dataset
+    assert _match(dataset, retired_in, emit.RDFS_LABEL, None, _graph(config, "schema"))
+
+
+def test_no_record_is_retired_today(dataset: ox.Dataset, vocab: emit.Vocabulary):
+    """The clean corpus carries no retirement, so nothing below is vacuously proven on it."""
+    for predicate in (emit.OWL_DEPRECATED, vocab.slot_iri("retired"), vocab.slot_iri("replaced_by")):
+        assert list(dataset.quads_for_predicate(predicate)) == [], predicate.value
+
+
+# ---------------------------------------------------------------------------------------------------
+# retirement (ADR 0048): a retired record keeps every triple and gains three
+
+
+def test_a_retired_record_keeps_resolving_marked_deprecated_with_its_successor(config: Config, vocab: emit.Vocabulary):
+    term = _term(dict(_GOOD_TERM, retired="5.1.0", replaced_by="CAP-FIXTURE-2"))
+    triples = set(emit.term_triples(term, vocab))
+    subject = vocab.id("CAP-FIXTURE-1")
+    assert triples - set(emit.term_triples(_term(_GOOD_TERM), vocab)) == {
+        (subject, emit.OWL_DEPRECATED, emit.TRUE),
+        (subject, vocab.slot_iri("retired"), ox.Literal("5.1.0")),
+        (subject, ox.NamedNode(emit.DCTERMS + "isReplacedBy"), vocab.id("CAP-FIXTURE-2")),
+    }
+    assert emit.TRUE == ox.Literal("true", datatype=ox.NamedNode(emit.XSD + "boolean"))
+
+
+def test_retired_is_projected_verbatim_for_the_shape_to_check(vocab: emit.Vocabulary):
+    triples = set(emit.term_triples(_term(dict(_GOOD_TERM, retired="5.1")), vocab))
+    assert (vocab.id("CAP-FIXTURE-1"), vocab.slot_iri("retired"), ox.Literal("5.1")) in triples
+
+
+def test_replaced_by_that_cannot_be_an_iri_names_the_record(vocab: emit.Vocabulary):
+    with pytest.raises(emit.EmitError) as info:
+        list(emit.term_triples(_term(dict(_GOOD_TERM, retired="5.1.0", replaced_by="NOT AN ID")), vocab))
+    assert info.value.record_id == "CAP-FIXTURE-1" and "replaced_by" in str(info.value)
+
+
 # ---------------------------------------------------------------------------------------------------
 # SKOS integrity and language tags
 

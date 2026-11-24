@@ -1,6 +1,5 @@
-# ITPRA ontology — ADM-QAT (Application Quality & Testing) capabilities
-# type: Capability. ids CAP-ADM-QAT-<n>. Grouped under domain ADM-QAT (ADR 0021). Verifies the application
-# against a product-quality model (ISO/IEC 25010); the platform may provide test-execution surface consumed.
+# ITPRA ontology — ADM-QAT (Application Quality & Testing): capabilities
+# type: Capability. Ids CAP-ADM-QAT-<n>, each grouped under ADM-QAT. Decided in ADR 0021.
 
 - id: CAP-ADM-QAT-1
   term: Application Quality Bar & Fitness Criteria

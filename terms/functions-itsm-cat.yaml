@@ -1,6 +1,5 @@
-# ITPRA ontology — FUNCTION library, ITSM-CAT (Service Catalog & Portfolio Coordination)
-# type: Function. ids FUNC-itsm-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
-# the function (ADR 0011). Functions `support` >=1 capability (many-to-many). See ADR 0025.
+# ITPRA ontology — ITSM-CAT (Service Catalog & Portfolio Coordination): functions
+# type: Function. Ids FUNC-itsm-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0025.
 
 # End-to-end service catalog (CAP-ITSM-CAT-1)
 - id: FUNC-itsm-catalog-publication

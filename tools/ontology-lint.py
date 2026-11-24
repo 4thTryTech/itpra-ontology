@@ -4,7 +4,7 @@
 The rules live once, in the pipeline package: `tools/itpra-onto/src/itpra_onto/lint.py` (ADR 0042 D1) — file
 shape, required and unknown fields, unique ids and the id pattern, known types and verbs, resolving targets,
 `derived_from` kept off Functions (ADR 0011), the `source:` grammar and resolving decision citations (ADR 0005),
-the two version numbers (ADR 0003). This script imports that module (standard library plus PyYAML, no RDF
+the two version numbers (ADR 0003), the retirement fields (ADR 0048). This script imports that module (standard library plus PyYAML, no RDF
 dependencies) and lints the repository root; `itpra-onto lint` is the same run from the package's environment.
 
 Usage:  python tools/ontology-lint.py [--root DIR] [--decisions DIR] [--json]

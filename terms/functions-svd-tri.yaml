@@ -1,6 +1,5 @@
-# ITPRA ontology — FUNCTION library, SVD-TRI (Triage, Classification & Routing)
-# type: Function. ids FUNC-svd-<slug>. Functions `support` >=1 capability; NEVER derived_from on a Function (ADR
-# 0011). See ADR 0019.
+# ITPRA ontology — SVD-TRI (Triage, Classification & Routing): functions
+# type: Function. Ids FUNC-svd-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0019.
 
 # Contact classification (CAP-SVD-TRI-1)
 - id: FUNC-svd-type-classification

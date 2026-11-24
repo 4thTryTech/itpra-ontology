@@ -3,7 +3,7 @@
 The rules here are the rows of the register's Table A (``shapes/REGISTER.md``): file shape, required and
 unknown fields, unique ids and the id pattern, known types and verbs, resolving targets, ``derived_from``
 kept off Functions (ADR 0011), the ``source:`` grammar and resolving decision citations (ADR 0005), the two
-version numbers (ADR 0003). :func:`lint_vocabulary` returns the merged vocabulary beside its findings, so a
+version numbers (ADR 0003), the retirement fields (ADR 0048). :func:`lint_vocabulary` returns the merged vocabulary beside its findings, so a
 caller can check further rules against the same terms; ``itpra-onto parity`` compares these findings with the
 shapes.
 
@@ -28,6 +28,7 @@ Finding = dict[str, str]
 REQUIRED_FIELDS = ("id", "term", "type", "definition")
 DEFAULT_ID_PATTERN = r"^[A-Za-z][A-Za-z0-9_.-]*$"
 SEMVER_RE = re.compile(r"^\d+\.\d+\.\d+$")
+RETIRED_RE = re.compile(r"[0-9]+\.[0-9]+\.[0-9]+")  # fullmatch; the pattern of the `retired-format` shape
 ADR_ITEM_RE = re.compile(r"^ADR (\d{4})(?: \((amended|extended) by ADR \d{4}(?:, ADR \d{4})*\))?$")
 ADR_NUM_RE = re.compile(r"\bADR (\d{4})\b")
 URL_RE = re.compile(r"https?://")
@@ -52,6 +53,9 @@ CORE_RULE_IDS = (
     "source-grammar",
     "source-adr-unresolved",
     "version-format",
+    "retired-format",
+    "replaced-by-unresolved",
+    "replaced-by-without-retired",
 )
 
 
@@ -206,6 +210,14 @@ def lint_vocabulary(
                 for number in ADR_NUM_RE.findall(item):
                     if number not in vocab.decisions:
                         sink.err("source-adr-unresolved", tid, f"{label}: {tid}: source cites ADR {number}, which has no record under {_label(decisions_dir, rel_to)}/", label)
+        retired, replaced_by = rec.get("retired"), rec.get("replaced_by")
+        if retired is not None and not RETIRED_RE.fullmatch(str(retired)):
+            sink.err("retired-format", tid, f"{label}: {tid}: retired {retired!r} is not an X.Y.Z version (ADR 0048)", label)
+        if replaced_by is not None:
+            if not isinstance(replaced_by, str) or replaced_by not in vocab.terms or replaced_by == tid:
+                sink.err("replaced-by-unresolved", tid, f"{label}: {tid}: replaced_by {replaced_by!r} is not the id of another record (ADR 0048)", label)
+            if retired is None:
+                sink.err("replaced-by-without-retired", tid, f"{label}: {tid}: replaced_by on a record that is not retired (ADR 0048)", label)
     return sink.findings, vocab
 
 

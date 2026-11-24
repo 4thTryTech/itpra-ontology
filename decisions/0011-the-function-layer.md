@@ -20,14 +20,14 @@ are themselves the behaviour.
 2. A function `supports` one or more capabilities, many-to-many, and may `depends_on` a function or
    `applies_to` a concept. Shared behaviour is one function (ADR 0009); a child capability (ADR 0004) is for
    an outcome-level split only.
-3. A first-domain or shared function carries no domain code (`FUNC-event-correlation`); a later domain's
-   carries its code (`FUNC-euc-device-enrollment`). Sharing is therefore nameable in one direction:
-   an uncoded function may support any capability; a coded id names one domain.
+3. Every function carries the code of its home service domain (`FUNC-ito-event-correlation`,
+   `FUNC-euc-device-enrollment`); it may support another domain's capability by a record (ADR 0009) and keeps
+   its id (amended by ADR 0045).
 4. A function names a standard, protocol or technique only where that is the function itself, on two
    independent criteria. Scope: the standard is the behaviour, not one encoding of it — a signed-manifest
    format is one encoding of content provenance. Maturity: a published specification under
    independent governance with multi-vendor adoption, its status stated in the definition
-   (`FUNC-opamp-remote-management` names a Beta specification); an individual draft among competing drafts
+   (`FUNC-ito-opamp-remote-management` names a Beta specification); an individual draft among competing drafts
    fails.
 5. A specification change is a definition edit, not a new id; the market name and interchangeable encodings
    of one behaviour are aliases on the one function.
@@ -40,8 +40,8 @@ are themselves the behaviour.
   status and may need an edit before stability.
 - A mature standard can still be refused on scope and a fitting one on maturity; each refusal is recorded,
   which keeps the layer from becoming a tool index.
-- One-directional naming means the first domain's functions are the ones shared; a later domain's
-  function that comes to be shared needs a MAJOR rename (ADR 0003).
+- A function's id names its home domain, not whether it is shared; in return, sharing a function never
+  renames it.
 
 ## Alternatives
 

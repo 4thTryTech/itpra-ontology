@@ -1,6 +1,5 @@
-# ITPRA ontology — ITSM-VAL (Service Performance & Value Insight) capabilities
-# type: Capability. ids CAP-ITSM-VAL-<n>. Grouped under domain ITSM-VAL (ADR 0025). Neutral cross-provider
-# coordination over GC-SERVICE-LEVEL / GC-FEEDBACK.
+# ITPRA ontology — ITSM-VAL (Service Performance & Value Insight): capabilities
+# type: Capability. Ids CAP-ITSM-VAL-<n>, each grouped under ITSM-VAL. Decided in ADR 0025.
 
 - id: CAP-ITSM-VAL-1
   term: End-to-End Service Performance Insight

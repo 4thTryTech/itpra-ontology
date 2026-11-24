@@ -15,8 +15,8 @@ ways the industry organises resolution beyond the first line.
 
 ## Decision
 
-1. The Service Desk has seven capability domains, each `grouped_by` Experience or Governance, the planes its service
-   domain interfaces with (ADR 0009, ADR 0010): `SVD-CON` Contact & Intake Channels (Experience); `SVD-TRI` Triage,
+1. The Service Desk has seven capability domains, each `grouped_by` Experience or Governance, per
+   ADR 0010 (amended by ADR 0047): `SVD-CON` Contact & Intake Channels (Experience); `SVD-TRI` Triage,
    Classification & Routing (Governance); `SVD-KNW` Knowledge & Self-Service Enablement (Experience); `SVD-HDL`
    Front-line Incident & Request Handling (Governance); `SVD-MAJ` Major-Incident Coordination & Escalation
    (Governance); `SVD-COM` Customer Communication & Satisfaction (Experience); `SVD-PRF` Support Performance & Insight

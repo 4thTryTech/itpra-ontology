@@ -1,6 +1,5 @@
-# ITPRA ontology — NET-CON (Connectivity Provisioning & WAN) capabilities
-# type: Capability. ids CAP-NET-CON-<n>. Grouped under domain NET-CON (ADR 0023); environment expression per ADR
-# 0014.
+# ITPRA ontology — NET-CON (Connectivity Provisioning & WAN): capabilities
+# type: Capability. Ids CAP-NET-CON-<n>, each grouped under NET-CON. Decided in ADR 0023.
 
 - id: CAP-NET-CON-1
   term: Site & Branch Connectivity Provisioning
@@ -54,10 +53,11 @@
   term: Cloud & SaaS On-Ramp Connectivity
   type: Capability
   definition: >
-    Provides optimized, governed network paths from sites and the platform to cloud providers and SaaS, so
-    cloud-bound traffic reaches its destination efficiently rather than being backhauled through a central point.
+    Provides optimized, governed network paths from sites and the infrastructure platform to cloud providers
+    and SaaS, so cloud-bound traffic reaches its destination efficiently rather than being backhauled through
+    a central point.
   relates_to:
     - {rel: grouped_by, target: NET-CON}
     - {rel: depends_on, target: CAP-NET-CON-2}
     - {rel: consumed_by, target: PERSONA-net-engineering-team}
-  source: ADR 0023
+  source: ADR 0023 (amended by ADR 0047)

@@ -1,11 +1,14 @@
-# ITPRA ontology — relationship types
-# The verbs usable in a term's `relates_to.rel`. The canonical validation list is in schema.yaml:relationships;
-# these records give each verb a human definition (and feed the generated glossary).
+# ITPRA ontology — relationship types: the verbs a term's `relates_to` may use.
+# type: RelationshipType. Ids are the verbs (snake_case). Decided in ADR 0008.
 
 - id: grouped_by
   term: grouped by
   type: RelationshipType
-  definition: The subject is organized under / belongs to the target grouping.
+  definition: >
+    The subject is organized under the target grouping — a capability under its capability domain, a
+    capability domain under its plane, a journey under its journey group, a plane or journey group under a
+    framework tier. Single-valued.
+  source: ADR 0008 (amended by ADR 0047)
 
 - id: consumed_by
   term: consumed by
@@ -15,7 +18,10 @@
 - id: realized_in
   term: realized in
   type: RelationshipType
-  definition: The subject is exercised by / made concrete in the target journey or workflow.
+  definition: >
+    The subject is exercised by / made concrete in the target journey: a capability exercised in a journey,
+    or a workflow that diagrams one.
+  source: ADR 0008 (amended by ADR 0047)
 
 - id: depends_on
   term: depends on
@@ -42,17 +48,20 @@
 - id: met_by
   term: met by
   type: RelationshipType
-  definition: The subject requirement is satisfied by the target architecture element.
+  definition: The subject requirement is satisfied by the target capability.
+  source: ADR 0008 (amended by ADR 0047)
 
 - id: verified_by
   term: verified by
   type: RelationshipType
-  definition: The subject is demonstrated or evidenced by the target journey or check.
+  definition: The subject requirement is demonstrated or evidenced by the target journey.
+  source: ADR 0008 (amended by ADR 0047)
 
 - id: categorized_as
   term: categorized as
   type: RelationshipType
-  definition: The subject belongs to the target category (e.g. an NFR's quality attribute).
+  definition: The subject non-functional requirement belongs to the target quality attribute; single-valued.
+  source: ADR 0008 (amended by ADR 0047)
 
 - id: derived_from
   term: derived from
@@ -64,17 +73,22 @@
 - id: supersedes
   term: supersedes
   type: RelationshipType
-  definition: The subject replaces the target (e.g. one ADR superseding another).
+  definition: The subject decision record replaces the target decision record.
+  source: ADR 0008 (amended by ADR 0047)
 
 - id: owns
   term: owns
   type: RelationshipType
-  definition: The subject persona is accountable for the target element.
+  definition: The subject persona is accountable for the target capability.
+  source: ADR 0008 (amended by ADR 0047)
 
 - id: governs
   term: governs
   type: RelationshipType
-  definition: The subject operating model or policy constrains the target.
+  definition: >
+    The subject constrains the target: an operating model constrains a workflow, or a governing concept (such
+    as the automation boundary) constrains the functions and concepts that act under it.
+  source: ADR 0008 (amended by ADR 0047)
 
 - id: applies_to
   term: applies to
@@ -84,21 +98,22 @@
 - id: produces
   term: produces
   type: RelationshipType
-  definition: The subject yields or exposes the target.
+  definition: The subject service yields or exposes the target capability.
+  source: ADR 0008 (amended by ADR 0047)
 
 - id: interfaces_with
   term: interfaces with
   type: RelationshipType
   definition: >
-    The subject exchanges with the target across a boundary, where neither contains the other (e.g. one
-    service domain interfaces with another service domain's capability plane). Used for context-boundary
-    relationships.
+    The subject exchanges with the target across a boundary, where neither contains the other — a
+    context-boundary relationship. Its declared pair is a service domain to a capability plane; the vocabulary
+    holds no instance of it, and an edge is added only by a decision record that decides it.
+  source: ADR 0008 (amended by ADR 0047)
 
 - id: belongs_to_service_domain
   term: belongs to service domain
   type: RelationshipType
   definition: >
-    The subject term is owned by the target ServiceDomain — its single owning service domain. SINGLE-VALUED:
-    a term names at most one owning service domain (ADR 0009, one-to-one cardinality). Used to attribute a
-    term (e.g. a placement concept, a capability domain) to its owning service domain. Every Domain record
-    carries exactly one (ADR 0009).
+    The subject capability domain is owned by the target service domain, its single owning service domain.
+    Single-valued: every capability domain carries exactly one.
+  source: ADR 0008 (amended by ADR 0046, ADR 0047)

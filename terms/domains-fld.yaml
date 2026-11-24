@@ -1,8 +1,6 @@
-# ITPRA ontology — Onsite / Field Support (FLD) capability domains
-# type: Domain. The `id` IS the domain code used in capability ids: CAP-<id>-<n> (child: CAP-<id>-<n>.<m>). Each
-# domain is `grouped_by` an EXISTING capability PLANE (terms/planes.yaml). SD-FIELD-SUPPORT interfaces_with
-# PLANE-RESOURCE and PLANE-OPERATIONS (ADR 0009); each group is placed under the fitting existing plane.
-# Taxonomy ratified by ADR 0020. Owning service domain: SD-FIELD-SUPPORT (see ADR 0009 + ADR 0020).
+# ITPRA ontology — Onsite / Field Support (FLD): capability domains
+# type: Domain. A capability domain's id is the code its capabilities carry (CAP-<id>-<n>). Owned by
+# SD-FIELD-SUPPORT. Decided in ADR 0020.
 
 - id: FLD-DISP
   term: Dispatch & Scheduling

@@ -1,19 +1,18 @@
-# ITPRA ontology — Data Center & Facilities (DCF) personas
-# type: Persona. ids PERSONA-dcf-<slug>. Coarse, tier-graduated neutral role archetypes (mirrors the persona
-# model, ADR 0012): each refines into granular roles at T2/T3. Capabilities reference these via `consumed_by`;
-# relationships are expressed from the capability/journey side. Ratified by ADR 0022.
+# ITPRA ontology — Data Center & Facilities (DCF): personas
+# type: Persona. Ids PERSONA-dcf-<slug>. Decided in ADR 0022.
 
 - id: PERSONA-dcf-facility-tenant
   term: Facility Tenant
   type: Persona
   definition: >
-    The consumer of the physical hosting environment: the platform and IT teams (and any co-located business
-    or third party) whose equipment is hosted in the facility — they consume space, power, cooling, cabling,
-    and physical access, and depend on the facility's physical availability. The primary customer of the DCF
-    service domain; the infrastructure platform (ITO) is its principal tenant. At T2/T3 this refines into
-    segments (platform/infrastructure team, co-located business unit, carrier/third-party tenant).
+    The consumer of the physical hosting environment: the infrastructure platform and IT teams (and any
+    co-located business or third party) whose equipment is hosted in the facility — they consume space, power,
+    cooling, cabling, and physical access, and depend on the facility's physical availability. The primary
+    customer of the DCF service domain; the infrastructure platform (ITO) is its principal tenant. At T2/T3
+    this refines into segments (platform/infrastructure team, co-located business unit, carrier/third-party
+    tenant).
   aliases: [tenant, hosted-equipment owner, platform team as tenant, colocation customer]
-  source: ADR 0022
+  source: ADR 0022 (amended by ADR 0047)
 
 - id: PERSONA-dcf-facilities-team
   term: Facilities Engineering Team

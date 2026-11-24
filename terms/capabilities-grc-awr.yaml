@@ -1,7 +1,5 @@
-# ITPRA ontology — GRC-AWR (Security Awareness & Human Risk Assurance) capabilities
-# type: Capability. ids CAP-GRC-AWR-<n>. Grouped under domain GRC-AWR (ADR 0024). Enterprise HUMAN-risk function
-# — targets people across all estates; distinct from EUC device/workspace experience and from platform
-# capabilities (the platform has no workforce to train) (ADR 0024).
+# ITPRA ontology — GRC-AWR (Security Awareness & Human Risk Assurance): capabilities
+# type: Capability. Ids CAP-GRC-AWR-<n>, each grouped under GRC-AWR. Decided in ADR 0024.
 
 - id: CAP-GRC-AWR-1
   term: Security Awareness & Training Programme

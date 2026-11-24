@@ -1,6 +1,5 @@
-# ITPRA ontology — FUNCTION library, GRC-SOC (Security Operations & Threat Response)
-# type: Function. ids FUNC-grc-<slug>. All T1-neutral; a function MAY name a security standard/technique where
-# that IS the function (ADR 0011). Functions `support` >=1 capability (many-to-many). See ADR 0024.
+# ITPRA ontology — GRC-SOC (Security Operations & Threat Response): functions
+# type: Function. Ids FUNC-grc-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0024.
 
 # Enterprise security monitoring & event correlation (CAP-GRC-SOC-1)
 - id: FUNC-grc-security-event-aggregation

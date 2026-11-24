@@ -1,6 +1,5 @@
-# ITPRA ontology — ITSM-CAT (Service Catalog & Portfolio Coordination) capabilities
-# type: Capability. ids CAP-ITSM-CAT-<n>. Grouped under domain ITSM-CAT (ADR 0025); environment expression per
-# ADR 0014. Neutral cross-provider coordination over GC-CATALOG / GC-OWNERSHIP / GC-RECORD.
+# ITPRA ontology — ITSM-CAT (Service Catalog & Portfolio Coordination): capabilities
+# type: Capability. Ids CAP-ITSM-CAT-<n>, each grouped under ITSM-CAT. Decided in ADR 0025.
 
 - id: CAP-ITSM-CAT-1
   term: End-to-End Service Catalog

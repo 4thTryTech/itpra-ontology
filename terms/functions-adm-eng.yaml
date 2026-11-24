@@ -1,7 +1,5 @@
-# ITPRA ontology — FUNCTION library, ADM-ENG (Application Build & Engineering Practice)
-# type: Function. ids FUNC-adm-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
-# the function (ADR 0011). Functions `support` ≥1 capability (many-to-many). CONSUMER-side build; consumes
-# ITO-DEL. See ADR 0021.
+# ITPRA ontology — ADM-ENG (Application Build & Engineering Practice): functions
+# type: Function. Ids FUNC-adm-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0021.
 
 # Design & architecture (CAP-ADM-ENG-1)
 - id: FUNC-adm-application-design
@@ -82,15 +80,15 @@
     - {rel: supports, target: CAP-ADM-APM-5}
   source: ADR 0021
 
-# Model-grounded behaviour (CAP-ADM-ENG-6) and guardrail design (CAP-ADM-ENG-7) - ADR 0034
+# Model-grounded behaviour and guardrail design (CAP-ADM-ENG-6, CAP-ADM-ENG-7)
 - id: FUNC-adm-context-assembly-design
   term: Context Assembly Design
   type: Function
-  definition: Specifies at design time what a model-grounded component may see at inference time - which sources, in what precedence, under what scoping and redaction rules, within what budget. The DESIGN-TIME counterpart of the platform's runtime assembly of that context; deliberately a separate function, not the same one.
+  definition: Specifies at design time what a model-grounded component may see at inference time - which sources, in what precedence, under what scoping and redaction rules, within what budget. The DESIGN-TIME counterpart of the infrastructure platform's runtime assembly of that context; deliberately a separate function, not the same one.
   aliases: [context engineering, context governance, context design, prompt context design]
   relates_to:
     - {rel: supports, target: CAP-ADM-ENG-6}
-  source: ADR 0034
+  source: ADR 0034 (amended by ADR 0047)
 
 - id: FUNC-adm-model-grounded-component-design
   term: Model-Grounded Component Design

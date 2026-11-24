@@ -1,6 +1,5 @@
-# ITPRA ontology — BIA-INT (Data Integration & Ingestion) capabilities
-# type: Capability. ids CAP-BIA-INT-<n>. Grouped under domain BIA-INT (ADR 0026); environment expression per ADR
-# 0014.
+# ITPRA ontology — BIA-INT (Data Integration & Ingestion): capabilities
+# type: Capability. Ids CAP-BIA-INT-<n>, each grouped under BIA-INT. Decided in ADR 0026.
 
 - id: CAP-BIA-INT-1
   term: Batch Data Ingestion
@@ -19,11 +18,11 @@
   type: Capability
   definition: >
     Ingests business events and data as a continuous stream for low-latency analytics, consuming the
-    platform's managed streaming substrate, so time-sensitive insight reflects current state.
+    infrastructure platform's managed streaming substrate, so time-sensitive insight reflects current state.
   relates_to:
     - {rel: grouped_by, target: BIA-INT}
     - {rel: consumed_by, target: PERSONA-bia-analytics-team}
-  source: ADR 0026
+  source: ADR 0026 (amended by ADR 0047)
 
 - id: CAP-BIA-INT-3
   term: Change-Data Capture & Replication

@@ -10,9 +10,10 @@ optional load into the disposable Oxigraph store (``config.paths.store_dir``, AD
 rebuilt on every run, never committed, never migrated in place).
 
 **Provenance, without timestamps** (ADR 0043 D3): every build computes ``input_hash``
-(sha256 over every input file's bytes, each contribution prefixed by its repo-relative path so a rename
-alone changes the hash — see :func:`hash_contributions`), ``pipeline_version`` (this distribution's own
-version), ``environment_hash`` (sha256 over the resolved dependency set, as installed), ``rules_version`` (:func:`itpra_onto.rules.rules_digest`),
+(sha256 over every input file's bytes, each contribution prefixed by its label — a vocabulary file's path
+relative to the vocabulary's directory, a layer file's relative to the repository root — so a rename alone
+changes the hash and a vendored copy hashes as the original does; see :func:`labelled_inputs`), ``pipeline_version`` (this distribution's own
+version, which is the release's: equal to ``ontology_version``, ADR 0044), ``environment_hash`` (sha256 over the resolved dependency set, as installed), ``rules_version`` (:func:`itpra_onto.rules.rules_digest`),
 ``ontology_version`` (the vocabulary's ``schema.yaml``), ``schema_hash`` (sha256 of the hand-authored LinkML
 schema plus its two generated fragments) and ``code_hash`` (sha256 over every ``src/itpra_onto/**/*.py``
 file, sorted repo-relative path — the pipeline's own code, not just its inputs). No commit SHA
@@ -25,8 +26,9 @@ with a CI runner on ``input_hash`` alone. The record is written
 twice, once machine-readable (``<out>/build.json``) and once as RDF: the dataset's own node
 (``<base>dataset`` — a plain resource directly under the base IRI, distinct from any record id
 under ``<base>id/``, any schema vocabulary term under ``<base>onto#`` and any named graph under
-``<base>graph/``) carries the seven scalars as literals plus one ``prov:wasDerivedFrom`` per input file, each
-input a ``prov:Entity`` of its own carrying ``dcterms:identifier`` (its repo-relative path) and
+``<base>graph/``) carries the seven scalars as literals, the vocabulary's licence (``dcterms:license``,
+ADR 0002) and one ``prov:wasDerivedFrom`` per input file, each
+input a ``prov:Entity`` of its own carrying ``dcterms:identifier`` (its label, see :func:`labelled_inputs`) and
 ``itpra-o:sha256`` (that one file's own, line-ending-normalised hash). ``prov:wasDerivedFrom`` is the right
 predicate for dataset-to-input provenance (``itpra-o:decidedIn`` is reserved for a term's link to its
 decision record, a different relation entirely; ADR 0041 D2). All of this lands in a fourth named graph,
@@ -105,12 +107,11 @@ BUILD_FILENAME = "build.json"
 
 PROVENANCE_GRAPH_LOCAL = "provenance"
 DATASET_LOCAL = "dataset"  # <base>dataset — see module docstring for why this shape, not <graph_ns>dataset
-INPUT_NODE_LOCAL_PREFIX = "input/"  # <graph_ns>input/<repo-relative path>
+INPUT_NODE_LOCAL_PREFIX = "input/"  # <graph_ns>input/<label>
 
 # Standard vocabulary this module needs beyond what itpra_onto.emit already exposes as constants
 # (only the base IRI is a configuration item, ADR 0004; W3C/DCMI vocabularies are literal constants).
-DCTERMS = "http://purl.org/dc/terms/"
-DCTERMS_IDENTIFIER = ox.NamedNode(DCTERMS + "identifier")
+DCTERMS_IDENTIFIER = ox.NamedNode(emit.DCTERMS + "identifier")
 PROV_ENTITY = ox.NamedNode(emit.PROV + "Entity")
 PROV_WAS_DERIVED_FROM = ox.NamedNode(emit.PROV + "wasDerivedFrom")
 
@@ -171,7 +172,7 @@ class Provenance:
     ontology_version: str
     schema_hash: str
     code_hash: str
-    input_files: tuple[tuple[str, str], ...]  # (repo-relative path, that file's own sha256), sorted
+    input_files: tuple[tuple[str, str], ...]  # (label, that file's own sha256), sorted by label
 
 
 def normalised_bytes(data: bytes) -> bytes:
@@ -201,24 +202,38 @@ def hash_contributions(contributions: Iterable[tuple[str, bytes]]) -> str:
     return digest.hexdigest()
 
 
-def compute_input_hash(paths: Iterable[Path], repo_root: Path) -> str:
-    """:func:`hash_contributions` over ``paths``, labelled by their posix path relative to ``repo_root``, in
-    the given order, over each file's line-ending-normalised bytes (:func:`normalised_bytes`).
+def compute_input_hash(inputs: Iterable[tuple[str, Path]]) -> str:
+    """:func:`hash_contributions` over ``inputs`` — ``(label, path)`` pairs as :func:`labelled_inputs` returns
+    them — in the given order, over each file's line-ending-normalised bytes (:func:`normalised_bytes`).
 
-    Callers pass an already-deterministically-ordered ``paths`` (:func:`input_files` sorts by that same
-    label) so the digest does not depend on filesystem iteration order.
+    Callers pass the already-deterministically-ordered pairs (:func:`labelled_inputs` sorts by label) so the
+    digest does not depend on filesystem iteration order.
     """
-    return hash_contributions((emit._repo_relative(p, repo_root), normalised_bytes(p.read_bytes())) for p in paths)
+    return hash_contributions((label, normalised_bytes(path.read_bytes())) for label, path in inputs)
+
+
+def labelled_inputs(config: Config | None = None, layers: Sequence[Layer] = ()) -> list[tuple[str, Path]]:
+    """Every file the build hashes for provenance, with its label, sorted by label — the fixed order
+    :func:`compute_input_hash` and the provenance graph's ``prov:wasDerivedFrom`` edges both rely on.
+
+    A file of the vocabulary — every term file (as :mod:`itpra_onto.emit` reads them) and ``schema.yaml`` —
+    is labelled by its path relative to the vocabulary's directory (:func:`itpra_onto.emit.vocabulary_label`),
+    so the label, and with it the input hash, is the same wherever the vocabulary is checked out or vendored.
+    A file a layer reads is labelled by its path relative to the repository root. Two inputs under one
+    label are a :class:`BuildError`: a provenance record names each input once."""
+    config = config if config is not None else load_config()
+    labelled = [(emit.vocabulary_label(p, config), p) for p in (*emit.term_files(config), emit.schema_file(config))]
+    labelled += [(emit._repo_relative(p, config.repo_root), p) for p in layers_module.input_files(config, layers)]
+    labelled.sort(key=lambda pair: pair[0])
+    for (label, first), (other, second) in zip(labelled, labelled[1:]):
+        if label == other and first.resolve() != second.resolve():
+            raise BuildError(f"two inputs share the label {label!r}: {first} and {second} — move the layer's file")
+    return labelled
 
 
 def input_files(config: Config | None = None, layers: Sequence[Layer] = ()) -> list[Path]:
-    """Every file the build hashes for provenance: every term file (as :mod:`itpra_onto.emit` reads them),
-    the vocabulary's ``schema.yaml`` itself and every file a layer reads — sorted by repo-relative posix
-    path, the fixed order :func:`compute_input_hash` and the provenance graph's ``prov:wasDerivedFrom``
-    edges both rely on."""
-    config = config if config is not None else load_config()
-    paths = [*emit.term_files(config), emit.schema_file(config), *layers_module.input_files(config, layers)]
-    return sorted(paths, key=lambda p: emit._repo_relative(p, config.repo_root))
+    """The paths of :func:`labelled_inputs`, in its order."""
+    return [path for _label, path in labelled_inputs(config, layers)]
 
 
 def _pipeline_version() -> str:
@@ -285,9 +300,9 @@ def _code_hash(layers: Sequence[Layer] = ()) -> str:
 
 
 def compute_provenance(config: Config, inputs: emit.Inputs, layers: Sequence[Layer] = ()) -> Provenance:
-    paths = input_files(config, layers)
+    labelled = labelled_inputs(config, layers)
     return Provenance(
-        input_hash=compute_input_hash(paths, config.repo_root),
+        input_hash=compute_input_hash(labelled),
         pipeline_version=_pipeline_version(),
         environment_hash=_environment_hash(),
         rules_version=layers_module.rules_version(config, layers),
@@ -295,8 +310,8 @@ def compute_provenance(config: Config, inputs: emit.Inputs, layers: Sequence[Lay
         schema_hash=_schema_hash(),
         code_hash=_code_hash(layers),
         input_files=tuple(
-            (emit._repo_relative(p, config.repo_root), hashlib.sha256(normalised_bytes(p.read_bytes())).hexdigest())
-            for p in paths
+            (label, hashlib.sha256(normalised_bytes(p.read_bytes())).hexdigest())
+            for label, p in labelled
         ),
     )
 
@@ -306,8 +321,8 @@ def _dataset_node(config: Config) -> ox.NamedNode:
     return ox.NamedNode(config.iri.base + DATASET_LOCAL)
 
 
-def _input_node(config: Config, repo_relative_path: str) -> ox.NamedNode:
-    return ox.NamedNode(config.iri.graph_ns + INPUT_NODE_LOCAL_PREFIX + repo_relative_path)
+def _input_node(config: Config, label: str) -> ox.NamedNode:
+    return ox.NamedNode(config.iri.graph_ns + INPUT_NODE_LOCAL_PREFIX + label)
 
 
 def _provenance_quads(config: Config, provenance: Provenance) -> list[ox.Quad]:
@@ -319,6 +334,7 @@ def _provenance_quads(config: Config, provenance: Provenance) -> list[ox.Quad]:
 
     triples: list[tuple[ox.NamedNode, ox.NamedNode, ox.NamedNode | ox.Literal]] = [
         (dataset_node, emit.RDF_TYPE, PROV_ENTITY),
+        (dataset_node, emit.DCTERMS_LICENSE, emit.LICENCE),
         (dataset_node, onto("inputHash"), ox.Literal(provenance.input_hash)),
         (dataset_node, onto("pipelineVersion"), ox.Literal(provenance.pipeline_version)),
         (dataset_node, onto("environmentHash"), ox.Literal(provenance.environment_hash)),
@@ -327,11 +343,11 @@ def _provenance_quads(config: Config, provenance: Provenance) -> list[ox.Quad]:
         (dataset_node, onto("schemaHash"), ox.Literal(provenance.schema_hash)),
         (dataset_node, onto("codeHash"), ox.Literal(provenance.code_hash)),
     ]
-    for repo_relative_path, sha256_hex in provenance.input_files:
-        node = _input_node(config, repo_relative_path)
+    for label, sha256_hex in provenance.input_files:
+        node = _input_node(config, label)
         triples.append((dataset_node, PROV_WAS_DERIVED_FROM, node))
         triples.append((node, emit.RDF_TYPE, PROV_ENTITY))
-        triples.append((node, DCTERMS_IDENTIFIER, ox.Literal(repo_relative_path)))
+        triples.append((node, DCTERMS_IDENTIFIER, ox.Literal(label)))
         triples.append((node, onto("sha256"), ox.Literal(sha256_hex)))
     return [ox.Quad(s, p, o, graph) for s, p, o in triples]
 
@@ -364,7 +380,7 @@ def _turtle_prefixes(config: Config) -> dict[str, str]:
         "rdfs": emit.RDFS,
         "owl": emit.OWL,
         "skos": emit.SKOS,
-        "dcterms": DCTERMS,
+        "dcterms": emit.DCTERMS,
         "prov": emit.PROV,
     }
 

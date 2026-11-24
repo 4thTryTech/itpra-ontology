@@ -1,9 +1,6 @@
-# ITPRA ontology — Data Center & Facilities (DCF) capability domains
-# type: Domain. The `id` IS the domain code used in capability ids: CAP-<id>-<n> (child: CAP-<id>-<n>.<m>). Each
-# domain is `grouped_by` an EXISTING capability PLANE (terms/planes.yaml). DCF capabilities are
-# physical-facility-focused (buildings, power, cooling, cabling, physical security, monitoring, resilience),
-# distinct from ITO's logical Infrastructure Substrate (ITO-SUB). Taxonomy ratified by ADR 0022. Owning service
-# domain: SD-DATACENTER (interfaces_with PLANE-RESOURCE; see ADR 0009 + ADR 0022).
+# ITPRA ontology — Data Center & Facilities (DCF): capability domains
+# type: Domain. A capability domain's id is the code its capabilities carry (CAP-<id>-<n>). Owned by
+# SD-DATACENTER. Decided in ADR 0022.
 
 - id: DCF-SPC
   term: Facility Space & Capacity
@@ -25,11 +22,11 @@
     The electrical plant that delivers clean, continuous power to the hosted equipment — utility intake and
     primary supply, backup generation, uninterruptible and conditioned power, distribution to racks, and power
     metering and electrical-capacity accounting. Owns the physical electrical path; distinct from the
-    platform's logical power/energy consumption accounting.
+    infrastructure platform's logical power/energy consumption accounting.
   relates_to:
     - {rel: grouped_by, target: PLANE-RESOURCE}
     - {rel: belongs_to_service_domain, target: SD-DATACENTER}
-  source: ADR 0022
+  source: ADR 0022 (amended by ADR 0047)
 
 - id: DCF-COOL
   term: Cooling & Environmental Control
@@ -51,11 +48,11 @@
     The passive physical cabling plant of the facility — structured copper/fiber cabling, the pathways and
     spaces (trays, risers, conduits) that carry and protect it, and the physical cross-connects/interconnects
     where tenants and carriers physically meet. Provides the physical medium the logical network runs over;
-    distinct from the logical network (the adjacent Network domain) and platform virtual networking (ITO).
+    distinct from the logical network (the Network & Connectivity domain) and platform virtual networking (ITO).
   relates_to:
     - {rel: grouped_by, target: PLANE-RESOURCE}
     - {rel: belongs_to_service_domain, target: SD-DATACENTER}
-  source: ADR 0022
+  source: ADR 0022 (amended by ADR 0047)
 
 - id: DCF-SEC
   term: Physical Security & Access Control
@@ -78,11 +75,11 @@
     The operational observability and management of the physical facility (the neutral DCIM concern) —
     physical asset and inventory management, real-time environmental and power monitoring, facility capacity
     planning, energy and efficiency measurement, and facility maintenance management. Observes and manages the
-    physical plant; distinct from the platform's workload/service observability (ITO-OBS).
+    physical plant; distinct from the infrastructure platform's workload/service observability (ITO-OBS).
   relates_to:
     - {rel: grouped_by, target: PLANE-OPERATIONS}
     - {rel: belongs_to_service_domain, target: SD-DATACENTER}
-  source: ADR 0022
+  source: ADR 0022 (amended by ADR 0047)
 
 - id: DCF-RES
   term: Facility Resilience & Continuity
@@ -91,9 +88,9 @@
     The physical resilience and continuity of the hosting environment — redundancy and fault tolerance of the
     critical power/cooling systems, concurrent maintainability, hazard protection and life-safety (fire/leak
     detection and suppression), and site continuity and failover. Keeps the physical environment serving the
-    hosted load through component failure, planned maintenance, and site hazards; the platform's workload
-    resilience and DR (ITO) consume this physical availability and run on top.
+    hosted load through component failure, planned maintenance, and site hazards; the infrastructure
+    platform's workload resilience and DR (ITO) consume this physical availability and run on top.
   relates_to:
     - {rel: grouped_by, target: PLANE-RESOURCE}
     - {rel: belongs_to_service_domain, target: SD-DATACENTER}
-  source: ADR 0022
+  source: ADR 0022 (amended by ADR 0047)

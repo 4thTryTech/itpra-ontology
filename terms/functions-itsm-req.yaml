@@ -1,5 +1,5 @@
-# ITPRA ontology — FUNCTION library, ITSM-REQ (Cross-Domain Request & Fulfillment Orchestration)
-# type: Function. ids FUNC-itsm-<slug>. All T1-neutral. Functions `support` >=1 capability. See ADR 0025.
+# ITPRA ontology — ITSM-REQ (Cross-Domain Request & Fulfillment Orchestration): functions
+# type: Function. Ids FUNC-itsm-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0025.
 
 # Cross-domain request intake & triage (CAP-ITSM-REQ-1)
 - id: FUNC-itsm-request-intake

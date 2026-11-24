@@ -244,59 +244,7 @@ def test_linkml_bare_list_target_class_spike():
     assert "1-BAD-ID" in (bad.stdout + bad.stderr)
 
 
-# --- (e) `release` refusal ---
-
-
-def test_release_refuses_on_placeholder_base_iri(tmp_path):
-    """``release`` refuses while ``[iri] base`` is the reserved-domain placeholder (ADR 0004). The shipped
-    itpra-onto.toml carries the published base IRI, so the refusal is exercised through a temporary config
-    whose host is the placeholder -- assembled by concatenation so this file does not itself match
-    test_iri_config.py's project-wide placeholder scan."""
-    import os
-
-    from itpra_onto.config import load_config
-
-    shipped = load_config()
-    placeholder_base = "https://" + "placeholder" + ".invalid" + "/ns/itpra/"
-    alt = tmp_path / "itpra-onto.toml"
-    alt.write_text(
-        "[iri]\n"
-        f'base = "{placeholder_base}"\n'
-        'id_path = "id/"\nonto_path = "onto#"\ngraph_path = "graph/"\n\n'
-        "[paths]\n"
-        f'ontology_dir = "{(PROJECT_ROOT / shipped.paths.ontology_dir).resolve().as_posix()}"\n'
-        'dist_dir = "dist"\nstore_dir = ".store"\n\n[python]\npinned = "3.12"\n',
-        encoding="utf-8",
-    )
-    result = subprocess.run(
-        [sys.executable, "-m", "itpra_onto.cli", "release"],
-        cwd=PROJECT_ROOT,
-        env={**os.environ, "ITPRA_ONTO_CONFIG": str(alt)},
-        capture_output=True,
-        text=True,
-        check=False,
-    )
-    assert result.returncode == 1
-    assert "placeholder" in result.stderr.lower()
-    assert placeholder_base in result.stderr
-
-
-def test_validate_and_parity_are_implemented():
-    """``build`` (test_build.py), plain ``validate`` without ``--authoring`` (test_shacl.py) and ``parity``
-    (test_parity.py) are implemented; this is only a smoke check that ``parity`` does not print the
-    not-implemented message ``release`` still prints."""
-    result = subprocess.run(
-        [sys.executable, "-m", "itpra_onto.cli", "parity"],
-        cwd=PROJECT_ROOT,
-        capture_output=True,
-        text=True,
-        check=False,
-    )
-    assert result.returncode in (0, 1), (result.stdout, result.stderr)
-    assert "not implemented yet" not in result.stdout
-
-
-# --- (f) version pin test ---
+# --- (e) version pins ---
 
 
 def _load_pinned_versions() -> dict[str, str]:
@@ -322,3 +270,23 @@ def test_installed_versions_match_pyproject_pins():
         pinned = pins[distribution_name]
         installed = importlib.metadata.version(distribution_name)
         assert installed == pinned, f"{distribution_name}: installed {installed!r} != pinned {pinned!r}"
+
+
+def test_package_version_is_the_ontology_version():
+    """One tag covers the vocabulary and the package (ADR 0044): the distribution's version — declared, in
+    the package, and as installed — is ``schema.yaml``'s ``ontology_version``, so a build's
+    ``pipeline_version`` names the release it was built from. The authoring schema's own ``version``, which
+    the generated artefacts carry, is the same number."""
+    import yaml
+
+    import itpra_onto
+    from itpra_onto import emit
+    from itpra_onto.config import load_config
+
+    ontology_version = str(yaml.safe_load(emit.schema_file(load_config()).read_text(encoding="utf-8"))["ontology_version"])
+    pyproject = tomllib.loads((PROJECT_ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+    assert pyproject["project"]["version"] == ontology_version
+    assert itpra_onto.__version__ == ontology_version
+    assert importlib.metadata.version("itpra-onto") == ontology_version
+    authoring_schema = PROJECT_ROOT / "src" / "itpra_onto" / "schema" / "itpra.linkml.yaml"
+    assert str(yaml.safe_load(authoring_schema.read_text(encoding="utf-8"))["version"]) == ontology_version

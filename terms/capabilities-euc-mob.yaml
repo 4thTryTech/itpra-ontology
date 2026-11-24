@@ -1,5 +1,5 @@
-# ITPRA ontology — EUC-MOB (Mobility & BYOD) capabilities
-# type: Capability. ids CAP-EUC-MOB-<n>. Grounded in NIST SP 1800-22 (BYOD).
+# ITPRA ontology — EUC-MOB (Mobility & BYOD): capabilities
+# type: Capability. Ids CAP-EUC-MOB-<n>, each grouped under EUC-MOB. Decided in ADR 0018.
 
 - id: CAP-EUC-MOB-1
   term: Personal-Device Enrollment

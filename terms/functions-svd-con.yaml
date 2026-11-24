@@ -1,7 +1,5 @@
-# ITPRA ontology — FUNCTION library, SVD-CON (Contact & Intake Channels)
-# type: Function. ids FUNC-svd-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
-# the function (ADR 0011). Functions `support` >=1 capability (many-to-many). NEVER use derived_from on a
-# Function. See ADR 0019.
+# ITPRA ontology — SVD-CON (Contact & Intake Channels): functions
+# type: Function. Ids FUNC-svd-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0019.
 
 # Multi-channel contact intake (CAP-SVD-CON-1)
 - id: FUNC-svd-voice-intake

@@ -1,7 +1,5 @@
-# ITPRA ontology — ITSM-CFG (System-of-Record & Configuration Integration) capabilities
-# type: Capability. ids CAP-ITSM-CFG-<n>. Grouped under domain ITSM-CFG (ADR 0025). Neutral cross-provider
-# coordination over GC-RECORD. Federation/normalization/reconciliation are neutral data-integration techniques
-# (function level; ADR 0011).
+# ITPRA ontology — ITSM-CFG (System-of-Record & Configuration Integration): capabilities
+# type: Capability. Ids CAP-ITSM-CFG-<n>, each grouped under ITSM-CFG. Decided in ADR 0025.
 
 - id: CAP-ITSM-CFG-1
   term: Federated System-of-Record Integration

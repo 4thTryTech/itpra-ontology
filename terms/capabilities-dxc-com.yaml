@@ -1,5 +1,5 @@
-# ITPRA ontology — DXC-COM (Digital Commerce) capabilities
-# type: Capability. ids CAP-DXC-COM-<n>. Grouped under domain DXC-COM (ADR 0027).
+# ITPRA ontology — DXC-COM (Digital Commerce): capabilities
+# type: Capability. Ids CAP-DXC-COM-<n>, each grouped under DXC-COM. Decided in ADR 0027.
 
 - id: CAP-DXC-COM-1
   term: Product Catalog & Merchandising

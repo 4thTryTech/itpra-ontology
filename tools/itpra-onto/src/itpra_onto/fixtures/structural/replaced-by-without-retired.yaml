@@ -1,0 +1,11 @@
+# Proves itpra-o:ReplacedByWithoutRetiredShape (structural.ttl item 9; ADR 0048): naming a successor on a
+# real Capability that is not retired raises exactly one Violation of replaced-by-without-retired, on that
+# Capability. The successor is a real record, so replaced-by-unresolved stays silent.
+rule: replaced-by-without-retired
+expect:
+  severity: Violation
+  focus: CAP-ITO-FND-3
+  count: 1
+mutate:
+  id: CAP-ITO-FND-3
+  set: {replaced_by: CAP-ITO-FND-2}

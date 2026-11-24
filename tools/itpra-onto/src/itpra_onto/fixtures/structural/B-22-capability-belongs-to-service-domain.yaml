@@ -1,7 +1,7 @@
 # Proves the generated B-22 shape for belongs_to_service_domain (shapes/generated/verb-pairs.ttl,
 # itpra-o:VerbPairsBelongsToServiceDomainShape): CAP-ITO-FND-1 gains a
-# belongs_to_service_domain edge to SD-IT-OPERATIONS (a real ServiceDomain). The verb's itpra_verb pairs are
-# (Concept, ServiceDomain) and (Domain, ServiceDomain) — a Capability's service domain is attributed through
+# belongs_to_service_domain edge to SD-IT-OPERATIONS (a real ServiceDomain). The verb's one itpra_verb pair is
+# (Domain, ServiceDomain) — a Capability's service domain is attributed through
 # its Domain (ADR 0009), never directly — so (Capability, ServiceDomain) is one Violation.
 #
 # A clean single-rule proof: the target resolves (target-unresolved silent); CAP-ITO-FND-1 now has exactly one

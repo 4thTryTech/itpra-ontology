@@ -1,6 +1,5 @@
-# ITPRA ontology — ADM-APM (Application Portfolio & Lifecycle Management) capabilities
-# type: Capability. ids CAP-ADM-APM-<n>. Grouped under domain ADM-APM (ADR 0021); environment expression per ADR
-# 0014.
+# ITPRA ontology — ADM-APM (Application Portfolio & Lifecycle Management): capabilities
+# type: Capability. Ids CAP-ADM-APM-<n>, each grouped under ADM-APM. Decided in ADR 0021.
 
 - id: CAP-ADM-APM-1
   term: Application Inventory & Catalog
@@ -8,12 +7,12 @@
   definition: >
     Maintains an authoritative inventory of the organization's business applications and their relationships
     to business capabilities, owners, and dependencies — the trustworthy record of what applications exist
-    and why. Distinct from the platform's catalog of platform offerings.
+    and why. Distinct from the infrastructure platform's catalog of platform offerings.
   relates_to:
     - {rel: grouped_by, target: ADM-APM}
     - {rel: consumed_by, target: PERSONA-adm-app-team}
     - {rel: consumed_by, target: PERSONA-adm-business-owner}
-  source: ADR 0021
+  source: ADR 0021 (amended by ADR 0047)
 
 - id: CAP-ADM-APM-2
   term: Application Lifecycle State & Roadmap

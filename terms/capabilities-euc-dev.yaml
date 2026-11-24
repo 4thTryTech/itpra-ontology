@@ -1,6 +1,5 @@
-# ITPRA ontology — EUC-DEV (Device Lifecycle & Provisioning) capabilities
-# type: Capability. ids CAP-EUC-DEV-<n>. Grouped under domain EUC-DEV (ADR 0018); environment expression per ADR
-# 0014.
+# ITPRA ontology — EUC-DEV (Device Lifecycle & Provisioning): capabilities
+# type: Capability. Ids CAP-EUC-DEV-<n>, each grouped under EUC-DEV. Decided in ADR 0018.
 
 - id: CAP-EUC-DEV-1
   term: Device Enrollment & Zero-Touch Provisioning

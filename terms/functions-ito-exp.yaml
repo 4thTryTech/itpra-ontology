@@ -1,9 +1,7 @@
-# ITPRA ontology — FUNCTION library, ITO-EXP (Consumer Experience)
-# type: Function. ids FUNC-ito-<slug>. All T1 neutral. Reuses shared FUNC-ito-request-intake (CAP-ITO-EXP-1),
-# FUNC-ito-knowledge-retrieval (CAP-ITO-EXP-5), FUNC-ito-notification-delivery (CAP-ITO-EXP-6). See ADR 0011.
-# FUNC-ito-self-service-action-execution added 2026-06-04 (the portal-native self-service action layer).
+# ITPRA ontology — ITO-EXP (Consumer Experience): functions
+# type: Function. Ids FUNC-ito-<slug>; a function supports one or more capabilities. Decided in ADR 0011.
 
-# Self-service interface (supports CAP-ITO-EXP-1; submission via shared FUNC-ito-request-intake)
+# Self-service interface (CAP-ITO-EXP-1)
 - id: FUNC-ito-self-service-portal
   term: Self-Service Portal
   type: Function
@@ -25,7 +23,7 @@
     - {rel: supports, target: CAP-ITO-EXP-2}
   source: ADR 0011 (amended by ADR 0045)
 
-# Service catalog (supports CAP-ITO-EXP-2; browsing via shared FUNC-ito-capability-discovery)
+# Service catalog (CAP-ITO-EXP-2)
 - id: FUNC-ito-catalog-publishing
   term: Catalog Publishing
   type: Function
@@ -35,9 +33,7 @@
     - {rel: supports, target: CAP-ITO-EXP-2}
   source: ADR 0011 (amended by ADR 0045)
 
-# Self-service action layer (the interface ACTS on a catalog item — distinct from request capture
-# FUNC-ito-request-intake and from template scaffolding FUNC-ito-scaffolding; execution itself stays in
-# ITO-AUT).
+# Self-service action layer
 - id: FUNC-ito-self-service-action-execution
   term: Self-Service Action Execution
   type: Function
@@ -53,7 +49,7 @@
     - {rel: supports, target: CAP-ITO-EXP-2}
   source: ADR 0011 (amended by ADR 0045)
 
-# Golden-path templates (supports CAP-ITO-EXP-3)
+# Golden-path templates (CAP-ITO-EXP-3)
 - id: FUNC-ito-template-cataloging
   term: Template Cataloging
   type: Function
@@ -72,8 +68,7 @@
     - {rel: supports, target: CAP-ITO-EXP-3}
   source: ADR 0011 (amended by ADR 0045)
 
-# Programmatic interfaces (supports CAP-ITO-EXP-4; the platform's own interfaces, not the tenant API edge
-# CAP-ITO-SUB-6)
+# Programmatic interfaces (CAP-ITO-EXP-4)
 - id: FUNC-ito-programmatic-api-access
   term: Programmatic API Access
   type: Function
@@ -92,7 +87,7 @@
     - {rel: supports, target: CAP-ITO-EXP-4}
   source: ADR 0011 (amended by ADR 0045)
 
-# Documentation & onboarding (supports CAP-ITO-EXP-5; search via shared FUNC-ito-knowledge-retrieval)
+# Documentation & onboarding (CAP-ITO-EXP-5)
 - id: FUNC-ito-documentation-publishing
   term: Documentation Publishing
   type: Function
@@ -111,7 +106,7 @@
     - {rel: supports, target: CAP-ITO-EXP-5}
   source: ADR 0011 (amended by ADR 0045)
 
-# Consumer notifications (supports CAP-ITO-EXP-6; delivery via shared FUNC-ito-notification-delivery)
+# Consumer notifications (CAP-ITO-EXP-6)
 - id: FUNC-ito-notification-preferences
   term: Notification Preferences
   type: Function
@@ -121,7 +116,7 @@
     - {rel: supports, target: CAP-ITO-EXP-6}
   source: ADR 0011 (amended by ADR 0045)
 
-# Developer environments (supports CAP-ITO-EXP-7)
+# Developer environments (CAP-ITO-EXP-7)
 - id: FUNC-ito-dev-environment-provisioning
   term: Developer Environment Provisioning
   type: Function
@@ -140,7 +135,7 @@
     - {rel: supports, target: CAP-ITO-EXP-7}
   source: ADR 0011 (amended by ADR 0045)
 
-# Governed coding assistance (supports CAP-ITO-EXP-8)
+# Governed coding assistance (CAP-ITO-EXP-8)
 - id: FUNC-ito-coding-assistance
   term: Coding Assistance
   type: Function

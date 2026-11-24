@@ -1,5 +1,5 @@
-# ITPRA ontology — FUNCTION library, FLD-SAFE (On-site Safety, Access & Escort)
-# type: Function. ids FUNC-fld-<slug>. Functions `support` ≥1 capability. See ADR 0020.
+# ITPRA ontology — FLD-SAFE (On-site Safety, Access & Escort): functions
+# type: Function. Ids FUNC-fld-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0020.
 
 # Site-access request & scheduling (CAP-FLD-SAFE-1)
 - id: FUNC-fld-access-preregistration

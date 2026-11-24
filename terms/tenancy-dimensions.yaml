@@ -1,25 +1,20 @@
-# ITPRA ontology — tenancy isolation dimensions + strength
-# SHARED file: it belongs to no single service domain, so neither its name nor its ids carry a service-domain
-# code (ADR 0007, ADR 0045).
-# The neutral model for multi-tenancy at T1. Ratified by ADR 0014 (the tenancy twin of ADR 0014's environment
-# dimensions). A capability's `Multi-tenancy` field states the per-tenant boundary it upholds, names which of
-# these isolation DIMENSIONS it is responsible for, and treats isolation STRENGTH/mechanism as a variation point
-# bound at T2/T3. type: Concept. The `tenant` (entity TENANT) is the T1 unit of isolation. Mechanism-free — no
-# products, no runtime primitives.
+# ITPRA ontology — tenancy dimensions: the isolation dimensions a tenant boundary holds across, and its strength
+# SHARED file: it belongs to no single service domain, so neither its name nor its ids carry a service-domain code.
+# type: Concept. Ids TEN-DIM-<SLUG> and TEN-ISOLATION-STRENGTH. Decided in ADR 0014.
 
-# ---- isolation dimensions (the planes a tenant boundary must hold across) ----
+# ---- isolation dimensions (the dimensions a tenant boundary must hold across) ----
 - id: TEN-DIM-DATA
   term: Data isolation
   type: Concept
   definition: >
-    The isolation dimension covering tenant data and state at rest and in motion within the platform: one
-    tenant cannot read, alter, or infer another tenant's data beyond explicitly granted policy. T1 asserts
-    the boundary; the realization (separate stores, logical partitions, encryption scoping) is a T2/T3
-    variation point.
+    The isolation dimension covering tenant data and state at rest and in motion within the infrastructure
+    platform: one tenant cannot read, alter, or infer another tenant's data beyond explicitly granted policy.
+    T1 asserts the boundary; the realization (separate stores, logical partitions, encryption scoping) is a
+    T2/T3 variation point.
   aliases: [data-plane isolation, storage isolation]
   relates_to:
     - {rel: applies_to, target: TENANT}
-  source: ADR 0014
+  source: ADR 0014 (amended by ADR 0047)
 
 - id: TEN-DIM-NETWORK
   term: Network isolation

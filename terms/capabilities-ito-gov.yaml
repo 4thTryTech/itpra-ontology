@@ -1,6 +1,5 @@
-# ITPRA ontology — ITO-GOV (Governance & Service Management) capabilities
-# type: Capability. ids CAP-ITO-GOV-<n>. Grouped under domain ITO-GOV (ADR 0017). Operating-model-NEUTRAL
-# constructs (request/approval/change/incident/record); ITIL/DevOps mapping happens at T2.
+# ITPRA ontology — ITO-GOV (Governance & Service Management): capabilities
+# type: Capability. Ids CAP-ITO-GOV-<n>, each grouped under ITO-GOV. Decided in ADR 0017.
 
 - id: CAP-ITO-GOV-1
   term: Service Request Management

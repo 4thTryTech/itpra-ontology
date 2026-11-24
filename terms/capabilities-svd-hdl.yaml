@@ -1,6 +1,5 @@
-# ITPRA ontology — SVD-HDL (Front-line Incident & Request Handling) capabilities
-# type: Capability. ids CAP-SVD-HDL-<n>. Grouped under domain SVD-HDL (ADR 0019). Neutral across tiered and
-# swarming operating models (ADR 0019).
+# ITPRA ontology — SVD-HDL (Front-line Incident & Request Handling): capabilities
+# type: Capability. Ids CAP-SVD-HDL-<n>, each grouped under SVD-HDL. Decided in ADR 0019.
 
 - id: CAP-SVD-HDL-1
   term: First-Line Resolution

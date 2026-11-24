@@ -15,33 +15,33 @@ the source wins on disagreement, and a knowledge graph has no store type. Which 
 
 ## Decision
 
-1. `FUNC-access-policy-propagation` enforces, at retrieval time, the access restriction of the source a derived
+1. `FUNC-ito-access-policy-propagation` enforces, at retrieval time, the access restriction of the source a derived
    representation was built from, against the principal a consumer or delegated actor currently acts for, including
-   when entitlements changed after the build. Supports `CAP-DATA-4`, `CAP-DATA-8`; `applies_to` `AUTON-ACTOR`;
-   `depends_on` `FUNC-authorization-decision`, `FUNC-delegated-authority-chain` (ADR 0035).
+   when entitlements changed after the build. Supports `CAP-ITO-DATA-4`, `CAP-ITO-DATA-8`; `applies_to` `AUTON-ACTOR`;
+   `depends_on` `FUNC-ito-authorization-decision`, `FUNC-ito-delegated-authority-chain` (ADR 0035).
    `FUNC-bia-semantic-access-policy` stays the structured-data case.
-2. A sibling of `FUNC-erasure-propagation`, not a generalisation: erasure is write-time and one-shot, access
+2. A sibling of `FUNC-ito-erasure-propagation`, not a generalisation: erasure is write-time and one-shot, access
    read-time and continuous; they fail different tests. Build-time inheritance, query-time check or both is a
    scenario decision.
-3. Source over derivative: `FUNC-retrieval-provenance` traces to the authoritative record, not the index entry, and
-   the source prevails on disagreement; `FUNC-erasure-propagation` may also be discharged by re-derivation, where
-   available (ADR 0039 states where not); `CAP-GOV-4` is authoritative and governing for the estate, discovered
-   topology (`CAP-OBS-10`) a peer reconciled under precedence rules, not a derivative.
-4. `FUNC-mcp-tool-interoperability` reaches the resources an actor can discover and read as well as tools: a
+3. Source over derivative: `FUNC-ito-retrieval-provenance` traces to the authoritative record, not the index entry, and
+   the source prevails on disagreement; `FUNC-ito-erasure-propagation` may also be discharged by re-derivation, where
+   available (ADR 0039 states where not); `CAP-ITO-GOV-4` is authoritative and governing for the estate, discovered
+   topology (`CAP-ITO-OBS-10`) a peer reconciled under precedence rules, not a derivative.
+4. `FUNC-ito-mcp-tool-interoperability` reaches the resources an actor can discover and read as well as tools: a
    definition edit, not a re-mint (ADR 0011).
-5. `JRN-run-delegated-actor` `depends_on` `CAP-GOV-9`: grounding is part of running an actor.
+5. `JRN-ito-run-delegated-actor` `depends_on` `CAP-ITO-GOV-9`: grounding is part of running an actor.
 
 ## Consequences
 
 - The derived store honours its source's access restrictions and erasures, traces to the authoritative record and
   loses every disagreement with it.
-- `CAP-DATA-1` gains graph stores as a store type beside ADR 0033's vector stores; the data model binds below the
+- `CAP-ITO-DATA-1` gains graph stores as a store type beside ADR 0033's vector stores; the data model binds below the
   reference tier, and a store's role is a property of its deployment, not its type.
-- `FUNC-knowledge-retrieval` names how material is found — lexical, similarity, graph traversal, model-grounded or
+- `FUNC-ito-knowledge-retrieval` names how material is found — lexical, similarity, graph traversal, model-grounded or
   combined — as a variation point; retrieval-augmented generation is a composition, not a function.
 - The access function rests on a risk entry and vendor convergence, no named incident; "the source prevails" precedes
   any settled mechanism.
-- Propagating a wrong source permission faithfully still overshares; source hygiene is `CAP-SEC-2`.
+- Propagating a wrong source permission faithfully still overshares; source hygiene is `CAP-ITO-SEC-2`.
 
 ## Alternatives
 

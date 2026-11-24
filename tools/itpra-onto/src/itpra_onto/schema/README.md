@@ -24,9 +24,8 @@ entry into one RDF predicate per verb (ADR 0041 D2).
 ## The base IRI is a configuration item (ADR 0004)
 
 The base IRI is **never hard-coded**. `itpra-onto.toml` `[iri]` (`base`, `id_path`, `onto_path`,
-`graph_path`) is the single source; a base whose host ends in `.invalid` (the reserved TLD that never
-resolves) is a placeholder that `itpra-onto release` refuses. The prefixes are `itpra:` = `<base>id/`,
-`itpra-o:` = `<base>onto#` and `itpra-g:` = `<base>graph/` (named graphs).
+`graph_path`) is the single source. The prefixes are `itpra:` = `<base>id/`, `itpra-o:` = `<base>onto#` and
+`itpra-g:` = `<base>graph/` (named graphs).
 
 Two mechanisms keep those IRIs out of the hand-authored `itpra.linkml.yaml`:
 
@@ -85,7 +84,7 @@ with an `itpra_verb` annotation. The tests fail until both exist.
 
 JSON Schema can enforce these rules directly:
 
-- id patterns
+- id patterns, and the version pattern of `retired`
 - required fields
 - enums
 - at least one `grouped_by` on Capability, Domain and Journey (`has_member`)
@@ -113,7 +112,7 @@ annotations:
       evidence: data | meta-only | definition
       domain: [<Class>, …]          # = distinct subjects of pairs, sorted
       range: [<Class>, …]           # = distinct objects of pairs, sorted
-      pairs: [{subject, object, count}]         # allowed combinations; count dated 3.14.0
+      pairs: [{subject, object, count}]         # allowed combinations; count dated 5.0.0
       cardinality: [{subject, min, max|null}]   # declared rules only; subject Term = every record
       observed: [{subject, records, min, max}]  # read off the data, informational
       meta_edges: ["ENTITY -> ENTITY", …]       # entities.yaml relates_to, verbatim
@@ -128,7 +127,7 @@ instead (`SERVICE`, `ADR`, `REQUIREMENT`). The tests enforce four things:
 - `meta_edges` equals `entities.yaml`.
 - `domain` and `range` are derived from `pairs`.
 
-The `count` and `observed` numbers are dated to 3.14.0 and are **not** asserted. Refresh them from
+The `count` and `observed` numbers are dated to 5.0.0 and are **not** asserted. Refresh them from
 `python -m itpra_onto.profile`.
 
 ## Class ↔ EntityType bridge

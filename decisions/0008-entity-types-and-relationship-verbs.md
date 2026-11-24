@@ -33,8 +33,8 @@ declared.
    `governs` `OPERATING_MODEL`→`WORKFLOW`, `CONCEPT`→`FUNCTION`|`CONCEPT`; `applies_to`
    `CAPABILITY`|`FUNCTION`|`CONCEPT`→`CONCEPT`, `CONCEPT`→`CAPABILITY`, `OPERATING_MODEL`|`ADR`→`ITPRA_TIER`;
    `produces` `SERVICE`→`CAPABILITY`; `interfaces_with` (across a boundary, neither containing the other)
-   `SERVICE_DOMAIN`→`PLANE`; `belongs_to_service_domain` `DOMAIN`|`CONCEPT`→`SERVICE_DOMAIN`. A concept's
-   `applies_to` an entity type lives in the authoring schema alone.
+   `SERVICE_DOMAIN`→`PLANE`; `belongs_to_service_domain` `DOMAIN`→`SERVICE_DOMAIN`. A concept's
+   `applies_to` an entity type lives in the authoring schema alone (amended by ADR 0046).
 4. `grouped_by`, `categorized_as` and `belongs_to_service_domain` are single-valued (a `Domain` carries exactly
    one, ADR 0009); a function `supports` at least one capability; other verbs are many-to-many. `met_by` runs
    from requirement to element, never the reverse.

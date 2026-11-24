@@ -1,25 +1,19 @@
-# ITPRA ontology — quality-attribute vocabulary (NFR categories)
-# SHARED file: it belongs to no single service domain, so neither its name nor its ids carry a service-domain
-# code (ADR 0007, ADR 0045).
-# Seeded controlled set for non-functional requirements. NFRs reference these by id via their `qa` field.
-# Starting set drawn from ISO/IEC 25010 and cloud well-architected frameworks; refine via ADR if changed.
-# Extended by ADR 0016 with SAFETY (ISO/IEC 25010:2023 2nd ed. added Safety as a full characteristic - the set
-# above predates that revision), and EXPLAINABILITY / VALIDITY / FAIRNESS (NIST AI RMF trustworthiness
-# characteristics; ISO/IEC 25059:2023 AI quality model). These four are VOCABULARY: whether a given architecture
-# carries an NFR against them is a T2/T3 scope decision, not a T1 obligation.
+# ITPRA ontology — quality attributes: the categories of non-functional concern a requirement may constrain
+# SHARED file: it belongs to no single service domain, so neither its name nor its ids carry a service-domain code.
+# type: QualityAttribute. Ids <UPPER_TOKEN>. Decided in ADR 0016.
 
 - id: AVAILABILITY
   term: Availability
   type: QualityAttribute
-  definition: The platform and its services are reachable and operational when needed.
-  source: ISO/IEC 25010; well-architected
+  definition: A service and the components it relies on are reachable and operational when needed.
+  source: ISO/IEC 25010; well-architected; ADR 0047
 
 - id: RESILIENCE
   term: Resilience
   type: QualityAttribute
-  definition: The platform tolerates and recovers from faults without disproportionate impact.
+  definition: A service tolerates and recovers from faults without disproportionate impact.
   aliases: [reliability, fault-tolerance]
-  source: well-architected
+  source: well-architected; ADR 0047
 
 - id: SCALABILITY
   term: Scalability
@@ -44,8 +38,9 @@
 - id: COMPLIANCE
   term: Compliance & Auditability
   type: QualityAttribute
-  definition: The platform meets regulatory/policy obligations and can evidence them.
+  definition: A service meets regulatory/policy obligations and can evidence them.
   aliases: [auditability]
+  source: ADR 0016 (amended by ADR 0047)
 
 - id: OBSERVABILITY
   term: Observability
@@ -55,7 +50,8 @@
 - id: OPERABILITY
   term: Operability
   type: QualityAttribute
-  definition: The platform is straightforward to run, monitor, and intervene in day-to-day.
+  definition: A service is straightforward to run, monitor, and intervene in day-to-day.
+  source: ADR 0016 (amended by ADR 0047)
 
 - id: MAINTAINABILITY
   term: Maintainability
@@ -66,8 +62,8 @@
 - id: PORTABILITY
   term: Portability
   type: QualityAttribute
-  definition: Workloads and the platform can move across environments with bounded effort.
-  source: ISO/IEC 25010
+  definition: A workload or service can move across environments with bounded effort.
+  source: ISO/IEC 25010; ADR 0047
 
 - id: INTEROPERABILITY
   term: Interoperability
@@ -92,8 +88,9 @@
 - id: RECOVERABILITY
   term: Recoverability
   type: QualityAttribute
-  definition: After disruption, the platform restores service and data within defined objectives.
+  definition: After disruption, a service is restored, with its data, within defined objectives.
   aliases: [disaster-recovery, dr]
+  source: ADR 0016 (amended by ADR 0047)
 
 - id: SAFETY
   term: Safety

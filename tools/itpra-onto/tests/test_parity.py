@@ -22,7 +22,15 @@ from itpra_onto import emit, fixtures, lint, parity
 from itpra_onto.config import Config, load_config
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-COMPARABLE = {"field-missing", "id-pattern", "target-unresolved", "function-derived-from"}
+COMPARABLE = {
+    "field-missing",
+    "id-pattern",
+    "target-unresolved",
+    "function-derived-from",
+    "retired-format",
+    "replaced-by-unresolved",
+    "replaced-by-without-retired",
+}
 EMIT_MAPPED = {"type-unknown", "verb-unknown", "relates-to-malformed"}
 OUTSIDE_SCOPE = {
     "yaml-parse-error",
@@ -49,7 +57,7 @@ def config() -> Config:
 def test_table_a_lists_exactly_the_linters_rule_ids():
     mechanisms = parity.parse_table_a()
     assert set(mechanisms) == set(lint.CORE_RULE_IDS)
-    assert len(mechanisms) == len(lint.CORE_RULE_IDS) == 16
+    assert len(mechanisms) == len(lint.CORE_RULE_IDS) == 19
 
 
 def test_table_a_splits_into_comparable_emit_time_and_outside_scope():
@@ -84,20 +92,23 @@ def test_parse_table_a_raises_on_a_changed_header_row(tmp_path: Path):
         parity.parse_table_a(path, shapes_dir=None)
 
 
+ROWS = len(lint.CORE_RULE_IDS)
+
+
 def test_parse_table_a_raises_when_the_row_count_disagrees_with_the_counts_line(tmp_path: Path):
-    path = _register_copy(tmp_path, "**Table A rows:** 16", "**Table A rows:** 15")
-    with pytest.raises(parity.ParityError, match="16 rows but the Counts section states 15"):
+    path = _register_copy(tmp_path, f"**Table A rows:** {ROWS}", f"**Table A rows:** {ROWS - 1}")
+    with pytest.raises(parity.ParityError, match=f"{ROWS} rows but the Counts section states {ROWS - 1}"):
         parity.parse_table_a(path, shapes_dir=None)
 
 
 def test_parse_table_a_raises_when_a_row_is_dropped(tmp_path: Path):
     path = _register_copy(tmp_path, _register_row("| `id-duplicate` |") + "\n", "")
-    with pytest.raises(parity.ParityError, match="15 rows but the Counts section states 16"):
+    with pytest.raises(parity.ParityError, match=f"{ROWS - 1} rows but the Counts section states {ROWS}"):
         parity.parse_table_a(path, shapes_dir=None)
 
 
 def test_parse_table_a_raises_without_a_counts_line(tmp_path: Path):
-    path = _register_copy(tmp_path, "**Table A rows:** 16", "Table A rows: 16")
+    path = _register_copy(tmp_path, f"**Table A rows:** {ROWS}", f"Table A rows: {ROWS}")
     with pytest.raises(parity.ParityError, match="states no"):
         parity.parse_table_a(path, shapes_dir=None)
 

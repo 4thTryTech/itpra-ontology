@@ -1,5 +1,5 @@
-# ITPRA ontology — DXC-JRN (Customer Journey Orchestration) capabilities
-# type: Capability. ids CAP-DXC-JRN-<n>. Grouped under domain DXC-JRN (ADR 0027).
+# ITPRA ontology — DXC-JRN (Customer Journey Orchestration): capabilities
+# type: Capability. Ids CAP-DXC-JRN-<n>, each grouped under DXC-JRN. Decided in ADR 0027.
 
 - id: CAP-DXC-JRN-1
   term: Journey Design & Mapping

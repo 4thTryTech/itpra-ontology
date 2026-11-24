@@ -1,7 +1,5 @@
-# ITPRA ontology — Service Desk (SVD) personas
-# type: Persona. ids PERSONA-svd-<slug>. Coarse, tier-graduated neutral role archetypes (mirrors the persona
-# model, ADR 0012): each refines into granular roles at T2/T3. Capabilities reference these via `consumed_by`;
-# relationships are expressed from the capability/journey side. Ratified by ADR 0019.
+# ITPRA ontology — Service Desk (SVD): personas
+# type: Persona. Ids PERSONA-svd-<slug>. Decided in ADR 0019.
 
 - id: PERSONA-svd-requester
   term: Service Desk Requester
@@ -43,10 +41,10 @@
   term: Resolver Group Liaison
   type: Persona
   definition: >
-    The adjacent provider the desk hands off to: a resolver in another service domain (platform operations,
+    The provider the desk hands off to: a resolver in another service domain (platform operations,
     end-user computing, field support, application, network, security) that performs the deeper fulfilment
     or technical restoration the front line routes to it, and that exchanges status back to the desk.
     Modeled as a persona so handoff and status-exchange capabilities have a counterpart; it is not a service
     desk role and refines into specific resolver teams at T2/T3.
   aliases: [resolver group, fulfilment team, assignment group, downstream resolver]
-  source: ADR 0019
+  source: ADR 0019 (amended by ADR 0047)

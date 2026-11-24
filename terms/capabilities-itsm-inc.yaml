@@ -1,6 +1,5 @@
-# ITPRA ontology — ITSM-INC (Cross-Domain Incident & Problem Coordination) capabilities
-# type: Capability. ids CAP-ITSM-INC-<n>. Grouped under domain ITSM-INC (ADR 0025). Neutral cross-provider
-# coordination over GC-INCIDENT / GC-PROBLEM / GC-RECORD.
+# ITPRA ontology — ITSM-INC (Cross-Domain Incident & Problem Coordination): capabilities
+# type: Capability. Ids CAP-ITSM-INC-<n>, each grouped under ITSM-INC. Decided in ADR 0025.
 
 - id: CAP-ITSM-INC-1
   term: Cross-Provider Incident Detection & Triage

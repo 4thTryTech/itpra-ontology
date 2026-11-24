@@ -31,14 +31,14 @@ directory or one of its parents, else the one beside a checkout's `pyproject.tom
 | Table | Keys | Meaning |
 |---|---|---|
 | `[iri]` | `base`, `id_path`, `onto_path`, `graph_path` | The base IRI and the three namespaces built from it: `itpra:` = `<base><id_path>` (one IRI per record), `itpra-o:` = `<base><onto_path>` (verbs, classes and annotation properties), `itpra-g:` = `<base><graph_path>` (named graphs). Every key is required; a missing one raises `ConfigError` — no default is baked into the code (ADR 0004). |
-| `[paths]` | `repo_root`, `ontology_dir`, `dist_dir`, `store_dir` | The repository root every input must lie under and file labels are relative to (default `../..`; read from the configuration, never from where the package is installed), the vocabulary's directory (`schema.yaml`, `entities.yaml`, `relationships.yaml`, `terms/*.yaml`), the output root (`<dist_dir>/rdf/`, `<dist_dir>/schema/`) and the embedded store's directory. |
+| `[paths]` | `repo_root`, `ontology_dir`, `dist_dir`, `store_dir` | The repository root every input must lie under and that findings name files relative to (default `../..`; read from the configuration, never from where the package is installed), the vocabulary's directory (`schema.yaml`, `entities.yaml`, `relationships.yaml`, `terms/*.yaml`), the output root (`<dist_dir>/rdf/`, `<dist_dir>/schema/`) and the embedded store's directory. |
 | `[python]` | `pinned` | The interpreter version the package is pinned to (`3.12`). |
 
 The base IRI is written once, in `[iri] base`: the LinkML prefixes are generated from it (`gen-prefixes`),
 the schema's own `id:` is substituted in memory at load time, and rule, shape and query files declare no
 `PREFIX`/`@prefix` for `itpra:`/`itpra-o:`/`itpra-g:` — a block computed from the configuration is prepended
 before they run or parse. `tests/test_iri_config.py` fails if the literal appears outside `itpra-onto.toml`
-and the two generated fragments. A host ending in `.invalid` is a placeholder that `itpra-onto release` refuses.
+and the two generated fragments.
 
 ## Layers
 
@@ -60,12 +60,11 @@ with a small one.
 | `gen-prefixes [--check]` | Regenerates `schema/generated/itpra-prefixes.linkml.yaml` from `[iri]`. Sorted, LF. `--check` as above. |
 | `gen-verb-shapes [--check]` | Regenerates `shapes/generated/verb-pairs.ttl` (rule `B-22`: one SHACL-SPARQL shape per verb, allowing only the (subject class, object class) pairs its `itpra_verb` annotation declares) from `schema/itpra.linkml.yaml`. `shapes/generated/` is owned by this command; never edit it by hand. `--check` as above. |
 | `gen-artifacts [--check]` | Regenerates `<dist_dir>/schema/` (`itpra.schema.json`, `itpra_models.py`, `itpra.owl.nt`, `itpra.shacl.nt`, `doc/`) from the LinkML schema. Two runs are byte-identical. `--check` regenerates into a temporary directory and exits 1 on any difference. |
-| `lint [--root DIR] [--json]` | Lints the vocabulary (`itpra_onto.lint`; the register's Table A: file shape, required and unknown fields, unique ids and the id pattern, known types and verbs, resolving targets, `derived_from` kept off Functions, the `source:` grammar and resolving decision citations, the two version numbers). Standard library plus PyYAML only (ADR 0042 D1). Exit 1 on any error; `--json` prints the findings and nothing else. |
+| `lint [--root DIR] [--json]` | Lints the vocabulary (`itpra_onto.lint`; the register's Table A: file shape, required and unknown fields, unique ids and the id pattern, known types and verbs, resolving targets, `derived_from` kept off Functions, the `source:` grammar and resolving decision citations, the two version numbers, the retirement fields). Standard library plus PyYAML only (ADR 0042 D1). Exit 1 on any error; `--json` prints the findings and nothing else. |
 | `validate --authoring [--quiet]` | LinkML-validates every term file against `schema/itpra.linkml.yaml`, in-process, closed mode. One line per file and a total; exit 0 only if every file passes. `--quiet` prints failing files only. See [`schema/README.md`](src/itpra_onto/schema/README.md). |
 | `validate [--shapes DIR] [--json]` | Emits, applies the rules and SHACL-validates the result against `shapes/` (or `DIR`). One line per finding, sorted, then a summary. Exit 0 only when no `sh:Violation` fired; a `sh:Warning` is advisory. `--json` prints a JSON list of `rule`/`subject`/`severity`/`message` and nothing else on stdout. An input the emitter refuses is reported as an `emit-error` finding (exit 1), never a traceback. |
 | `build [--out DIR] [--no-store] [--check]` | Emits, applies the rules, adds the `provenance` graph, canonicalises and writes `<dist_dir>/rdf/` (or `DIR`), then loads the embedded store unless `--no-store`. `--check` builds into a temporary directory, never touches the store, and exits 1 if `base/` would differ from what is on disk or is missing. |
 | `parity [--json] [--fixtures]` | Compares the linter (`itpra_onto.lint`) with the shapes over the comparable rule ids: the real tree by default, or fixture by fixture with `--fixtures`. `--json` prints one object and nothing else. |
-| `release` | Not implemented yet. Exits 1 while `[iri] base` has a `.invalid` host; otherwise prints that it is not implemented and exits 2. |
 
 `python -m itpra_onto.profile` prints the per-verb profile read off the data (type pairs with counts,
 per-record edge counts, meta-edges) that the schema's `itpra_verb` annotations were written from.
@@ -84,8 +83,8 @@ Only named graphs are written; the default graph stays empty, and no query reads
 
 | Graph | Holds |
 |---|---|
-| `schema` | The ontology header and version IRI, the concept scheme, each EntityType record as an `owl:Class` under `skos:Concept`, the 17 verbs as `owl:ObjectProperty` with `rdfs:seeAlso` to their RelationshipType record, the annotation properties, and the declarations of what the rules derive and the build records (each with an `rdfs:comment` naming the rule or build step that asserts it). No domain, range, inverse or functional axioms (ADR 0041 D2). |
-| `t1` | Every term record, typed by its entity type and, explicitly, `skos:Concept`, so listing concepts needs no reasoning. |
+| `schema` | The ontology header and version IRI, the concept scheme, the licence (`dcterms:license` CC BY 4.0 on the ontology and the scheme; ADR 0002), each EntityType record as an `owl:Class` under `skos:Concept`, the 17 verbs as `owl:ObjectProperty` with `rdfs:seeAlso` to their RelationshipType record, the annotation properties, and the declarations of what the rules derive and the build records (each with an `rdfs:comment` naming the rule or build step that asserts it). No domain, range, inverse or functional axioms (ADR 0041 D2). |
+| `t1` | Every term record, typed by its entity type and, explicitly, `skos:Concept`, so listing concepts needs no reasoning. A retired record stays (below). |
 | `inferred` | Written only by the rules (below). |
 | `provenance` | Written only by `build` (below). |
 
@@ -96,6 +95,12 @@ are tagged `@en`; no data graph contains a blank node. A `source` value is kept 
 each `;`-separated item mentioning `ADR` must match `ADR NNNN` exactly, optionally followed by one such tail,
 or `SourceGrammarError` names the record and the item. An item carrying a URL is an external reference in
 its entirety, never a `decidedIn` link; a bare `ADR NNNN` means the record of that number in the file's repository.
+
+A retired record (ADR 0048) projects as any other and keeps resolving at its IRI; `retired` adds
+`owl:deprecated true` and `itpra-o:retiredIn "<X.Y.Z>"` (declared in `schema` as an annotation property), and
+`replaced_by` adds `dcterms:isReplacedBy <successor>`. Both values are projected as authored; the shapes check
+them (`retired-format`, `replaced-by-unresolved`, `replaced-by-without-retired`). The `deprecated` field is
+banned synonyms (`itpra-o:bannedLabel`), never retirement.
 
 ## Rules
 
@@ -131,15 +136,26 @@ under `<dist_dir>/rdf/`:
 - `build.json` — the provenance record: sorted keys, indent 2, LF.
 
 **Provenance carries no timestamp and no commit SHA** (ADR 0043 D3): seven scalars — `input_hash` (every
-input file's bytes, each contribution prefixed by its repository-relative path, so a rename alone changes
-it), `pipeline_version` (this distribution's version), `environment_hash` (sha256 over the resolved dependency set as installed, transitively — what the lockfile pins, readable without the lockfile), `rules_version`,
+input file's bytes, each contribution prefixed by its label, so a rename alone changes
+it), `pipeline_version` (this distribution's version, equal to
+`ontology_version`: one tag covers the vocabulary and the package, ADR 0044, and a test fails when
+`pyproject.toml` and `schema.yaml` differ), `environment_hash` (sha256 over the resolved dependency set as installed, transitively — what the lockfile pins, readable without the lockfile), `rules_version`,
 `ontology_version` (from `schema.yaml`), `schema_hash` (the hand-authored LinkML schema plus its two
 generated fragments) and `code_hash` (every `src/itpra_onto/**/*.py`). All are hashed over
 line-ending-normalised bytes (CRLF collapsed to LF), so they depend on content, never on the checkout. The
-same record is written as RDF: the dataset node `<base>dataset` carries the seven as literals plus one
-`prov:wasDerivedFrom` per input file, each a `prov:Entity` with `dcterms:identifier` (its path) and
+same record is written as RDF: the dataset node `<base>dataset` carries the seven as literals, the licence
+(`dcterms:license`, CC BY 4.0; ADR 0002) and one `prov:wasDerivedFrom` per input file, each a `prov:Entity` with `dcterms:identifier` (its label) and
 `itpra-o:sha256`. `prov:wasDerivedFrom` is reserved for this dataset-to-input sense; a term's link to its
 decision record is `itpra-o:decidedIn`.
+
+**Labels do not depend on where the vocabulary lives.** A file of the vocabulary is labelled by its path
+relative to the vocabulary's directory (`terms/planes.yaml`, `schema.yaml`) — in a record's
+`itpra-o:authoringFile`, in `input_hash` and in the provenance graph — and a file a layer reads by its path
+relative to the repository root; two inputs under one label are refused. A build of a vendored copy
+therefore writes the same `base/` files, the same `base/manifest.json` and the same `input_hash` as the
+release's own. `full/itpra.nq` and `build.json` match too when the dependencies are installed from the
+lockfile: `environment_hash` records the dependency set as installed, so an install that resolved other
+versions says so there.
 
 **The store is disposable** (ADR 0041 D5): `[paths] store_dir` is removed and rebuilt with
 `Store.bulk_load` from `full/itpra.nq` on every build unless `--no-store` is given, and its quad count is
@@ -190,7 +206,8 @@ quad injection in its group's test module.
 over the same `(rule, subject, severity)` triples (ADR 0042 D5). On conflict the rule text wins (ADR 0042 D6).
 
 - **Comparable ids:** Table A rows whose mechanism is `core` or `sparql` (`field-missing`, `id-pattern`,
-  `target-unresolved`, `function-derived-from`), parsed from the register at run time (a parse failure is a
+  `target-unresolved`, `function-derived-from`, `retired-format`, `replaced-by-unresolved`,
+  `replaced-by-without-retired`), parsed from the register at run time (a parse failure is a
   `ParityError`). `python` rows are reported as `outside_scope`, never compared; Table B rules have no linter
   analogue and are proven by fixture only.
 - **Emit-time mapping:** ids the emitter refuses before any graph exists (Table A's `generated` and `emit`
@@ -229,7 +246,7 @@ uv run pytest -q -s tests/test_competency.py   # with the printed tables and tim
 ```
 
 Every expected count is computed from `emit.load_inputs()`, never a literal. `tests/competency/cq-NN-*.rq`
-holds 24 single-purpose SPARQL queries run against one store holding `schema` + `t1` + `inferred`; every
+holds 25 single-purpose SPARQL queries run against one store holding `schema` + `t1` + `inferred`; every
 query asserting an empty result has a sibling counting query that confirms the pattern's positive count first.
 
 ## Dependency pins

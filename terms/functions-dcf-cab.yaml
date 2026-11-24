@@ -1,6 +1,5 @@
-# ITPRA ontology — FUNCTION library, DCF-CAB (Cabling & Physical Connectivity)
-# type: Function. ids FUNC-dcf-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
-# the function (ADR 0011).
+# ITPRA ontology — DCF-CAB (Cabling & Physical Connectivity): functions
+# type: Function. Ids FUNC-dcf-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0022.
 
 # Structured cabling provision (CAP-DCF-CAB-1)
 - id: FUNC-dcf-structured-cabling

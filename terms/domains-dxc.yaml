@@ -1,11 +1,6 @@
-# ITPRA ontology — Digital Experience & Channels (DXC) capability domains
-# type: Domain. The `id` IS the domain code used in capability ids: CAP-<id>-<n> (child: CAP-<id>-<n>.<m>). Each
-# domain is `grouped_by` an EXISTING capability PLANE (terms/planes.yaml). DXC capabilities span the Experience
-# and Delivery planes; each group is placed under the fitting existing plane. Taxonomy ratified by ADR 0027.
-# Owning service domain: SD-DIGITAL-EXPERIENCE (interfaces_with PLANE-EXPERIENCE and PLANE-DELIVERY; see ADR
-# 0009 + ADR 0027). DXC is the CUSTOMER-FACING digital experience discipline; its consumers are
-# EXTERNAL customers; it runs ON the platform but the platform does not own its experience logic. Explicitly NOT
-# Digital Experience MONITORING (CAP-ITO-OBS-9).
+# ITPRA ontology — Digital Experience & Channels (DXC): capability domains
+# type: Domain. A capability domain's id is the code its capabilities carry (CAP-<id>-<n>). Owned by
+# SD-DIGITAL-EXPERIENCE. Decided in ADR 0027.
 
 - id: DXC-CNT
   term: Content Management & Composition
@@ -57,11 +52,11 @@
     preference management, and activation/distribution of profiles and audiences to the other DXC domains and
     downstream analytics. Operates the customer profile and consent experience; the enterprise privacy
     control catalog (Enterprise Security/GRC) and business analytics of customer data (Business Intelligence &
-    Analytics) are adjacent.
+    Analytics) are those domains' concerns.
   relates_to:
     - {rel: grouped_by, target: PLANE-EXPERIENCE}
     - {rel: belongs_to_service_domain, target: SD-DIGITAL-EXPERIENCE}
-  source: ADR 0027
+  source: ADR 0027 (amended by ADR 0047)
 
 - id: DXC-EXP
   term: Experimentation & Optimization
@@ -99,9 +94,9 @@
     performs — multi-channel experience delivery (create-once / publish-everywhere), delivery and front-end
     API services, edge delivery and experience performance, digital channel presence management, and the
     customer-outcome view of channel experience insight (engagement, conversion, friction). The technical
-    monitoring of end-user/page performance and availability is the platform's observability concern
+    monitoring of end-user/page performance and availability is IT Operations' observability concern
     (ITO-OBS, CAP-ITO-OBS-9) this domain interfaces with — not DXC.
   relates_to:
     - {rel: grouped_by, target: PLANE-DELIVERY}
     - {rel: belongs_to_service_domain, target: SD-DIGITAL-EXPERIENCE}
-  source: ADR 0027
+  source: ADR 0027 (amended by ADR 0047)

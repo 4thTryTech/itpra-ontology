@@ -1,14 +1,17 @@
 # ITPRA ontology
 
 The controlled vocabulary of the IT Platform Reference Architecture (ITPRA): the service domains, planes, capability
-domains, capabilities, functions, personas, journeys, workflows, dimensions, governance constructs, quality attributes
+domains, capabilities, functions, personas, journeys, dimensions, governance constructs, quality attributes
 and cross-cutting concepts an enterprise IT platform is described with. Tool-agnostic, neutral to any operating model,
 and machine-readable so that architecture documents can be checked against it ([ADR 0001](decisions/0001-purpose-scope-and-tier-neutrality.md)).
 
-**Status:** current release `5.0.0` (2026-11-24): IT Operations' ids and files take the code `ITO`, so all eleven
-service domains follow one form — a MAJOR release that renames ids ([ADR 0045](decisions/0045-it-operations-carries-its-code.md);
-old → new in [migrations/5.0.0.yaml](migrations/5.0.0.yaml)). Releases from `4.0.0` on are listed in
-[CHANGELOG.md](CHANGELOG.md) and on the repository's Releases page, each with its source archive and `sha256`.
+**Status:** current release `5.0.0` (2026-11-24), a MAJOR release. IT Operations' ids and files take the code `ITO`, so
+all eleven service domains follow one form ([ADR 0045](decisions/0045-it-operations-carries-its-code.md)); the workflow
+and placement records leave ([ADR 0046](decisions/0046-records-without-content-leave.md)); and the eleven service
+domains are defined as peers ([ADR 0047](decisions/0047-service-domains-read-as-peers.md)). Old → new, and what was
+removed, is in [migrations/5.0.0.yaml](migrations/5.0.0.yaml). Releases from `4.0.0` on are listed in
+[CHANGELOG.md](CHANGELOG.md) and on the repository's Releases page, each with its source archive and, from `5.0.0`, its
+RDF projection, both with a `sha256`.
 
 ## What is here
 
@@ -16,17 +19,19 @@ old → new in [migrations/5.0.0.yaml](migrations/5.0.0.yaml)). Releases from `4
 |---|---|
 | `schema.yaml` | The meta-schema: record fields, allowed `type` values, relationship verbs, id conventions and the two version numbers |
 | `entities.yaml` · `relationships.yaml` | The entity types and the relationship verbs, each a term of its own ([ADR 0008](decisions/0008-entity-types-and-relationship-verbs.md)) |
-| `terms/` | The vocabulary, split by kind and service domain: `domains-<code>`, `capabilities-<code>-<grp>`, `functions-<code>-<grp>`, `personas-<code>`, `journeys-<code>`, `workflows-<code>`; a file without a service-domain code is shared by all eleven ([ADR 0007](decisions/0007-term-records-files-and-aliases.md), [ADR 0045](decisions/0045-it-operations-carries-its-code.md)) |
-| `migrations/` | The id and file renames of a MAJOR release, old → new (`5.0.0.yaml`: [ADR 0045](decisions/0045-it-operations-carries-its-code.md)) |
-| `decisions/` | The decision records that shape the vocabulary, numbered from 0001 in reading order ([index](decisions/README.md)) |
+| `terms/` | The vocabulary, split by kind and service domain: `domains-<code>`, `capabilities-<code>-<grp>`, `functions-<code>-<grp>`, `personas-<code>`, `journeys-<code>`; a file without a service-domain code is shared by all eleven ([ADR 0007](decisions/0007-term-records-files-and-aliases.md), [ADR 0045](decisions/0045-it-operations-carries-its-code.md)) |
+| `migrations/` | The ids and files a MAJOR release renames, old → new, or removes (`5.0.0.yaml`: [ADR 0045](decisions/0045-it-operations-carries-its-code.md), [ADR 0046](decisions/0046-records-without-content-leave.md)) |
+| `decisions/` | The decision records that shape the vocabulary, numbered from 0001 in reading order, each stating its rules as they stand ([index](decisions/README.md), [ADR 0049](decisions/0049-records-state-the-rules-as-they-stand.md)) |
 | `tools/` · `tests/` | The checks that run in CI |
 | `tools/itpra-onto/` | The ontology-as-code pipeline: the vocabulary projected to RDF, validated with SHACL and built into canonical artefacts ([ADR 0041](decisions/0041-the-rdf-projection-roles-modelling-and-derivation.md), [ADR 0042](decisions/0042-validation-parity-register-shapes-fixtures-and-the-parity-check.md), [ADR 0043](decisions/0043-builds-artefacts-and-layers.md); [its README](tools/itpra-onto/README.md)) |
 
 ## Reading the vocabulary
 
-- A term is one YAML record: `id`, `term`, `type` and `definition`, with optional `aliases`, `deprecated`, `relates_to` and
-  `source`. Aliases are the words a reader may search for; the id never changes once released.
-- The prefix tells the kind: `CAP-` capability, `FUNC-` function, `PERSONA-`, `JRN-` journey, `WF-` workflow, `PLANE-`,
+- A term is one YAML record: `id`, `term`, `type` and `definition`, with optional `aliases`, `deprecated`, `relates_to`,
+  `source`, `retired` and `replaced_by`. Aliases are the words a reader may search for; the id never changes once
+  released. A retired record stays, marked with the version that retired it and, where there is one, its successor
+  ([ADR 0048](decisions/0048-retirement.md)).
+- The prefix tells the kind: `CAP-` capability, `FUNC-` function, `PERSONA-`, `JRN-` journey, `PLANE-`,
   `SD-` service domain, `GC-` governance construct, `AUTON-` autonomy concept, and so on. A term owned by a service
   domain carries that domain's code after the prefix — ITO, EUC, SVD, FLD, ADM, DCF, NET, GRC, ITSM, BIA or DXC
   (`CAP-ITO-FND-1`, `FUNC-euc-device-enrollment`); a term without a code is shared
@@ -41,8 +46,8 @@ old → new in [migrations/5.0.0.yaml](migrations/5.0.0.yaml)). Releases from `4
 Semantic Versioning. A MAJOR change can break a consumer's checks; MINOR adds; PATCH is editorial, or a release that
 carries only tooling ([ADR 0003](decisions/0003-versioning-releases-and-pinning.md),
 [ADR 0044](decisions/0044-one-release-for-the-vocabulary-and-its-tooling.md)). Consume a **release**: vendor the release
-archive and record its version, tag, commit and hash; pin a package dependency to the same tag; or name the version IRI.
-Do not track `master`.
+archive and record its version, tag, commit and hash; pin a package dependency to the same tag; take the release's RDF
+projection by its hash; or name the version IRI. Do not track `master`.
 
 Describe a scenario or an implementation with this vocabulary, and keep your own terms, requirements and
 operating-model mappings in your own repository. Cite a record here by its URL.
@@ -79,4 +84,4 @@ repository at `4.0.0`. The decision records consolidate what was decided in that
 | 3.16.1 – 3.16.3 | 2026-11-21 | Preparation for publication: the base IRI; citations re-pointed to these records; comments scrubbed; three engineering definitions complete the durable-execution obligations |
 | 4.0.0 | 2026-11-21 | First public release: a new location, the licences, minted IRIs and the pinning contract; no term changes |
 | 4.0.1 | 2026-11-23 | The pipeline package joins the release; one release for the vocabulary and its tooling; no term changes |
-| 5.0.0 | 2026-11-24 | IT Operations carries its code: 356 ids and 26 files renamed to the form of the other ten domains (MAJOR); the pipeline builds the vocabulary alone |
+| 5.0.0 | 2026-11-24 | IT Operations carries its code: 339 ids and 25 files renamed to the form of the other ten domains (MAJOR); workflow and placement records removed; service domains defined as peers; retirement fields; the pipeline builds the vocabulary alone and the release carries its RDF projection |

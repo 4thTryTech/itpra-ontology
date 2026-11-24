@@ -1,7 +1,5 @@
-# ITPRA ontology — GRC-SOC (Security Operations & Threat Response) capabilities
-# type: Capability. ids CAP-GRC-SOC-<n>. Grouped under domain GRC-SOC (ADR 0024); environment expression per ADR
-# 0014. Enterprise SOC/CSIRT — consumes platform (ITO-SEC) signals; does NOT duplicate platform detection (ADR
-# 0024).
+# ITPRA ontology — GRC-SOC (Security Operations & Threat Response): capabilities
+# type: Capability. Ids CAP-GRC-SOC-<n>, each grouped under GRC-SOC. Decided in ADR 0024.
 
 - id: CAP-GRC-SOC-1
   term: Enterprise Security Monitoring & Event Correlation
@@ -65,9 +63,9 @@
     Executes the enterprise incident-response lifecycle — containment, eradication, recovery, and
     post-incident learning — directing remediation across estates and capturing lessons that feed prevention,
     detection, and the risk register. Drives enterprise recovery; the per-estate technical actions are carried
-    out by the owning estate (e.g. the platform's own response).
+    out by the owning estate (e.g. the infrastructure platform's own response).
   relates_to:
     - {rel: grouped_by, target: GRC-SOC}
     - {rel: depends_on, target: CAP-GRC-SOC-4}
     - {rel: consumed_by, target: PERSONA-grc-security-operations}
-  source: ADR 0024
+  source: ADR 0024 (amended by ADR 0047)

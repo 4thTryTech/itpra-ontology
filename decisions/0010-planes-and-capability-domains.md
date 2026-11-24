@@ -26,9 +26,9 @@ structure is the five-plane developer-platform model; an enterprise platform is 
    policy, provenance); Governance is the management wrapper of neutral constructs, tenancy, service
    lifecycle, evidence and measurement.
 4. The same seven planes group every service domain's capability domains; no service domain adds a plane.
-5. A capability domain's id is its code — bare for the first domain (`OBS`), `<SD>-<GRP>` for the ten others
-   (`EUC-DEV`) — and the code is the domain segment of its capability ids (ADR 0004). Each capability domain
-   carries one `grouped_by` edge and one `belongs_to_service_domain` edge (ADR 0009).
+5. Each capability domain carries one `grouped_by` edge and one `belongs_to_service_domain` edge (ADR 0009).
+   Its id is its code, `<SD>-<GRP>` in every service domain (`ITO-OBS`, `EUC-DEV`), and the code is the domain
+   segment of its capability ids, per ADR 0004 (amended by ADR 0045).
 6. Security, Operations and Governance are planes in their own right, not a cross-cutting set; interaction
    between domains is expressed by `depends_on` edges between capabilities, never by the grouping. A
    capability domain's boundary changes only by a record, never by a silent edit.

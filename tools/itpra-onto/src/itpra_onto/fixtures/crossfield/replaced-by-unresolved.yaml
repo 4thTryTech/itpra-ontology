@@ -1,0 +1,12 @@
+# Proves itpra-o:ReplacedByUnresolvedShape (crossfield.ttl; ADR 0048): retiring a real Capability in a
+# well-formed version and naming a successor that is no record raises exactly one Violation of
+# replaced-by-unresolved, on that Capability. The self-reference arm (a record naming itself) is proven in
+# tests/test_shapes_crossfield.py.
+rule: replaced-by-unresolved
+expect:
+  severity: Violation
+  focus: CAP-ITO-FND-3
+  count: 1
+mutate:
+  id: CAP-ITO-FND-3
+  set: {retired: "5.0.0", replaced_by: CAP-ITO-FND-NOPE}

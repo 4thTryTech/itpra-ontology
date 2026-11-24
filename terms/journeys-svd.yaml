@@ -1,9 +1,6 @@
-# ITPRA ontology — Service Desk (SVD) journey catalog
-# type: Journey. ids JRN-svd-<slug>. Each `grouped_by` exactly one EXISTING JourneyGroup
-# (JG-ONBOARDING..JG-EVOLUTION; reused, not redefined). Neutral — steps reference capabilities + neutral
-# governance construct points (request/approval/change/incident/problem/record/feedback/service-level), never
-# tools or named processes. Relationships from the journey side: grouped_by, consumed_by (primary personas),
-# depends_on (capabilities exercised). Ratified by ADR 0019. Diagrams: WF-svd-<slug>.
+# ITPRA ontology — Service Desk (SVD): journeys
+# type: Journey. Ids JRN-svd-<slug>; a journey is grouped by one journey group (ADR 0013). Decided in
+# ADR 0019.
 
 # ---- JG-ONBOARDING ----
 - id: JRN-svd-onboard-consumer-to-desk

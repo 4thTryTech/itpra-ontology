@@ -4,7 +4,8 @@ Modelling (ADR 0041 D2): every term record is a ``skos:Concept`` in one concept 
 its authored fields as literals; the EntityType records form a thin ``owl:Class`` layer; each relationship
 verb is an ``owl:ObjectProperty`` and every ``relates_to`` edge becomes one triple on that predicate; a
 record's ``source`` is kept verbatim and the ``ADR NNNN`` references in it (the grammar is ADR 0005's) become
-``itpra-o:decidedIn`` links; no blank node is ever emitted. EntityType ``relates_to`` entries are schema
+``itpra-o:decidedIn`` links; a retired record (ADR 0048) keeps every triple and gains ``owl:deprecated``, the
+version that retired it and its successor; no blank node is ever emitted. EntityType ``relates_to`` entries are schema
 statements (ADR 0008) and are never emitted. Identifiers (ADR 0004): ``<base>id/<id>`` for records,
 ``<base>onto#`` for the schema vocabulary, ``<base>graph/`` for the named graphs.
 
@@ -47,6 +48,8 @@ RDFS = "http://www.w3.org/2000/01/rdf-schema#"
 OWL = "http://www.w3.org/2002/07/owl#"
 SKOS = "http://www.w3.org/2004/02/skos/core#"
 PROV = "http://www.w3.org/ns/prov#"
+DCTERMS = "http://purl.org/dc/terms/"
+XSD = "http://www.w3.org/2001/XMLSchema#"
 
 RDF_TYPE = ox.NamedNode(RDF + "type")
 RDFS_LABEL = ox.NamedNode(RDFS + "label")
@@ -61,10 +64,17 @@ OWL_ANNOTATION_PROPERTY = ox.NamedNode(OWL + "AnnotationProperty")
 OWL_DATATYPE_PROPERTY = ox.NamedNode(OWL + "DatatypeProperty")
 OWL_VERSION_IRI = ox.NamedNode(OWL + "versionIRI")
 OWL_VERSION_INFO = ox.NamedNode(OWL + "versionInfo")
+OWL_DEPRECATED = ox.NamedNode(OWL + "deprecated")
 SKOS_CONCEPT = ox.NamedNode(SKOS + "Concept")
 SKOS_CONCEPT_SCHEME = ox.NamedNode(SKOS + "ConceptScheme")
 SKOS_IN_SCHEME = ox.NamedNode(SKOS + "inScheme")
 PROV_WAS_INFLUENCED_BY = ox.NamedNode(PROV + "wasInfluencedBy")
+DCTERMS_LICENSE = ox.NamedNode(DCTERMS + "license")
+TRUE = ox.Literal("true", datatype=ox.NamedNode(XSD + "boolean"))
+
+# The licence of the vocabulary and every projection of it (ADR 0002), declared in each projection's header:
+# the ontology and concept-scheme nodes here, the dataset node of a build's provenance graph.
+LICENCE = ox.NamedNode("https://creativecommons.org/licenses/by/4.0/")
 
 LANG = "en"  # labels, definitions and statements are English; nothing else is tagged
 
@@ -120,6 +130,7 @@ SCHEMA_LABELS = {  # English rdfs:label for schema-namespace terms that have no 
     AMENDED_BY: "amended by",
     EXTENDED_BY: "extended by",
     AUTHORING_FILE: "authoring file",
+    "retired": "retired in",
 }
 
 try:  # the C loader parses the same YAML 1.1 as SafeLoader, several times faster
@@ -193,7 +204,9 @@ def _is_glob(path: Path) -> bool:
 
 @dataclass(frozen=True)
 class TermRecord:
-    """One record of a term file of the vocabulary, tagged with its repo-relative authoring file."""
+    """One record of a term file of the vocabulary, tagged with its authoring file: the file's path relative
+    to the vocabulary's directory (:func:`vocabulary_label`), the same wherever the vocabulary is checked out
+    or vendored."""
 
     record: dict[str, Any]
     file: str
@@ -241,6 +254,14 @@ def _repo_relative(path: Path, repo_root: Path) -> str:
     return path.resolve().relative_to(repo_root.resolve()).as_posix()
 
 
+def vocabulary_label(path: Path, config: Config) -> str:
+    """``path`` — a file of the vocabulary — as its posix path relative to the vocabulary's directory
+    (``terms/planes.yaml``, ``schema.yaml``). This is the label a record's ``authoringFile`` and the build's
+    provenance carry: it does not depend on where a consumer keeps its copy, so a build of a vendored copy
+    reproduces the published one (ADR 0043 D3-D4)."""
+    return path.resolve().relative_to(ontology_dir(config).resolve()).as_posix()
+
+
 def _shown(path: Path, repo_root: Path | None) -> str:
     """``path`` repo-relative when it is inside the repository (every guarded input is), else as given."""
     if repo_root is None:
@@ -270,7 +291,7 @@ def load_inputs(config: Config | None = None) -> Inputs:
     config = config if config is not None else load_config()
     root = config.repo_root
     terms = tuple(
-        TermRecord(record, _repo_relative(path, root))
+        TermRecord(record, vocabulary_label(path, config))
         for path in term_files(config)
         for record in _term_file_records(path, root)
     )
@@ -548,6 +569,7 @@ def term_triples(term: TermRecord, vocab: Vocabulary) -> Iterator[Triple]:
         yield subject, vocab.slot_iri("aliases"), _en(alias)
     for banned in _as_list(rec.get("deprecated")):
         yield subject, vocab.slot_iri("deprecated"), _en(banned)
+    yield from _retirement_triples(subject, rec, vocab)
     yield subject, SKOS_IN_SCHEME, vocab.scheme
     yield subject, vocab.onto(AUTHORING_FILE), ox.Literal(term.file)
     if rec["type"] != META_SUBJECT_TYPE:  # EntityType relates_to entries are schema statements, never emitted
@@ -577,6 +599,19 @@ def _verb_edges(subject: ox.NamedNode, rec: dict[str, Any], vocab: Vocabulary) -
             )
         target = record_node(vocab, edge["target"], where=f"{record_id}: relates_to target", record_id=record_id)
         yield subject, predicate, target
+
+
+def _retirement_triples(subject: ox.NamedNode, rec: dict[str, Any], vocab: Vocabulary) -> Iterator[Triple]:
+    """A retired record (ADR 0048): ``owl:deprecated true`` and ``itpra-o:retiredIn`` the version, verbatim (its
+    format is the ``retired-format`` shape's to check); ``replaced_by`` as ``dcterms:isReplacedBy`` its
+    successor, whether or not that resolves (``replaced-by-unresolved``) or the record is retired
+    (``replaced-by-without-retired``)."""
+    if rec.get("retired") is not None:
+        yield subject, OWL_DEPRECATED, TRUE
+        yield subject, vocab.slot_iri("retired"), ox.Literal(str(rec["retired"]))
+    if rec.get("replaced_by") is not None:
+        where = f"{rec['id']}: replaced_by"
+        yield subject, vocab.slot_iri("replaced_by"), record_node(vocab, rec["replaced_by"], where=where, record_id=rec["id"])
 
 
 def source_triples(
@@ -614,7 +649,9 @@ def _ontology_header(version: str, vocab: Vocabulary) -> Iterator[Triple]:
     yield onto, OWL_VERSION_IRI, ox.NamedNode(f"{onto.value}/{version}")
     yield onto, OWL_VERSION_INFO, ox.Literal(version)
     yield onto, RDFS_LABEL, _en(ONTOLOGY_LABEL)
+    yield onto, DCTERMS_LICENSE, LICENCE
     yield vocab.scheme, RDF_TYPE, SKOS_CONCEPT_SCHEME
+    yield vocab.scheme, DCTERMS_LICENSE, LICENCE
 
 
 def _class_declarations(inputs: Inputs, vocab: Vocabulary) -> Iterator[Triple]:
@@ -657,7 +694,7 @@ def _verb_declarations(inputs: Inputs, vocab: Vocabulary) -> Iterator[Triple]:
 
 def _annotation_declarations(vocab: Vocabulary) -> Iterator[Triple]:
     """bannedLabel ⊑ skos:hiddenLabel (its ``broad_mappings``); decidedIn ⊑ prov:wasInfluencedBy with
-    amendedBy/extendedBy ⊑ decidedIn (ADR 0041 D2); authoringFile."""
+    amendedBy/extendedBy ⊑ decidedIn (ADR 0041 D2); authoringFile; retiredIn (ADR 0048)."""
     prop = vocab.slot_iri("deprecated")
     yield prop, RDF_TYPE, OWL_ANNOTATION_PROPERTY
     for broader in vocab.sv.get_slot("deprecated").broad_mappings:
@@ -671,6 +708,9 @@ def _annotation_declarations(vocab: Vocabulary) -> Iterator[Triple]:
     authoring_file = vocab.onto(AUTHORING_FILE)
     yield authoring_file, RDF_TYPE, OWL_ANNOTATION_PROPERTY
     yield authoring_file, RDFS_LABEL, _en(SCHEMA_LABELS[AUTHORING_FILE])
+    retired_in = vocab.slot_iri("retired")
+    yield retired_in, RDF_TYPE, OWL_ANNOTATION_PROPERTY
+    yield retired_in, RDFS_LABEL, _en(SCHEMA_LABELS["retired"])
 
 
 def _derived_declarations(vocab: Vocabulary) -> Iterator[Triple]:

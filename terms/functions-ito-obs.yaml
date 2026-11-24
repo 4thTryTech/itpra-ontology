@@ -1,15 +1,7 @@
-# ITPRA ontology — FUNCTION library, ITO-OBS (Observability & Operations)
-# type: Function. ids FUNC-ito-<slug>. A function `supports` one or more capabilities (many-to-many). Functions
-# are flat — no tier annotation, no `derived_from` — per ADR 0011 (which supersedes ADR 0011 §3 on function
-# tiering and ADR 0011 entirely). A function may freely name a specific standard/protocol/technique where that
-# *is* the function; whether the function is "neutral" or "named" makes no structural difference. T2 selects
-# required functions; T3 binds tools to them. The IT Operations library is split per capability domain into
-# functions-ito-<grp>.yaml files; a function is HOMED in its primary capability domain's file but may `supports`
-# capabilities in any of them. See ADR 0011.
+# ITPRA ontology — ITO-OBS (Observability & Operations): functions
+# type: Function. Ids FUNC-ito-<slug>; a function supports one or more capabilities. Decided in ADR 0011.
 
-# ---- Functions -----------------------------------------------------------------------------
-
-# Collection (supports CAP-ITO-OBS-1 Telemetry Collection)
+# Collection (CAP-ITO-OBS-1)
 - id: FUNC-ito-metric-collection
   term: Metric Collection
   type: Function
@@ -51,7 +43,7 @@
     - {rel: supports, target: CAP-ITO-OBS-1}
   source: ADR 0011 (amended by ADR 0045)
 
-# Network & topology (supports CAP-ITO-OBS-10)
+# Network & topology (CAP-ITO-OBS-10)
 - id: FUNC-ito-network-flow-collection
   term: Network Flow Collection
   type: Function
@@ -81,7 +73,7 @@
     - {rel: supports, target: CAP-ITO-OBS-10}
   source: ADR 0011 (amended by ADR 0045)
 
-# Analytics & noise reduction (supports CAP-ITO-OBS-6; some cross-domain to ITO-SEC)
+# Analytics & noise reduction (CAP-ITO-OBS-6)
 - id: FUNC-ito-event-correlation
   term: Event Correlation
   type: Function
@@ -147,7 +139,7 @@
     - {rel: supports, target: CAP-ITO-OBS-6}
   source: ADR 0011 (amended by ADR 0045)
 
-# Digital experience (supports CAP-ITO-OBS-9)
+# Digital experience (CAP-ITO-OBS-9)
 - id: FUNC-ito-synthetic-monitoring
   term: Synthetic Monitoring
   type: Function
@@ -195,7 +187,7 @@
     - {rel: supports, target: CAP-ITO-OBS-9}
   source: ADR 0011 (amended by ADR 0045)
 
-# Presentation (supports CAP-ITO-OBS-3)
+# Presentation (CAP-ITO-OBS-3)
 - id: FUNC-ito-dashboarding
   term: Dashboarding
   type: Function
@@ -212,9 +204,8 @@
     - {rel: supports, target: CAP-ITO-OBS-3}
   source: ADR 0011 (amended by ADR 0045)
 
-# ---- Cross-domain monitoring & telemetry-pipeline functions (added 2026-05-25). All neutral T1. -------
 
-# Coarse, product-category monitoring functions (compose finer functions above; useful T3 binding targets)
+# Coarse monitoring functions
 - id: FUNC-ito-infrastructure-monitoring
   term: Infrastructure Monitoring
   type: Function
@@ -245,7 +236,7 @@
     - {rel: supports, target: CAP-ITO-OBS-9}
   source: ADR 0011 (amended by ADR 0045)
 
-# Telemetry pipeline stages (supports CAP-ITO-OBS-8 — the receive -> process -> route observability data plane)
+# Telemetry pipeline stages (CAP-ITO-OBS-8)
 - id: FUNC-ito-telemetry-ingestion
   term: Telemetry Ingestion
   type: Function
@@ -334,7 +325,7 @@
     - {rel: supports, target: CAP-ITO-OBS-8}
   source: ADR 0011 (amended by ADR 0045)
 
-# Cross-domain: redaction is both an observability-pipeline and a data-governance behavior
+# Telemetry redaction
 - id: FUNC-ito-sensitive-data-redaction
   term: Sensitive Data Redaction
   type: Function
@@ -348,7 +339,7 @@
     - {rel: supports, target: CAP-ITO-DATA-4}
   source: ADR 0011 (amended by ADR 0045)
 
-# Endpoint & dependency monitoring (observe specific layers; observe other domains' services)
+# Endpoint & dependency monitoring
 - id: FUNC-ito-api-monitoring
   term: API Monitoring
   type: Function
@@ -388,7 +379,7 @@
     - {rel: supports, target: CAP-ITO-OBS-10}
   source: ADR 0011 (amended by ADR 0045)
 
-# Network active measurement & packet analysis (packet analysis is cross-domain to ITO-SEC threat detection)
+# Network active measurement & packet analysis
 - id: FUNC-ito-network-path-testing
   term: Network Path Testing
   type: Function
@@ -414,7 +405,7 @@
     - {rel: supports, target: CAP-ITO-SEC-7}
   source: ADR 0011 (amended by ADR 0045)
 
-# Cross-domain: KPI tracking is strategic (governance) over operational (SLO management)
+# KPI tracking
 - id: FUNC-ito-kpi-tracking
   term: KPI Tracking
   type: Function
@@ -428,9 +419,8 @@
     - {rel: supports, target: CAP-ITO-OBS-4}
   source: ADR 0011 (amended by ADR 0045)
 
-# ---- ITO-OBS gap coverage (added 2026-05-25). T1 neutral ----
 
-# Alerting (supports CAP-ITO-OBS-2)
+# Alerting (CAP-ITO-OBS-2)
 - id: FUNC-ito-threshold-evaluation
   term: Threshold Evaluation
   type: Function
@@ -458,7 +448,7 @@
     - {rel: supports, target: CAP-ITO-OBS-2}
   source: ADR 0011 (amended by ADR 0045)
 
-# Platform patching & updates (supports CAP-ITO-OBS-5; scheduling reused from ITO-AUT later)
+# Platform patching & updates (CAP-ITO-OBS-5)
 - id: FUNC-ito-patch-assessment
   term: Patch Assessment
   type: Function
@@ -479,7 +469,7 @@
     - {rel: supports, target: CAP-ITO-OBS-5}
   source: ADR 0011 (amended by ADR 0045)
 
-# Operational notification & escalation (supports CAP-ITO-OBS-7; delivery shared with CAP-ITO-EXP-6)
+# Operational notification & escalation (CAP-ITO-OBS-7)
 - id: FUNC-ito-notification-delivery
   term: Notification Delivery
   type: Function
@@ -521,12 +511,7 @@
     - {rel: supports, target: CAP-ITO-OBS-7}
   source: ADR 0011 (amended by ADR 0045)
 
-# ---- Standard / protocol / technique functions ---------------------------------------------------------
-# These name a specific technique (not interchangeable protocols of a generic function); they earn their
-# place in the library as distinct functions. They are flat — no tier annotation, no derived_from — per
-# ADR 0011 (which supersedes ADR 0011 §3 on function tiering). The earlier `FUNC-netflow-analysis` was
-# deleted; specific flow-export protocols (NetFlow/IPFIX/sFlow) are bound at tool selection (T3),
-# captured as aliases on FUNC-ito-network-flow-analysis above.
+# Standard, protocol and technique functions
 
 - id: FUNC-ito-snmp-polling
   term: SNMP Polling
@@ -563,10 +548,7 @@
     - {rel: supports, target: CAP-ITO-OBS-10}
   source: ADR 0011 (amended by ADR 0045)
 
-# Telemetry control plane (supports CAP-ITO-OBS-11, ADR 0032). Reused generics: health =
-# FUNC-ito-infrastructure-monitoring; versions = FUNC-ito-patch-*; rollout = FUNC-ito-progressive-rollout;
-# rollback = FUNC-ito-configuration-rollback; drift = FUNC-ito-drift-*; audit = FUNC-ito-audit-logging;
-# secrets = FUNC-ito-secret-*.
+# Telemetry control plane (CAP-ITO-OBS-11)
 - id: FUNC-ito-collector-fleet-inventory
   term: Collector Fleet Inventory
   type: Function

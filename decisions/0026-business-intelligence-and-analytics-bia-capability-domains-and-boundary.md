@@ -9,8 +9,8 @@ Origin: Consolidates decisions taken between 2026-05 and 2026-11, before publica
 
 ## Context
 
-Business analytics shares words with the platform's operational Data & Analytics (`DATA`), Observability (`OBS`)
-and Infrastructure Substrate (`SUB`) and with the enterprise control authority. The Business Intelligence &
+Business analytics shares words with the platform's operational Data & Analytics (`ITO-DATA`), Observability (`ITO-OBS`)
+and Infrastructure Substrate (`ITO-SUB`) and with the enterprise control authority. The Business Intelligence &
 Analytics domain (`SD-BUSINESS-ANALYTICS`, ADR 0009) needs capability domains on its two planes and a boundary
 that keeps it the business side of the data value chain.
 
@@ -27,13 +27,13 @@ that keeps it the business side of the data value chain.
    Team, Data Scientist & Advanced Analyst, Product Analytics Team, Data Steward & Governance Owner. A sixth,
    Semantic Modeller & Ontology Owner, is added by ADR 0037.
 4. The domain owns the business data-and-insight value chain and consumes the platform's data substrate: `BIA-INT`
-   and `BIA-WHS` use the pipelines, streaming and storage of `DATA` and `SUB` as the business side of the boundary
-   integration `CAP-DATA-5`, and operate no infrastructure.
+   and `BIA-WHS` use the pipelines, streaming and storage of `ITO-DATA` and `ITO-SUB` as the business side of the boundary
+   integration `CAP-ITO-DATA-5`, and operate no infrastructure.
 5. The seams: `BIA-PRD` measures how people use products for business optimisation, distinct from detecting
-   anomalous user and entity behaviour (`CAP-SEC-7`); `BIA-SCI` builds business models, distinct from analytics
-   over operational telemetry (`CAP-OBS-6`); `BIA-GOV` governs business data, distinct from platform data
-   governance (`CAP-DATA-4`), and applies the enterprise control catalogue (`SD-SECURITY-GRC`) without authoring
-   it; `BIA-SEM` and `BIA-RPT` serve insight without owning the platform's consumer surface (`EXP`).
+   anomalous user and entity behaviour (`CAP-ITO-SEC-7`); `BIA-SCI` builds business models, distinct from analytics
+   over operational telemetry (`CAP-ITO-OBS-6`); `BIA-GOV` governs business data, distinct from platform data
+   governance (`CAP-ITO-DATA-4`), and applies the enterprise control catalogue (`SD-SECURITY-GRC`) without authoring
+   it; `BIA-SEM` and `BIA-RPT` serve insight without owning the platform's consumer surface (`ITO-EXP`).
 
 ## Consequences
 
@@ -48,7 +48,7 @@ that keeps it the business side of the data value chain.
 
 - Fold reporting into the semantic layer — different consumers and lifecycles; regulatory reporting carries its
   own evidence obligations.
-- Own the analytical store's compute and storage — that substrate is the platform's (`DATA`, `SUB`); the domain
+- Own the analytical store's compute and storage — that substrate is the platform's (`ITO-DATA`, `ITO-SUB`); the domain
   owns the models and semantics on it.
 
 ## Sources

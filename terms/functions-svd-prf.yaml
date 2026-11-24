@@ -1,6 +1,5 @@
-# ITPRA ontology — FUNCTION library, SVD-PRF (Support Performance & Insight)
-# type: Function. ids FUNC-svd-<slug>. Functions `support` >=1 capability; NEVER derived_from on a Function (ADR
-# 0011). See ADR 0019.
+# ITPRA ontology — SVD-PRF (Support Performance & Insight): functions
+# type: Function. Ids FUNC-svd-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0019.
 
 # Contact analytics & reporting (CAP-SVD-PRF-1)
 - id: FUNC-svd-volume-analytics

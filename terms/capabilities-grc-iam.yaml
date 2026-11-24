@@ -1,7 +1,5 @@
-# ITPRA ontology — GRC-IAM (Corporate Identity & Access Authority) capabilities
-# type: Capability. ids CAP-GRC-IAM-<n>. Grouped under domain GRC-IAM (ADR 0024). Enterprise identity AUTHORITY
-# — owns identity of record/entitlement governance the platform (ITO-SEC) and workplace (EUC-IAM) consume; does
-# NOT own workload identity or the end-user sign-in experience (ADR 0024).
+# ITPRA ontology — GRC-IAM (Corporate Identity & Access Authority): capabilities
+# type: Capability. Ids CAP-GRC-IAM-<n>, each grouped under GRC-IAM. Decided in ADR 0024.
 
 - id: CAP-GRC-IAM-1
   term: Identity of Record & Authoritative Source Management
@@ -9,13 +7,13 @@
   definition: >
     Maintains the enterprise identity of record — the authoritative register of people and their
     organizational attributes from authoritative sources — that every downstream system trusts. The single
-    source of truth for who exists; the platform and workplace consume it rather than owning it. The register
-    is of PEOPLE: a non-human principal is not an entry here, but every delegated authority granted to one
-    binds back to a person in this register as the accountable party (ADR 0035).
+    source of truth for who exists; the infrastructure platform and workplace consume it rather than owning
+    it. The register is of PEOPLE: a non-human principal is not an entry here, but every delegated authority
+    granted to one binds back to a person in this register as the accountable party (ADR 0035).
   relates_to:
     - {rel: grouped_by, target: GRC-IAM}
     - {rel: consumed_by, target: PERSONA-grc-identity-governance}
-  source: ADR 0024
+  source: ADR 0024 (amended by ADR 0047)
 
 - id: CAP-GRC-IAM-2
   term: Access Governance & Entitlement Management

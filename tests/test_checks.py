@@ -36,6 +36,14 @@ class VersionBump(unittest.TestCase):
         ok, msg = bump.verdict("ontology_version: 3.16.3\n", "ontology_version: 4.0.0\n", ["CHANGELOG.md"])
         self.assertTrue(ok); self.assertIn("release bump", msg)
 
+    def test_a_change_joins_a_version_that_is_not_released_yet(self):
+        same = ("ontology_version: 5.0.0\n", "ontology_version: 5.0.0\n", ["terms/x.yaml"])
+        ok, msg = bump.verdict(*same, base_released=False)
+        self.assertTrue(ok); self.assertIn("not released yet", msg)
+        self.assertFalse(bump.verdict(*same, base_released=True)[0])
+        # a version going backwards fails whether or not the base is released
+        self.assertFalse(bump.verdict("ontology_version: 5.0.0\n", "ontology_version: 4.0.1\n", ["schema.yaml"], base_released=False)[0])
+
     def test_no_base_passes_when_well_formed(self):
         self.assertTrue(bump.verdict(None, "ontology_version: 4.0.0\n", [])[0])
         self.assertFalse(bump.verdict(None, "ontology_version: 4.0\n", [])[0])

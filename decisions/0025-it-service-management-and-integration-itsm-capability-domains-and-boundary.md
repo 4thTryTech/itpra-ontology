@@ -10,7 +10,7 @@ Origin: Consolidates decisions taken between 2026-05 and 2026-11, before publica
 ## Context
 
 Service management shares its vocabulary with the governance constructs every domain uses and with the platform's
-own `GOV` domain, which holds them for the platform. The IT Service Management & Integration domain
+own `ITO-GOV` domain, which holds them for the platform. The IT Service Management & Integration domain
 (`SD-SERVICE-MGMT`, ADR 0009) needs domains that coordinate across providers without restating any provider's
 governance, named in no operating model's vocabulary.
 
@@ -31,9 +31,9 @@ governance, named in no operating model's vocabulary.
    a capability difference.
 4. The domain owns the cross-provider coordination wrapper; each provider keeps its own constructs, record and
    response, so a construct appears twice — as a provider's own and as this domain's coordination of it:
-   `ITSM-REQ` routes steps `CAP-GOV-1` fulfils for the platform; `ITSM-CHG` authorises change spanning providers,
-   `CAP-GOV-2` the platform's own; `ITSM-INC` coordinates across boundaries, `CAP-GOV-3` within; `ITSM-CFG`
-   federates authoritative sources, `CAP-GOV-4` among them, replacing none.
+   `ITSM-REQ` routes steps `CAP-ITO-GOV-1` fulfils for the platform; `ITSM-CHG` authorises change spanning providers,
+   `CAP-ITO-GOV-2` the platform's own; `ITSM-INC` coordinates across boundaries, `CAP-ITO-GOV-3` within; `ITSM-CFG`
+   federates authoritative sources, `CAP-ITO-GOV-4` among them, replacing none.
 5. The user contact channel is `SD-SERVICE-DESK` (ADR 0019), not this domain.
 6. Named service-management concepts are restated as outcomes: `ITSM-CFG` is federated system-of-record
    integration; `ITSM-SLM` is the commitment chain — what a consumer is given, the internal alignments supporting
@@ -52,7 +52,7 @@ governance, named in no operating model's vocabulary.
 
 - The named frameworks' vocabulary (ITIL, SIAM) — CMDB, SLA/OLA/UC, XLA, the incident, change and request
   processes and the retained organisation are what rule 6 restates; the names bind the reference tier to one model.
-- Fold the wrapper into `GOV` — `GOV` governs one provider; this domain coordinates many.
+- Fold the wrapper into `ITO-GOV` — `ITO-GOV` governs one provider; this domain coordinates many.
 
 ## Sources
 

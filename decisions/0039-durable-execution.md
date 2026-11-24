@@ -19,18 +19,18 @@ coordinator and the cost of the run's record.
    `RESILIENCE` already measure what `DURABILITY` would (ADR 0016).
 2. The market phrase is an alias at most (ADR 0007): a behaviour older than its name is defined by the behaviour and
    found by the name.
-3. `CAP-AUT-9` Resumable Execution Service: a managed service recording each completed step of a consumer run
+3. `CAP-ITO-AUT-9` Resumable Execution Service: a managed service recording each completed step of a consumer run
    outside its process, so the run resumes after the last; the consumer connects its own workers
-   and the service never executes their code — unlike the platform's own automation (`CAP-AUT-5`, `CAP-AUT-6`) and
-   runtime-chosen action sets (`CAP-AUT-8`, ADR 0033). Agent-run durability is the same on both sides: the model
+   and the service never executes their code — unlike the platform's own automation (`CAP-ITO-AUT-5`, `CAP-ITO-AUT-6`) and
+   runtime-chosen action sets (`CAP-ITO-AUT-8`, ADR 0033). Agent-run durability is the same on both sides: the model
    call is journaled, not re-invoked on replay.
-4. `FUNC-execution-version-compatibility`: when a definition or its code changes, every open execution continues on a
+4. `FUNC-ito-execution-version-compatibility`: when a definition or its code changes, every open execution continues on a
    version able to complete it or is drained, migrated or terminated; none is retired silently. A standing duty,
-   hence a function; supports `CAP-DEL-4`, `CAP-AUT-5`, `CAP-AUT-6`, `CAP-AUT-9`.
-5. Terms that stop being silent: `FUNC-workflow-orchestration` (coordination state outlives its process),
-   `FUNC-job-scheduling` and `FUNC-event-triggered-execution` (an in-run timer; an event resumes a waiting run),
-   `FUNC-job-execution-tracking` (a step record sufficient to resume), `FUNC-erasure-propagation` (execution records
-   are not re-derivable; qualifies ADR 0038), `CAP-DEL-4` (constrained by open runs).
+   hence a function; supports `CAP-ITO-DEL-4`, `CAP-ITO-AUT-5`, `CAP-ITO-AUT-6`, `CAP-ITO-AUT-9`.
+5. Terms that stop being silent: `FUNC-ito-workflow-orchestration` (coordination state outlives its process),
+   `FUNC-ito-job-scheduling` and `FUNC-ito-event-triggered-execution` (an in-run timer; an event resumes a waiting run),
+   `FUNC-ito-job-execution-tracking` (a step record sufficient to resume), `FUNC-ito-erasure-propagation` (execution records
+   are not re-derivable; qualifies ADR 0038), `CAP-ITO-DEL-4` (constrained by open runs).
 6. `AUTON-INFLIGHT-CONTROL` names resume — a pause that cannot be resumed is a terminate — and the `AUTON-HARNESS`
    budget bounds active execution only, so a long wait is not a budget breach; a suspended run is governed by its
    permission's validity (wording in ADR 0030).
@@ -40,7 +40,7 @@ coordinator and the cost of the run's record.
 ## Consequences
 
 - Sharper, longer definitions plus one capability and one function absorb the category; an in-memory coordinator
-  no longer satisfies `FUNC-workflow-orchestration`.
+  no longer satisfies `FUNC-ito-workflow-orchestration`.
 - Recovery and reversal are part of designing a multi-step sequence (`CAP-ADM-ENG-1`, ADR 0021): a resumable runtime
   does not discharge once-only obligations at an outbound boundary (`CAP-ADM-ENG-3`), and a runtime-chosen call site
   makes bounding duplicate effects guardrail work (`CAP-ADM-ENG-7`, ADR 0034).
@@ -49,7 +49,7 @@ coordinator and the cost of the run's record.
 ## Alternatives
 
 - A compensation function — the cleanest test, but no engine provides it.
-- A service type within `CAP-DATA-1` — that precedent places store types.
+- A service type within `CAP-ITO-DATA-1` — that precedent places store types.
 
 ## Sources
 

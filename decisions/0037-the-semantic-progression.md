@@ -24,7 +24,7 @@ needs a home.
 2. Each stage is a kind of term: glossary, the function `FUNC-bia-glossary-management`, which owns the alias
    `business glossary` (`FUNC-bia-metadata-management` references it, not holds it); taxonomy,
    `FUNC-bia-reference-data-control`, widened from flat code lists to hierarchical vocabularies; ontology, the
-   capability; knowledge graph, its instance layer, a store type under `CAP-DATA-1` (ADR 0038); semantic layer,
+   capability; knowledge graph, its instance layer, a store type under `CAP-ITO-DATA-1` (ADR 0038); semantic layer,
    `CAP-BIA-SEM-1`, reused. There is no thesaurus stage.
 3. `FUNC-bia-ontology-modelling` (versioned releases with migration paths and deprecation windows) and
    `FUNC-bia-semantic-model-publication` (a release in standard machine-readable form) support `CAP-BIA-GOV-7`;

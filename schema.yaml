@@ -8,7 +8,7 @@
 # licence change; MINOR = additive terms/types/verbs/fields and a term retirement; PATCH = editorial wording,
 # comments, metadata, and a release that carries only tooling or records (ADR 0044). Every vocabulary change bumps
 # ontology_version in the same change (ADR 0003); consumers pin a release.
-schema_version: 2
+schema_version: 3
 ontology_version: 5.0.0
 
 # ---- id rules -------------------------------------------------------------
@@ -31,19 +31,17 @@ id:
     persona_instance:    "PERSONA-<code>-<slug>"
     journey_instance:    "JRN-<code>-<slug>"
     workflow_instance:   "WF-<code>-<slug>"
-    requirement_FR:      "FR-<CODE>-<n>"           # <CODE> = the owning service domain's code (FR-ADM-38). A registry
-                         # older than 5.0.0 may carry a bare capability-group token instead (FR-FND-1); it still parses.
-    requirement_NFR:     "NFR-<CODE>_<QA>-<n> | NFR-<QA>-<n>"  # the code is joined to the QA with _ so the id stays one
-                         # segment; a compound QA keeps its own _ (NFR-ADM_COST_EFFICIENCY-1). The uncoded second form
-                         # is kept for registries older than 5.0.0; both are canonical (ADR 0004, ADR 0045).
+    requirement_FR:      "FR-<CODE>-<n>"           # <CODE> = the owning service domain's code (FR-ADM-38)
+    requirement_NFR:     "NFR-<CODE>_<QA>-<n>"     # the code is joined to the QA with _ so the id stays one segment; a
+                         # compound QA keeps its own _ (NFR-ADM_COST_EFFICIENCY-1). Requirement ids are a consumer's
+                         # own; these two are the forms the vocabulary reserves for them (ADR 0004, ADR 0046).
     concept_instance:    "<UPPER-KEBAB> (e.g. AUTON-BOUNDARY, KNOWLEDGE-ROLE, GC-APPROVAL)"
     coverage_area:       "AREA-<slug>"       # AREA-baseline is the declared enterprise-standard area (ADR 0029)
     adr_instance:        "ADR-<NNNN>"
     service_domain_instance: "SD-<slug>"
-  # Prefixes whose ids are NOT ontology records (ADR 0004). A consumer's linter accepts met_by / verified_by
-  # references by prefix without resolving them; only the three below have no record by design.
+  # Prefixes whose ids are NOT ontology records (ADR 0004, ADR 0046). A consumer's linter accepts met_by /
+  # verified_by references by prefix without resolving them; the two below have no record by design.
   reserved_prefixes:
-    SVC: "package-local service instances in a derived (T2/T3) architecture; no T1 record; no current use"
     OQ:  "open-question ids in a consumer's decision backlog (OQ-<n> or OQ-<CODE>-<n>); resolved by a decision record, never a term"
     ADR: "decision-record references (ADR-NNNN in registries and waivers; `ADR NNNN` in source = the ITPRA ontology's record of that number, in decisions/); a consumer's own records are cited by URL (ADR 0005)"
 
@@ -56,7 +54,7 @@ fields:
   aliases:    {required: false, kind: list}
   deprecated: {required: false, kind: list}      # banned synonyms, recorded for authors and projected as hidden
                                                  # labels; NOT machine-enforced (the words occur legitimately
-                                                 # elsewhere; advisory, ADR 0007)
+                                                 # elsewhere; advisory, ADR 0007). Not retirement: that is `retired`
   relates_to: {required: false, kind: relation_list}
   source: {required: false, kind: string}
   # `source` grammar (ADR 0005): one or more citations separated by "; ", each either
@@ -68,8 +66,10 @@ fields:
   # `ADR NNNN` always means the ITPRA ontology's record of that number (decisions/). An item carrying a URL is external in its
   # entirety, whatever it mentions, and is never a decidedIn link. The RDF projection parses each ADR NNNN to a decidedIn link and
   # keeps the whole string as dcterms:source.
-  # Note: prior to schema_version 2, term records also carried an optional `itpra_tier` field (enum T1|T2|T3|all). The field
-  # was removed (ADR 0011): the tier a term is admissible at is inferred from where it lives (this vocabulary = T1), not declared.
+  retired:     {required: false, kind: string}  # the ontology_version (X.Y.Z) that retired the record; its presence
+                                                # marks the record retired: the id and IRI stay (ADR 0048)
+  replaced_by: {required: false, kind: string}  # the id of the record that succeeds a retired one; only beside
+                                                # `retired`, never the record itself (ADR 0048)
 
 # ---- allowed `type` values ------------------------------------------------
 types:
@@ -80,14 +80,13 @@ types:
   - Plane               # a grouping of capability domains by concern (PLANE-<slug>; ADR 0010)
   - Concept             # a defined idea that is not an entity/relationship/QA
   - Capability          # an instance of the CAPABILITY entity type (CAP-<DOMAIN>-<n>)
-  - Function            # an instance of the FUNCTION entity type — a granular behavior below a capability (FUNC-<slug>; ADR 0011)
-  - Persona             # an instance of the PERSONA entity type (PERSONA-<slug>)
+  - Function            # an instance of the FUNCTION entity type — a granular behavior below a capability (FUNC-<code>-<slug>; ADR 0011)
+  - Persona             # an instance of the PERSONA entity type (PERSONA-<code>-<slug>; ADR 0012)
   - JourneyGroup        # a grouping of journeys by lifecycle phase/concern (JG-<slug>; ADR 0013)
-  - Journey             # an instance of the JOURNEY entity type (JRN-<slug>; ADR 0013)
-  - Workflow            # an instance of the WORKFLOW entity type (WF-<slug>; ADR 0013)
+  - Journey             # an instance of the JOURNEY entity type (JRN-<code>-<slug>; ADR 0013)
+  - Workflow            # an instance of the WORKFLOW entity type (WF-<code>-<slug>): a consumer's own diagram of a
+                        # journey. The vocabulary holds no Workflow record (ADR 0046).
   - ServiceDomain       # an IT service domain in the enterprise landscape (SD-<slug>; ADR 0009)
-# Note: instance kinds are added here as they are introduced so the linter can validate each
-# record's `type`.
 
 # ---- relationship verb vocabulary (the `rel` in relates_to) ---------------
 # The linter validates every relates_to.rel against this list. Each verb is also

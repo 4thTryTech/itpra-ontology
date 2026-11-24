@@ -1,5 +1,5 @@
-# ITPRA ontology — FUNCTION library, EUC-SUP (End-User Support Experience & Self-Service)
-# type: Function. ids FUNC-euc-<slug>.
+# ITPRA ontology — EUC-SUP (End-User Support Experience & Self-Service): functions
+# type: Function. Ids FUNC-euc-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0018.
 
 # Workplace self-service & knowledge (CAP-EUC-SUP-1)
 - id: FUNC-euc-self-service-portal

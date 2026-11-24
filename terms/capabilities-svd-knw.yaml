@@ -1,5 +1,5 @@
-# ITPRA ontology — SVD-KNW (Knowledge & Self-Service Enablement) capabilities
-# type: Capability. ids CAP-SVD-KNW-<n>. Grouped under domain SVD-KNW (ADR 0019).
+# ITPRA ontology — SVD-KNW (Knowledge & Self-Service Enablement): capabilities
+# type: Capability. Ids CAP-SVD-KNW-<n>, each grouped under SVD-KNW. Decided in ADR 0019.
 
 - id: CAP-SVD-KNW-1
   term: Self-Service Resolution Surface

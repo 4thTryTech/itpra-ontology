@@ -18,7 +18,7 @@ actor, where it runs, or what its owner can do meanwhile. A persona is a human a
 1. `AUTON-ACTOR` "Delegated actor" is a Concept, never a Persona: a non-human actor acting under authority
    delegated by an accountable persona, which it never holds — a distinct, identified principal with bounded,
    revocable authority, its actions recorded against itself and the persona, governed by the boundary including
-   actions it selects at runtime. Edges: `depends_on` `GC-OWNERSHIP`, `FUNC-privileged-access-management`.
+   actions it selects at runtime. Edges: `depends_on` `GC-OWNERSHIP`, `FUNC-ito-privileged-access-management`.
 2. Named for the accountability relationship, not the technology; agentic actor, digital worker, AI agent,
    software agent and non-human actor are aliases.
 3. `consumed_by` stays human: an actor's use counts as the accountable persona's.
@@ -26,7 +26,7 @@ actor, where it runs, or what its owner can do meanwhile. A persona is a human a
    mediates every tool and system it may reach, enforces the boundary on each selected action, bounds the budget
    of active execution and records the action trace. The budget bounds work in progress, not elapsed time: a
    suspended run consumes none, its suspension governed by the validity of its permission (ADR 0039). Edges:
-   `applies_to` `AUTON-ACTOR`; `depends_on` `AUTON-BOUNDARY`, `FUNC-policy-evaluation`, `FUNC-audit-logging`.
+   `applies_to` `AUTON-ACTOR`; `depends_on` `AUTON-BOUNDARY`, `FUNC-ito-policy-evaluation`, `FUNC-ito-audit-logging`.
 5. `AUTON-INFLIGHT-CONTROL` "In-flight action control" is a Concept, not a Function: observing a delegated
    actor's execution while it runs and intervening (pause, resume, redirect, terminate); an unresumable pause is
    a terminate (ADR 0039). The intervention point is the harness, reachable by the accountable persona. Edges:

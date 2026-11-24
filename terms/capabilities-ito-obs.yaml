@@ -1,5 +1,5 @@
-# ITPRA ontology — ITO-OBS (Observability & Operations) capabilities
-# type: Capability. ids CAP-ITO-OBS-<n>. Grouped under domain ITO-OBS (ADR 0017).
+# ITPRA ontology — ITO-OBS (Observability & Operations): capabilities
+# type: Capability. Ids CAP-ITO-OBS-<n>, each grouped under ITO-OBS. Decided in ADR 0017.
 
 - id: CAP-ITO-OBS-1
   term: Telemetry Collection
@@ -13,7 +13,7 @@
     SOURCES and new signal VOCABULARY (inference calls, tool invocations, actor run traces) within this same
     signal shape - they are not a new signal kind requiring a distinct capture technique, so they are in
     scope here rather than minted separately (ADR 0033).
-  aliases: [telemetry ingestion, AI observability, agent telemetry]   # granular behaviors (incl. infrastructure monitoring) are FUNC-* (ADR 0011)
+  aliases: [telemetry ingestion, AI observability, agent telemetry]
   relates_to:
     - {rel: grouped_by, target: ITO-OBS}
     - {rel: consumed_by, target: PERSONA-ito-platform-team}
@@ -39,7 +39,7 @@
   definition: >
     Presents dashboards and ad hoc queries over operational telemetry, letting users see and interrogate
     the state of the platform and their services.
-  aliases: [visualization, telemetry query, search and analytics]   # dashboarding/log-search are FUNC-* (ADR 0011)
+  aliases: [visualization, telemetry query, search and analytics]
   relates_to:
     - {rel: grouped_by, target: ITO-OBS}
     - {rel: depends_on, target: CAP-ITO-OBS-1}
@@ -79,7 +79,7 @@
     or ML/AI — to surface insights, anomalies, and likely root causes. Includes event noise reduction
     (deduplication, suppression, enrichment, correlation) so responders see actionable incidents, not raw
     alert volume.
-  aliases: [AIOps, event noise reduction]   # correlation/anomaly/RCA/dedup are FUNC-* (ADR 0011)
+  aliases: [AIOps, event noise reduction]
   relates_to:
     - {rel: grouped_by, target: ITO-OBS}
     - {rel: depends_on, target: CAP-ITO-OBS-1}
@@ -125,14 +125,14 @@
     real-world experience. Spans web and mobile clients and includes capture of client-side errors and
     crashes correlated to the affected session. This is Digital Experience **Monitoring** (observe/measure
     experience) — distinct from Digital Experience **Management** (DXM/DXP: compose/deliver/optimize
-    experience), which is an adjacent SD-DIGITAL-EXPERIENCE concern (SDP-dxm), not an ITO-OBS capability.
-  aliases: [DEM, mobile monitoring, uptime monitoring, availability monitoring]   # synthetic/RUM/session-replay/error-tracking/uptime are FUNC-* (ADR 0011)
+    experience), which is the SD-DIGITAL-EXPERIENCE service domain's concern, not an ITO-OBS capability.
+  aliases: [DEM, mobile monitoring, uptime monitoring, availability monitoring]
   relates_to:
     - {rel: grouped_by, target: ITO-OBS}
     - {rel: depends_on, target: CAP-ITO-OBS-1}
     - {rel: consumed_by, target: PERSONA-ito-platform-consumer}
     - {rel: consumed_by, target: PERSONA-ito-platform-team}
-  source: ADR 0017 (amended by ADR 0045)
+  source: ADR 0017 (amended by ADR 0045, ADR 0046)
 
 - id: CAP-ITO-OBS-10
   term: Network & Topology Observability
@@ -143,7 +143,7 @@
     network view; discovered topology relates to the authoritative system-of-record (CAP-ITO-GOV-4) as a PEER
     source reconciled under precedence rules, not as a derived representation of it (KNOWLEDGE-ROLE;
     ADR 0038).
-  aliases: [network observability]   # flow analysis/NetFlow/topology mapping are FUNC-* (ADR 0011)
+  aliases: [network observability]
   relates_to:
     - {rel: grouped_by, target: ITO-OBS}
     - {rel: depends_on, target: CAP-ITO-OBS-1}

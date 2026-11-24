@@ -1,5 +1,5 @@
-# ITPRA ontology — ITO-RES (Resilience & Continuity) capabilities
-# type: Capability. ids CAP-ITO-RES-<n>. Grouped under domain ITO-RES (ADR 0017).
+# ITPRA ontology — ITO-RES (Resilience & Continuity): capabilities
+# type: Capability. Ids CAP-ITO-RES-<n>, each grouped under ITO-RES. Decided in ADR 0017.
 
 - id: CAP-ITO-RES-1
   term: Backup

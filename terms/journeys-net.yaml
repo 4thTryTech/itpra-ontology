@@ -1,9 +1,6 @@
-# ITPRA ontology — Network & Connectivity (NET) journey catalog
-# type: Journey. ids JRN-net-<slug>. Each `grouped_by` exactly one EXISTING JourneyGroup
-# (JG-ONBOARDING..JG-EVOLUTION; reused, not redefined). Neutral — steps reference capabilities + neutral
-# governance construct points (request/approval/change/incident/record/feedback), never tools or named
-# processes. Relationships from the journey side: grouped_by, consumed_by (primary personas), depends_on
-# (capabilities exercised). Ratified by ADR 0023. Diagrams: WF-net-<slug>.
+# ITPRA ontology — Network & Connectivity (NET): journeys
+# type: Journey. Ids JRN-net-<slug>; a journey is grouped by one journey group (ADR 0013). Decided in
+# ADR 0023.
 
 # ---- JG-ONBOARDING ----
 - id: JRN-net-provision-site-connectivity
@@ -26,8 +23,9 @@
   term: Establish a Cloud / SaaS On-Ramp
   type: Journey
   definition: >
-    Provide an optimized, governed network path from sites and the platform to a cloud provider or SaaS, so
-    cloud-bound traffic reaches its destination efficiently rather than backhauled through a central point.
+    Provide an optimized, governed network path from sites and the infrastructure platform to a cloud provider
+    or SaaS, so cloud-bound traffic reaches its destination efficiently rather than backhauled through a
+    central point.
   relates_to:
     - {rel: grouped_by, target: JG-ONBOARDING}
     - {rel: consumed_by, target: PERSONA-net-engineering-team}
@@ -35,7 +33,7 @@
     - {rel: depends_on, target: CAP-NET-CON-5}
     - {rel: depends_on, target: CAP-NET-CON-2}
     - {rel: depends_on, target: CAP-NET-QOS-3}
-  source: ADR 0023
+  source: ADR 0023 (amended by ADR 0047)
 
 - id: JRN-net-onboard-remote-worker
   term: Onboard a Remote Worker to Secure Access

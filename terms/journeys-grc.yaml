@@ -1,9 +1,6 @@
-# ITPRA ontology — Enterprise Security, Risk & Compliance (GRC) journey catalog
-# type: Journey. ids JRN-grc-<slug>. Each `grouped_by` exactly one EXISTING JourneyGroup
-# (JG-ONBOARDING..JG-EVOLUTION; reused, not redefined). Neutral — steps reference capabilities + neutral
-# governance construct points (request/approval/change/incident/problem/record/feedback), never tools or named
-# processes. Relationships from the journey side: grouped_by, consumed_by (primary personas), depends_on
-# (capabilities exercised). Ratified by ADR 0024. Diagrams: WF-grc-<slug>.
+# ITPRA ontology — Enterprise Security, Risk & Compliance (GRC): journeys
+# type: Journey. Ids JRN-grc-<slug>; a journey is grouped by one journey group (ADR 0013). Decided in
+# ADR 0024.
 
 # ---- JG-ONBOARDING ----
 - id: JRN-grc-onboard-estate-governance
@@ -170,8 +167,8 @@
   type: Journey
   definition: >
     An internal or external audit runs against the control framework — control health is monitored, evidence
-    is marshalled (including evidence supplied by the platform and other estates), findings are tracked to
-    remediation, and the attestation or certification is produced.
+    is marshalled (including evidence supplied by the infrastructure platform and other estates), findings are
+    tracked to remediation, and the attestation or certification is produced.
   relates_to:
     - {rel: grouped_by, target: JG-GOVERNANCE}
     - {rel: consumed_by, target: PERSONA-grc-risk-compliance}
@@ -179,7 +176,7 @@
     - {rel: depends_on, target: CAP-GRC-CMP-3}
     - {rel: depends_on, target: CAP-GRC-CMP-4}
     - {rel: depends_on, target: CAP-GRC-CMP-1}
-  source: ADR 0024
+  source: ADR 0024 (amended by ADR 0047)
 
 # ---- JG-EVOLUTION ----
 - id: JRN-grc-report-and-evolve-posture

@@ -1,34 +1,30 @@
-# ITPRA ontology — T1 journey groups
-# SHARED file: it belongs to no single service domain, so neither its name nor its ids carry a service-domain
-# code (ADR 0007, ADR 0045).
-# The groups journeys are organized under. Ratified by ADR 0013. type: JourneyGroup; ids JG-<slug>. Grouping is
-# by lifecycle phase (design -> deploy -> operate) plus cross-cutting concerns, NOT by persona (a journey
-# crosses personas; primary persona is a field on the journey spec). The id is NOT encoded in journey ids
-# (journeys are JRN-<code>-<slug>; group membership is via `grouped_by`). Neutral — no ITIL/DevOps terms.
+# ITPRA ontology — journey groups: journeys grouped by lifecycle phase and cross-cutting concern
+# SHARED file: it belongs to no single service domain, so neither its name nor its ids carry a service-domain code.
+# type: JourneyGroup. Ids JG-<slug>. Decided in ADR 0013.
 
 - id: JG-ONBOARDING
   term: Onboarding
   type: JourneyGroup
   definition: >
-    Establishing a consumer, team, or workload on the platform — access, identity, tenancy, and the first
-    golden-path service. The entry point that precedes the design -> deploy -> operate loop.
-  source: ADR 0013
+    Establishing a consumer, team, or workload on a service — access, identity, tenancy, and first use along
+    a golden path. The entry point that precedes the design -> deploy -> operate loop.
+  source: ADR 0013 (amended by ADR 0047)
 
 - id: JG-DELIVERY
   term: Build & Deliver
   type: JourneyGroup
   definition: >
-    Designing, building, testing, deploying, releasing, and promoting a workload onto the platform — the
+    Designing, building, testing, deploying, releasing, and promoting a workload or change into service — the
     recurring delivery loop spanning the design and deploy phases.
-  source: ADR 0013
+  source: ADR 0013 (amended by ADR 0047)
 
 - id: JG-OPERATIONS
   term: Operate
   type: JourneyGroup
   definition: >
-    Running, observing, scaling, patching, and making routine changes to keep workloads and the platform
-    healthy — the ongoing operate phase, which runs for the lifetime of the workload.
-  source: ADR 0013
+    Running, observing, scaling, patching, and making routine changes to keep a service and its workloads
+    healthy — the ongoing operate phase, which runs for the lifetime of what is operated.
+  source: ADR 0013 (amended by ADR 0047)
 
 - id: JG-RESPONSE
   term: Respond & Recover
@@ -50,6 +46,6 @@
   term: Evolve & Retire
   type: JourneyGroup
   definition: >
-    Upgrading and migrating, decommissioning and offboarding, and the platform-as-a-product feedback loop
-    (defect/nomination -> backlog -> roadmap) — how the platform and its workloads change and end.
-  source: ADR 0013
+    Upgrading and migrating, decommissioning and offboarding, and the service-as-a-product feedback loop
+    (defect/nomination -> backlog -> roadmap) — how a service and its workloads change and end.
+  source: ADR 0013 (amended by ADR 0047)

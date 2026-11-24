@@ -1,5 +1,5 @@
-# ITPRA ontology — BIA-RPT (Reporting & Visualization) capabilities
-# type: Capability. ids CAP-BIA-RPT-<n>. Grouped under domain BIA-RPT (ADR 0026). Experience-plane group.
+# ITPRA ontology — BIA-RPT (Reporting & Visualization): capabilities
+# type: Capability. Ids CAP-BIA-RPT-<n>, each grouped under BIA-RPT. Decided in ADR 0026.
 
 - id: CAP-BIA-RPT-1
   term: Interactive Dashboards

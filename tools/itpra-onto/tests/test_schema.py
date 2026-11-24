@@ -22,7 +22,17 @@ from itpra_onto.config import load_config
 from itpra_onto.profile import compute_profile, load_records
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-EXPECTED_TERM_FILES = 213
+
+
+def _expected_term_files() -> int:
+    """The vocabulary's files counted off the directory (ADR 0007): top-level ``*.yaml`` but ``schema.yaml``
+    and ``PIN.yaml``, plus ``terms/*.yaml`` — independent of :func:`default_term_files`."""
+    root = gen_enums.ontology_dir()
+    top = [p for p in root.glob("*.yaml") if p.name not in ("schema.yaml", "PIN.yaml")]
+    return len(top) + len(list((root / "terms").glob("*.yaml")))
+
+
+EXPECTED_TERM_FILES = _expected_term_files()
 
 
 # ---------------------------------------------------------------------------------------------------
@@ -110,7 +120,7 @@ def test_id_pattern_equals_ontology_schema_yaml(sv: SchemaView, ontology_schema_
 def test_real_slot_names_and_mappings(sv: SchemaView):
     """Slot-naming decision: the YAML keys `aliases` / `deprecated` are the slot names (no rename)."""
     term_slots = {s.name for s in sv.class_induced_slots("Term")}
-    assert {"id", "term", "type", "definition", "aliases", "deprecated", "relates_to", "source"} == term_slots
+    assert {"id", "term", "type", "definition", "aliases", "deprecated", "relates_to", "source", "retired", "replaced_by"} == term_slots
     aliases = sv.induced_slot("aliases", "Capability")
     deprecated = sv.induced_slot("deprecated", "Capability")
     assert aliases.multivalued and aliases.slot_uri == "skos:altLabel"
@@ -119,6 +129,27 @@ def test_real_slot_names_and_mappings(sv: SchemaView):
     # the metamodel's element-level `deprecated`/`aliases` stay untouched on the class itself
     assert sv.get_class("Term").deprecated is None
     assert list(sv.get_class("Term").aliases) == []
+
+
+def test_term_slots_are_schema_yaml_fields(sv: SchemaView, ontology_schema_yaml: dict):
+    assert {s.name for s in sv.class_induced_slots("Term")} == set(ontology_schema_yaml["fields"])
+
+
+def test_retirement_slots(sv: SchemaView):
+    """ADR 0048: `retired` is an X.Y.Z version, projected as itpra-o:retiredIn; `replaced_by` a reference to
+    another record, projected as dcterms:isReplacedBy."""
+    retired = sv.induced_slot("retired", "Capability")
+    replaced_by = sv.induced_slot("replaced_by", "Capability")
+    assert retired.slot_uri == "itpra-o:retiredIn" and retired.pattern == "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    assert replaced_by.slot_uri == "dcterms:isReplacedBy" and replaced_by.range == "Term"
+    assert not retired.required and not replaced_by.required
+
+
+def test_retired_record_validates_and_a_malformed_version_fails(checker, capability_file):
+    ok = checker.validate_term_records(_mutate(capability_file, lambda r: r.update(retired="5.1.0", replaced_by="CAP-ITO-FND-2")))
+    assert ok.ok, ok.errors
+    bad = checker.validate_term_records(_mutate(capability_file, lambda r: r.update(retired="5.1")))
+    assert not bad.ok and "does not match" in bad.errors[0]
 
 
 def test_function_forbids_derived_from_in_schema(sv: SchemaView):

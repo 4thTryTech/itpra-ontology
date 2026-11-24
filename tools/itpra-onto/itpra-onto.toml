@@ -5,8 +5,7 @@
 #
 # [iri] base is the one place the base IRI is written (ADR 0004): a term is <base>id/CAP-ITO-FND-1, the schema
 # <base>onto#, a named graph <base>graph/t1 and the version IRI <base>onto/X.Y.Z. One base in every
-# environment; a change rewrites every IRI and is MAJOR. `itpra-onto release` refuses a reserved `.invalid`
-# host (itpra_onto.config.is_placeholder_base_iri()), which is what the tests use to exercise the refusal.
+# environment; a change rewrites every IRI and is MAJOR.
 
 [iri]
 base = "https://itpra.4thtry.tech/"

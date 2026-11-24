@@ -1,10 +1,6 @@
-# ITPRA ontology — Business Intelligence & Analytics (BIA) capability domains
-# type: Domain. The `id` IS the domain code used in capability ids: CAP-<id>-<n> (child: CAP-<id>-<n>.<m>). Each
-# domain is `grouped_by` an EXISTING capability PLANE (terms/planes.yaml). SD-BUSINESS-ANALYTICS interfaces_with
-# PLANE-RESOURCE (it consumes the platform data substrate/streaming/storage) and PLANE-EXPERIENCE (it serves
-# insight to business consumers); every BIA group is placed under one of those two existing planes. Taxonomy
-# ratified by ADR 0026. Owning service domain: SD-BUSINESS-ANALYTICS (ADR 0009). Scope/boundary vs
-# ITO-DATA/ITO-OBS/ITO-SEC: ADR 0026.
+# ITPRA ontology — Business Intelligence & Analytics (BIA): capability domains
+# type: Domain. A capability domain's id is the code its capabilities carry (CAP-<id>-<n>). Owned by
+# SD-BUSINESS-ANALYTICS. Decided in ADR 0026.
 
 - id: BIA-INT
   term: Data Integration & Ingestion
@@ -25,12 +21,12 @@
   definition: >
     The governed analytical data store and its business models — a managed warehouse/lakehouse, the layered
     refinement of data from landing through conformed to consumption-ready, dimensional/business data
-    modeling, time-variant history, and analytics-ready data products. Consumes the platform's data substrate
-    (ITO-DATA/ITO-SUB) rather than owning it.
+    modeling, time-variant history, and analytics-ready data products. Consumes the infrastructure platform's
+    data substrate (ITO-DATA/ITO-SUB) rather than owning it.
   relates_to:
     - {rel: grouped_by, target: PLANE-RESOURCE}
     - {rel: belongs_to_service_domain, target: SD-BUSINESS-ANALYTICS}
-  source: ADR 0026
+  source: ADR 0026 (amended by ADR 0047)
 
 - id: BIA-SEM
   term: Semantic Layer & Self-Service Analytics
@@ -65,11 +61,11 @@
     The advanced-analytics lifecycle — a collaborative experimentation workspace, feature engineering and a
     feature store, model development/training/evaluation, model deployment and scoring as consumable insight,
     and ongoing model monitoring and lifecycle management. Produces predictive and prescriptive business
-    insight; distinct from the platform's operational AIOps (ITO-OBS).
+    insight; distinct from the infrastructure platform's operational AIOps (ITO-OBS).
   relates_to:
     - {rel: grouped_by, target: PLANE-EXPERIENCE}
     - {rel: belongs_to_service_domain, target: SD-BUSINESS-ANALYTICS}
-  source: ADR 0026
+  source: ADR 0026 (amended by ADR 0047)
 
 - id: BIA-PRD
   term: Product & User-Behavior Analytics
@@ -79,10 +75,11 @@
     collection and a governed event taxonomy, journey/funnel/conversion analysis, cohort/retention/engagement
     analysis, and experimentation and insight activation. Business product insight; distinct from security
     UEBA (ITO-SEC, CAP-ITO-SEC-7) and operational AIOps (ITO-OBS, CAP-ITO-OBS-6).
+  aliases: [product analytics, user behavior analytics, digital analytics, customer analytics]
   relates_to:
     - {rel: grouped_by, target: PLANE-EXPERIENCE}
     - {rel: belongs_to_service_domain, target: SD-BUSINESS-ANALYTICS}
-  source: ADR 0026
+  source: ADR 0026 (amended by ADR 0046)
 
 - id: BIA-GOV
   term: Data Governance, Quality & Master Data
@@ -91,9 +88,10 @@
     The cross-cutting trust function for business data and insight — data governance and stewardship;
     metadata, catalog, and lineage; data quality measurement and remediation; master data management (golden
     records); reference data management; and data privacy/policy compliance for analytics. Governs business
-    data; applies the enterprise control catalog (Enterprise Security/GRC) and is distinct from the platform's
-    operational data governance (ITO-DATA, CAP-ITO-DATA-4). The DAMA Wheel places this at the center.
+    data; applies the enterprise control catalog (Enterprise Security/GRC) and is distinct from the
+    infrastructure platform's operational data governance (ITO-DATA, CAP-ITO-DATA-4). The DAMA Wheel places
+    this at the center.
   relates_to:
     - {rel: grouped_by, target: PLANE-RESOURCE}
     - {rel: belongs_to_service_domain, target: SD-BUSINESS-ANALYTICS}
-  source: ADR 0026
+  source: ADR 0026 (amended by ADR 0047)

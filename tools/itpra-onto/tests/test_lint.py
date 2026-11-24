@@ -25,7 +25,10 @@ SCHEMA = {
     "id": {"pattern": r"^[A-Za-z][A-Za-z0-9_.-]*$"},
     "types": ["EntityType", "RelationshipType", "Capability", "Function", "QualityAttribute", "Concept"],
     "relationships": ["supports", "derived_from", "depends_on"],
-    "fields": {k: {} for k in ("id", "term", "type", "definition", "aliases", "deprecated", "relates_to", "source")},
+    "fields": {
+        k: {}
+        for k in ("id", "term", "type", "definition", "aliases", "deprecated", "relates_to", "source", "retired", "replaced_by")
+    },
 }
 CLEAN_TERMS = [
     {"id": "CAP-X-1", "term": "Alpha", "type": "Capability", "definition": "A capability.", "source": "ADR 0001"},
@@ -145,6 +148,28 @@ def test_source_grammar_and_unresolved_decision(tmp_path: Path):
 def test_source_with_a_url_is_external_whatever_it_mentions(tmp_path: Path):
     findings = _mutated(tmp_path, lambda ts: ts[0].update(source="see ADR 0099 at https://example.org/adr/99"))
     assert findings == []
+
+
+def test_a_retired_record_with_a_successor_is_clean(tmp_path: Path):
+    findings = _mutated(tmp_path, lambda ts: ts[0].update(retired="1.2.0", replaced_by="QA"))
+    assert findings == []
+
+
+@pytest.mark.parametrize("value", ["1.2", "v1.2.3", "1.2.3-rc1", " 1.2.3", 1.2])
+def test_retired_format(tmp_path: Path, value):
+    findings = _mutated(tmp_path, lambda ts: ts[0].update(retired=value))
+    assert [(f["rule"], f["subject"]) for f in findings] == [("retired-format", "CAP-X-1")]
+
+
+@pytest.mark.parametrize("value", ["CAP-NOPE", "CAP-X-1", ["QA"]])
+def test_replaced_by_unresolved_or_naming_its_own_record(tmp_path: Path, value):
+    findings = _mutated(tmp_path, lambda ts: ts[0].update(retired="1.2.0", replaced_by=value))
+    assert [(f["rule"], f["subject"]) for f in findings] == [("replaced-by-unresolved", "CAP-X-1")]
+
+
+def test_replaced_by_without_retired(tmp_path: Path):
+    findings = _mutated(tmp_path, lambda ts: ts[0].update(replaced_by="QA"))
+    assert [(f["rule"], f["subject"]) for f in findings] == [("replaced-by-without-retired", "CAP-X-1")]
 
 
 def test_version_format(tmp_path: Path):

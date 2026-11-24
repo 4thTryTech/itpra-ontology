@@ -1,5 +1,5 @@
-# ITPRA ontology — FLD-FIX (Hardware Break-Fix & Depot Repair) capabilities
-# type: Capability. ids CAP-FLD-FIX-<n>. Grouped under domain FLD-FIX (ADR 0020).
+# ITPRA ontology — FLD-FIX (Hardware Break-Fix & Depot Repair): capabilities
+# type: Capability. Ids CAP-FLD-FIX-<n>, each grouped under FLD-FIX. Decided in ADR 0020.
 
 - id: CAP-FLD-FIX-1
   term: On-Site Fault Isolation & Component Swap

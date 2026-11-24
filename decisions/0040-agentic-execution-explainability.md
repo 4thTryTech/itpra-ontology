@@ -22,7 +22,7 @@ account?
    affected.
 2. It sits in `ADM-VAL` (ADR 0021), which observes the application for the owning team, where accountability sits;
    not `ADM-ENG`, since engineering a behaviour is not accounting for its runs; not platform observability, since
-   `OBS` determines system state and `CAP-AUT-8` records actions for the platform's attributability (ADR 0033); the account
+   `ITO-OBS` determines system state and `CAP-ITO-AUT-8` records actions for the platform's attributability (ADR 0033); the account
    consumes both.
 3. Each function is separated from a neighbour: `FUNC-adm-execution-decision-trace-capture` captures the per-execution
    trace tree of steps and results, where `FUNC-adm-distributed-tracing` locates latency;

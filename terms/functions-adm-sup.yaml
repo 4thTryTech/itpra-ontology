@@ -1,7 +1,5 @@
-# ITPRA ontology — FUNCTION library, ADM-SUP (Application Support & Maintenance Modes)
-# type: Function. ids FUNC-adm-<slug>. All T1-neutral; a function MAY name a standard/technique where that IS
-# the function (ADR 0011). Maintenance-mode functions name the ISO/IEC 14764 categories (that IS the function).
-# See ADR 0021.
+# ITPRA ontology — ADM-SUP (Application Support & Maintenance Modes): functions
+# type: Function. Ids FUNC-adm-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0021.
 
 # Support triage & resolution (CAP-ADM-SUP-1)
 - id: FUNC-adm-support-triage

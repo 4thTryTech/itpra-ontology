@@ -22,8 +22,7 @@
 #
 # The base IRI is a configuration item (ADR 0004)
 #   Nothing below is a literal IRI under the base. itpra-onto.toml [iri] (base / id_path / onto_path /
-#   graph_path) is the single source; `itpra-onto release` refuses to run while the configured base is a
-#   placeholder (nothing may be published under one). Concretely:
+#   graph_path) is the single source. Concretely:
 #     itpra:    <base>id/     one IRI per term record                               — generated,
 #     itpra-o:  <base>onto#   the schema vocabulary: verb properties, bannedLabel, …          see
 #     itpra-g:  <base>graph/  named graphs                                          — generated/itpra-prefixes.linkml.yaml
@@ -44,6 +43,10 @@
 #     aliases    -> skos:altLabel
 #     deprecated -> itpra-o:bannedLabel  (rdfs:subPropertyOf skos:hiddenLabel; expressed here as
 #                   slot_uri + broad_mappings: skos:hiddenLabel)
+#
+# Retirement (ADR 0048)
+#   retired     -> itpra-o:retiredIn, and the record also gets owl:deprecated true
+#   replaced_by -> dcterms:isReplacedBy <successor>
 #
 # Validation (itpra-onto validate --authoring)
 #   Term files are bare lists. The validator dispatches each record to the subclass whose `type`
@@ -73,7 +76,7 @@
 #         domain:    [<Class>, …]                 # sorted, = the distinct `subject`s of `pairs`
 #         range:      [<Class>, …]                 # sorted, = the distinct `object`s of `pairs`
 #         pairs:                                   # the ALLOWED (subject, object) combinations —
-#           - {subject: <Class>, object: <Class>, count: <int>}   # count = instance edges at 3.16.0
+#           - {subject: <Class>, object: <Class>, count: <int>}   # count = instance edges at 5.0.0
 #           # The numeric fields (pairs[].count, observed[].records/min/max) are a SNAPSHOT at the version
 #           # named above, refreshed by a line-based edit from `uv run python -m itpra_onto.profile`
 #           # (never round-tripped through a YAML dumper). tests/test_schema.py checks the (subject, object) pairs, meta-edges and
@@ -105,7 +108,7 @@ title: ITPRA ontology — authoring schema
 description: >-
   LinkML description of the ITPRA ontology's authoring shape (the term records in the ontology
   directory). The base IRI is a configuration item (itpra-onto.toml [iri], ADR 0004).
-version: 0.1.0
+version: 5.0.0
 prefixes:
   linkml: https://w3id.org/linkml/
   skos: http://www.w3.org/2004/02/skos/core#
@@ -129,7 +132,7 @@ subsets:
 
 # -----------------------------------------------------------------------------------------------------
 slots:
-  # ---- the eight authored term fields (schema.yaml `fields:`) ----
+  # ---- the ten authored term fields (schema.yaml `fields:`) ----
   id:
     identifier: true
     required: true
@@ -161,7 +164,7 @@ slots:
       - skos:hiddenLabel
     description: >-
       Banned synonyms — words that must not be used for this concept. Emitted as itpra-o:bannedLabel,
-      a sub-property of skos:hiddenLabel. Not a retirement marker (retirement is ADR 0041 D6, tombstones).
+      a sub-property of skos:hiddenLabel. Not a retirement marker (that is `retired`, ADR 0048).
   relates_to:
     multivalued: true
     range: RelatesTo
@@ -177,6 +180,18 @@ slots:
       Provenance text, verbatim ("ADR NNNN" = this repository's own record, optional amend/extend tail, or an
       external citable reference -- another project's record carries its URL). The grammar is parsed by the
       emitter (ADR 0005), not constrained here.
+  retired:
+    pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    slot_uri: itpra-o:retiredIn
+    description: >-
+      The ontology_version (X.Y.Z) that retired the record; its presence marks the record retired (ADR 0048).
+      Emitted as itpra-o:retiredIn beside owl:deprecated true; the record otherwise projects unchanged.
+  replaced_by:
+    range: Term
+    slot_uri: dcterms:isReplacedBy
+    description: >-
+      Id of the record that succeeds a retired one (a reference, not an inlined record; ADR 0048). Allowed
+      only beside `retired`; resolves to another record.
 
   # ---- RelatesTo ----
   rel:
@@ -259,14 +274,14 @@ slots:
       itpra_verb:
         value:
           carried_by: relates_to
-          evidence: data
-          domain: [Workflow]
+          evidence: meta-only
+          domain: [Capability, Workflow]
           range: [Journey]
           pairs:
-            - {subject: Workflow, object: Journey, count: 30}
+            - {subject: Capability, object: Journey, count: 0}
+            - {subject: Workflow, object: Journey, count: 0}
           cardinality: []
-          observed:
-            - {subject: Workflow, records: 30, min: 1, max: 1}
+          observed: []
           meta_edges:
             - "CAPABILITY -> JOURNEY"
             - "WORKFLOW -> JOURNEY"
@@ -293,7 +308,7 @@ slots:
           cardinality: []
           observed:
             - {subject: Capability, records: 400, min: 0, max: 4}
-            - {subject: Concept, records: 33, min: 0, max: 3}
+            - {subject: Concept, records: 29, min: 0, max: 3}
             - {subject: Function, records: 772, min: 0, max: 2}
             - {subject: Journey, records: 149, min: 1, max: 13}
           meta_edges:
@@ -492,7 +507,7 @@ slots:
             - {subject: Concept, object: Function, count: 5}
           cardinality: []
           observed:
-            - {subject: Concept, records: 33, min: 0, max: 6}
+            - {subject: Concept, records: 29, min: 0, max: 6}
           meta_edges:
             - "CONCEPT -> CONCEPT"
             - "CONCEPT -> FUNCTION"
@@ -520,7 +535,7 @@ slots:
           cardinality: []
           observed:
             - {subject: Capability, records: 400, min: 0, max: 1}
-            - {subject: Concept, records: 33, min: 0, max: 5}
+            - {subject: Concept, records: 29, min: 0, max: 5}
             - {subject: Function, records: 772, min: 0, max: 1}
           meta_edges:
             - "ADR -> ITPRA_TIER"
@@ -560,14 +575,13 @@ slots:
       itpra_verb:
         value:
           carried_by: relates_to
-          evidence: data
+          evidence: meta-only
           domain: [ServiceDomain]
           range: [Plane]
           pairs:
-            - {subject: ServiceDomain, object: Plane, count: 16}
+            - {subject: ServiceDomain, object: Plane, count: 0}
           cardinality: []
-          observed:
-            - {subject: ServiceDomain, records: 11, min: 0, max: 2}
+          observed: []
           meta_edges:
             - "SERVICE_DOMAIN -> PLANE"
           inverse_name: null
@@ -582,19 +596,16 @@ slots:
         value:
           carried_by: relates_to
           evidence: data
-          domain: [Concept, Domain]
+          domain: [Domain]
           range: [ServiceDomain]
           pairs:
-            - {subject: Concept, object: ServiceDomain, count: 4}
             - {subject: Domain, object: ServiceDomain, count: 82}
           cardinality:
             - {subject: Term, min: 0, max: 1}
             - {subject: Domain, min: 1, max: 1}
           observed:
-            - {subject: Concept, records: 33, min: 0, max: 1}
             - {subject: Domain, records: 82, min: 1, max: 1}
           meta_edges:
-            - "CONCEPT -> SERVICE_DOMAIN"
             - "DOMAIN -> SERVICE_DOMAIN"
           inverse_name: null
 
@@ -606,7 +617,7 @@ classes:
     description: >-
       The shape shared by every term record (schema.yaml `fields:`). Abstract:
       every record is validated as the subclass its `type` names.
-    slots: [id, term, type, definition, aliases, deprecated, relates_to, source]
+    slots: [id, term, type, definition, aliases, deprecated, relates_to, source, retired, replaced_by]
 
   RelatesTo:
     class_uri: itpra-o:RelatesTo

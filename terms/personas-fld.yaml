@@ -1,7 +1,5 @@
-# ITPRA ontology — Onsite / Field Support (FLD) personas
-# type: Persona. ids PERSONA-fld-<slug>. Coarse, tier-graduated neutral role archetypes (mirrors the persona
-# model, ADR 0012): each refines into granular roles at T2/T3. Capabilities reference these via `consumed_by`;
-# relationships are expressed from the capability/journey side. Ratified by ADR 0020.
+# ITPRA ontology — Onsite / Field Support (FLD): personas
+# type: Persona. Ids PERSONA-fld-<slug>. Decided in ADR 0020.
 
 - id: PERSONA-fld-field-technician
   term: Field Technician

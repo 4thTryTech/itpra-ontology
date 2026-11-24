@@ -1,5 +1,5 @@
-# ITPRA ontology — NET-SEG (Network Security & Segmentation) capabilities
-# type: Capability. ids CAP-NET-SEG-<n>. Grouped under domain NET-SEG (ADR 0023).
+# ITPRA ontology — NET-SEG (Network Security & Segmentation): capabilities
+# type: Capability. Ids CAP-NET-SEG-<n>, each grouped under NET-SEG. Decided in ADR 0023.
 
 - id: CAP-NET-SEG-1
   term: Network Edge Firewalling & Policy Enforcement

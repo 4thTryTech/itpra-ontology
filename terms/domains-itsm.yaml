@@ -1,10 +1,6 @@
-# ITPRA ontology — IT Service Management & Integration (ITSM) capability domains
-# type: Domain. The `id` IS the domain code used in capability ids: CAP-<id>-<n> (child: CAP-<id>-<n>.<m>). ITSM
-# is the ENTERPRISE CROSS-DOMAIN service-integration / coordination wrapper (a service integrator / retained
-# org; SIAM). Its capabilities are NEUTRAL coordination over the framework's neutral governance constructs
-# (GC-*) — distinct from any one provider's own internal governance (e.g. ITO-GOV). Every domain is `grouped_by`
-# the EXISTING governance plane (SD-SERVICE-MGMT interfaces_with PLANE-GOVERNANCE; ADR 0009). Taxonomy ratified
-# by ADR 0025; scope/boundary ADR 0025; T1-neutrality note ADR 0025. Owning service domain: SD-SERVICE-MGMT.
+# ITPRA ontology — IT Service Management & Integration (ITSM): capability domains
+# type: Domain. A capability domain's id is the code its capabilities carry (CAP-<id>-<n>). Owned by
+# SD-SERVICE-MGMT. Decided in ADR 0025.
 
 - id: ITSM-CAT
   term: Service Catalog & Portfolio Coordination
@@ -14,11 +10,11 @@
     lifecycle — an end-to-end service catalog of requestable services with their fulfillment conditions, and a
     service portfolio spanning pipeline, live, and retired services across all providers. Coordinates each
     service's offer and ownership across providers; distinct from a single provider's own local offer surface
-    (e.g. the platform's own consumer experience/governance).
+    (e.g. the infrastructure platform's own consumer experience/governance).
   relates_to:
     - {rel: grouped_by, target: PLANE-GOVERNANCE}
     - {rel: belongs_to_service_domain, target: SD-SERVICE-MGMT}
-  source: ADR 0025
+  source: ADR 0025 (amended by ADR 0047)
 
 - id: ITSM-REQ
   term: Cross-Domain Request & Fulfillment Orchestration

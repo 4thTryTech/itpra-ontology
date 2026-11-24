@@ -1,6 +1,5 @@
-# ITPRA ontology — FUNCTION library, NET-SEG (Network Security & Segmentation)
-# type: Function. ids FUNC-net-<slug>. T1-neutral; a function MAY name a standard/technique where that IS the
-# function (ADR 0011). See ADR 0023.
+# ITPRA ontology — NET-SEG (Network Security & Segmentation): functions
+# type: Function. Ids FUNC-net-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0023.
 
 - id: FUNC-net-edge-firewalling
   term: Edge Firewalling

@@ -16,17 +16,19 @@ name.
 ## Decision
 
 1. A term is one YAML record: `id`, `term`, `type` and `definition` are required; `aliases`, `deprecated`,
-   `relates_to` and `source` optional. Ids: ADR 0004; `source` grammar: ADR 0005.
+   `relates_to`, `source`, `retired` and `replaced_by` optional. Ids: ADR 0004; `source` grammar: ADR 0005
+   (amended by ADR 0048).
 2. `type` is one of `EntityType`, `RelationshipType`, `QualityAttribute`, `Domain`, `Plane`, `Concept`,
    `Capability`, `Function`, `Persona`, `JourneyGroup`, `Journey`, `Workflow`, `ServiceDomain`. `relates_to`
    holds `{rel, target}` pairs: `rel` a verb of ADR 0008, `target` another record's id.
 3. Files merge into one set with globally unique ids. `schema.yaml`, `entities.yaml` and `relationships.yaml`
    hold the shape, types and verbs; all other records sit under `terms/`, split by kind and service domain
    (`domains-<code>`, `capabilities-<code>-<grp>`, `functions-<code>-<grp>`, `personas-<code>`,
-   `journeys-<code>`, `workflows-<code>`); the first domain's files, like its ids, carry no code (ADR 0004).
-4. Planes, journey groups, service domains, placements, quality attributes, dimensions, governance constructs,
-   coverage areas, autonomy concepts and knowledge roles are shared files, never redefined by a domain
-   (ADR 0006).
+   `journeys-<code>`); a file named with a code is that domain's, one without is shared (amended by ADR 0045,
+   ADR 0046).
+4. Planes, journey groups, service domains, quality attributes, dimensions, governance constructs, coverage
+   areas, autonomy concepts and knowledge roles are shared files (ADR 0006), never redefined by a domain
+   (amended by ADR 0046).
 5. `aliases` are alternative labels — synonyms, market words, industry categories — disjoint from the term's own
    label and naming no product or operating-model process (ADR 0001).
 6. `deprecated` lists synonyms authors avoid; advisory, since the words occur legitimately elsewhere, and

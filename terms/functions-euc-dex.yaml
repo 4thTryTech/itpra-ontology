@@ -1,5 +1,5 @@
-# ITPRA ontology — FUNCTION library, EUC-DEX (Endpoint Observability & Digital Employee Experience)
-# type: Function. ids FUNC-euc-<slug>.
+# ITPRA ontology — EUC-DEX (Endpoint Observability & Digital Employee Experience): functions
+# type: Function. Ids FUNC-euc-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0018.
 
 # Endpoint telemetry & inventory (CAP-EUC-DEX-1)
 - id: FUNC-euc-endpoint-telemetry
@@ -30,7 +30,7 @@
     - {rel: supports, target: CAP-EUC-DEX-2}
   source: ADR 0018
 
-# Proactive experience remediation (CAP-EUC-DEX-3) — also supported by FUNC-euc-automated-remediation (EUC-SUP)
+# Proactive experience remediation (CAP-EUC-DEX-3)
 - id: FUNC-euc-proactive-detection
   term: Proactive Experience Detection
   type: Function

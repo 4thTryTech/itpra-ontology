@@ -1,9 +1,12 @@
 name: release
 
-# A release is a tag vX.Y.Z on master with an immutable release carrying the source archive and its hash (ADR 0003).
-# Two ways in, one job: push the tag, or run this workflow on master with the version — it then creates the tag.
-# Either way the tag must equal ontology_version, CHANGELOG.md must have the section, the archive is built from the
-# tag, and the release is published with the archive and its sha256. A tag vX.Y.Z-rc.N is a pre-release.
+# A release is a tag vX.Y.Z on master with an immutable release carrying the source archive, the RDF projection
+# and their hashes (ADR 0003, ADR 0043). Two ways in, one job: push the tag, or run this workflow on master with
+# the version — it then creates the tag. Either way the version must equal ontology_version and the pipeline
+# package's version (ADR 0044), CHANGELOG.md must have the section, and both archives are built from the release
+# commit, which must be on master: a pushed tag that points anywhere else is refused. On a manual run nothing is
+# tagged until everything has built and validated: a tag cannot be moved, so it is created only for a commit that
+# is known to release. A tag vX.Y.Z-rc.N is a pre-release.
 
 on:
   push:
@@ -29,7 +32,7 @@ jobs:
         with:
           fetch-depth: 0
           fetch-tags: true
-      - name: The tag names the version in schema.yaml
+      - name: The tag names the version in schema.yaml and of the pipeline package
         run: |
           version="${TAG#v}"
           base="${version%%-rc.*}"
@@ -37,41 +40,84 @@ jobs:
           if [ "$base" != "$declared" ]; then
             echo "::error::tag $TAG does not match ontology_version $declared in schema.yaml"; exit 1
           fi
+          package="$(sed -n 's/^version[[:space:]]*=[[:space:]]*"\(.*\)"/\1/p' tools/itpra-onto/pyproject.toml | head -n 1)"
+          if [ "$package" != "$declared" ]; then
+            echo "::error::the pipeline package is version $package, not ontology_version $declared (ADR 0044)"; exit 1
+          fi
           echo "VERSION=$version" >> "$GITHUB_ENV"
           echo "BASE_VERSION=$base" >> "$GITHUB_ENV"
       - name: Release notes come from CHANGELOG.md
         run: python3 tools/release-notes.py "$BASE_VERSION" > notes.md
-      - name: Create the tag on master (manual run)
-        if: github.event_name == 'workflow_dispatch'
+      - name: The release commit (on master; an existing tag is never moved)
         run: |
-          if [ "$GITHUB_REF" != "refs/heads/master" ]; then
-            echo "::error::a release is tagged on master, not on $GITHUB_REF (ADR 0003)"; exit 1
-          fi
-          if git rev-parse -q --verify "refs/tags/$TAG^{commit}" >/dev/null; then
-            if [ "$(git rev-parse "$TAG^{commit}")" != "$(git rev-parse HEAD)" ]; then
-              echo "::error::tag $TAG already exists at another commit; tags are never moved"; exit 1
+          commit="$(git rev-parse HEAD)"
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
+            if [ "$GITHUB_REF" != "refs/heads/master" ]; then
+              echo "::error::a release is tagged on master, not on $GITHUB_REF (ADR 0003)"; exit 1
             fi
-            echo "tag $TAG already exists at HEAD"; exit 0
+            if git rev-parse -q --verify "refs/tags/$TAG^{commit}" >/dev/null; then
+              if [ "$(git rev-parse "$TAG^{commit}")" != "$commit" ]; then
+                echo "::error::tag $TAG already exists at another commit; tags are never moved"; exit 1
+              fi
+              echo "tag $TAG already exists at HEAD"
+            fi
+          else
+            if [ "$(git rev-parse "$TAG^{commit}")" != "$commit" ]; then
+              echo "::error::the checkout is not the commit of $TAG"; exit 1
+            fi
+            git fetch --quiet origin "+refs/heads/master:refs/remotes/origin/master"
+            if ! git merge-base --is-ancestor "$commit" refs/remotes/origin/master; then
+              echo "::error::tag $TAG is at $commit, which is not on master; a release is tagged on master (ADR 0003)"; exit 1
+            fi
           fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git tag -a "$TAG" -m "ITPRA ontology $VERSION"
-          git push origin "refs/tags/$TAG"
+          echo "COMMIT=$commit" >> "$GITHUB_ENV"
       - name: Build the source archive and its hash
         run: |
           name="itpra-ontology-$VERSION"
-          git archive --format=tar.gz --prefix="$name/" -o "$name.tar.gz" "$TAG"
+          git archive --format=tar.gz --prefix="$name/" -o "$name.tar.gz" "$COMMIT"
           sha256sum "$name.tar.gz" > "$name.tar.gz.sha256"
           cat "$name.tar.gz.sha256"
           {
             echo
             echo "## Pinning"
             echo
-            echo "- Tag \`$TAG\` at commit \`$(git rev-parse "$TAG^{commit}")\`"
+            echo "- Tag \`$TAG\` at commit \`$COMMIT\`"
             echo "- Archive \`$name.tar.gz\`, sha256 \`$(cut -d' ' -f1 "$name.tar.gz.sha256")\`"
             echo "- Verify with \`sha256sum -c $name.tar.gz.sha256\`"
           } >> notes.md
           echo "ARCHIVE=$name.tar.gz" >> "$GITHUB_ENV"
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10.2.0
+        with:
+          python-version: "3.12"
+      - name: Build the RDF projection from the release commit (validated, reproducible)
+        run: |
+          uv sync --locked --project tools/itpra-onto
+          uv run --project tools/itpra-onto itpra-onto build --no-store
+          uv run --project tools/itpra-onto itpra-onto build --check
+          uv run --project tools/itpra-onto itpra-onto validate
+      - name: Package the RDF projection and its hash
+        run: |
+          name="itpra-ontology-$VERSION-rdf"
+          tar --sort=name --mtime='UTC 1970-01-01' --owner=0 --group=0 --numeric-owner \
+            --transform "s,^rdf,$name," -C dist -cf - rdf | gzip -n > "$name.tar.gz"
+          sha256sum "$name.tar.gz" > "$name.tar.gz.sha256"
+          cat "$name.tar.gz.sha256"
+          {
+            echo "- RDF projection \`$name.tar.gz\` (canonical N-Quads, Turtle per asserted graph, build record), sha256 \`$(cut -d' ' -f1 "$name.tar.gz.sha256")\`"
+            echo "- Verify with \`sha256sum -c $name.tar.gz.sha256\`"
+          } >> notes.md
+          echo "RDF_ARCHIVE=$name.tar.gz" >> "$GITHUB_ENV"
+      - name: Create the tag on master (manual run; only now that everything has built)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          if git rev-parse -q --verify "refs/tags/$TAG^{commit}" >/dev/null; then
+            echo "tag $TAG already exists at $COMMIT"; exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" -m "ITPRA ontology $VERSION" "$COMMIT"
+          git push origin "refs/tags/$TAG"
       - name: Publish the release
         run: |
           if existing="$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" --jq .immutable 2>/dev/null)"; then
@@ -80,7 +126,7 @@ jobs:
           fi
           flags=(--verify-tag --title "ITPRA ontology $VERSION" --notes-file notes.md)
           case "$VERSION" in *-rc.*) flags+=(--prerelease);; esac
-          gh release create "$TAG" "$ARCHIVE" "$ARCHIVE.sha256" "${flags[@]}"
+          gh release create "$TAG" "$ARCHIVE" "$ARCHIVE.sha256" "$RDF_ARCHIVE" "$RDF_ARCHIVE.sha256" "${flags[@]}"
       - name: The published release is immutable
         run: |
           immutable="$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" --jq .immutable)"

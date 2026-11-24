@@ -1,5 +1,5 @@
-# ITPRA ontology — FUNCTION library, EUC-VRW (Virtual & Remote Workspace)
-# type: Function. ids FUNC-euc-<slug>.
+# ITPRA ontology — EUC-VRW (Virtual & Remote Workspace): functions
+# type: Function. Ids FUNC-euc-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0018.
 
 # Virtual & hosted desktop provisioning (CAP-EUC-VRW-1)
 - id: FUNC-euc-virtual-desktop-provisioning

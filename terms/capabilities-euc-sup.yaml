@@ -1,6 +1,5 @@
-# ITPRA ontology — EUC-SUP (End-User Support Experience & Self-Service) capabilities
-# type: Capability. ids CAP-EUC-SUP-<n>. Workplace-resolution experience — distinct from the cross-domain
-# contact channel/triage owned by the Service Desk (SD-SERVICE-DESK), interfaced with; see ADR 0018.
+# ITPRA ontology — EUC-SUP (End-User Support Experience & Self-Service): capabilities
+# type: Capability. Ids CAP-EUC-SUP-<n>, each grouped under EUC-SUP. Decided in ADR 0018.
 
 - id: CAP-EUC-SUP-1
   term: Workplace Self-Service & Knowledge

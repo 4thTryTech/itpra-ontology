@@ -1,8 +1,9 @@
 """The ``crossfield`` shape file (SHACL-SPARQL): ``shapes/crossfield.ttl`` + ``fixtures/crossfield/``.
 
-Rules (``shapes/REGISTER.md`` Table B, severities per Table C): **B-8** (an alias equal to its own subject's
-prefLabel, case-insensitively — ADR 0007), **B-8-pref-label-unique** (at most one prefLabel per language
-tag per subject — SKOS S14), **B-13** (every ``decidedIn``/``amendedBy``/``extendedBy`` object is an
+Rules (``shapes/REGISTER.md`` Tables A and B, severities per Table C): **replaced-by-unresolved** (a retired
+record's ``dcterms:isReplacedBy`` names another record — ADR 0048), **B-8** (an alias equal to its own
+subject's prefLabel, case-insensitively — ADR 0007), **B-8-pref-label-unique** (at most one prefLabel per
+language tag per subject — SKOS S14), **B-13** (every ``decidedIn``/``amendedBy``/``extendedBy`` object is an
 ``ADR-NNNN`` node in the id namespace). B-9 is "no rule, by design" and is asserted absent.
 
 B-13 and B-8-pref-label-unique are defence in depth: no authoring-YAML mutation can make the emitter produce
@@ -36,7 +37,7 @@ CROSSFIELD_TTL = SHAPES_DIR / "crossfield.ttl"
 FIXTURES_DIR = fixtures.FIXTURES_DIR / "crossfield"
 FIXTURE_FILES = fixtures.fixture_files(FIXTURES_DIR)
 
-RULE_IDS = {"B-8", "B-8-pref-label-unique", "B-13"}
+RULE_IDS = {"replaced-by-unresolved", "B-8", "B-8-pref-label-unique", "B-13"}
 SH = rdflib.Namespace(shacl.SH)
 
 
@@ -96,6 +97,7 @@ def test_fixture_directory_is_populated():
         "B-8-pref-label-unique.yaml",
         "B-13.yaml",
         "B-13-emit-guard.yaml",
+        "replaced-by-unresolved.yaml",
     }
 
 
@@ -109,6 +111,22 @@ def test_b8_fixture_message_names_the_offending_alias(config: Config):
     [finding] = _findings(report, "B-8")
     assert "platform configuration source of truth" in finding.message
     assert finding.path == emit.SKOS + "altLabel"
+
+
+def test_replaced_by_unresolved_fires_on_a_record_naming_itself(config: Config, crossfield_dir: Path):
+    """The self-reference arm (the fixture proves the dangling arm): a retired record whose ``replaced_by`` is
+    its own id resolves, but names no OTHER record."""
+    fixture = fixtures.load_fixture(FIXTURES_DIR / "replaced-by-unresolved.yaml")
+    inputs = fixtures.apply_fixture(emit.load_inputs(config), fixture)
+    terms = tuple(
+        emit.TermRecord({**t.record, "replaced_by": fixture.focus}, t.file) if t.record.get("id") == fixture.focus else t
+        for t in inputs.terms
+    )
+    dataset = rules.apply_rules(emit.emit(emit.Inputs(terms, inputs.ontology_version), config), config).dataset
+    report = shacl.validate(dataset, shacl.load_shapes(crossfield_dir, config=config), config=config)
+    [finding] = report.findings
+    assert finding.rule_id == "replaced-by-unresolved" and finding.severity == "Violation"
+    assert finding.focus == config.iri.id_ns + fixture.focus
 
 
 # ---------------------------------------------------------------------------------------------------
@@ -247,7 +265,7 @@ def test_every_shape_is_named_and_carries_rule_id_and_severity(config: Config, s
     assert shapes == _rule_bearing_shapes(shapes_graph, config)
     for shape in shapes:
         assert isinstance(shape, rdflib.URIRef), shape
-        assert shapes_graph.value(shape, SH.severity) == SH.Violation, shape  # Table C: B-8 and B-13 are Violation
+        assert shapes_graph.value(shape, SH.severity) == SH.Violation, shape  # Table C: every crossfield rule is a Violation
 
 
 def test_every_sparql_constraint_uses_the_injected_prefixes_and_names_the_value(config: Config, shapes_graph: rdflib.Graph):

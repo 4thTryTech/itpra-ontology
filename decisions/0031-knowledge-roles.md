@@ -26,8 +26,8 @@ them, nor the obligations that carry meaning and restrictions from source to rea
 4. The role is a property of the deployment, never of the store type; one store may play several. Store counts,
    refresh and which systems play which role are scenario decisions.
 5. One concept, in the shape of ADR 0028: no role needs relationships of its own, and a role one store can play
-   twice is a partition, not a capability. Edges: `applies_to` `CAP-BIA-GOV-7`, `CAP-DATA-1`, `CAP-GOV-9`,
-   `CAP-GOV-4`, `AUTON-ACTOR`.
+   twice is a partition, not a capability. Edges: `applies_to` `CAP-BIA-GOV-7`, `CAP-ITO-DATA-1`, `CAP-ITO-GOV-9`,
+   `CAP-ITO-GOV-4`, `AUTON-ACTOR`.
 6. No verb and no quality attribute is added (ADR 0008, ADR 0016): conformance, derivation and authority are
    instance-level obligations, carried by the definition and by functions (ADR 0038).
 7. Conformance is a rule source for existing checks (`FUNC-bia-quality-profiling` at authoring time,

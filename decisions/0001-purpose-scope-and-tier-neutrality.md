@@ -18,8 +18,8 @@ shared vocabulary has to sit above both.
 1. The ITPRA ontology is the controlled vocabulary of the IT Platform Reference Architecture: terms, types and
    relationships, machine-readable so documents can be checked against it.
 2. Its scope is the reference tier of eleven service domains of enterprise IT: service domains, planes, capability
-   domains, capabilities, functions, personas, journeys, workflows, dimensions, governance constructs, quality attributes
-   and the concepts that bind them.
+   domains, capabilities, functions, personas, journeys, dimensions, governance constructs, quality attributes and the
+   concepts that bind them (amended by ADR 0046).
 3. Architecture is described in three tiers: T1, the reference tier this vocabulary defines; T2, a scenario architecture
    that binds an operating model; T3, an implementable architecture that binds tools. T2 and T3 are authored elsewhere
    with this vocabulary; the ontology holds T1 terms only.

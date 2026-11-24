@@ -1,5 +1,5 @@
-# ITPRA ontology — DXC-PER (Personalization & Targeting) capabilities
-# type: Capability. ids CAP-DXC-PER-<n>. Grouped under domain DXC-PER (ADR 0027).
+# ITPRA ontology — DXC-PER (Personalization & Targeting): capabilities
+# type: Capability. Ids CAP-DXC-PER-<n>, each grouped under DXC-PER. Decided in ADR 0027.
 
 - id: CAP-DXC-PER-1
   term: Audience Segmentation & Targeting

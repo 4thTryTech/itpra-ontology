@@ -1,6 +1,5 @@
-# ITPRA ontology — FUNCTION library, GRC-RISK (Enterprise Vulnerability, Threat & Risk Management)
-# type: Function. ids FUNC-grc-<slug>. All T1-neutral; functions MAY name a standard/technique where that IS the
-# function (ADR 0011). Functions `support` >=1 capability. See ADR 0024.
+# ITPRA ontology — GRC-RISK (Enterprise Vulnerability, Threat & Risk Management): functions
+# type: Function. Ids FUNC-grc-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0024.
 
 # Risk assessment & treatment (CAP-GRC-RISK-1)
 - id: FUNC-grc-risk-identification
@@ -79,7 +78,7 @@
     - {rel: supports, target: CAP-GRC-RISK-5}
   source: ADR 0024
 
-# AI-system risk classification (ADR 0035)
+# AI-system risk classification
 - id: FUNC-grc-ai-system-risk-classification
   term: AI-System Risk Classification
   type: Function

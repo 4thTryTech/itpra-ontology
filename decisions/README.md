@@ -8,6 +8,10 @@ cites the record that minted or changed it as `ADR NNNN`. From outside this repo
 - One decision per record, written to [the template](0000-template.md); `tools/adr-lint.py` enforces the shape and runs in CI.
 - Statuses: Accepted · Superseded (names its successor) · Deprecated · Rejected. A record is proposed as a pull request, together
   with the change it decides, and lands Accepted. Nothing else reaches `master`.
+- Rules as they stand ([ADR 0049](0049-records-state-the-rules-as-they-stand.md)): a rule a later record amends is restated in
+  place and ends `(amended by ADR NNNN)`; a withdrawn rule becomes one line naming the record that withdrew it; rule numbers
+  never change. A record is superseded only when its decision is replaced whole, and then keeps its text. Every id a record
+  cites is a live id; a rename updates the records that cite it in the same change. No record carries a change log.
 - Short: at most 60 lines and 500 words (hard limit 80 / 700). Context in six lines; Decision as numbered rules in the present
   tense; Consequences in three to six bullets with at least one trade-off; Alternatives one line each (name — why not); Sources as
   URL · what it supports · accessed date.
@@ -65,3 +69,7 @@ cites the record that minted or changed it as `ADR NNNN`. From outside this repo
 | 0043 | [Builds, artefacts and layers: the build reads the vocabulary alone](0043-builds-artefacts-and-layers.md) | Accepted | 2026-11-22 |
 | 0044 | [One release for the vocabulary and its tooling](0044-one-release-for-the-vocabulary-and-its-tooling.md) | Accepted | 2026-11-23 |
 | 0045 | [IT Operations carries its code: one id and file form for all eleven service domains](0045-it-operations-carries-its-code.md) | Accepted | 2026-11-23 |
+| 0046 | [Records without content leave: workflows, placements and unused id forms](0046-records-without-content-leave.md) | Accepted | 2026-11-24 |
+| 0047 | [Service domains read as peers: definitions in their own right, no domain-to-plane edges](0047-service-domains-read-as-peers.md) | Accepted | 2026-11-24 |
+| 0048 | [Retirement: a retired record stays, marked, and names its successor](0048-retirement.md) | Accepted | 2026-11-24 |
+| 0049 | [Records state the rules as they stand: amended in place, ids kept current](0049-records-state-the-rules-as-they-stand.md) | Accepted | 2026-11-24 |

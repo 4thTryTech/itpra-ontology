@@ -1,9 +1,5 @@
-# ITPRA ontology — BIA-GOV (Data Governance, Quality & Master Data) capabilities
-# type: Capability. ids CAP-BIA-GOV-<n>. Grouped under domain BIA-GOV (ADR 0026). Governs BUSINESS data &
-# insight; distinct from platform operational data governance (CAP-ITO-DATA-4); applies the enterprise control
-# catalog (Enterprise Security/GRC) — ADR 0026. ADR 0037 adds CAP-BIA-GOV-7 (the ONTOLOGY stage of the glossary
-# -> taxonomy -> ontology -> semantic layer progression; the load-bearing gap no term named) and amends
-# CAP-BIA-GOV-5 (cross-party mapping authority).
+# ITPRA ontology — BIA-GOV (Data Governance, Quality & Master Data): capabilities
+# type: Capability. Ids CAP-BIA-GOV-<n>, each grouped under BIA-GOV. Decided in ADR 0026.
 
 - id: CAP-BIA-GOV-1
   term: Data Governance & Stewardship

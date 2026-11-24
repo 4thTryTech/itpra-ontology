@@ -1,5 +1,5 @@
-# ITPRA ontology — FUNCTION library, ITSM-CHG (Cross-Domain Change Coordination)
-# type: Function. ids FUNC-itsm-<slug>. All T1-neutral. Functions `support` >=1 capability. See ADR 0025.
+# ITPRA ontology — ITSM-CHG (Cross-Domain Change Coordination): functions
+# type: Function. Ids FUNC-itsm-<slug>; a function supports one or more capabilities (ADR 0011). Decided in ADR 0025.
 
 # Cross-provider change authorization (CAP-ITSM-CHG-1)
 - id: FUNC-itsm-change-authorization

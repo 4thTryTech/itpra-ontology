@@ -1,6 +1,5 @@
-# ITPRA ontology — entity types
-# The kinds of things the architecture is built from. Instances (capabilities, personas, journeys, …) live under
-# terms/; requirements live in consumers' registries (ADR 0001).
+# ITPRA ontology — entity types: the kinds of thing a term can be, and the relationships each may carry.
+# type: EntityType. Ids UPPER_SNAKE. Decided in ADR 0008.
 
 - id: ITPRA_TIER
   term: ITPRA Framework Tier
@@ -18,27 +17,29 @@
   term: Capability Plane
   type: EntityType
   definition: >
-    A grouping of related capability domains by platform concern — the layer above DOMAIN
-    (Capability → Domain → Plane → Tier). The seven ITPRA planes extend the Internal Developer Platform
-    five-plane model for an infrastructure platform. Members live in terms/planes.yaml. Ratified by ADR 0010.
+    A grouping of related capability domains by concern — the layer above DOMAIN
+    (Capability → Domain → Plane → Tier). The same seven planes group every service domain's capability
+    domains; they extend the five-plane Internal Developer Platform model.
   aliases: [platform plane]
   relates_to:
     - {rel: grouped_by, target: ITPRA_TIER}
+  source: ADR 0010 (amended by ADR 0047)
 
 - id: DOMAIN
   term: Domain
   type: EntityType
   definition: >
-    A grouping of related capabilities (a functional area of the platform), itself grouped under a
+    A grouping of related capabilities (a functional area of one service domain), itself grouped under a
     capability plane.
   relates_to:
     - {rel: grouped_by, target: PLANE}
     - {rel: belongs_to_service_domain, target: SERVICE_DOMAIN}
+  source: ADR 0008 (amended by ADR 0047)
 
 - id: CAPABILITY
   term: Capability
   type: EntityType
-  definition: A tool-agnostic platform ability that delivers an outcome, independent of how it is built.
+  definition: A tool-agnostic ability of a service domain that delivers an outcome, independent of how it is built.
   aliases: [platform capability]
   deprecated: [feature]
   relates_to:
@@ -49,22 +50,23 @@
     - {rel: decomposes_into, target: CAPABILITY}
     - {rel: derived_from, target: CAPABILITY}
     - {rel: applies_to, target: CONCEPT}
+  source: ADR 0008 (amended by ADR 0047)
 
 - id: FUNCTION
   term: Function
   type: EntityType
   definition: >
     A discrete unit of behavior finer-grained than a capability — the granular layer that T2 selects as
-    required features and T3 binds tools to (ADR 0011). One library (`FUNC-<code>-<slug>`, the code naming the
-    function's home service domain; ADR 0045): a function `supports` one or more capabilities (many-to-many),
-    its own domain's or, by a record, another's (ADR 0009). Functions are flat — no tier annotation —
-    and may freely name a specific standard, protocol, or technique where that *is* the function (ADR 0011: no tier
-    field, no function `derived_from`). Distinct from a child capability
-    (`CAP-<DOMAIN>-<n>.<m>`), which is an outcome-level split.
+    required features and T3 binds tools to. One library (`FUNC-<code>-<slug>`, the code naming the function's
+    home service domain): a function `supports` one or more capabilities (many-to-many), its own service
+    domain's or, by a decision record, another's. Functions are flat — they carry no tier and are never
+    `derived_from` another — and may name a specific standard, protocol, or technique where that *is* the
+    function. Distinct from a child capability (`CAP-<DOMAIN>-<n>.<m>`), which is an outcome-level split.
   relates_to:
     - {rel: supports, target: CAPABILITY}
     - {rel: depends_on, target: FUNCTION}
     - {rel: applies_to, target: CONCEPT}
+  source: ADR 0011 (amended by ADR 0045, ADR 0047)
 
 - id: SERVICE
   term: Service
@@ -77,19 +79,21 @@
 - id: PERSONA
   term: Persona
   type: EntityType
-  definition: An archetypal role that interacts with the platform, with goals and success measures.
+  definition: An archetypal role that interacts with a service domain's services, with goals and success measures.
   aliases: [role]
   relates_to:
     - {rel: owns, target: CAPABILITY}
+  source: ADR 0008 (amended by ADR 0047)
 
 - id: JOURNEY_GROUP
   term: Journey Group
   type: EntityType
   definition: >
-    A grouping of journeys by lifecycle phase (design / deploy / operate) or cross-cutting concern.
-    Members live in terms/journey-groups.yaml. Ratified by ADR 0013.
+    A grouping of journeys by lifecycle phase (design / deploy / operate) or cross-cutting concern, shared by
+    every service domain.
   relates_to:
     - {rel: grouped_by, target: ITPRA_TIER}
+  source: ADR 0013 (amended by ADR 0047)
 
 - id: JOURNEY
   term: Journey
@@ -104,9 +108,13 @@
 - id: WORKFLOW
   term: Workflow
   type: EntityType
-  definition: A diagrammable sequence of steps and branch points that realizes a journey or use case.
+  definition: >
+    A diagrammable sequence of steps and branch points that realizes a journey or use case — a consumer's own
+    diagram of a journey, drawn in a derived architecture; the vocabulary defines the type and holds no
+    instances.
   relates_to:
     - {rel: realized_in, target: JOURNEY}
+  source: ADR 0008 (amended by ADR 0046, ADR 0047)
 
 - id: OPERATING_MODEL
   term: Operating Model
@@ -121,28 +129,31 @@
 - id: TENANT
   term: Tenant
   type: EntityType
-  definition: A consumer organization unit isolated within the platform (team, business unit, project, or an estate governed as one).
+  definition: >
+    A consumer organization unit isolated within a shared service (team, business unit, project, or an estate
+    governed as one).
   relates_to:
     - {rel: consumed_by, target: PERSONA}
+  source: ADR 0008 (amended by ADR 0047)
 
 - id: ENVIRONMENT
   term: Environment
   type: EntityType
-  definition: A runtime context the platform serves (e.g. public/private/hybrid cloud, container or VM).
+  definition: A runtime context in which services and workloads are hosted (e.g. public/private/hybrid cloud, container or VM).
+  source: ADR 0008 (amended by ADR 0047)
 
 - id: SERVICE_DOMAIN
   term: Service Domain
   type: EntityType
   definition: >
-    A domain of IT services in the enterprise landscape (TBM-tower / SIAM-tower style). The framework spans
-    eleven peer service domains, each authored as its own architecture. Service domains `interfaces_with`
-    each other across capability planes — context-boundary relationships, a C4 system-context view. Distinct
-    from a capability DOMAIN (the finer-grained grouping inside a service domain). Members live in
-    terms/service-domains.yaml. Web-grounded in the TBM Resource Towers, the SIAM tower model, and the ITIL
-    core IT functions. Ratified by ADR 0009.
+    A domain of IT services in the enterprise landscape (TBM-tower / SIAM-tower style). The vocabulary spans
+    eleven peer service domains, each defined by what it is and owns in its own right and each authored as
+    its own architecture: every capability domain, persona, and journey belongs to exactly one of them.
+    Distinct from a capability DOMAIN (the finer-grained grouping inside a service domain).
   aliases: [service block, service tower]
   relates_to:
     - {rel: interfaces_with, target: PLANE}
+  source: ADR 0009 (amended by ADR 0047)
 
 - id: ADR
   term: Architecture Decision Record
@@ -156,43 +167,46 @@
   term: Requirement
   type: EntityType
   definition: >
-    A one-line statement of something the platform must do (FR) or a quality it must exhibit (NFR), kept in a
-    consumer's requirement registry and traced to the capabilities that meet it and the journeys that
-    verify it. The generic kind; FR and NFR are its two forms (ADR 0008).
+    A one-line statement of something a service or system must do (FR) or a quality it must exhibit (NFR),
+    kept in a consumer's requirement registry and traced to the capabilities that meet it and the journeys
+    that verify it. The generic kind; FR and NFR are its two forms.
   aliases: [requirement record]
   relates_to:
     - {rel: met_by, target: CAPABILITY}
     - {rel: verified_by, target: JOURNEY}
+  source: ADR 0008 (amended by ADR 0047)
 
 - id: NFR
   term: Non-Functional Requirement
   type: EntityType
   definition: >
-    A one-line statement of a quality the platform must exhibit (NFR), categorized by a quality
-    attribute. Qualitative at T1; given measurable targets at T2/T3.
+    A one-line statement of a quality a service or system must exhibit, categorized by a quality attribute.
+    Qualitative at T1; given measurable targets at T2/T3.
   aliases: [quality requirement]
   relates_to:
     - {rel: categorized_as, target: QUALITY_ATTRIBUTE}
     - {rel: met_by, target: CAPABILITY}
     - {rel: verified_by, target: JOURNEY}
+  source: ADR 0008 (amended by ADR 0047)
 
 - id: QUALITY_ATTRIBUTE
   term: Quality Attribute
   type: EntityType
-  definition: A category of non-functional concern (e.g. Availability, Security). Members live in terms/.
+  definition: A category of non-functional concern (e.g. Availability, Security).
   aliases: ["-ility"]
+  source: ADR 0008 (amended by ADR 0047)
 
 - id: FR
   term: Functional Requirement
   type: EntityType
   definition: >
-    A one-line statement of something the platform must do. Ids FR-<CODE>-<n>. Met by capabilities and verified by
-    journeys; the functional form of REQUIREMENT (ADR 0008).
+    A one-line statement of something a service or system must do. Ids FR-<CODE>-<n>. Met by capabilities and
+    verified by journeys; the functional form of REQUIREMENT.
   aliases: [functional requirement record]
   relates_to:
     - {rel: met_by, target: CAPABILITY}
     - {rel: verified_by, target: JOURNEY}
-  source: ADR 0008
+  source: ADR 0008 (amended by ADR 0047)
 
 - id: CONCEPT
   term: Concept
@@ -209,5 +223,4 @@
     - {rel: governs, target: CONCEPT}
     - {rel: depends_on, target: CONCEPT}
     - {rel: depends_on, target: FUNCTION}
-    - {rel: belongs_to_service_domain, target: SERVICE_DOMAIN}
-  source: ADR 0008
+  source: ADR 0008 (amended by ADR 0046)

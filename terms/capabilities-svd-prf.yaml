@@ -1,5 +1,5 @@
-# ITPRA ontology — SVD-PRF (Support Performance & Insight) capabilities
-# type: Capability. ids CAP-SVD-PRF-<n>. Grouped under domain SVD-PRF (ADR 0019).
+# ITPRA ontology — SVD-PRF (Support Performance & Insight): capabilities
+# type: Capability. Ids CAP-SVD-PRF-<n>, each grouped under SVD-PRF. Decided in ADR 0019.
 
 - id: CAP-SVD-PRF-1
   term: Contact Analytics & Reporting

@@ -16,7 +16,7 @@ obligations. GRC does not own workload identity (ADR 0024).
 ## Decision
 
 1. No new capability: every candidate resolves to an existing term.
-2. A delegated actor's identity is workload identity, owned by the platform (`CAP-SEC-1`, `CAP-SEC-3`);
+2. A delegated actor's identity is workload identity, owned by the platform (`CAP-ITO-SEC-1`, `CAP-ITO-SEC-3`);
    `CAP-GRC-IAM-1` stays the register of people, to which every delegation binds an accountable person.
 3. Delegated authority, a bounded, revocable subset of a person's authority passed to a non-person, is governed by
    `CAP-GRC-IAM-2` on the least-privilege basis of a direct grant through
@@ -25,9 +25,9 @@ obligations. GRC does not own workload identity (ADR 0024).
 4. `FUNC-grc-delegated-authority-recertification` (`supports` `CAP-GRC-IAM-4`) is its own function: a
    non-human principal never leaves, so no leaver event catches it.
 5. GRC governs whether a delegation may exist and keeps the standing record; the platform establishes and presents
-   the chain at runtime and decides against it. `FUNC-delegated-authority-chain` (`supports` `CAP-SEC-2`,
+   the chain at runtime and decides against it. `FUNC-ito-delegated-authority-chain` (`supports` `CAP-ITO-SEC-2`,
    `applies_to` `AUTON-ACTOR`) carries the chain from the accountable person, via any intermediating
-   application, to the executing principal; `CAP-SEC-2` attributes an action to an accountable person, never only
+   application, to the executing principal; `CAP-ITO-SEC-2` attributes an action to an accountable person, never only
    to the executing principal, and `CAP-GRC-IAM-5` governs the ceiling of a runtime-chosen action (ADR 0033).
 6. The chain is a named pattern with no protocol in id, term or definition: the candidate mechanism, an individual
    draft with competing siblings, fails ADR 0011's maturity criterion.
@@ -46,7 +46,7 @@ obligations. GRC does not own workload identity (ADR 0024).
 
 ## Alternatives
 
-- A non-human identity governance capability — collides with ADR 0024 and duplicates `CAP-SEC-1`, `CAP-SEC-3`.
+- A non-human identity governance capability — collides with ADR 0024 and duplicates `CAP-ITO-SEC-1`, `CAP-ITO-SEC-3`.
 - Register non-human principals in `CAP-GRC-IAM-1` — "who exists" would then mean two things.
 - A dedicated AI compliance capability — the overlap with existing obligations is what `CAP-GRC-CMP-1` absorbs.
 

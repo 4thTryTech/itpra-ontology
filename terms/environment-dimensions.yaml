@@ -1,22 +1,19 @@
-# ITPRA ontology — environment dimensions
-# SHARED file: it belongs to no single service domain, so neither its name nor its ids carry a service-domain
-# code (ADR 0007, ADR 0045).
-# The orthogonal axes a T1 capability is asserted to be invariant across (public/private/hybrid, container/VM).
-# Ratified by ADR 0014. A capability's `Environment applicability` field names which of these are variation
-# points whose binding is deferred to T2 (scenario) / T3 (runtime). type: Concept.
+# ITPRA ontology — environment dimensions: the hosting axes a capability's outcome holds across
+# SHARED file: it belongs to no single service domain, so neither its name nor its ids carry a service-domain code.
+# type: Concept. Ids ENV-DIM-<SLUG>. Decided in ADR 0014.
 
 - id: ENV-DIM-HOSTING
   term: Hosting model
   type: Concept
   definition: >
-    The environment dimension describing where the platform and its workloads are hosted. Allowed values:
-    public (public cloud), private (private cloud / on-prem), hybrid (a managed combination). A T1
-    capability's outcome must hold across all values; how it is realized may vary, in which case hosting is
-    a variation point bound at T2/T3 (e.g. provider integration, network/identity model).
+    The environment dimension describing where the infrastructure platform and its workloads are hosted.
+    Allowed values: public (public cloud), private (private cloud / on-prem), hybrid (a managed combination).
+    A T1 capability's outcome must hold across all values; how it is realized may vary, in which case hosting
+    is a variation point bound at T2/T3 (e.g. provider integration, network/identity model).
   aliases: [deployment locus, hosting locus]
   relates_to:
     - {rel: applies_to, target: ENVIRONMENT}
-  source: ADR 0014
+  source: ADR 0014 (amended by ADR 0047)
 
 - id: ENV-DIM-WORKLOAD
   term: Workload form
